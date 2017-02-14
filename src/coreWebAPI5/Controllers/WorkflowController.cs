@@ -13,9 +13,9 @@ namespace coreWebAPI5.Controllers
 	[Route("api/[controller]")]
 	public class WorkflowController : Controller
 	{
-		public WorkflowController(IWorkflowRepository Workflow)
+		public WorkflowController(IWorkflowRepository workflow)
 		{
-			Workflow = Workflow;
+			Workflow = workflow;
 		}
 		public IWorkflowRepository Workflow { get; set; }
 
