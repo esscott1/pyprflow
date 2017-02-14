@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MkDWorkFlow
+namespace coreWebAPI5.Model
 {
 	public interface IWorkflowRepository
 	{

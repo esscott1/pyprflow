@@ -1,4 +1,4 @@
-﻿namespace MkDWorkFlow
+﻿namespace coreWebAPI5.Model
 {
 	public interface IUser
 	{

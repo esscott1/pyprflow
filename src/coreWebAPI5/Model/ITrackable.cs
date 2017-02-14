@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MkDWorkFlow
+namespace coreWebAPI5.Model
 {
 	public interface ITrackable
 	{

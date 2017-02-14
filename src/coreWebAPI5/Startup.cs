@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using coreWebAPI5.Model;
+
 
 namespace coreWebAPI5
 {
@@ -29,7 +31,8 @@ namespace coreWebAPI5
         {
             // Add framework services.
             services.AddMvc();
-        }
+			services.AddSingleton<IWorkflowRepository, WorkflowRepository>();
+		}
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)

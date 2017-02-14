@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 
-namespace MkDWorkFlow
+namespace coreWebAPI5.Model
 {
 	public class Workflow
 	{
