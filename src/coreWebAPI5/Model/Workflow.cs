@@ -8,7 +8,7 @@ namespace coreWebAPI5.Model
 {
 	public class Workflow
 	{
-		private static string TestStoreCategoryKey = "MkDWorkFlow_ProofOfConcept";
+		private static string TestStoreCategoryKey = "WorkFlow_ProofOfConcept";
 		public Guid WorkflowId { get; private set; }
 		public string Key { get; set; }
 		public string WorkflowName { get; private set; }
