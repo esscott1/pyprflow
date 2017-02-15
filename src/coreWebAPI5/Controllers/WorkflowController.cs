@@ -49,7 +49,7 @@ namespace coreWebAPI5.Controllers
 			return CreatedAtRoute("GetWorkflow", new { id = workflow.Key }, Workflow);
 		}
 		[HttpPut]
-		public IActionResult StartTracking()//string workFlowId, [FromBody] ITrackable trackable)
+		public IActionResult StartTrackingItem(string workflowId, [FromBody] ITrackable item)//string workFlowId, [FromBody] ITrackable trackable)
 		{
 			var workflow = Workflow.Find("_blankKey");
 			var t = new Model.Fakes.TrackableDocument("documentToTrack1");

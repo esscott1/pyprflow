@@ -1,0 +1,116 @@
+﻿
+workflow example
+
+ JSONSchema
+```
+
+{
+	"title": "Workflow Schema",
+	"type": "object",
+	"properties": {
+		"workflowId": {
+			"description": "The unique identifier for a product",
+			"type": "string"
+		},
+		"key": {
+				"description":  "used for testing, surrogage for unique key during testing, remove",
+				"type": "string"
+			},
+		"workflowName": {
+				"type": "string"
+			},
+			"steps": {
+				"description": "a collection of steps",
+				"type": "array",
+				"items": {
+					"title": "Step",
+					"type": "object",
+					"properties": {
+						"step_id": {
+							"description": "step unique identifier",
+							"type": "string"
+						},
+						"ITrackables": {
+							"description": "array of ojects within a given step",
+							"type": "array",
+							"items": {
+								"title": "itrackable",
+								"description": "object being tracked within this step",
+								"type": "object",
+								"properties": {
+									"trackingId": {
+										"description": "unique identifier for this item",
+										"type": "string"
+									},
+									"itemId": {
+										"description": "unique identifier for this item",
+										"type": "number"
+									},
+									"trackingName:" {
+										"description": "human friendly name for this item",
+										"type": "string"
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+		"moves": {
+				"description": "Array of available movements with the workflow",
+				"type": "array",
+				"items": {
+					"title": "movements",
+					"description": "defines a single available movement between steps in a workflow",
+					"type": "object",
+					"properties": {
+						"from": {
+							"description": "starting step for movement",
+							"type": "string"
+						},
+						"to": {
+							"description": "ending step for movement",
+							"type": "string"
+						}
+					}
+				},
+			}
+	},
+	"required": [ "WorkflowId", "Key", "workflowName" ]
+}
+```
+
+
+
+``` json[
+  {
+    "steps": {
+      "Step1": [],
+      "Step2": [],
+      "Step3": [],
+      "Step4": []
+    },
+    "trackingComments": [],
+    "moves": [
+      {
+        "from": "Step1",
+        "to": "Step2",
+        "approveUsers": []
+      },
+      {
+        "from": "Step2",
+        "to": "Step3",
+        "approveUsers": []
+      },
+      {
+        "from": "Step3",
+        "to": "Step4",
+        "approveUsers": []
+      }
+    ],
+    "workflowId": "c4f75e1f-dad8-4d41-8dfb-5c42834471cb",
+    "key": "_blankKey",
+    "workflowName": "_blank"
+  }
+]
+```
