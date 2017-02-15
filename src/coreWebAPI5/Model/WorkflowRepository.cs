@@ -13,11 +13,12 @@ namespace coreWebAPI5.Model
 			new ConcurrentDictionary<string, Workflow>();
 		public WorkflowRepository()
 		{
-			Add(new Workflow("Workflow1"));
+			Add(new Workflow("_blank"));
 		}
 		public void Add(Workflow workflow)
 		{
-			workflow.Key = Guid.NewGuid().ToString();
+			if(workflow.Key == null || workflow.Key ==String.Empty )
+				workflow.Key = Guid.NewGuid().ToString();
 			_Workflow[workflow.Key] = workflow;
 		}
 

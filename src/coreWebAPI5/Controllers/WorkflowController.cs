@@ -25,6 +25,8 @@ namespace coreWebAPI5.Controllers
 			return Workflow.GetAll();
 		}
 
+		
+
 		[HttpGet("{id}", Name = "GetWorkflow")]
 		public IActionResult GetById(string id)
 		{
@@ -45,6 +47,14 @@ namespace coreWebAPI5.Controllers
 			}
 			Workflow.Add(workflow);
 			return CreatedAtRoute("GetWorkflow", new { id = workflow.Key }, Workflow);
+		}
+		[HttpPut]
+		public IActionResult StartTracking()//string workFlowId, [FromBody] ITrackable trackable)
+		{
+			var workflow = Workflow.Find("_blankKey");
+			var t = new Model.Fakes.TrackableDocument("documentToTrack1");
+			workflow.AddTrackableToStart(t);
+			return new ObjectResult(workflow);
 		}
 
 		[HttpPut("{id}")]
