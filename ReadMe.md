@@ -1,9 +1,5 @@
-﻿
-workflow example
-
- JSONSchema
+﻿Workflow JSON Schema
 ```
-
 {
 	"title": "Workflow Schema",
 	"type": "object",
@@ -80,37 +76,55 @@ workflow example
 }
 ```
 
+Workflow Example with simple steps and one item being tracked in first step
 
+``` {
+	"workflowId": "WorkflowExample1",
+	"key": "_WorkflowExample1",
+	"workflowId": "shouldbeGUID",
+	"steps": [
+		{
+			"step_id": "Step1",
+			"ITrackables": [
+				{
+					"trackingId": "docId1Guid",
+					"itemId": 1,
+					"trackingName": "Document1"
+				},
+				{
+					"trackingId": "docId2Guid",
+					"itemId": 2,
+					"trackingName": "Document2"
+				}
+			]
+		},
+		{
+			"step_id": "Step2",
+			"ITrackables": []
+		},
+		{
+			"step_id": "Step3",
+			"ITrackables": []
+		},
+		{
+			"step_id": "Step4",
+			"ITrackables": []
+		}
+	],
+	"moves": [
+		{
+			"from": "Step1",
+			"to": "Step2"
+		},
+		{
+			"from": "Step2",
+			"to": "Step3"
+		},
+		{
+			"from": "Step3",
+			"to": "Step4"
+		}
+	]
+}
 
-``` json[
-  {
-    "steps": {
-      "Step1": [],
-      "Step2": [],
-      "Step3": [],
-      "Step4": []
-    },
-    "trackingComments": [],
-    "moves": [
-      {
-        "from": "Step1",
-        "to": "Step2",
-        "approveUsers": []
-      },
-      {
-        "from": "Step2",
-        "to": "Step3",
-        "approveUsers": []
-      },
-      {
-        "from": "Step3",
-        "to": "Step4",
-        "approveUsers": []
-      }
-    ],
-    "workflowId": "c4f75e1f-dad8-4d41-8dfb-5c42834471cb",
-    "key": "_blankKey",
-    "workflowName": "_blank"
-  }
-]
 ```

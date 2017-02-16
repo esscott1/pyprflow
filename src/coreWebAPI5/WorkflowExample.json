@@ -1,0 +1,48 @@
+﻿{
+	"workflowId": "WorkflowExample1",
+	"key": "_WorkflowExample1",
+	"workflowId": "shouldbeGUID",
+	"steps": [
+		{
+			"step_id": "Step1",
+			"ITrackables": [
+				{
+					"trackingId": "docId1Guid",
+					"itemId": 1,
+					"trackingName": "Document1"
+				},
+				{
+					"trackingId": "docId2Guid",
+					"itemId": 2,
+					"trackingName": "Document2"
+				}
+			]
+		},
+		{
+			"step_id": "Step2",
+			"ITrackables": []
+		},
+		{
+			"step_id": "Step3",
+			"ITrackables": []
+		},
+		{
+			"step_id": "Step4",
+			"ITrackables": []
+		}
+	],
+	"moves": [
+		{
+			"from": "Step1",
+			"to": "Step2"
+		},
+		{
+			"from": "Step2",
+			"to": "Step3"
+		},
+		{
+			"from": "Step3",
+			"to": "Step4"
+		}
+	]
+}
