@@ -25,8 +25,9 @@ namespace coreWebAPI5.Controllers
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody]string value)
+        public string Post([FromBody]string value)
         {
+			return "i sent " + value;
         }
 
         // PUT api/values/5

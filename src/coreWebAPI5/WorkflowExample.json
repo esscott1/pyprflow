@@ -1,7 +1,7 @@
-﻿{
+﻿{Lists are arrays, everything else is object
 	"workflowId": "WorkflowExample1",
 	"key": "_WorkflowExample1",
-	"workflowId": "shouldbeGUID",
+	"workflowName": "shouldbeGUID",
 	"steps": [
 		{
 			"step_id": "Step1",

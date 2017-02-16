@@ -13,26 +13,26 @@
 		"workflowName": {
 			"type": "string"
 		},
-		"steps": {
-			"description": "a collection of steps",
-			"type": "array",
+		"nodes": {
+			"description": "a collection of nodes that represent a resting state in which items belong during thier journey though the workflow",
+			"type": "object",
 			"items": {
-				"title": "Step",
+				"title": "node",
 				"type": "object",
 				"properties": {
-					"step_id": {
-						"description": "step unique identifier",
+					"node_id": {
+						"description": "node unique identifier",
 						"type": "string"
 					},
-					"ITrackables": {
-						"description": "array of ojects within a given step",
+					"trackables": {
+						"description": "array of items within the given node",
 						"type": "array",
 						"items": {
-							"title": "itrackable",
+							"title": "trackable",
 							"description": "object being tracked within this step",
 							"type": "object",
 							"properties": {
-								"trackingId": {
+								"trackingGuid": {
 									"description": "unique identifier for this item",
 									"type": "string"
 								},

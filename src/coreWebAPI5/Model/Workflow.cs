@@ -13,7 +13,9 @@ namespace coreWebAPI5.Model
 		public string Key { get; set; }
 		public string WorkflowName { get; private set; }
 		[JsonProperty]
-		private Dictionary<string, List<ITrackable>> Steps;
+		private Dictionary<string, Node> Nodes;
+		//[JsonProperty]
+		//private Dictionary<string, List<ITrackable>> Steps; // name is the key... needs to change to different
 		[JsonProperty]
 		private List<TrackingComment> trackingComments;
 		[JsonProperty]
@@ -26,19 +28,26 @@ namespace coreWebAPI5.Model
 			{
 				WorkflowId = Guid.NewGuid();
 			}
-			Steps = new Dictionary<string, List<ITrackable>>();
+			//Steps = new Dictionary<string, List<ITrackable>>();
+			Nodes = new Dictionary<string, Node>();
 			trackingComments = new List<TrackingComment>();
 			moves = new List<Movement>();
 			if (workflowName == "_blank")
 			{
 				Key="_blankKey";
-				Steps.Add("Step1", new List<ITrackable>());
-				Steps.Add("Step2", new List<ITrackable>());
-				Steps.Add("Step3", new List<ITrackable>());
-				Steps.Add("Step4", new List<ITrackable>());
+				ITrackable td = new Model.Fakes.TrackableDocument("doc1") { ItemId = 0 };
+				ITrackable td2 = new Model.Fakes.TrackableDocument("doc2") { ItemId = 2 };
+				List<ITrackable> l = new List<ITrackable>();
+				l.Add(td);l.Add(td2); 
+				//Steps.Add("Step1", l);
+				//Steps.Add("Step2", new List<ITrackable>());
+				//Steps.Add("Step3", new List<ITrackable>());
+				//Steps.Add("Step4", new List<ITrackable>());
 				moves.Add(new Movement() { From = "Step1", To = "Step2" });
 				moves.Add(new Movement() { From = "Step2", To = "Step3" });
 				moves.Add(new Movement() { From = "Step3", To = "Step4" });
+				Nodes.Add("Step1", new Node("Step1") { Trackables = l });
+				Nodes.Add("Step2", new Node("Step2") );
 
 
 			}
@@ -110,9 +119,9 @@ namespace coreWebAPI5.Model
 			//return DeserializeWorkflow(serializedWorkfow);
 		}
 
-		public void AddState(string stateName, string fromState = null)
+		public void AddNode(string stateName, string fromState = null)
 		{
-			Steps.Add(stateName, new List<ITrackable>());
+			Nodes.Add(stateName, new Node(stateName));
 			if (!string.IsNullOrWhiteSpace(fromState))
 			{
 				AddValidStateMovement(fromState, stateName);
@@ -121,12 +130,12 @@ namespace coreWebAPI5.Model
 
 		public void AddTrackableToStart(ITrackable item)
 		{
-			Steps.First().Value.Add(item);
+			Nodes.First().Value.Trackables.Add(item);
 
 		}
 		public void AddTrackableToState(ITrackable item, string stateName, IUser moveUser, string comment = "Added Item")
 		{
-			Steps[stateName].Add(item);
+			Nodes[stateName].Trackables.Add(item);
 
 			// log comment
 			if (comment.Equals("Added Item"))
@@ -144,7 +153,7 @@ namespace coreWebAPI5.Model
 				throw new WorkFlowException(msg);
 			}
 
-			Steps[toState].Add(item);
+			Nodes[toState].Trackables.Add(item);
 			RemoveFromState(item, fromState, moveUser, toState);
 
 			// log comment
@@ -163,7 +172,7 @@ namespace coreWebAPI5.Model
 				throw new WorkFlowException(msg);
 			}
 
-			Steps[toState].Add(item);
+			Nodes[toState].Trackables.Add(item);
 
 			// log comment
 			if (comment.Equals("Copied Item"))
@@ -205,7 +214,7 @@ namespace coreWebAPI5.Model
 
 		public void RemoveFromState(ITrackable item, string stateName, IUser removeUser, string comment = "Removed Item")
 		{
-			Steps[stateName].Remove(item);
+			Nodes[stateName].Trackables.Remove(item);
 
 			// log comment
 			if (comment.Equals("Removed Item"))
@@ -217,17 +226,19 @@ namespace coreWebAPI5.Model
 
 		public List<string> GetStates()
 		{
-			return Steps.Keys.ToList();
+			return Nodes.Keys.ToList();
 		}
 
 		public IEnumerable<string> GetStatesItemIsIn(ITrackable item)
 		{
-			return Steps.Where(s => s.Value.Contains(item)).Select(k => k.Key);
+			return Nodes.Where(n => n.Value.Trackables.Contains(item)).Select(k => k.Key);
+			
 		}
 
 		public IEnumerable<ITrackable> GetItemsInState(string stateName)
 		{
-			return Steps[stateName];
+			Node node = Nodes[stateName];
+			return node.Trackables;
 		}
 
 		public string SerializeToJsonString()
@@ -284,12 +295,12 @@ namespace coreWebAPI5.Model
 
 		public void AddValidStateMovement(string from, string to, IUser moveUser = null)
 		{
-			if (!Steps.ContainsKey(from))
+			if (!Nodes.ContainsKey(from))
 			{
 				throw new WorkFlowException("can't move from " + from);
 			}
 
-			if (!Steps.ContainsKey(to))
+			if (!Nodes.ContainsKey(to))
 			{
 				throw new WorkFlowException("can't move to " + to);
 			}
