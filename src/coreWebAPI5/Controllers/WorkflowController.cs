@@ -52,7 +52,7 @@ namespace coreWebAPI5.Controllers
 		public IActionResult StartTrackingItem(string workflowId, [FromBody] ITrackable item)//string workFlowId, [FromBody] ITrackable trackable)
 		{
 			var workflow = Workflow.Find("_blankKey");
-			var t = new Model.Fakes.TrackableDocument("documentToTrack1");
+			var t = new Model.Trackable("documentToTrack1");
 			workflow.AddTrackableToStart(t);
 			return new ObjectResult(workflow);
 		}

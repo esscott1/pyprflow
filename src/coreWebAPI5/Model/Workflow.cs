@@ -35,9 +35,9 @@ namespace coreWebAPI5.Model
 			if (workflowName == "_blank")
 			{
 				Key="_blankKey";
-				ITrackable td = new Model.Fakes.TrackableDocument("doc1") { ItemId = 0 };
-				ITrackable td2 = new Model.Fakes.TrackableDocument("doc2") { ItemId = 2 };
-				List<ITrackable> l = new List<ITrackable>();
+				Trackable td = new Trackable("doc1");
+				Trackable td2 = new Trackable("doc2");
+				List<Trackable> l = new List<Trackable>();
 				l.Add(td);l.Add(td2); 
 				//Steps.Add("Step1", l);
 				//Steps.Add("Step2", new List<ITrackable>());
@@ -128,12 +128,12 @@ namespace coreWebAPI5.Model
 			}
 		}
 
-		public void AddTrackableToStart(ITrackable item)
+		public void AddTrackableToStart(Trackable item)
 		{
 			Nodes.First().Value.Trackables.Add(item);
 
 		}
-		public void AddTrackableToState(ITrackable item, string stateName, IUser moveUser, string comment = "Added Item")
+		public void AddTrackableToState(Trackable item, string stateName, IUser moveUser, string comment = "Added Item")
 		{
 			Nodes[stateName].Trackables.Add(item);
 
@@ -142,10 +142,10 @@ namespace coreWebAPI5.Model
 			{
 				comment = string.Format("{0} to {1}", comment, stateName);
 			}
-			TrackComment(item.TrackingGuid, comment, moveUser);
+			//TrackComment(item.TrackingGuid, comment, moveUser);
 		}
 
-		public void MoveToState(ITrackable item, string fromState, string toState, IUser moveUser, string comment = "Moved Item")
+		public void MoveToState(Trackable item, string fromState, string toState, IUser moveUser, string comment = "Moved Item")
 		{
 			if (!IsMoveValid(fromState, toState, moveUser))
 			{
@@ -161,10 +161,10 @@ namespace coreWebAPI5.Model
 			{
 				comment = string.Format("{0} from {1} to {2}", comment, fromState, toState);
 			}
-			TrackComment(item.TrackingGuid, comment, moveUser);
+		//	TrackComment(item.TrackingGuid, comment, moveUser);
 		}
 
-		public void CopyToState(ITrackable item, string fromState, string toState, IUser copyUser, string comment = "Copied Item")
+		public void CopyToState(Trackable item, string fromState, string toState, IUser copyUser, string comment = "Copied Item")
 		{
 			if (!IsMoveValid(fromState, toState, copyUser))
 			{
@@ -179,7 +179,7 @@ namespace coreWebAPI5.Model
 			{
 				comment = string.Format("{0} from {1} to {2}", comment, fromState, toState);
 			}
-			TrackComment(item.TrackingGuid, comment, copyUser);
+			//TrackComment(item.TrackingGuid, comment, copyUser);
 		}
 
 		public bool IsMoveValid(string from, string to, IUser user)
@@ -212,7 +212,7 @@ namespace coreWebAPI5.Model
 			return true;
 		}
 
-		public void RemoveFromState(ITrackable item, string stateName, IUser removeUser, string comment = "Removed Item")
+		public void RemoveFromState(Trackable item, string stateName, IUser removeUser, string comment = "Removed Item")
 		{
 			Nodes[stateName].Trackables.Remove(item);
 
@@ -221,7 +221,7 @@ namespace coreWebAPI5.Model
 			{
 				comment = string.Format("{0} from {1}", comment, stateName);
 			}
-			TrackComment(item.TrackingGuid, comment, removeUser);
+			//TrackComment(item.TrackingGuid, comment, removeUser);
 		}
 
 		public List<string> GetStates()
@@ -229,13 +229,13 @@ namespace coreWebAPI5.Model
 			return Nodes.Keys.ToList();
 		}
 
-		public IEnumerable<string> GetStatesItemIsIn(ITrackable item)
+		public IEnumerable<string> GetStatesItemIsIn(Trackable item)
 		{
 			return Nodes.Where(n => n.Value.Trackables.Contains(item)).Select(k => k.Key);
 			
 		}
 
-		public IEnumerable<ITrackable> GetItemsInState(string stateName)
+		public IEnumerable<Trackable> GetItemsInState(string stateName)
 		{
 			Node node = Nodes[stateName];
 			return node.Trackables;
