@@ -1,0 +1,18 @@
+﻿{
+	"title": "Workflow Update Schema",
+	"type": "object",
+	"properties": {
+		"workflowId": {
+			"description": "The Id of the workflow you want to work with",
+			"type": "string"
+		},
+		"trackableId": {
+			"description": "the Id of the trackable item to move through workflow",
+			"type": "string"
+		},
+		"nodeId": {
+			"description": "the Id of that you want the trackable to be move to",
+			"type": "string"
+		}
+	}
+}

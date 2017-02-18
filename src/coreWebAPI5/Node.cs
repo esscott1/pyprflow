@@ -18,8 +18,8 @@ namespace coreWebAPI5.Model
 
 	public class Trackable 
 	{
-	//	public int ItemId { get; set; }
-	//	public string TrackingGuid { get; set; }
+		//	public int ItemId { get; set; }
+		public string TrackingId { get; set; }
 		public string TrackingName { get; set; }
 		public Trackable(string name)
 		{

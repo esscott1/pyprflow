@@ -1,4 +1,4 @@
-﻿{Lists are arrays, everything else is object
+﻿{
 	"workflowId": "WorkflowExample1",
 	"key": "_WorkflowExample1",
 	"workflowName": "shouldbeGUID",

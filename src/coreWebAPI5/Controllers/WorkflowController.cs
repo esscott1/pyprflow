@@ -33,9 +33,9 @@ namespace coreWebAPI5.Controllers
 			var workflow = Workflow.Find(id);
 			if (workflow == null)
 			{
-				return NotFound();
+				return NotFound(id);
 			}
-			return new ObjectResult(workflow);
+			return Json(workflow);
 		}
 
 		[HttpPost]
@@ -56,7 +56,11 @@ namespace coreWebAPI5.Controllers
 			workflow.AddTrackableToStart(t);
 			return new ObjectResult(workflow);
 		}
-
+		[HttpPut("move")]
+		public IActionResult Move([FromBody]WorkflowUpdate workflowUpdate)
+		{
+			return new ObjectResult(workflowUpdate);
+		}
 		[HttpPut("{id}")]
 		public IActionResult Update(string id, [FromBody] Workflow workflow)
 		{
