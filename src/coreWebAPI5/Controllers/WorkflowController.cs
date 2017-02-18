@@ -60,9 +60,54 @@ namespace coreWebAPI5.Controllers
 		public IActionResult Move([FromBody]WorkflowUpdate workflowUpdate)
 		{
 			var workflow = Workflow.Find(workflowUpdate.WorkflowId);
-			workflow.MoveToState(workflowUpdate.TrackableId, workflowUpdate.NodeId);
+			try
+			{
+				workflow.MoveToState(workflowUpdate.TrackableId, workflowUpdate.NodeId);
+			}
+			catch(WorkFlowException ex)
+			{
+				return Json(ex.Message);
+			}
 			 return new ObjectResult(workflow);
 		}
+		[HttpPut("movenext")]
+		public IActionResult MoveNext([FromBody]WorkflowUpdate workflowUpdate)
+		{
+			Workflow workflow; string nodeName; string nextNodeName;
+			
+			try {  workflow = Workflow.Find(workflowUpdate.WorkflowId); }
+			catch(Exception ex)
+			{
+				return Json(ex.Message);
+			}
+			try
+			{
+				//find the NodeName that the item is in
+				nodeName = workflow.GetNodeNameItemIsIn(workflowUpdate.TrackableId);
+				nextNodeName = workflow.FindNextNodeName(nodeName);
+				workflow.MoveToState(workflowUpdate.TrackableId, nextNodeName);
+			}
+			catch (Exception ex)
+			{
+				return Json(ex.InnerException);
+			}
+			return new ObjectResult(workflow);
+			
+
+		}
+
+		[HttpPut("submit")]
+		public IActionResult SubmitToWorkflow([FromBody]Trackable Trackable)
+		{
+			//Workflow workflow = Workflow.Find(workflowUpdate.WorkflowId);
+			//KeyValuePair<string, Node> firstNode = workflow.GetFirstNode();
+			//firstNode.Value.Trackables.Add(Trackable);
+
+
+			return NotFound();
+		}
+
+
 		[HttpPut("{id}")]
 		public IActionResult Update(string id, [FromBody] Workflow workflow)
 		{

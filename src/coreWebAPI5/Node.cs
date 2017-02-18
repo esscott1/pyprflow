@@ -17,21 +17,21 @@ namespace coreWebAPI5.Model
 		public string NodeId { get; set; }
 	}
 
-	public class Trackable 
-	{
-		//	public int ItemId { get; set; }
-		public string TrackableId { get; set; }
-		public string TrackingName { get; set; }
-		public Trackable(string name)
-		{
-			TrackingName = name;
-			TrackableId = name;
-		}
-		//public Trackable(string trackingname, string trackableId)
-		//{
-		//	TrackingName = trackingname;
-		//	TrackableId = trackableId;
+	//public class Trackable 
+	//{
+	//	//	public int ItemId { get; set; }
+	//	public string TrackableId { get; set; }
+	//	public string TrackingName { get; set; }
+	//	public Trackable(string name)
+	//	{
+	//		TrackingName = name;
+	//		TrackableId = name;
+	//	}
+	//	//public Trackable(string trackingname, string trackableId)
+	//	//{
+	//	//	TrackingName = trackingname;
+	//	//	TrackableId = trackableId;
 
-		//}
-	}
+	//	//}
+	//}
 }

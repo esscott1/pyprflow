@@ -14,5 +14,6 @@
 			"description": "the Id of that you want the trackable to be move to",
 			"type": "string"
 		}
+	},
+	"required": ["workflowId", "trackableId"]
 	}
-}

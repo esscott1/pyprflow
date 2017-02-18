@@ -64,6 +64,11 @@ namespace coreWebAPI5.Model
 			WorkflowId = workflowId;
 		}
 
+		internal KeyValuePair<string, Node> GetFirstNode()
+		{
+			return Nodes.First();
+		}
+
 		public static Workflow DeserializeWorkflow(string workflowJson)
 		{
 			if (string.IsNullOrWhiteSpace(workflowJson))
@@ -144,12 +149,27 @@ namespace coreWebAPI5.Model
 			}
 			//TrackComment(item.TrackingGuid, comment, moveUser);
 		}
-		public void MoveToState(string trackableId, string toState,  IUser user=null, string comment = "Moved Item")
+		public void MoveToState(string trackableId, string toState, IUser user = null, string comment = "Moved Item")
 		{
-			var trackable = this.GetTrackableById(trackableId);
-			var currentNode = this.GetStatesItemIsIn(trackable).First();
-			Nodes[currentNode].Trackables.Remove(trackable);
-			Nodes[toState].Trackables.Add(trackable);
+			try
+			{
+				var trackable = this.GetTrackableById(trackableId);
+
+				var currentNode = this.GetNodeNameItemIsIn(trackable).First();
+				if (IsMoveValid(currentNode, toState))
+				{
+					Nodes[currentNode].Trackables.Remove(trackable);
+					Nodes[toState].Trackables.Add(trackable);
+				}
+				else
+					throw new WorkFlowException("invalid move");
+
+			}
+			catch(Exception ex)
+			{
+				throw new WorkFlowException(ex.Message);
+			
+			}
 
 		}
 		public void MoveToState(Trackable item, string fromState, string toState, IUser moveUser, string comment = "Moved Item")
@@ -189,7 +209,7 @@ namespace coreWebAPI5.Model
 			//TrackComment(item.TrackingGuid, comment, copyUser);
 		}
 
-		public bool IsMoveValid(string from, string to, IUser user)
+		public bool IsMoveValid(string from, string to, IUser user=null)
 		{
 			if (!moves.Any())
 			{
@@ -230,19 +250,42 @@ namespace coreWebAPI5.Model
 			}
 			//TrackComment(item.TrackingGuid, comment, removeUser);
 		}
+		internal  string FindNextNodeName(string nodeName)
+		{
+			
+			var nextNodeName = this.moves.Find(m => m.From == nodeName).To;
+			if (nextNodeName == null || nextNodeName == String.Empty)
+				throw new WorkFlowException("No next Node found");
+			return nextNodeName;
+			
+		}
 
+		
 		public List<string> GetStates()
 		{
 			return Nodes.Keys.ToList();
 		}
 
-		public IEnumerable<string> GetStatesItemIsIn(Trackable item)
+		public string GetNodeNameItemIsIn(string itemId)
 		{
+			foreach(KeyValuePair<string, Node> kvp in Nodes)
+			{
+				var r = kvp.Value.Trackables.Where(t => t.TrackableId == itemId);
+				if (r.Count() > 0)
+					return kvp.Key;
+			}
+			return String.Empty;
+
+
+		}
+		public IEnumerable<string> GetNodeNameItemIsIn(Trackable item)
+		{
+	
 			return Nodes.Where(n => n.Value.Trackables.Contains(item)).Select(k => k.Key);
 			
 		}
 
-		public IEnumerable<Trackable> GetItemsInState(string stateName)
+		public IEnumerable<Trackable> GetItemsInNode(string stateName)
 		{
 			Node node = Nodes[stateName];
 			return node.Trackables;
