@@ -59,7 +59,9 @@ namespace coreWebAPI5.Controllers
 		[HttpPut("move")]
 		public IActionResult Move([FromBody]WorkflowUpdate workflowUpdate)
 		{
-			return new ObjectResult(workflowUpdate);
+			var workflow = Workflow.Find(workflowUpdate.WorkflowId);
+			workflow.MoveToState(workflowUpdate.TrackableId, workflowUpdate.NodeId);
+			 return new ObjectResult(workflow);
 		}
 		[HttpPut("{id}")]
 		public IActionResult Update(string id, [FromBody] Workflow workflow)

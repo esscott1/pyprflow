@@ -35,8 +35,8 @@ namespace coreWebAPI5.Model
 			if (workflowName == "_blank")
 			{
 				Key="_blankKey";
-				Trackable td = new Trackable("doc1");
-				Trackable td2 = new Trackable("doc2");
+				Trackable td = new Trackable("doc1") { TrackableId = "doc1" };
+				Trackable td2 = new Trackable("doc2") { TrackableId = "doc2" };
 				List<Trackable> l = new List<Trackable>();
 				l.Add(td);l.Add(td2); 
 				//Steps.Add("Step1", l);
@@ -144,7 +144,14 @@ namespace coreWebAPI5.Model
 			}
 			//TrackComment(item.TrackingGuid, comment, moveUser);
 		}
+		public void MoveToState(string trackableId, string toState,  IUser user=null, string comment = "Moved Item")
+		{
+			var trackable = this.GetTrackableById(trackableId);
+			var currentNode = this.GetStatesItemIsIn(trackable).First();
+			Nodes[currentNode].Trackables.Remove(trackable);
+			Nodes[toState].Trackables.Add(trackable);
 
+		}
 		public void MoveToState(Trackable item, string fromState, string toState, IUser moveUser, string comment = "Moved Item")
 		{
 			if (!IsMoveValid(fromState, toState, moveUser))
@@ -286,6 +293,20 @@ namespace coreWebAPI5.Model
 		public IEnumerable<TrackingComment> GetTrackingByDocument(Guid docId)
 		{
 			return trackingComments.Where(t => t.DocId == docId).OrderBy(o => o.Time);
+		}
+
+		public Trackable GetTrackableById(string docId)
+		{
+			
+			foreach(KeyValuePair<string, Node> kvp in Nodes)
+			{
+				IEnumerable<Trackable> r = kvp.Value.Trackables.Where(t => t.TrackableId == docId);
+				if (r.Count() > 0)
+					return r.First();
+			}
+			return null;
+			
+			
 		}
 
 		public IEnumerable<TrackingComment> GetTrackingByUser(IUser user)
