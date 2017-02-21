@@ -38,6 +38,7 @@ namespace coreWebAPI5.Controllers
 			return Json(workflow);
 		}
 
+		[HttpGet("availablemoves")]
 		[HttpPost]
 		public IActionResult Create([FromBody] Workflow workflow)
 		{
@@ -62,7 +63,7 @@ namespace coreWebAPI5.Controllers
 			var workflow = Workflow.Find(workflowUpdate.WorkflowId);
 			try
 			{
-				workflow.MoveToState(workflowUpdate.TrackableId, workflowUpdate.NodeId);
+				workflow.MoveToNode(workflowUpdate.TrackableId, workflowUpdate.NodeId);
 			}
 			catch(WorkFlowException ex)
 			{
@@ -85,7 +86,7 @@ namespace coreWebAPI5.Controllers
 				//find the NodeName that the item is in
 				nodeName = workflow.GetNodeNameItemIsIn(workflowUpdate.TrackableId);
 				nextNodeName = workflow.FindNextNodeName(nodeName);
-				workflow.MoveToState(workflowUpdate.TrackableId, nextNodeName);
+				workflow.MoveToNode(workflowUpdate.TrackableId, nextNodeName);
 			}
 			catch (Exception ex)
 			{

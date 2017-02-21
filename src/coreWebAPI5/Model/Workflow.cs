@@ -47,11 +47,12 @@ namespace coreWebAPI5.Model
 				moves.Add(new Movement() { From = "Step2", To = "Step3" });
 				moves.Add(new Movement() { From = "Step3", To = "Step4" });
 				Nodes.Add("Step1", new Node("Step1") { Trackables = l });
+				foreach(Trackable t in l)
+				{
+					t.NodeNamesIn.Add("Step1");
+				}
 				Nodes.Add("Step2", new Node("Step2") );
-
-
 			}
-
 			WorkflowName = workflowName;
 			
 		}
@@ -136,7 +137,7 @@ namespace coreWebAPI5.Model
 		public void AddTrackableToStart(Trackable item)
 		{
 			Nodes.First().Value.Trackables.Add(item);
-
+			item.NodeNamesIn.Add(Nodes.First().Key);
 		}
 		public void AddTrackableToState(Trackable item, string stateName, IUser moveUser, string comment = "Added Item")
 		{
@@ -149,7 +150,7 @@ namespace coreWebAPI5.Model
 			}
 			//TrackComment(item.TrackingGuid, comment, moveUser);
 		}
-		public void MoveToState(string trackableId, string toState, IUser user = null, string comment = "Moved Item")
+		public void MoveToNode(string trackableId, string toState, IUser user = null, string comment = "Moved Item")
 		{
 			try
 			{
@@ -160,6 +161,7 @@ namespace coreWebAPI5.Model
 				{
 					Nodes[currentNode].Trackables.Remove(trackable);
 					Nodes[toState].Trackables.Add(trackable);
+					trackable.NodeNamesIn.Add(toState);
 				}
 				else
 					throw new WorkFlowException("invalid move");
@@ -172,26 +174,26 @@ namespace coreWebAPI5.Model
 			}
 
 		}
-		public void MoveToState(Trackable item, string fromState, string toState, IUser moveUser, string comment = "Moved Item")
-		{
-			if (!IsMoveValid(fromState, toState, moveUser))
-			{
-				var msg = string.Format("{0} cannot move {1} from {2} to {3}", moveUser, item, fromState, toState);
-				throw new WorkFlowException(msg);
-			}
+		//public void MoveToNode(Trackable item, string fromState, string toState, IUser moveUser, string comment = "Moved Item")
+		//{
+		//	if (!IsMoveValid(fromState, toState, moveUser))
+		//	{
+		//		var msg = string.Format("{0} cannot move {1} from {2} to {3}", moveUser, item, fromState, toState);
+		//		throw new WorkFlowException(msg);
+		//	}
 
-			Nodes[toState].Trackables.Add(item);
-			RemoveFromState(item, fromState, moveUser, toState);
+		//	Nodes[toState].Trackables.Add(item);
+		//	RemoveFromState(item, fromState, moveUser, toState);
 
-			// log comment
-			if (comment.Equals("Moved Item"))
-			{
-				comment = string.Format("{0} from {1} to {2}", comment, fromState, toState);
-			}
-		//	TrackComment(item.TrackingGuid, comment, moveUser);
-		}
+		//	// log comment
+		//	if (comment.Equals("Moved Item"))
+		//	{
+		//		comment = string.Format("{0} from {1} to {2}", comment, fromState, toState);
+		//	}
+		////	TrackComment(item.TrackingGuid, comment, moveUser);
+		//}
 
-		public void CopyToState(Trackable item, string fromState, string toState, IUser copyUser, string comment = "Copied Item")
+		public void CopyToNode(Trackable item, string fromState, string toState, IUser copyUser, string comment = "Copied Item")
 		{
 			if (!IsMoveValid(fromState, toState, copyUser))
 			{
@@ -261,7 +263,7 @@ namespace coreWebAPI5.Model
 		}
 
 		
-		public List<string> GetStates()
+		public List<string> GetNodeNames()
 		{
 			return Nodes.Keys.ToList();
 		}

@@ -10,8 +10,10 @@ namespace coreWebAPI5.Model
 		//	public int ItemId { get; set; }
 		public string TrackableId { get; set; }
 		public string TrackingName { get; set; }
+		public List<string> NodeNamesIn { get; set; }
 		public Trackable(string name)
 		{
+			NodeNamesIn = new List<string>();
 			TrackingName = name;
 			TrackableId = name;
 		}
