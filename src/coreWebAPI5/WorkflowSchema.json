@@ -11,43 +11,52 @@
 			"type": "string"
 		},
 		"workflowName": {
-			"type": "string"
-		},
+				"description" : "human friendly name give to thw workflow",
+				"type": "string"
+			},
 		"nodes": {
 			"description": "a collection of nodes that represent a resting state in which items belong during thier journey though the workflow",
-			"type": "object",
+			"type": "array",
 			"items": {
 				"title": "node",
+				"description" : "a resting state of a workflow that contains trackable items",
 				"type": "object",
-				"properties": {
-					"node_id": {
-						"description": "node unique identifier",
-						"type": "string"
-					},
-					"trackables": {
-						"description": "array of items within the given node",
-						"type": "array",
-						"items": {
-							"title": "trackable",
-							"description": "object being tracked within this step",
-							"type": "object",
-							"properties": {
-								"trackingGuid": {
-									"description": "unique identifier for this item",
-									"type": "string"
-								},
-								"itemId": {
-									"description": "unique identifier for this item",
-									"type": "number"
-								},
-								"trackingName:" {
-									"description": "human friendly name for this item",
-									"type": "string"
+						"properties": {
+							"trackables": {
+								"description": "array of items within the given node",
+								"type": "array",
+								"items": {
+									"title": "trackable",
+									"description": "object being tracked within this step",
+									"type": "object",
+									"properties": {
+										"trackableId": {
+											"description": "unique identifier for this item",
+											"type": "string"
+										},
+										"trackingName:" {
+											"description": "human friendly name for this item",
+											"type": "string"
+										},
+										"nodeNamesIn": {
+											"description": "unique identifier for this item",
+											"type": "array",
+											"items": { "nodeName": "string" }
+										}
+									}
 								}
+							},
+							"nodeName": {
+								"type": "string"
+							},
+							"nodeDescription": {
+								"type": "string"
+							},
+							"nodeId": {
+								"description": "node unique identifier",
+								"type": "string"
 							}
 						}
-					}
-				}
 			}
 		},
 		"moves": {
@@ -59,11 +68,11 @@
 				"type": "object",
 				"properties": {
 					"from": {
-						"description": "starting step for movement",
+						"description": "starting NodeName for movement",
 						"type": "string"
 					},
 					"to": {
-						"description": "ending step for movement",
+						"description": "ending NodeName for movement",
 						"type": "string"
 					}
 				}

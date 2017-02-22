@@ -1,48 +1,47 @@
 ﻿{
-	"workflowId": "WorkflowExample1",
-	"key": "_WorkflowExample1",
-	"workflowName": "shouldbeGUID",
-	"steps": [
-		{
-			"step_id": "Step1",
-			"ITrackables": [
+	"nodes": {
+		"Step1": {
+			"trackables": [
 				{
-					"trackingId": "docId1Guid",
-					"itemId": 1,
-					"trackingName": "Document1"
-				},
-				{
-					"trackingId": "docId2Guid",
-					"itemId": 2,
-					"trackingName": "Document2"
+					"trackableId": null,
+					"trackingName": "document2",
+					"nodeNamesIn": []
 				}
-			]
+			],
+			"nodeName": "Step1",
+			"nodeDescription": null,
+			"nodeId": "0"
 		},
-		{
-			"step_id": "Step2",
-			"ITrackables": []
+		"Step2": {
+			"trackables": [
+				{
+					"trackableId": "unique1",
+					"trackingName": "document1",
+					"nodeNamesIn": [
+						"Step2"
+					]
+				}
+			],
+			"nodeName": "Step2",
+			"nodeDescription": null,
+			"nodeId": "0"
 		},
-		{
-			"step_id": "Step3",
-			"ITrackables": []
-		},
-		{
-			"step_id": "Step4",
-			"ITrackables": []
+		"Step3": {
+			"trackables": [],
+			"nodeName": "Step3",
+			"nodeDescription": null,
+			"nodeId": "0"
 		}
-	],
+	},
+	"trackingComments": [],
 	"moves": [
 		{
 			"from": "Step1",
-			"to": "Step2"
-		},
-		{
-			"from": "Step2",
-			"to": "Step3"
-		},
-		{
-			"from": "Step3",
-			"to": "Step4"
+			"to": "Step2",
+			"approveUsers": []
 		}
-	]
+	],
+	"workflowId": "5bb80835-05a8-435b-b273-205f73f1d700",
+	"key": "_blankKeyes21",
+	"workflowName": "_blankKeyes21"
 }
