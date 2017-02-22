@@ -38,7 +38,26 @@ namespace coreWebAPI5.Controllers
 			return Json(workflow);
 		}
 
-		[HttpGet("availablemoves")]
+		[HttpPut("availablemoves")]
+		public IEnumerable<string> AvailableMoves([FromBody] WorkflowUpdate workflowUpdate)
+		{
+			var workflow = Workflow.Find(workflowUpdate.WorkflowId);
+			try
+			{
+				return workflow.FindAvailableNodes(workflowUpdate.TrackableId);
+			}
+			catch (WorkFlowException ex)
+			{
+
+			}
+			finally
+			{
+				
+			}
+			return new List<string>();
+
+
+		}
 		[HttpPost]
 		public IActionResult Create([FromBody] Workflow workflow)
 		{

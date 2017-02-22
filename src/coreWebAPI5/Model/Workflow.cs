@@ -57,6 +57,14 @@ namespace coreWebAPI5.Model
 			
 		}
 
+		internal IEnumerable<string> FindAvailableNodes(string trackableId)
+		{
+			string nodeName = GetNodeNameItemIsIn(trackableId);
+			IEnumerable<Movement> listOmoves = moves.Where(m => m.From == nodeName);
+			IEnumerable<string> toNodes = listOmoves.Select(o => o.To);
+			return toNodes;
+		}
+
 		[JsonConstructor]
 		public Workflow(Guid workflowId, string workflowname)
 			: this(workflowname)
