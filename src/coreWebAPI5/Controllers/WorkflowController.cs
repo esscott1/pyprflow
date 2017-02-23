@@ -33,26 +33,26 @@ namespace workflow.Controllers
 			}
 			return Json(workflow);
 		}
-		[HttpPut("availablemoves")]
-		public IEnumerable<string> AvailableMoves([FromBody] WorkflowUpdate workflowUpdate)
-		{
-			var workflow = Workflow.Find(workflowUpdate.WorkflowId);
-			try
-			{
-				return workflow.FindAvailableNodes(workflowUpdate.TrackableId);
-			}
-			catch (WorkFlowException ex)
-			{
+		//[HttpPut("availablemoves")]
+		//public IEnumerable<string> AvailableMoves([FromBody] WorkflowUpdate workflowUpdate)
+		//{
+		//	var workflow = Workflow.Find(workflowUpdate.WorkflowId);
+		//	try
+		//	{
+		//		return workflow.FindAvailableNodes(workflowUpdate.TrackableId);
+		//	}
+		//	catch (WorkFlowException ex)
+		//	{
 
-			}
-			finally
-			{
+		//	}
+		//	finally
+		//	{
 
-			}
-			return new List<string>();
+		//	}
+		//	return new List<string>();
 
 
-		}
+		//}
 		[HttpPost]
 		public IActionResult Create([FromBody] Workflow workflow)
 		{
@@ -71,55 +71,54 @@ namespace workflow.Controllers
 			workflow.AddTrackableToStart(t);
 			return new ObjectResult(workflow);
 		}
-		[HttpPut("move")]
-		public IActionResult Move([FromBody]WorkflowUpdate workflowUpdate)
-		{
-			var workflow = Workflow.Find(workflowUpdate.WorkflowId);
-			try
-			{
-				workflow.MoveToNode(workflowUpdate.TrackableId, workflowUpdate.NodeId);
-			}
-			catch (WorkFlowException ex)
-			{
-				return Json(ex.Message);
-			}
-			return new ObjectResult(workflow);
-		}
-		[HttpPut("movenext")]
-		public IActionResult MoveNext([FromBody]WorkflowUpdate workflowUpdate)
-		{
-			Workflow workflow; string nodeName; string nextNodeName;
+		//[HttpPut("move")]
+		//public IActionResult Move([FromBody]WorkflowUpdate workflowUpdate)
+		//{
+		//	var workflow = Workflow.Find(workflowUpdate.WorkflowId);
+		//	try
+		//	{
+		//		workflow.MoveToNode(workflowUpdate.TrackableId, workflowUpdate.NodeId);
+		//	}
+		//	catch (WorkFlowException ex)
+		//	{
+		//		return Json(ex.Message);
+		//	}
+		//	return new ObjectResult(workflow);
+		//}
+		//[HttpPut("movenext")]
+		//public IActionResult MoveNext([FromBody]WorkflowUpdate workflowUpdate)
+		//{
+		//	Workflow workflow; string nodeName; string nextNodeName;
 
-			try { workflow = Workflow.Find(workflowUpdate.WorkflowId); }
-			catch (Exception ex)
-			{
-				return Json(ex.Message);
-			}
-			try
-			{
-				//find the NodeName that the item is in
-				nodeName = workflow.GetNodeNameItemIsIn(workflowUpdate.TrackableId);
-				nextNodeName = workflow.FindNextNodeName(nodeName);
-				workflow.MoveToNode(workflowUpdate.TrackableId, nextNodeName);
-			}
-			catch (Exception ex)
-			{
-				return Json(ex.InnerException);
-			}
-			return new ObjectResult(workflow);
+		//	try { workflow = Workflow.Find(workflowUpdate.WorkflowId); }
+		//	catch (Exception ex)
+		//	{
+		//		return Json(ex.Message);
+		//	}
+		//	try
+		//	{
+		//		//find the NodeName that the item is in
+		//		nodeName = workflow.GetNodeNameItemIsIn(workflowUpdate.TrackableId);
+		//		nextNodeName = workflow.FindNextNodeName(nodeName);
+		//		workflow.MoveToNode(workflowUpdate.TrackableId, nextNodeName);
+		//	}
+		//	catch (Exception ex)
+		//	{
+		//		return Json(ex.InnerException);
+		//	}
+		//	return new ObjectResult(workflow);
+		//}
+		
+		//[HttpPut("submit")]
+		//public IActionResult SubmitToWorkflow([FromBody]Trackable Trackable)
+		//{
+		//	//Workflow workflow = Workflow.Find(workflowUpdate.WorkflowId);
+		//	//KeyValuePair<string, Node> firstNode = workflow.GetFirstNode();
+		//	//firstNode.Value.Trackables.Add(Trackable);
 
 
-		}
-		[HttpPut("submit")]
-		public IActionResult SubmitToWorkflow([FromBody]Trackable Trackable)
-		{
-			//Workflow workflow = Workflow.Find(workflowUpdate.WorkflowId);
-			//KeyValuePair<string, Node> firstNode = workflow.GetFirstNode();
-			//firstNode.Value.Trackables.Add(Trackable);
-
-
-			return NotFound();
-		}
+		//	return NotFound();
+		//}
 		[HttpPut("{id}")]
 		public IActionResult Update(string id, [FromBody] Workflow workflow)
 		{
@@ -143,12 +142,12 @@ namespace workflow.Controllers
 				return NotFound();
 			return Json(deleted);
 		}
-		[HttpDelete("trackable/delete")]
-		public IActionResult DeleteTrackable([FromBody] WorkflowUpdate workflowUpdate)
-		{
-			Workflow wf = Workflow.Find(workflowUpdate.WorkflowId);
-			wf.RemoveItemFromWorkflow(workflowUpdate.TrackableId);
-			return Json("tried to delete ID: " + workflowUpdate);
-		}
+		//[HttpDelete("trackable/delete")]
+		//public IActionResult RemoveTrackable([FromBody] WorkflowUpdate workflowUpdate)
+		//{
+		//	Workflow wf = Workflow.Find(workflowUpdate.WorkflowId);
+		//	wf.RemoveItemFromWorkflow(workflowUpdate.TrackableId);
+		//	return Json("tried to delete ID: " + workflowUpdate);
+		//}
 	}
 }
