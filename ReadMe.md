@@ -94,7 +94,8 @@ Workflow JSON Schema
 
 Workflow Example with simple steps and one item being tracked in first step
 
-``` {
+```
+{
 	"nodes": {
 		"Step1": {
 			"trackables": [
@@ -141,4 +142,5 @@ Workflow Example with simple steps and one item being tracked in first step
 	"key": "_blankKeyes21",
 	"workflowName": "_blankKeyes21"
 }
+
 ```
