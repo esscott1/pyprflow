@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Primitives;
 
 namespace workflow.Model
 {
@@ -13,5 +14,6 @@ namespace workflow.Model
 		Workflow Find(string key);
 		Workflow Remove(string key);
 		void Update(Workflow workflow);
+		bool CheckValidUserKey(string stringValues);
 	}
 }

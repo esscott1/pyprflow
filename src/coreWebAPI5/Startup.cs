@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using workflow.Model;
+using workflow.Middleware;
 
 
 namespace workflow
@@ -39,6 +40,7 @@ namespace workflow
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+			app.ApplyUserKeyValidation();
 
             app.UseMvc();
         }

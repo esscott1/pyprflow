@@ -4,6 +4,7 @@ using System.Collections.Concurrent;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Primitives;
 
 namespace workflow.Model
 {
@@ -20,6 +21,17 @@ namespace workflow.Model
 			if(workflow.Key == null || workflow.Key ==String.Empty )
 				workflow.Key = Guid.NewGuid().ToString();
 			_Workflow[workflow.Key] = workflow;
+		}
+
+		public bool CheckValidUserKey(string stringValue)
+		{
+			var userkeylist = new List<string>();
+			userkeylist.Add("eric");
+			userkeylist.Add("test");
+			if(userkeylist.Contains(stringValue))
+				return true;
+			return false;
+			//throw new NotImplementedException();
 		}
 
 		public Workflow Find(string key)
