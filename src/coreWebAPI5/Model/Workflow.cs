@@ -133,6 +133,20 @@ namespace coreWebAPI5.Model
 			//return DeserializeWorkflow(serializedWorkfow);
 		}
 
+		internal void RemoveItemFromWorkflow(string trackableId)
+		{
+			foreach(KeyValuePair<string, Node> kvp in Nodes)
+			{
+				var trackables = kvp.Value.Trackables.FindAll(t => t.TrackableId == trackableId);
+				if (trackables.Count > 0)
+				{
+					kvp.Value.Trackables.RemoveAll(t => t.TrackableId == trackableId);
+				}
+			}
+			return;
+			
+		}
+
 		public void AddNode(string stateName, string fromState = null)
 		{
 			Nodes.Add(stateName, new Node(stateName));

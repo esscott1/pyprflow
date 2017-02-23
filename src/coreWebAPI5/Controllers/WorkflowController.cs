@@ -18,15 +18,11 @@ namespace coreWebAPI5.Controllers
 			Workflow = workflow;
 		}
 		public IWorkflowRepository Workflow { get; set; }
-
 		[HttpGet]
 		public IEnumerable<Workflow> GetAll()
 		{
 			return Workflow.GetAll();
 		}
-
-		
-
 		[HttpGet("{id}", Name = "GetWorkflow")]
 		public IActionResult GetById(string id)
 		{
@@ -37,7 +33,6 @@ namespace coreWebAPI5.Controllers
 			}
 			return Json(workflow);
 		}
-
 		[HttpPut("availablemoves")]
 		public IEnumerable<string> AvailableMoves([FromBody] WorkflowUpdate workflowUpdate)
 		{
@@ -52,7 +47,7 @@ namespace coreWebAPI5.Controllers
 			}
 			finally
 			{
-				
+
 			}
 			return new List<string>();
 
@@ -84,19 +79,19 @@ namespace coreWebAPI5.Controllers
 			{
 				workflow.MoveToNode(workflowUpdate.TrackableId, workflowUpdate.NodeId);
 			}
-			catch(WorkFlowException ex)
+			catch (WorkFlowException ex)
 			{
 				return Json(ex.Message);
 			}
-			 return new ObjectResult(workflow);
+			return new ObjectResult(workflow);
 		}
 		[HttpPut("movenext")]
 		public IActionResult MoveNext([FromBody]WorkflowUpdate workflowUpdate)
 		{
 			Workflow workflow; string nodeName; string nextNodeName;
-			
-			try {  workflow = Workflow.Find(workflowUpdate.WorkflowId); }
-			catch(Exception ex)
+
+			try { workflow = Workflow.Find(workflowUpdate.WorkflowId); }
+			catch (Exception ex)
 			{
 				return Json(ex.Message);
 			}
@@ -112,10 +107,9 @@ namespace coreWebAPI5.Controllers
 				return Json(ex.InnerException);
 			}
 			return new ObjectResult(workflow);
-			
+
 
 		}
-
 		[HttpPut("submit")]
 		public IActionResult SubmitToWorkflow([FromBody]Trackable Trackable)
 		{
@@ -126,8 +120,6 @@ namespace coreWebAPI5.Controllers
 
 			return NotFound();
 		}
-
-
 		[HttpPut("{id}")]
 		public IActionResult Update(string id, [FromBody] Workflow workflow)
 		{
@@ -141,6 +133,22 @@ namespace coreWebAPI5.Controllers
 			Workflow.Update(_workflow);
 			return new NoContentResult();
 
+		}
+		[HttpDelete("workflow/{id}")]
+		public IActionResult Delete(string id)
+		{
+			WorkflowRepository rep = new WorkflowRepository();
+			var deleted = rep.Remove(id);
+			if (deleted == null)
+				return NotFound();
+			return Json(deleted);
+		}
+		[HttpDelete("trackable/delete")]
+		public IActionResult DeleteTrackable([FromBody] WorkflowUpdate workflowUpdate)
+		{
+			Workflow wf = Workflow.Find(workflowUpdate.WorkflowId);
+			wf.RemoveItemFromWorkflow(workflowUpdate.TrackableId);
+			return Json("tried to delete ID: " + workflowUpdate);
 		}
 	}
 }

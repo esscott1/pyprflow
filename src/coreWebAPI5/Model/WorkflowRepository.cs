@@ -36,9 +36,15 @@ namespace coreWebAPI5.Model
 
 		public Workflow Remove(string key)
 		{
-			Workflow report;
-			_Workflow.TryRemove(key, out report);
-			return report;
+			Workflow report; bool d;
+			try { d =  _Workflow.TryRemove(key, out report); }
+			catch (Exception ex)
+			{
+				throw new WorkFlowException("error TryRemove: "+ex.InnerException);
+			}
+			if (d)
+				return report;
+			return null;
 		}
 
 		public void Update(Workflow workflow)
