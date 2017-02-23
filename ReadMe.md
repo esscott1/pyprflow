@@ -1,11 +1,13 @@
-﻿This API application provides endpoints for creating managing and deleting a workflow orchestration and the items which are being processed through a given workflow.
+﻿
+
+This API application provides endpoints for creating managing and deleting a workflow orchestration and the items which are being processed through a given workflow.
 
 There are 2 types of workflow:  'Basic' and 'Complex' which are denoted by the Workflow property called "workflowType".
 Workflows are created by submitting a JSON object that represent the structure and rules of the workflow.  Below are the JSON Schema and an example of both a Simple and Complex workflow type
 
  
 Workflow JSON Schema
-```
+```JSON
 {
 	"title": "Workflow Schema",
 	"type": "object",
@@ -94,7 +96,7 @@ Workflow JSON Schema
 
 Workflow Example with simple steps and one item being tracked in first step
 
-```
+```JSON
 {
 	"nodes": {
 		"Step1": {
