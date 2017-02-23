@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace coreWebAPI5.Model
+namespace workflow.Model
 {
 	public class WorkflowRepository : IWorkflowRepository
 	{

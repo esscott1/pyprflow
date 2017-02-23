@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace coreWebAPI5.Model
+namespace workflow.Model
 {
 	public class TrackingComment
 	{

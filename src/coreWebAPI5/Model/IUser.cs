@@ -1,4 +1,4 @@
-﻿namespace coreWebAPI5.Model
+﻿namespace workflow.Model
 {
 	public interface IUser
 	{

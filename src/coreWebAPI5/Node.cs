@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace coreWebAPI5.Model
+namespace workflow.Model
 {
 	internal class Node
 	{

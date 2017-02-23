@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace coreWebAPI5.Model
+namespace workflow.Model
 {
 	[JsonConverter(typeof(Trackable))]
 	public interface ITrackable

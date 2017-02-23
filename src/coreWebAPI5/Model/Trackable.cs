@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace coreWebAPI5.Model
+namespace workflow.Model
 {
 	public class Trackable
 	{

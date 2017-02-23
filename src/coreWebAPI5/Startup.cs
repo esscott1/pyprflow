@@ -7,10 +7,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using coreWebAPI5.Model;
+using workflow.Model;
 
 
-namespace coreWebAPI5
+namespace workflow
 {
     public class Startup
     {
