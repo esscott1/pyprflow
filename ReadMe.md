@@ -1,10 +1,39 @@
-﻿
+﻿This API application provides endpoints for creating, managing, and deleting an orchestration workflow.  It allow for items (trackables) to be submitted into and managed through 
+the lifecycle of the orchestration workflow. 
 
-This API application provides endpoints for creating managing and deleting a workflow orchestration and the items which are being processed through a given workflow.
+###What is an orchestration workflow?
+An orchestration workflow defines a logical flow of activities or tasks from a start event to an end event to accomplish a specific purpose or service.
 
+###What is an example of an orchestration workflow (OW) in action?
+One typical example is the process of reviewing and approving documents.  In this example the OW defines the logical flow or path a document would 
+travel through in it's journey to be 'approved.'  First a document is created, then submitted into a previously defined OW.  As different actions
+ are performed (physical review by individuals; an amount of time has passed, a computerized event occurs),the document is advanced (or retarded) to the 
+ next step(s) in the OW.  In this example the specific purpose is to produce an "approved" document.  this may require various changes and re-reviews,
+ all of which are tracked and facilitated by the OW.
+ 
+ ###Are orchestration workflows single directional?
+ No, orchestration workflows support multiple direction.  In the above example, a document that needs modification may be retarded backwards to a less
+ mature step in the defined activity flow.
+
+ ###Are orchestration workflows single dimensional or serial in nature? 
+ No, simple OW are single dimensional, where one task leads to another task and another in a serial mannor.  OW can also be complex where completion of a 
+ single task may spawn need for multiple other tasks to be executed in parallel. Similarly, a task that needs to be done may require the completion of multiple 
+ unrelated tasks to be complete before that task can be attempted.
+
+ ###How are orchestration workflows represented in this tool?
 There are 2 types of workflow:  'Basic' and 'Complex' which are denoted by the Workflow property called "workflowType".
-Workflows are created by submitting a JSON object that represent the structure and rules of the workflow.  Below are the JSON Schema and an example of both a Simple and Complex workflow type
+Workflows are created by submitting a JSON object that represent the structure and rules of the workflow.  Below are the JSON Schema and examples of both a Simple
+ and Complex workflow type
 
+ ###How do I initiate a orchestration workflow?
+ Orchestration workflows are structured representations of business processes.  Initiating a business process requires something (ie. a document) to be submitted to 
+ process (OW) for facilitation and tracking.
+
+ ###How do I submit something to a orchestration workflow?
+ Any item can be submitted to an orchestration workflow.  The details of the item should be stored in a system other than the orchestration workflow system.  However, 
+ a unique identifier is required for the orchestration workflow to track and facilitate.  It also enable the items system of record to easily match the items information 
+ with it's location and status within the orchestration workflow.  Below is a JSON schema and JSON example of a WorkflowItemUpdate.  all item management requires submission 
+ of a WorkflowItemUpdate to the OW engine.'
  
 Workflow JSON Schema
 ```JSON
@@ -146,3 +175,10 @@ Workflow Example with simple steps and one item being tracked in first step
 }
 
 ```
+
+## Submitting and Managing items through a orchestration Workflow
+
+To submit an item to an orchestration workflow you simply Post a workflowUpdate JSON object to the API/trackable/start.  Note that the workflowUpdate JSON object requires 
+the workflowID and a trackableId for the item you are submitting.  This trackableId can be created by the submitter or you can request a trackableId from the system 
+via Get API/trackable/newId.  If the API/trackable/start receives a trackableId that is already being used within the OW, an error will be returned and the item will not 
+be accepted to the OW.  To verify the uniqueness of the trackableId, you can Post to API/trackable/isunique/{trackableId} for a boolean result.
