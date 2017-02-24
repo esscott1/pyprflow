@@ -12,6 +12,10 @@ namespace workflow.Model
 		public Guid WorkflowId { get; private set; }
 		public string Key { get; set; }
 		public string WorkflowName { get; private set; }
+
+		internal string StartingNodeName  {get;set;}
+		internal string EndingNodeName { get; set; }
+
 		[JsonProperty]
 		private Dictionary<string, Node> Nodes;
 		//[JsonProperty]
@@ -55,6 +59,51 @@ namespace workflow.Model
 			}
 			WorkflowName = workflowName;
 			
+		}
+		private bool CanExitNode(string nodeName)
+		{
+			foreach(Movement m in moves)
+			{
+				if (m.From == nodeName)
+					return true;
+			}
+			return false;
+		}
+
+		private bool CanEnterNode(string nodeName)
+		{
+			foreach (Movement m in moves)
+			{
+				if (m.To == nodeName)
+					return true;
+			}
+			return false;
+
+		}
+		internal bool IsValid(out WorkflowValidationMessage message)
+		{
+			message = new WorkflowValidationMessage();
+			List<string> NodesWithoutProperPaths = new List<string>();
+			// all middle nodes can be moved into and out of 
+			foreach(KeyValuePair<string, Node> kvp in Nodes)
+			{
+				if (kvp.Value.IsStart) { message.HasStart = true; }
+				else {
+					if (!CanEnterNode(kvp.Key))
+						message.UnreachableNodeNames.Add(kvp.Key); 
+					}
+				if (kvp.Value.IsEnd) {	message.HasEnd = true; }
+				else
+				{
+					if (!CanExitNode(kvp.Key))
+						message.DeadEndNodeNames.Add(kvp.Key);
+				}
+			}
+			if (message.Valid)
+				return true;
+			return false;
+			
+			//throw new NotImplementedException();
 		}
 
 		internal IEnumerable<string> FindAvailableNodes(string trackableId)

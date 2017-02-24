@@ -23,6 +23,7 @@ namespace workflow.Controllers
 		{
 			return Workflow.GetAll();
 		}
+
 		[HttpGet("{id}", Name = "GetWorkflow")]
 		public IActionResult GetById(string id)
 		{
@@ -33,26 +34,18 @@ namespace workflow.Controllers
 			}
 			return Json(workflow);
 		}
-		//[HttpPut("availablemoves")]
-		//public IEnumerable<string> AvailableMoves([FromBody] WorkflowUpdate workflowUpdate)
-		//{
-		//	var workflow = Workflow.Find(workflowUpdate.WorkflowId);
-		//	try
-		//	{
-		//		return workflow.FindAvailableNodes(workflowUpdate.TrackableId);
-		//	}
-		//	catch (WorkFlowException ex)
-		//	{
 
-		//	}
-		//	finally
-		//	{
+		[HttpPost("validate")]
+		public IActionResult Validate([FromBody] Workflow workflow)
+		{
+			WorkflowValidationMessage message;
 
-		//	}
-		//	return new List<string>();
+			bool valid = workflow.IsValid(out message);
+			if (valid)
+				return Json(new { valid = true });
+			return Json(message);
 
-
-		//}
+		}
 		[HttpPost]
 		public IActionResult Create([FromBody] Workflow workflow)
 		{
@@ -71,54 +64,7 @@ namespace workflow.Controllers
 			workflow.AddTrackableToStart(t);
 			return new ObjectResult(workflow);
 		}
-		//[HttpPut("move")]
-		//public IActionResult Move([FromBody]WorkflowUpdate workflowUpdate)
-		//{
-		//	var workflow = Workflow.Find(workflowUpdate.WorkflowId);
-		//	try
-		//	{
-		//		workflow.MoveToNode(workflowUpdate.TrackableId, workflowUpdate.NodeId);
-		//	}
-		//	catch (WorkFlowException ex)
-		//	{
-		//		return Json(ex.Message);
-		//	}
-		//	return new ObjectResult(workflow);
-		//}
-		//[HttpPut("movenext")]
-		//public IActionResult MoveNext([FromBody]WorkflowUpdate workflowUpdate)
-		//{
-		//	Workflow workflow; string nodeName; string nextNodeName;
-
-		//	try { workflow = Workflow.Find(workflowUpdate.WorkflowId); }
-		//	catch (Exception ex)
-		//	{
-		//		return Json(ex.Message);
-		//	}
-		//	try
-		//	{
-		//		//find the NodeName that the item is in
-		//		nodeName = workflow.GetNodeNameItemIsIn(workflowUpdate.TrackableId);
-		//		nextNodeName = workflow.FindNextNodeName(nodeName);
-		//		workflow.MoveToNode(workflowUpdate.TrackableId, nextNodeName);
-		//	}
-		//	catch (Exception ex)
-		//	{
-		//		return Json(ex.InnerException);
-		//	}
-		//	return new ObjectResult(workflow);
-		//}
 		
-		//[HttpPut("submit")]
-		//public IActionResult SubmitToWorkflow([FromBody]Trackable Trackable)
-		//{
-		//	//Workflow workflow = Workflow.Find(workflowUpdate.WorkflowId);
-		//	//KeyValuePair<string, Node> firstNode = workflow.GetFirstNode();
-		//	//firstNode.Value.Trackables.Add(Trackable);
-
-
-		//	return NotFound();
-		//}
 		[HttpPut("{id}")]
 		public IActionResult Update(string id, [FromBody] Workflow workflow)
 		{

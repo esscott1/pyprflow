@@ -1,5 +1,6 @@
 ﻿This API application provides endpoints for creating, managing, and deleting an orchestration workflow.  It allow for items (trackables) to be submitted into and managed through 
-the lifecycle of the orchestration workflow. 
+the lifecycle of the orchestration workflow.  To access the endpoints you will need to have a HTTP Header key = user-key with a value of "test" in each of your
+API calls.
 
 ###What is an orchestration workflow?
 An orchestration workflow defines a logical flow of activities or tasks from a start event to an end event to accomplish a specific purpose or service.
