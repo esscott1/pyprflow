@@ -214,7 +214,7 @@ namespace workflow.Model
 			//TrackComment(item.TrackingGuid, comment, moveUser);
 		}
 
-		public void MoveTrackable(WorkflowUpdate update)
+		public void MoveTrackable(WorkflowAction update)
 		{
 			MoveToNode(update.TrackableId, update.NodeId, null, update.Comment);
 

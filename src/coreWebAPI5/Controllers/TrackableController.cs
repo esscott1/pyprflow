@@ -31,7 +31,7 @@ namespace workflow.Controllers
 
 
 		[HttpPut("availablemoves")]
-		public IEnumerable<string> AvailableMoves([FromBody] WorkflowUpdate workflowUpdate)
+		public IEnumerable<string> AvailableMoves([FromBody] WorkflowAction workflowUpdate)
 		{
 			var workflow = Workflow.Find(workflowUpdate.WorkflowId);
 			try
@@ -50,7 +50,7 @@ namespace workflow.Controllers
 		}
 
 		[HttpPut("move")]
-		public IActionResult Move([FromBody]WorkflowUpdate workflowUpdate)
+		public IActionResult Move([FromBody]WorkflowAction workflowUpdate)
 		{
 			var workflow = Workflow.Find(workflowUpdate.WorkflowId);
 			if (workflow == null) 
@@ -71,7 +71,7 @@ namespace workflow.Controllers
 		}
 
 		[HttpPut("movenext")]
-		public IActionResult MoveNext([FromBody]WorkflowUpdate workflowUpdate)
+		public IActionResult MoveNext([FromBody]WorkflowAction workflowUpdate)
 		{
 			Workflow workflow; string nodeName; string nextNodeName;
 
@@ -87,7 +87,6 @@ namespace workflow.Controllers
 				nextNodeName = workflow.FindNextNodeName(nodeName);
 				workflowUpdate.NodeId = nextNodeName;
 				workflow.MoveTrackable(workflowUpdate);
-				//workflow.MoveToNode(workflowUpdate.TrackableId, nextNodeName);
 			}
 			catch (Exception ex)
 			{
@@ -98,7 +97,7 @@ namespace workflow.Controllers
 
 		}
 		[HttpPut("start")]
-		public IActionResult SubmitToWorkflow([FromBody]WorkflowUpdate workflowUpdate)
+		public IActionResult SubmitToWorkflow([FromBody]WorkflowAction workflowUpdate)
 		{
 			Workflow workflow = Workflow.Find(workflowUpdate.WorkflowId);
 			KeyValuePair<string, Node> firstNode = workflow.GetFirstNode();
@@ -109,7 +108,7 @@ namespace workflow.Controllers
 
 
 		[HttpDelete("remove")]
-		public IActionResult RemoveTrackable([FromBody] WorkflowUpdate workflowUpdate)
+		public IActionResult RemoveTrackable([FromBody] WorkflowAction workflowUpdate)
 		{
 			Workflow wf = Workflow.Find(workflowUpdate.WorkflowId);
 			wf.RemoveItemFromWorkflow(workflowUpdate.TrackableId);

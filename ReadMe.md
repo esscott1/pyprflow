@@ -27,15 +27,7 @@ Workflows are created by submitting a JSON object that represent the structure a
  node and at least one ending node.  Path validation is also required, where every node must have at least one entry point and one exit point.  the exceptions are, 
  starting nodes do not need a explicitly entry paths, and ending nodes do not need to have explicit exit paths.
 
- ###How do I initiate a orchestration workflow?
- Orchestration workflows are structured representations of business processes.  Initiating a business process requires something (ie. a document) to be submitted to 
- process (OW) for facilitation and tracking.
 
- ###How do I submit something to a orchestration workflow?
- Any item can be submitted to an orchestration workflow.  The details of the item should be stored in a system other than the orchestration workflow system.  However, 
- a unique identifier is required for the orchestration workflow to track and facilitate.  It also enable the items system of record to easily match the items information 
- with it's location and status within the orchestration workflow.  Below is a JSON schema and JSON example of a WorkflowItemUpdate.  all item management requires submission 
- of a WorkflowItemUpdate to the OW engine.'
  
 Workflow JSON Schema
 ```JSON
@@ -83,7 +75,31 @@ Workflow JSON Schema
 											"description": "unique identifier for this item",
 											"type": "array",
 											"items": { "nodeName": "string" }
-										}
+										},
+										"moveHistory": {
+																				"readonly": true,
+																				"description": "array of moves that this particular trackable has been through in this workflow",
+																				"type": "array",
+																				"items": {
+																					"title": "executedmove",
+																					"type": "object",
+																					"parameters": {
+																						"executionTime": {
+																							"type": "string",
+																							"readonly": true
+																						},
+																						"mover": "string",
+																						"comment": "string",
+																						"from": "string",
+																						"to": "string",
+																						"approvedUsers ": {
+																							"type"="array",
+																							"description": "list of users that could have executed this move",
+																							"items": { "user": "string" }
+																						}
+																					}
+																				}
+																			}
 									}
 								}
 							},
@@ -96,6 +112,16 @@ Workflow JSON Schema
 							"nodeId": {
 								"description": "node unique identifier",
 								"type": "string"
+							},
+							"isStart": {
+								"description": "is this a starting node for an orchestrated workflow",
+								"type": "boolean",
+								"optional": true
+							},
+							"isEnd": {
+								"description": "is this an ending node for an orchestrated workflow",
+								"type": "boolean",
+								"optional": true
 							}
 						}
 			}
@@ -128,59 +154,130 @@ Workflow JSON Schema
 Workflow Example with simple steps and one item being tracked in first step
 
 ```JSON
-{
-	"nodes": {
-		"Step1": {
-			"trackables": [
-				{
-					"trackableId": null,
-					"trackingName": "document2",
-					"nodeNamesIn": []
-				}
-			],
-			"nodeName": "Step1",
-			"nodeDescription": null,
-			"nodeId": "0"
-		},
-		"Step2": {
-			"trackables": [
-				{
-					"trackableId": "unique1",
-					"trackingName": "document1",
-					"nodeNamesIn": [
-						"Step2"
-					]
-				}
-			],
-			"nodeName": "Step2",
-			"nodeDescription": null,
-			"nodeId": "0"
-		},
-		"Step3": {
-			"trackables": [],
-			"nodeName": "Step3",
-			"nodeDescription": null,
-			"nodeId": "0"
-		}
-	},
-	"trackingComments": [],
-	"path": [
-		{
-			"from": "Step1",
-			"to": "Step2",
-			"approveUsers": []
-		}
-	],
-	"workflowId": "5bb80835-05a8-435b-b273-205f73f1d700",
-	"key": "_blankKeyes21",
-	"workflowName": "_blankKeyes21"
-}
+  {
+  	 "workflowId": "5bb80835-05a8-435b-b273-205f73f1d700",
+    "key": "_blankKeyes21",
+    "workflowName": "_blankKeyes21",
+    "nodes": {
+     "Step1": {
+        "trackables": [
+          {
+            "trackingName": "document1",
+            "trackableId": "unique1"
+          },
+          {
+            "trackingName": "document2"
+          }
+        ],
+        "nodeName": "Step1",
+        "nodeDescription": null,
+        "nodeId": 0,
+        "isstart": true
+      },
+      "Step2": {
+        "trackables": [],
+        "nodeName": "Step2",
+        "nodeDescription": null,
+        "nodeId": 0
+      }, "Step3": {
+        "trackables": [],
+        "nodeName": "Step3",
+        "nodeDescription": null,
+        "nodeId": 0
+      },
+      
+       "Step4": {
+        "trackables": [],
+        "nodeName": "Step4-1",
+        "nodeDescription": null,
+        "nodeId": "0",
+        "isend": true
+      }
+    },
+    "trackingComments": [],
+    "path": [
+    	 {
+        "from": "Step1",
+        "to": "Step2",
+        "approveUsers": []
+      },
+      	
+       {
+        "from": "Step2",
+        "to": "Step4",
+        "approveUsers": []
+      },
+       {
+        "from": "Step2",
+        "to": "Step3",
+        "approveUsers": []
+      },
+     {
+        "from": "Step3",
+        "to": "Step4",
+        "approveUsers": []
+      },
+       {
+        "from": "Step2",
+        "to": "Step1",
+        "approveUsers": []
+      }
+      ]
+   
+  }
 
 ```
 
-## Submitting and Managing items through a orchestration Workflow
+ ###How do I initiate a orchestration workflow?
+ Orchestration workflows are structured representations of business processes.  Initiating a business process requires something (ie. a document) to be submitted to 
+ process (OW) for facilitation and tracking.
 
-To submit an item to an orchestration workflow you simply Post a workflowUpdate JSON object to the API/trackable/start.  Note that the workflowUpdate JSON object requires 
+ ###How do I submit something to a orchestration workflow?
+ Any item can be submitted to an orchestration workflow.  The details of the item should be stored in a system other than the orchestration workflow system.  However, 
+ a unique identifier is required for the orchestration workflow to track and facilitate.  It also enable the items system of record to easily match the items information 
+ with it's location and status within the orchestration workflow.  Below is a JSON schema and JSON example of a workflowaction.  all item management requires submission 
+ of a WorkflowItemUpdate to the OW engine.
+
+### Submitting and Managing items through a orchestration Workflow
+
+To submit an item to an orchestration workflow you simply Post a workflowAction JSON object to the API/trackable/start.  Note that the workflowAction JSON object requires 
 the workflowID and a trackableId for the item you are submitting.  This trackableId can be created by the submitter or you can request a trackableId from the system 
 via Get API/trackable/newId.  If the API/trackable/start receives a trackableId that is already being used within the OW, an error will be returned and the item will not 
 be accepted to the OW.  To verify the uniqueness of the trackableId, you can Post to API/trackable/isunique/{trackableId} for a boolean result.
+
+WorkflowAction Schema
+'''JSON
+{
+	"title": "Workflow Action Schema",
+	"type": "object",
+	"properties": {
+		"workflowId": {
+			"description": "The Id of the workflow you want to work with",
+			"type": "string"
+		},
+		"trackableId": {
+			"description": "the Id of the trackable item to move through workflow",
+			"type": "string"
+		},
+			"nodeId": {
+				"description": "the Id of that you want the trackable to be move to",
+				"type": "string"
+			},
+			"comment": {
+							"description": "user provided text for comment on the rationale for moving",
+							"type": "string"
+			}
+	},
+	"required": ["workflowId", "trackableId"]
+	}
+	''''
+
+	An example
+	'''JSON
+	{
+	"nodeId": "Step2",
+	"trackableId": "unique1",
+	"workflowId": "_blankKeyes21",
+	"comment": "moving because was approved"
+}
+	'''

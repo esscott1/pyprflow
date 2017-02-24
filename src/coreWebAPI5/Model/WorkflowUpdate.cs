@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace workflow.Model
 {
-	public class WorkflowUpdate
+	public class WorkflowAction
 	{
 		public string WorkflowId { get; set; }
 		public string TrackableId { get; set; }

@@ -93,7 +93,7 @@ namespace workflow.Controllers
 			return Json(deleted);
 		}
 		//[HttpDelete("trackable/delete")]
-		//public IActionResult RemoveTrackable([FromBody] WorkflowUpdate workflowUpdate)
+		//public IActionResult RemoveTrackable([FromBody] WorkflowAction workflowUpdate)
 		//{
 		//	Workflow wf = Workflow.Find(workflowUpdate.WorkflowId);
 		//	wf.RemoveItemFromWorkflow(workflowUpdate.TrackableId);

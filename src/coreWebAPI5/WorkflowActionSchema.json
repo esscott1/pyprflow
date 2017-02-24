@@ -1,5 +1,5 @@
 ﻿{
-	"title": "Workflow Update Schema",
+	"title": "Workflow Action Schema",
 	"type": "object",
 	"properties": {
 		"workflowId": {

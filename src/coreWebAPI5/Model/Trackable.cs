@@ -20,12 +20,7 @@ namespace workflow.Model
 			TrackableId = name;
 			MoveHistory = new List<ExecutedMove>();
 		}
-		//public Trackable(string trackingname, string trackableId)
-		//{
-		//	TrackingName = trackingname;
-		//	TrackableId = trackableId;
-
-		//}
+		
 
 	}
 }
