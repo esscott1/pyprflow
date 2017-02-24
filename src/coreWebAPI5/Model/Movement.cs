@@ -8,7 +8,7 @@ namespace workflow.Model
 		public string From { get; set; }
 		public string To { get; set; }
 		public List<IUser> ApproveUsers { get; private set; }
-		//moves that also need to occur based on business rule definition
+		//path that also need to occur based on business rule definition
 		//public List<Movement> TriggeredMoves { get; set; }
 		public Movement()
 		{

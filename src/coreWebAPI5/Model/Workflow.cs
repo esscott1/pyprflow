@@ -23,7 +23,7 @@ namespace workflow.Model
 		[JsonProperty]
 		private List<TrackingComment> trackingComments;
 		[JsonProperty]
-		private List<Movement> moves;
+		private List<Movement> path;
 
 		private static IWorkflowRepository wfr { get; set; }
 		public Workflow(string workflowName)
@@ -35,7 +35,7 @@ namespace workflow.Model
 			//Steps = new Dictionary<string, List<ITrackable>>();
 			Nodes = new Dictionary<string, Node>();
 			trackingComments = new List<TrackingComment>();
-			moves = new List<Movement>();
+			path = new List<Movement>();
 			if (workflowName == "_blank")
 			{
 				Key="_blankKey";
@@ -47,9 +47,9 @@ namespace workflow.Model
 				//Steps.Add("Step2", new List<ITrackable>());
 				//Steps.Add("Step3", new List<ITrackable>());
 				//Steps.Add("Step4", new List<ITrackable>());
-				moves.Add(new Movement() { From = "Step1", To = "Step2" });
-				moves.Add(new Movement() { From = "Step2", To = "Step3" });
-				moves.Add(new Movement() { From = "Step3", To = "Step4" });
+				path.Add(new Movement() { From = "Step1", To = "Step2" });
+				path.Add(new Movement() { From = "Step2", To = "Step3" });
+				path.Add(new Movement() { From = "Step3", To = "Step4" });
 				Nodes.Add("Step1", new Node("Step1") { Trackables = l });
 				foreach(Trackable t in l)
 				{
@@ -62,7 +62,7 @@ namespace workflow.Model
 		}
 		private bool CanExitNode(string nodeName)
 		{
-			foreach(Movement m in moves)
+			foreach(Movement m in path)
 			{
 				if (m.From == nodeName)
 					return true;
@@ -72,7 +72,7 @@ namespace workflow.Model
 
 		private bool CanEnterNode(string nodeName)
 		{
-			foreach (Movement m in moves)
+			foreach (Movement m in path)
 			{
 				if (m.To == nodeName)
 					return true;
@@ -109,7 +109,7 @@ namespace workflow.Model
 		internal IEnumerable<string> FindAvailableNodes(string trackableId)
 		{
 			string nodeName = GetNodeNameItemIsIn(trackableId);
-			IEnumerable<Movement> listOmoves = moves.Where(m => m.From == nodeName);
+			IEnumerable<Movement> listOmoves = path.Where(m => m.From == nodeName);
 			IEnumerable<string> toNodes = listOmoves.Select(o => o.To);
 			return toNodes;
 		}
@@ -284,12 +284,12 @@ namespace workflow.Model
 
 		public bool IsMoveValid(string from, string to, IUser user=null)
 		{
-			if (!moves.Any())
+			if (!path.Any())
 			{
 				return true;
 			}
 
-			var validMoves = moves.Where(m => m.From == from && m.To == to);
+			var validMoves = path.Where(m => m.From == from && m.To == to);
 			// can we move?
 			if (!validMoves.Any())
 			{
@@ -326,7 +326,7 @@ namespace workflow.Model
 		internal  string FindNextNodeName(string nodeName)
 		{
 			
-			var nextNodeName = this.moves.Find(m => m.From == nodeName).To;
+			var nextNodeName = this.path.Find(m => m.From == nodeName).To;
 			if (nextNodeName == null || nextNodeName == String.Empty)
 				throw new WorkFlowException("No next Node found");
 			return nextNodeName;
@@ -443,11 +443,11 @@ namespace workflow.Model
 			}
 
 			// check if movement already exists
-			Movement move = moves.FirstOrDefault(m => m.From == from && m.To == to);
+			Movement move = path.FirstOrDefault(m => m.From == from && m.To == to);
 			if (move == null)
 			{
 				move = new Movement { From = from, To = to };
-				moves.Add(move);
+				path.Add(move);
 			}
 
 			// add move user
@@ -467,7 +467,7 @@ namespace workflow.Model
 		//			// should check if movement already exists
 		//			var move = new Movement { From = from };
 		//			move.ApproveUsers.Add(removeUser);
-		//			moves.Add(move);
+		//			path.Add(move);
 		//		}
 	}
 

@@ -59,7 +59,7 @@
 						}
 			}
 		},
-		"moves": {
+		"path": {
 			"description": "Array of available movements with the workflow",
 			"type": "array",
 			"items": {

@@ -100,7 +100,7 @@ Workflow JSON Schema
 						}
 			}
 		},
-		"moves": {
+		"path": {
 			"description": "Array of available movements with the workflow",
 			"type": "array",
 			"items": {
@@ -164,7 +164,7 @@ Workflow Example with simple steps and one item being tracked in first step
 		}
 	},
 	"trackingComments": [],
-	"moves": [
+	"path": [
 		{
 			"from": "Step1",
 			"to": "Step2",

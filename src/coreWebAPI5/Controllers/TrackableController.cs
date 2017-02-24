@@ -55,6 +55,8 @@ namespace workflow.Controllers
 		public IActionResult Move([FromBody]WorkflowUpdate workflowUpdate)
 		{
 			var workflow = Workflow.Find(workflowUpdate.WorkflowId);
+			if (workflow == null) 
+				return NotFound("workflow not found");
 			try
 			{
 				workflow.MoveToNode(workflowUpdate.TrackableId, workflowUpdate.NodeId);
@@ -62,6 +64,10 @@ namespace workflow.Controllers
 			catch (WorkFlowException ex)
 			{
 				return Json(ex.Message);
+			}
+			catch(Exception ex)
+			{
+				return BadRequest(ex.Message);
 			}
 			return new ObjectResult(workflow);
 		}

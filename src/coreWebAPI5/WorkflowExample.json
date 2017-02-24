@@ -34,7 +34,7 @@
 		}
 	},
 	"trackingComments": [],
-	"moves": [
+	"path": [
 		{
 			"from": "Step1",
 			"to": "Step2",
