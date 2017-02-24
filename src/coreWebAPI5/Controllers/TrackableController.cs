@@ -49,8 +49,6 @@ namespace workflow.Controllers
 			return new List<string>();
 		}
 
-		
-
 		[HttpPut("move")]
 		public IActionResult Move([FromBody]WorkflowUpdate workflowUpdate)
 		{
@@ -59,7 +57,7 @@ namespace workflow.Controllers
 				return NotFound("workflow not found");
 			try
 			{
-				workflow.MoveToNode(workflowUpdate.TrackableId, workflowUpdate.NodeId);
+				workflow.MoveTrackable(workflowUpdate);
 			}
 			catch (WorkFlowException ex)
 			{
@@ -87,7 +85,9 @@ namespace workflow.Controllers
 				//find the NodeName that the item is in
 				nodeName = workflow.GetNodeNameItemIsIn(workflowUpdate.TrackableId);
 				nextNodeName = workflow.FindNextNodeName(nodeName);
-				workflow.MoveToNode(workflowUpdate.TrackableId, nextNodeName);
+				workflowUpdate.NodeId = nextNodeName;
+				workflow.MoveTrackable(workflowUpdate);
+				//workflow.MoveToNode(workflowUpdate.TrackableId, nextNodeName);
 			}
 			catch (Exception ex)
 			{

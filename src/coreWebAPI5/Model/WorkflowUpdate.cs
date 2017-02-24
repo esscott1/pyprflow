@@ -10,5 +10,6 @@ namespace workflow.Model
 		public string WorkflowId { get; set; }
 		public string TrackableId { get; set; }
 		public string NodeId { get; set; }
+		public string Comment { get; set; }
 	}
 }

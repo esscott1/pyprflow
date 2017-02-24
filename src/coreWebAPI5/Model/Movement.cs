@@ -14,5 +14,11 @@ namespace workflow.Model
 		{
 			ApproveUsers = new List<IUser>();
 		}
+		public Movement(Movement init)
+		{
+			this.From = init.From;
+			this.To = init.To;
+			this.ApproveUsers = init.ApproveUsers;
+		}
 	}
 }

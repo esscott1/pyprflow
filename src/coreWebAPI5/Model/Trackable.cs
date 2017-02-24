@@ -11,11 +11,14 @@ namespace workflow.Model
 		public string TrackableId { get; set; }
 		public string TrackingName { get; set; }
 		public List<string> NodeNamesIn { get; set; }
+
+		public List<ExecutedMove> MoveHistory { get; set; }
 		public Trackable(string name)
 		{
 			NodeNamesIn = new List<string>();
 			TrackingName = name;
 			TrackableId = name;
+			MoveHistory = new List<ExecutedMove>();
 		}
 		//public Trackable(string trackingname, string trackableId)
 		//{
