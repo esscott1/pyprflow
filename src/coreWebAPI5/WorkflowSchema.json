@@ -42,7 +42,31 @@
 											"description": "unique identifier for this item",
 											"type": "array",
 											"items": { "nodeName": "string" }
-										}
+										},
+										"moveHistory": {
+																				"readonly": true,
+																				"description": "array of moves that this particular trackable has been through in this workflow",
+																				"type": "array",
+																				"items": {
+																					"title": "executedmove",
+																					"type": "object",
+																					"parameters": {
+																						"executionTime": {
+																							"type": "string",
+																							"readonly": true
+																						},
+																						"mover": "string",
+																						"comment": "string",
+																						"from": "string",
+																						"to": "string",
+																						"approvedUsers ": {
+																							"type"="array",
+																							"description": "list of users that could have executed this move",
+																							"items": { "user": "string" }
+																						}
+																					}
+																				}
+																			}
 									}
 								}
 							},
@@ -55,6 +79,16 @@
 							"nodeId": {
 								"description": "node unique identifier",
 								"type": "string"
+							},
+							"isStart": {
+								"description": "is this a starting node for an orchestrated workflow",
+								"type": "boolean",
+								"optional": true
+							},
+							"isEnd": {
+								"description": "is this an ending node for an orchestrated workflow",
+								"type": "boolean",
+								"optional": true
 							}
 						}
 			}

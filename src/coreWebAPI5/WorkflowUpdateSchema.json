@@ -10,10 +10,14 @@
 			"description": "the Id of the trackable item to move through workflow",
 			"type": "string"
 		},
-		"nodeId": {
-			"description": "the Id of that you want the trackable to be move to",
-			"type": "string"
-		}
+			"nodeId": {
+				"description": "the Id of that you want the trackable to be move to",
+				"type": "string"
+			},
+			"comment": {
+							"description": "user provided text for comment on the rationale for moving",
+							"type": "string"
+			}
 	},
 	"required": ["workflowId", "trackableId"]
 	}
