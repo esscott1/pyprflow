@@ -22,9 +22,10 @@ travel through in it's journey to be 'approved.'  First a document is created, t
  unrelated tasks to be complete before that task can be attempted.
 
  ###How are orchestration workflows represented in this tool?
-There are 2 types of workflow:  'Basic' and 'Complex' which are denoted by the Workflow property called "workflowType".
 Workflows are created by submitting a JSON object that represent the structure and rules of the workflow.  Below are the JSON Schema and examples of both a Simple
- and Complex workflow type
+ and Complex workflow.  Upon submission workflows are validated.  You can pre-validate by using the API/Workflow/Validate api.  Workflows must have at least one starting 
+ node and at least one ending node.  Path validation is also required, where every node must have at least one entry point and one exit point.  the exceptions are, 
+ starting nodes do not need a explicitly entry paths, and ending nodes do not need to have explicit exit paths.
 
  ###How do I initiate a orchestration workflow?
  Orchestration workflows are structured representations of business processes.  Initiating a business process requires something (ie. a document) to be submitted to 
