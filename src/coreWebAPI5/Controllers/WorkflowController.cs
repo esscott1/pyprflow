@@ -35,7 +35,7 @@ namespace workflow.Controllers
 			return Json(workflow);
 		}
 
-		[HttpPost("validate")]
+		[HttpPost("validate", Name ="ValidateWorkflow")]
 		public IActionResult Validate([FromBody] Workflow workflow)
 		{
 			WorkflowValidationMessage message;
@@ -43,7 +43,7 @@ namespace workflow.Controllers
 			bool valid = workflow.IsValid(out message);
 			if (valid)
 				return Json(new { valid = true });
-			return Json(message);
+			return StatusCode(422, message); //Json(message);
 
 		}
 		[HttpPost]
@@ -53,7 +53,11 @@ namespace workflow.Controllers
 			{
 				return BadRequest();
 			}
+			WorkflowValidationMessage message;
+			if (!workflow.IsValid(out message))
+				return StatusCode(422, message);
 			Workflow.Add(workflow);
+		
 			return CreatedAtRoute("GetWorkflow", new { id = workflow.Key }, Workflow);
 		}
 		[HttpPut]
