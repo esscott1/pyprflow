@@ -18,6 +18,7 @@ namespace workflow.Controllers
 			Workflow = workflow;
 		}
 		public IWorkflowRepository Workflow { get; set; }
+
 		[HttpGet]
 		public IEnumerable<Workflow> GetAll()
 		{
@@ -60,14 +61,14 @@ namespace workflow.Controllers
 		
 			return CreatedAtRoute("GetWorkflow", new { id = workflow.Key }, Workflow);
 		}
-		[HttpPut]
-		public IActionResult StartTrackingItem(string workflowId, [FromBody] ITrackable item)//string workFlowId, [FromBody] ITrackable trackable)
-		{
-			var workflow = Workflow.Find("_blankKey");
-			var t = new Model.Trackable("documentToTrack1", "_blankKey");
-			workflow.AddTrackableToStart(t);
-			return new ObjectResult(workflow);
-		}
+		//[HttpPut]
+		//public IActionResult StartTrackingItem(string workflowId, [FromBody] ITrackable item)//string workFlowId, [FromBody] ITrackable trackable)
+		//{
+		//	var workflow = Workflow.Find("_blankKey");
+		//	var t = new Model.Trackable("documentToTrack1", "_blankKey");
+		//	workflow.AddTrackableToStart(t);
+		//	return new ObjectResult(workflow);
+		//}
 		
 		[HttpPut("{id}")]
 		public IActionResult Update(string id, [FromBody] Workflow workflow)
@@ -83,21 +84,14 @@ namespace workflow.Controllers
 			return new NoContentResult();
 
 		}
-		[HttpDelete("workflow/{id}")]
+		[HttpDelete("{id}")]
 		public IActionResult Delete(string id)
 		{
-			WorkflowRepository rep = new WorkflowRepository();
-			var deleted = rep.Remove(id);
+			var deleted = Workflow.Remove(id);
 			if (deleted == null)
 				return NotFound();
 			return Json(deleted);
 		}
-		//[HttpDelete("trackable/delete")]
-		//public IActionResult RemoveTrackable([FromBody] WorkflowAction workflowUpdate)
-		//{
-		//	Workflow wf = Workflow.Find(workflowUpdate.WorkflowId);
-		//	wf.RemoveItemFromWorkflow(workflowUpdate.TrackableId);
-		//	return Json("tried to delete ID: " + workflowUpdate);
-		//}
+		
 	}
 }

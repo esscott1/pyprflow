@@ -25,15 +25,13 @@ namespace workflow.Controllers
 			//return Json("works");
 			return Workflow.GetAllTrackable();
 		}
+
 		[HttpPost("isunique/{id}")]
 		public bool IsUnique(string id)
 		{
-
 			return true;
 		}
 		
-
-
 		[HttpGet("{id}")]
 		public IActionResult GetTrackable(string workflowId, string id )
 		{
@@ -41,6 +39,7 @@ namespace workflow.Controllers
 			Trackable t = Workflow.FindTrackable(id);
 			return Json(t);
 		}
+
 		[HttpGet("newId")]
 		public IActionResult NewTrackableId()
 		{
@@ -96,11 +95,12 @@ namespace workflow.Controllers
 			
 		}
 
-		[HttpPut("start")]
+		[HttpPost("start")]
 		public IActionResult SubmitToWorkflow([FromBody]Trackable item, string workflowId)
 		{
 			Workflow workflow = Workflow.Find(workflowId);
 			item.Location.Add(workflowId, workflow.StartingNodeName);
+			Workflow.Add(item);
 			return Json(item);
 		}
 
