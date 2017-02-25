@@ -34,7 +34,6 @@ namespace workflow.Model
 				DeadEndNodeNames.Count == 0)
 				return true;
 			return false;
-
 		}
 	}
 }

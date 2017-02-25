@@ -9,19 +9,37 @@ using workflow.Model;
 
 namespace workflow.Controllers
 {
-	[Route("api/[controller]")]
-    public class TrackableController : Controller
-    {
+	[Route("api/workflow/{workflowId}/[controller]")]
+	public class TrackableController : Controller
+	{
+
 		public TrackableController(IWorkflowRepository workflow)
 		{
 			Workflow = workflow;
 		}
 		public IWorkflowRepository Workflow { get; set; }
+
+		[HttpGet]
+		public IEnumerable<Trackable> GetAll()
+		{
+			//return Json("works");
+			return Workflow.GetAllTrackable();
+		}
 		[HttpPost("isunique/{id}")]
 		public bool IsUnique(string id)
 		{
 
 			return true;
+		}
+		
+
+
+		[HttpGet("{id}")]
+		public IActionResult GetTrackable(string workflowId, string id )
+		{
+			Workflow w = Workflow.Find(workflowId);
+			Trackable t = Workflow.FindTrackable(id);
+			return Json(t);
 		}
 		[HttpGet("newId")]
 		public IActionResult NewTrackableId()
@@ -31,33 +49,27 @@ namespace workflow.Controllers
 
 
 		[HttpPut("availablemoves")]
-		public IEnumerable<string> AvailableMoves([FromBody] WorkflowAction workflowUpdate)
+		public IEnumerable<Movement> AvailableMoves([FromBody] Trackable item, string workflowId)
 		{
-			var workflow = Workflow.Find(workflowUpdate.WorkflowId);
-			try
-			{
-				return workflow.FindAvailableNodes(workflowUpdate.TrackableId);
-			}
-			catch (WorkFlowException ex)
-			{
+			var nodeName = item.Location[workflowId];
 
-			}
-			finally
-			{
-
-			}
-			return new List<string>();
+			Workflow workflow = Workflow.Find(workflowId);
+			
+			return workflow.path.Where(p => p.From == nodeName);
+			
 		}
 
 		[HttpPut("move")]
-		public IActionResult Move([FromBody]WorkflowAction workflowUpdate)
+		public IActionResult Move([FromBody]Trackable item, string workflowId)
 		{
-			var workflow = Workflow.Find(workflowUpdate.WorkflowId);
+			Trackable currentItem = Workflow.FindTrackable(item.Key);
+			var workflow = Workflow.Find(workflowId);
+
 			if (workflow == null) 
 				return NotFound("workflow not found");
 			try
 			{
-				workflow.MoveTrackable(workflowUpdate);
+				workflow.MoveTrackable(currentItem, item.Location[workflowId]);
 			}
 			catch (WorkFlowException ex)
 			{
@@ -71,39 +83,25 @@ namespace workflow.Controllers
 		}
 
 		[HttpPut("movenext")]
-		public IActionResult MoveNext([FromBody]WorkflowAction workflowUpdate)
+		public IActionResult MoveNext([FromBody]Trackable item, string workflowId)
 		{
-			Workflow workflow; string nodeName; string nextNodeName;
+			var currentNode = item.Location[workflowId];
+			var workflow = Workflow.Find(workflowId);
+			var movement = workflow.path.Where(p => p.From == currentNode).First();
 
-			try { workflow = Workflow.Find(workflowUpdate.WorkflowId); }
-			catch (Exception ex)
-			{
-				return Json(ex.Message);
-			}
-			try
-			{
-				//find the NodeName that the item is in
-				nodeName = workflow.GetNodeNameItemIsIn(workflowUpdate.TrackableId);
-				nextNodeName = workflow.FindNextNodeName(nodeName);
-				workflowUpdate.NodeId = nextNodeName;
-				workflow.MoveTrackable(workflowUpdate);
-			}
-			catch (Exception ex)
-			{
-				return Json(ex.InnerException);
-			}
-			return new ObjectResult(workflow);
-
-
+			item.Location.Remove(workflowId);
+			item.Location.Add(workflowId, movement.To);
+			item.MoveHistory.Add(new ExecutedMove(movement) { ExecutionTime = DateTime.Now });
+			return Json(item);
+			
 		}
+
 		[HttpPut("start")]
-		public IActionResult SubmitToWorkflow([FromBody]WorkflowAction workflowUpdate)
+		public IActionResult SubmitToWorkflow([FromBody]Trackable item, string workflowId)
 		{
-			Workflow workflow = Workflow.Find(workflowUpdate.WorkflowId);
-			KeyValuePair<string, Node> firstNode = workflow.GetFirstNode();
-			Trackable t = new Model.Trackable(workflowUpdate.TrackableId);
-			firstNode.Value.Trackables.Add(t);
-			return Json(t);
+			Workflow workflow = Workflow.Find(workflowId);
+			item.Location.Add(workflowId, workflow.StartingNodeName);
+			return Json(item);
 		}
 
 

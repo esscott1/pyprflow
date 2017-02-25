@@ -12,15 +12,28 @@ namespace workflow.Model
 	{
 		private static ConcurrentDictionary<string, Workflow> _Workflow =
 			new ConcurrentDictionary<string, Workflow>();
+		private static ConcurrentDictionary<string, Trackable> _Trackable =
+				 new ConcurrentDictionary<string, Trackable>();
 		public WorkflowRepository()
 		{
 			Add(new Workflow("_blank"));
+			Trackable td = new Trackable("doc1", "_blank") { TrackableId = "doc1" };
+			Trackable td2 = new Trackable("doc2", "_blank") { TrackableId = "doc2" };
+			Add(td);
+			Add(td2);
 		}
 		public void Add(Workflow workflow)
 		{
 			if(workflow.Key == null || workflow.Key ==String.Empty )
 				workflow.Key = Guid.NewGuid().ToString();
 			_Workflow[workflow.Key] = workflow;
+		}
+
+		public void Add(Trackable trackable)
+		{
+			if (trackable.Key == null || trackable.Key == String.Empty)
+				trackable.Key = Guid.NewGuid().ToString();
+			_Trackable[trackable.Key] = trackable;
 		}
 
 		public bool CheckValidUserKey(string stringValue)
@@ -31,9 +44,9 @@ namespace workflow.Model
 			if(userkeylist.Contains(stringValue))
 				return true;
 			return false;
-			//throw new NotImplementedException();
 		}
 
+		
 		public Workflow Find(string key)
 		{
 			Workflow workflow;
@@ -41,9 +54,21 @@ namespace workflow.Model
 			return workflow;
 		}
 
+		public Trackable FindTrackable(string key)
+		{
+			Trackable Trackable;
+			_Trackable.TryGetValue(key, out Trackable);
+			return Trackable;
+		}
+
 		public IEnumerable<Workflow> GetAll()
 		{
 			return _Workflow.Values;
+		}
+
+		public IEnumerable<Trackable> GetAllTrackable()
+		{
+			return _Trackable.Values;
 		}
 
 		public Workflow Remove(string key)
@@ -59,9 +84,27 @@ namespace workflow.Model
 			return null;
 		}
 
+		public Trackable RemoveTrackable(string key)
+		{
+			Trackable report; bool d;
+			try { d = _Trackable.TryRemove(key, out report); }
+			catch (Exception ex)
+			{
+				throw new WorkFlowException("error TryRemove: " + ex.InnerException);
+			}
+			if (d)
+				return report;
+			return null;
+		}
+
 		public void Update(Workflow workflow)
 		{
 			_Workflow[workflow.Key] = workflow;
+		}
+
+		public void Update(Trackable Trackable)
+		{
+			_Trackable[Trackable.Key] = Trackable;
 		}
 	}
 }

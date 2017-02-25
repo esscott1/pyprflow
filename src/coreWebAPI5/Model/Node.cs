@@ -9,9 +9,7 @@ namespace workflow.Model
 		{
 			NodeName = nodeName;
 			
-			Trackables = new List<Trackable>();
 		}
-		public List<Trackable> Trackables { get; set; }
 		public string NodeName { get; set; }
 		public string NodeDescription { get; set; }
 		public string NodeId { get; set; }

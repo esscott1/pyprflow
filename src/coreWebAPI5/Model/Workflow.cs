@@ -18,10 +18,9 @@ namespace workflow.Model
 
 		[JsonProperty]
 		private Dictionary<string, Node> Nodes;
+	
 		[JsonProperty]
-		private List<TrackingComment> trackingComments;
-		[JsonProperty]
-		private List<Movement> path;
+		internal List<Movement> path;
 
 		private static IWorkflowRepository wfr { get; set; }
 		public Workflow(string workflowName)
@@ -30,28 +29,24 @@ namespace workflow.Model
 			{
 				WorkflowId = Guid.NewGuid();
 			}
-			//Steps = new Dictionary<string, List<ITrackable>>();
+			WorkflowName = workflowName;
 			Nodes = new Dictionary<string, Node>();
-			trackingComments = new List<TrackingComment>();
 			path = new List<Movement>();
 			if (workflowName == "_blank")
 			{
 				Key="_blankKey";
-				Trackable td = new Trackable("doc1") { TrackableId = "doc1" };
-				Trackable td2 = new Trackable("doc2") { TrackableId = "doc2" };
+				Trackable td = new Trackable("doc1", this.WorkflowName) { TrackableId = "doc1" };
+				Trackable td2 = new Trackable("doc2", this.WorkflowName) { TrackableId = "doc2" };
 				List<Trackable> l = new List<Trackable>();
 				l.Add(td);l.Add(td2); 
 				path.Add(new Movement() { From = "Step1", To = "Step2" });
 				path.Add(new Movement() { From = "Step2", To = "Step3" });
 				path.Add(new Movement() { From = "Step3", To = "Step4" });
-				Nodes.Add("Step1", new Node("Step1") { Trackables = l });
-				foreach(Trackable t in l)
-				{
-					t.NodeNamesIn.Add("Step1");
-				}
+				Nodes.Add("Step1", new Node("Step1") );
+				
 				Nodes.Add("Step2", new Node("Step2") );
 			}
-			WorkflowName = workflowName;
+			
 			
 		}
 		private bool CanExitNode(string nodeName)
@@ -98,13 +93,6 @@ namespace workflow.Model
 			return false;
 		}
 
-		internal IEnumerable<string> FindAvailableNodes(string trackableId)
-		{
-			string nodeName = GetNodeNameItemIsIn(trackableId);
-			IEnumerable<Movement> listOmoves = path.Where(m => m.From == nodeName);
-			IEnumerable<string> toNodes = listOmoves.Select(o => o.To);
-			return toNodes;
-		}
 
 		[JsonConstructor]
 		public Workflow(Guid workflowId, string workflowname)
@@ -176,14 +164,7 @@ namespace workflow.Model
 
 		internal void RemoveItemFromWorkflow(string trackableId)
 		{
-			foreach(KeyValuePair<string, Node> kvp in Nodes)
-			{
-				var trackables = kvp.Value.Trackables.FindAll(t => t.TrackableId == trackableId);
-				if (trackables.Count > 0)
-				{
-					kvp.Value.Trackables.RemoveAll(t => t.TrackableId == trackableId);
-				}
-			}
+			// delete the trackable
 			return;
 			
 		}
@@ -199,58 +180,27 @@ namespace workflow.Model
 
 		public void AddTrackableToStart(Trackable item)
 		{
-			Nodes.First().Value.Trackables.Add(item);
-			item.NodeNamesIn.Add(Nodes.First().Key);
+			item.Location.Add(this.WorkflowName, Nodes.First().Key);
 		}
-		public void AddTrackableToState(Trackable item, string stateName, IUser moveUser, string comment = "Added Item")
+	
+		public void MoveTrackable(Trackable item, string targetNodeName)
 		{
-			Nodes[stateName].Trackables.Add(item);
-
-			// log comment
-			if (comment.Equals("Added Item"))
-			{
-				comment = string.Format("{0} to {1}", comment, stateName);
-			}
-			//TrackComment(item.TrackingGuid, comment, moveUser);
+			MoveToNode(item, targetNodeName, null);
 		}
-
-		public void MoveTrackable(WorkflowAction update)
+		private void MoveToNode(Trackable item, string targetNodeName, IUser user = null, string comment = "Moved Item")
 		{
-			MoveToNode(update.TrackableId, update.NodeId, null, update.Comment);
-
-		}
-		private void MoveToNode(string trackableId, string targetNodeName, IUser user = null, string comment = "Moved Item")
-		{
-			try
-			{
 				Movement move;
-				var trackable = this.GetTrackableById(trackableId);
-				if (trackable == null)
-					throw new WorkFlowException("Trackable not found in this workflow");
-				var currentNode = this.GetNodeNameItemIsIn(trackable).First();
-				if (currentNode == null)
-					throw new WorkFlowException("couldnt find node trackable is in");
-				if (IsMoveValid(currentNode, targetNodeName, out move))
-				{
-					Nodes[currentNode].Trackables.Remove(trackable);
-					trackable.NodeNamesIn.Add(targetNodeName);
-					ExecutedMove em = new ExecutedMove(move);
-					em.ExecutionTime = DateTime.Now;
-					em.Comment = comment;
-					trackable.MoveHistory.Add(em);
-					Nodes[targetNodeName].Trackables.Add(trackable);
-				}
-				else
-					throw new WorkFlowException("invalid move");
-			}
-			catch(Exception ex)
+			if (IsMoveValid(item.Location[this.WorkflowName], targetNodeName, out move))
 			{
-				throw new WorkFlowException(ex.Message);
+				item.Location.Remove(this.WorkflowName);
+				item.Location.Add(this.WorkflowName, targetNodeName);
+				item.MoveHistory.Add(new ExecutedMove(move) { ExecutionTime = DateTime.Now });
+				return;
 			}
-
+				
+			throw new WorkFlowException("move is not valid");
 		}
 		
-
 		public void CopyToNode(Trackable item, string fromState, string toState, IUser copyUser, string comment = "Copied Item")
 		{
 			Movement move;
@@ -259,15 +209,9 @@ namespace workflow.Model
 				var msg = string.Format("{0} cannot copy {1} from {2} to {3}", copyUser, item, fromState, toState);
 				throw new WorkFlowException(msg);
 			}
-
-			Nodes[toState].Trackables.Add(item);
-
-			// log comment
-			if (comment.Equals("Copied Item"))
-			{
-				comment = string.Format("{0} from {1} to {2}", comment, fromState, toState);
-			}
-			//TrackComment(item.TrackingGuid, comment, copyUser);
+			item.Location.Remove(this.WorkflowName);
+			item.Location.Add(this.WorkflowName, toState);
+			item.MoveHistory.Add(new ExecutedMove(move) { ExecutionTime = DateTime.Now });
 		}
 
 		public bool IsMoveValid(string from, string to, out Movement move, IUser user=null)
@@ -281,46 +225,9 @@ namespace workflow.Model
 				return true;
 			}
 			return false;
-			//if (!path.Any(m => m.To==to && m.From==from))
-			//{
-			//	return true;
-			//}
-
-			//var validMoves = path.Where(m => m.From == from && m.To == to);
-			//// can we move?
-			//if (!validMoves.Any())
-			//{
-			//	return false;
-			//}
-
-			// approver check not implemented yet.
-			// do we have any approvers if not, just approve?
-			//var numApprovers = validMoves.Sum(u => u.ApproveUsers.Count);
-			//if (numApprovers == 0)
-			//{
-			//	return true;
-			//}
-
-			//// do we have the correct approver?
-			//if (!validMoves.Any(u => u.ApproveUsers.Contains(user)))
-			//{
-			//	return false;
-			//}
-
-			//return true;
+			
 		}
 
-		public void RemoveFromState(Trackable item, string stateName, IUser removeUser, string comment = "Removed Item")
-		{
-			Nodes[stateName].Trackables.Remove(item);
-
-			// log comment
-			if (comment.Equals("Removed Item"))
-			{
-				comment = string.Format("{0} from {1}", comment, stateName);
-			}
-			//TrackComment(item.TrackingGuid, comment, removeUser);
-		}
 		internal  string FindNextNodeName(string nodeName)
 		{
 			
@@ -336,32 +243,7 @@ namespace workflow.Model
 		{
 			return Nodes.Keys.ToList();
 		}
-
-		public string GetNodeNameItemIsIn(string itemId)
-		{
-			foreach(KeyValuePair<string, Node> kvp in Nodes)
-			{
-				var r = kvp.Value.Trackables.Where(t => t.TrackableId == itemId);
-				if (r.Count() > 0)
-					return kvp.Key;
-			}
-			return String.Empty;
-
-
-		}
-		public IEnumerable<string> GetNodeNameItemIsIn(Trackable item)
-		{
-	
-			return Nodes.Where(n => n.Value.Trackables.Contains(item)).Select(k => k.Key);
-			
-		}
-
-		public IEnumerable<Trackable> GetItemsInNode(string stateName)
-		{
-			Node node = Nodes[stateName];
-			return node.Trackables;
-		}
-
+		
 		public string SerializeToJsonString()
 		{
 			// serialize arbitrary "ITrackable" concrete type http://www.newtonsoft.com/json/help/html/SerializeTypeNameHandling.htm
@@ -399,34 +281,21 @@ namespace workflow.Model
 			//return true;
 		}
 
-		private void TrackComment(Guid docId, string theComment, IUser user)
-		{
-			trackingComments.Add(new TrackingComment(theComment, user, docId));
-		}
-
-		public IEnumerable<TrackingComment> GetTrackingByDocument(Guid docId)
-		{
-			return trackingComments.Where(t => t.DocId == docId).OrderBy(o => o.Time);
-		}
-
-		public Trackable GetTrackableById(string docId)
-		{
+		//public Trackable FindTrackableById(string trackableId)
+		//{
 			
-			foreach(KeyValuePair<string, Node> kvp in Nodes)
-			{
-				IEnumerable<Trackable> r = kvp.Value.Trackables.Where(t => t.TrackableId == docId);
-				if (r.Count() > 0)
-					return r.First();
-			}
-			return null;
+		//	foreach(KeyValuePair<string, Node> kvp in Nodes)
+		//	{
+		//		IEnumerable<Trackable> r = kvp.Value.Trackables.Where(t => t.TrackableId == trackableId);
+		//		if (r.Count() > 0)
+		//			return r.First();
+		//	}
+		//	return null;
 			
 			
-		}
+		//}
 
-		public IEnumerable<TrackingComment> GetTrackingByUser(IUser user)
-		{
-			return trackingComments.Where(t => t.User == user).OrderBy(o => o.Time);
-		}
+		
 
 		public void AddValidStateMovement(string from, string to, IUser moveUser = null)
 		{

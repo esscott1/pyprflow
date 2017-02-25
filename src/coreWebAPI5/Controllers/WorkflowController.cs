@@ -64,7 +64,7 @@ namespace workflow.Controllers
 		public IActionResult StartTrackingItem(string workflowId, [FromBody] ITrackable item)//string workFlowId, [FromBody] ITrackable trackable)
 		{
 			var workflow = Workflow.Find("_blankKey");
-			var t = new Model.Trackable("documentToTrack1");
+			var t = new Model.Trackable("documentToTrack1", "_blankKey");
 			workflow.AddTrackableToStart(t);
 			return new ObjectResult(workflow);
 		}

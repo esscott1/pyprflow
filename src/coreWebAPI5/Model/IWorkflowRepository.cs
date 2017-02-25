@@ -14,6 +14,11 @@ namespace workflow.Model
 		Workflow Find(string key);
 		Workflow Remove(string key);
 		void Update(Workflow workflow);
+		void Add(Trackable workflow);
+		IEnumerable<Trackable> GetAllTrackable();
+		Trackable FindTrackable(string key);
+		Trackable RemoveTrackable(string key);
+		void Update(Trackable workflow);
 		bool CheckValidUserKey(string stringValues);
 	}
 }
