@@ -29,26 +29,30 @@ namespace workflow.Model
 			{
 				WorkflowId = Guid.NewGuid();
 			}
+			DemoWorkflow(workflowName);
+		}
+
+		
+	
+
+		private void DemoWorkflow(string workflowName)
+		{
 			WorkflowName = workflowName;
 			Nodes = new Dictionary<string, Node>();
 			path = new List<Movement>();
 			if (workflowName == "_blank")
 			{
-				Key="_blankKey";
-				Trackable td = new Trackable("doc1", this.WorkflowName) { TrackableId = "doc1" };
-				Trackable td2 = new Trackable("doc2", this.WorkflowName) { TrackableId = "doc2" };
-				List<Trackable> l = new List<Trackable>();
-				l.Add(td);l.Add(td2); 
+				Key = "_blankKey";
 				path.Add(new Movement() { From = "Step1", To = "Step2" });
 				path.Add(new Movement() { From = "Step2", To = "Step3" });
 				path.Add(new Movement() { From = "Step3", To = "Step4" });
-				Nodes.Add("Step1", new Node("Step1") );
-				
-				Nodes.Add("Step2", new Node("Step2") );
+				Nodes.Add("Step1", new Node("Step1") { IsStart = true });
+				Nodes.Add("Step2", new Node("Step2"));
+				Nodes.Add("Step3", new Node("Step3"));
+				Nodes.Add("Step4", new Node("Step4") { IsEnd = true });
 			}
-			
-			
 		}
+
 		private bool CanExitNode(string nodeName)
 		{
 			foreach(Movement m in path)
@@ -180,7 +184,8 @@ namespace workflow.Model
 
 		public void AddTrackableToStart(Trackable item)
 		{
-			item.Location.Add(this.WorkflowName, Nodes.First().Key);
+			throw new NotImplementedException();
+			//item.Location.Add(this.WorkflowName, Nodes.First().Key);
 		}
 	
 		public void MoveTrackable(Trackable item, string targetNodeName)
@@ -189,29 +194,31 @@ namespace workflow.Model
 		}
 		private void MoveToNode(Trackable item, string targetNodeName, IUser user = null, string comment = "Moved Item")
 		{
-				Movement move;
-			if (IsMoveValid(item.Location[this.WorkflowName], targetNodeName, out move))
-			{
-				item.Location.Remove(this.WorkflowName);
-				item.Location.Add(this.WorkflowName, targetNodeName);
-				item.MoveHistory.Add(new ExecutedMove(move) { ExecutionTime = DateTime.Now });
-				return;
-			}
+			throw new NotImplementedException();
+			//Movement move;
+			//if (IsMoveValid(item.Location[this.WorkflowName], targetNodeName, out move))
+			//{
+			//	item.Location.Remove(this.WorkflowName);
+			//	item.Location.Add(this.WorkflowName, targetNodeName);
+			//	item.MoveHistory.Add(new ExecutedMove(move) { ExecutionTime = DateTime.Now });
+			//	return;
+			//}
 				
-			throw new WorkFlowException("move is not valid");
+			//throw new WorkFlowException("move is not valid");
 		}
 		
 		public void CopyToNode(Trackable item, string fromState, string toState, IUser copyUser, string comment = "Copied Item")
 		{
-			Movement move;
-			if (!IsMoveValid(fromState, toState, out move, copyUser))
-			{
-				var msg = string.Format("{0} cannot copy {1} from {2} to {3}", copyUser, item, fromState, toState);
-				throw new WorkFlowException(msg);
-			}
-			item.Location.Remove(this.WorkflowName);
-			item.Location.Add(this.WorkflowName, toState);
-			item.MoveHistory.Add(new ExecutedMove(move) { ExecutionTime = DateTime.Now });
+			throw new NotImplementedException();
+			//Movement move;
+			//if (!IsMoveValid(fromState, toState, out move, copyUser))
+			//{
+			//	var msg = string.Format("{0} cannot copy {1} from {2} to {3}", copyUser, item, fromState, toState);
+			//	throw new WorkFlowException(msg);
+			//}
+			//item.Location.Remove(this.WorkflowName);
+			//item.Location.Add(this.WorkflowName, toState);
+			//item.MoveHistory.Add(new ExecutedMove(move) { ExecutionTime = DateTime.Now });
 		}
 
 		public bool IsMoveValid(string from, string to, out Movement move, IUser user=null)

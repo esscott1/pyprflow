@@ -1,0 +1,62 @@
+﻿{
+	"trackables": {
+	"description": "array of items within the given node",
+	"type": "array",
+			"items": {
+				"title": "trackable",
+				"description": "object being tracked within this step",
+				"type": "object",
+							"properties": {
+								"trackableId": {
+									"description": "unique identifier for this item",
+									"type": "string"
+								},
+								"trackingName:" {
+									"description": "human friendly name for this item",
+									"type": "string"
+								},
+								"nodeNamesIn": {
+									"description": "unique identifier for this item",
+									"type": "array",
+									"items": { "nodeName": "string" }
+								},
+								"Location": {
+									"type"="array",
+									"description": "List of locations that trackable is in.",
+									"items": {
+										"type": "object",
+										"description": "workflowId and NodeId that designates a location of item",
+										"parameters": {
+												"workflowId": "string",
+												"nodeId": "string"
+										}
+										}
+
+
+															}
+								"moveHistory": {
+									"readonly": true,
+									"description": "array of moves that this particular trackable has been through in this workflow",
+									"type": "array",
+									"items": {
+										"title": "executedmove",
+										"type": "object",
+										"parameters": {
+											"executionTime": {
+												"type": "string",
+												"readonly": true
+											},
+											"mover": "string",
+											"comment": "string",
+											"from": "string",
+											"to": "string",
+											"approvedUsers ": {
+												"\"type\"=\"array\"",
+												"description": "list of users that could have executed this move",
+												"items": { "user": "string" }
+											}
+										}
+									}
+								}
+							}
+}

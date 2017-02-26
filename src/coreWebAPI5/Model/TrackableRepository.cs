@@ -14,7 +14,7 @@ namespace workflow.Model
 				 new ConcurrentDictionary<string, Trackable>();
 		public TrackableRepository()
 		{
-			Add(new Trackable("defaultdoc","_blank"));
+			Add(new Trackable("defaultdoc"));
 		}
 		public void Add(Trackable trackable)
 		{

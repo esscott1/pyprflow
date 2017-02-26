@@ -26,20 +26,28 @@ namespace workflow.Controllers
 			return Workflow.GetAllTrackable();
 		}
 
-		[HttpPost("isunique/{id}")]
-		public bool IsUnique(string id)
-		{
-			return true;
-		}
-		
-		[HttpGet("{id}")]
-		public IActionResult GetTrackable(string workflowId, string id )
+		[HttpGet("{id}", Name ="GetTrackable") ]
+		public IActionResult GetTrackable(string workflowId, string id)
 		{
 			Workflow w = Workflow.Find(workflowId);
 			Trackable t = Workflow.FindTrackable(id);
 			return Json(t);
 		}
 
+		[HttpPost]
+		public IActionResult CreateTrackable([FromBody] Trackable item)
+		{
+			Workflow.Add(item);
+			return CreatedAtRoute("GetTrackable", new { id = item.Key }, Workflow);
+
+		}
+		[HttpPost("isunique/{id}")]
+		public bool IsUnique(string id)
+		{
+			return true;
+		}
+		
+		
 		[HttpGet("newId")]
 		public IActionResult NewTrackableId()
 		{
@@ -50,11 +58,12 @@ namespace workflow.Controllers
 		[HttpPut("availablemoves")]
 		public IEnumerable<Movement> AvailableMoves([FromBody] Trackable item, string workflowId)
 		{
-			var nodeName = item.Location[workflowId];
+			throw new NotImplementedException();
+			//var nodeName = item.Location[workflowId];
 
-			Workflow workflow = Workflow.Find(workflowId);
+			//Workflow workflow = Workflow.Find(workflowId);
 			
-			return workflow.path.Where(p => p.From == nodeName);
+			//return workflow.path.Where(p => p.From == nodeName);
 			
 		}
 
@@ -68,7 +77,7 @@ namespace workflow.Controllers
 				return NotFound("workflow not found");
 			try
 			{
-				workflow.MoveTrackable(currentItem, item.Location[workflowId]);
+			//	workflow.MoveTrackable(currentItem, item.Location[workflowId]);
 			}
 			catch (WorkFlowException ex)
 			{
@@ -84,24 +93,26 @@ namespace workflow.Controllers
 		[HttpPut("movenext")]
 		public IActionResult MoveNext([FromBody]Trackable item, string workflowId)
 		{
-			var currentNode = item.Location[workflowId];
-			var workflow = Workflow.Find(workflowId);
-			var movement = workflow.path.Where(p => p.From == currentNode).First();
+			//var currentNode = item.Location[workflowId];
+			//var workflow = Workflow.Find(workflowId);
+			//var movement = workflow.path.Where(p => p.From == currentNode).First();
 
-			item.Location.Remove(workflowId);
-			item.Location.Add(workflowId, movement.To);
-			item.MoveHistory.Add(new ExecutedMove(movement) { ExecutionTime = DateTime.Now });
-			return Json(item);
+			//item.Location.Remove(workflowId);
+			//item.Location.Add(workflowId, movement.To);
+			//item.MoveHistory.Add(new ExecutedMove(movement) { ExecutionTime = DateTime.Now });
+			//return Json(item);
+			throw new NotImplementedException();
 			
 		}
 
 		[HttpPost("start")]
 		public IActionResult SubmitToWorkflow([FromBody]Trackable item, string workflowId)
 		{
-			Workflow workflow = Workflow.Find(workflowId);
-			item.Location.Add(workflowId, workflow.StartingNodeName);
-			Workflow.Add(item);
-			return Json(item);
+			//Workflow workflow = Workflow.Find(workflowId);
+			//item.Location.Add(workflowId, workflow.StartingNodeName);
+			//Workflow.Add(item);
+			//return Json(item);
+			throw new NotImplementedException();
 		}
 
 

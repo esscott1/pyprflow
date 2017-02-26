@@ -17,8 +17,10 @@ namespace workflow.Model
 		public WorkflowRepository()
 		{
 			Add(new Workflow("_blank"));
-			Trackable td = new Trackable("doc1", "_blank") { TrackableId = "doc1" };
-			Trackable td2 = new Trackable("doc2", "_blank") { TrackableId = "doc2" };
+			Trackable td = new Trackable("doc1") { TrackableId = "doc1" };
+			td.Demo("_blank", "Step1");
+			Trackable td2 = new Trackable("doc2") { TrackableId = "doc2" };
+			td2.Demo("_blank", "Step1");
 			Add(td);
 			Add(td2);
 		}
