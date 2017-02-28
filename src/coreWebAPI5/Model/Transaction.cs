@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,8 +9,9 @@ namespace workflow.Model
 {
 	public class Transaction
 	{
-		public string  Key { get; set; }
+		public string Key { get; set; }
 		public string TrackableId { get; set; }
+		[JsonConverter(typeof(StringEnumConverter))]
 		public TransactionType type { get; set; }
 		public string Comment { get; set; }
 		public string PreviousNodeId { get; set; }
@@ -20,13 +23,33 @@ namespace workflow.Model
 		{
 			TransActionTime = DateTime.Now;
 		}
+		public bool Equals(Transaction other)
+		{
+			if (this.NewNodeId == other.NewNodeId &&
+				this.PreviousNodeId == other.PreviousNodeId)
+			{
+				return true;
+			}
+			return false;
+		}
 	}
 
+	internal class TranactionComparer : IEqualityComparer<Transaction>
+	{
+		public bool Equals(Transaction t1, Transaction t2)
+		{
+			return t1.Equals(t2);
+		}
+		public int GetHashCode(Transaction obj)
+		{
+			return obj.NewNodeId.GetHashCode();
+		}
+	}
 
 	 
 	public enum TransactionType
 	{
-		Move = 1,
-		Copy = 2
+		Move,
+		Copy
 	}
 }

@@ -47,49 +47,48 @@ namespace workflow.Controllers
 		{
 			return Json(Workflow.FindTransaction(id));
 		}
+
+		// only allow Posts of transactions as they are not editable
 		[HttpPost]
 		public IActionResult SubmitTransaction([FromBody] Transaction trans)
 		{
-			string result;
+			
 			if (trans == null)
 			{ return BadRequest("trans is null"); }
 			try
 			{
-			Workflow.Add(trans);
+				if (Workflow.GetAllTransactions().FirstOrDefault(t => t.WorkflowId == trans.WorkflowId &&
+				 t.NewNodeId == trans.NewNodeId && t.PreviousNodeId == trans.PreviousNodeId) != null)
+					return StatusCode(403, "transaction already exists");
+
+				var trackable = Workflow.FindTrackable(trans.TrackableId);
+				if (trackable != null) // trackable exists
+				{
+					if(trans.PreviousNodeId != null) // this is a starting request
+						if (!trackable.Locations.Exists(l => l.WorkflowId == trans.WorkflowId && l.NodeId == trans.PreviousNodeId))
+							return StatusCode(403, "trackable is not in the starting position for this move request");
+
+					var workflow = Workflow.Find(trans.WorkflowId); Movement move;
+					if (!workflow.IsMoveValid(trans.PreviousNodeId, trans.NewNodeId, out move))
+						return StatusCode(403, "requested move is not valid in the designated workflow");
+
+					Workflow.Add(trans);
+					trackable.Locations.Remove(new Location() { WorkflowId = trans.WorkflowId, NodeId = trans.PreviousNodeId });
+					trackable.Locations.Add(new Location() { WorkflowId = trans.WorkflowId, NodeId = trans.NewNodeId });
+				}
+				else
+					return StatusCode(403, "trackable you are trying to move does not exist");
+
+				return CreatedAtRoute("GetTransaction", new { id = trans.Key }, Workflow);
+				
 			}
-			catch (Exception ex)
-			{
-				result = ex.Message;
-				return Json(result);
-			}
-			CreatedAtRouteResult response = CreatedAtRoute("GetTransaction", new { id = trans.Key }, Workflow);
-			response.StatusCode = 303;
-			return response;
+			catch(Exception ex)
+			{ return (StatusCode(500, ex.InnerException)); }
 
 		}
 
-		//[Route("api/workflow/{workflowId}/trackable/{trackableId}/transaction/")]
-		//[HttpPut]
-		//public IActionResult Create([FromBody] Transaction item, 
-		//	string workflowId, string trackableId)
-		//{
-		//	Trackable t = Workflow.FindTrackable(trackableId);
-		//	Model.Workflow wf = Workflow.Find(workflowId);
-		//	Movement move;
-		//	bool valid = wf.IsMoveValid(item.PreviousNodeId, item.NewNodeId, out move);
-		//	if(valid)
-		//	{
-		//		t.CurrentLocation = new Location() { NodeId = item.NewNodeId, WorkflowId = workflowId };
-		//		item.type = TransactionType.Move;
-		//		Workflow.Add(item);
-		//	}
+		
+		}
 
-		//	var response = CreatedAtRoute("GetTransaction", new { id = item.Key }, Workflow);
-		//	response.StatusCode = 303;
-		//	return response;
-
-		//	//return CreatedAtRoute(("GetTransaction", new { id = item.Key }, Workflow);
-		//}
-
-	}
+	
 }

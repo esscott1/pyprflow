@@ -22,13 +22,11 @@ namespace workflow.Model
 		//public List<ExecutedMove> MoveHistory { get; set; }
 		public Trackable(string trackableName)
 		{
-			//NodeNames = new List<string>();
 			TrackingName = trackableName;
 			TrackableId = trackableName;
 			Key = trackableName;
 			Locations = new List<Location>();
 
-			//Location.Add(workflowId, "stuff");
 		}
 
 		internal void Demo(string workflowId, string nodeId)

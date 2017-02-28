@@ -26,6 +26,7 @@ namespace workflow.Controllers
 			List<User> users = new List<User> { new User() { Email = "Sample.User@somewhere.com" } };
 			Model.Workflow w = new Model.Workflow("SampleWorkflow1");
 			w.Key = "SampleWorkflow1";
+			w.path.Add(new Movement() { From = null, To = "SampleNode1", ApproveUsers = users });
 			w.path.Add(new Movement() { From = "SampleNode1", To = "SampleNode2", ApproveUsers = users });
 			w.path.Add(new Movement() { From = "SampleNode2", To = "SampleNode3", ApproveUsers = users });
 			w.path.Add(new Movement() { From = "SampleNode3", To = "SampleNode4", ApproveUsers = users });

@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.JsonPatch;
 using workflow.Model;
+
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -56,41 +58,124 @@ namespace workflow.Controllers
 			return CreatedAtRoute("GetTrackable", new { id = item.Key }, Workflow);
 		}
 
-		[HttpPatch("{id}")]
-		public IActionResult UpdatePatch([FromBody]JsonPatchDocument<Trackable> patch, string id)
-		{
-			Trackable trackable = Workflow.FindTrackable(id);
-			Trackable patched = Workflow.FindTrackable(id);
-			patch.ApplyTo(patched, ModelState);
-			if (!ModelState.IsValid)
-				return new BadRequestObjectResult(ModelState);
-			var model = new
-			{
-				orginal = trackable,
-				patched = patched
-			};
-			return Ok(model);
-			//return Json(patch);
+		// patch is inappropriate because when an trackable is "moved" we need other information
+		// that is not part of the Trackable Object to track the  move.
+		// Patch may be useful for partial updates of a trackable so leaving it in for now
+	//	[HttpPatch("{id}")]
+		//public IActionResult UpdatePatch([FromBody]JsonPatchDocument<Trackable> patch, string id)
+		//{
+		//	Trackable trackable = Workflow.FindTrackable(id);
+		//	Trackable patched = Workflow.FindTrackable(id);
+		//	patch.ApplyTo(patched, ModelState);
+		//	if (!ModelState.IsValid)
+		//		return new BadRequestObjectResult(ModelState);
+		//	var model = new
+		//	{
+		//		orginal = trackable,
+		//		patched = patched,
+		//		operations = patch.Operations
+		//	};
+			
+			
+		//	var locationUpdates = patch.Operations.Where(o => o.path.ToLowerInvariant() == "/locations/-");
+		//	List<Location> newlocations = new List<Location>();
+		//	// getting a list of locations that were sent in the patch.
+		//	foreach(Microsoft.AspNetCore.JsonPatch.Operations.Operation<Trackable> o in locationUpdates)
+		//	{
+		//		string sVar = JsonConvert.SerializeObject(o.value);
+		//		var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto };
+		//		Location loc = JsonConvert.DeserializeObject<Location>(sVar, settings);
 
-		}
-		[HttpPut]
-		public IActionResult Update([FromBody] Trackable item)
-		{
-			Trackable current = Workflow.FindTrackable(item.Key);
-			foreach(Location l in item.Locations)
-			{
-				foreach(Location lold in current.Locations)
-				{
-					
+		//		switch (o.op)
+		//		{
+		//		case "add":
+		//				string nodeId;
+		//				if(WorkflowHelper.ExistsInWorkflow(trackable, loc.WorkflowId, out nodeId))
+		//				{
+		//					var wf = Workflow.Find(loc.WorkflowId);
+		//					Movement move;
+		//					if(wf.IsMoveValid(nodeId,loc.NodeId, out move))
+		//					{
+		//						// merge in patch and save the move
+		//					}
+		//				}
+		//			l = (Location)o.value;
+		//			return Json(l);
+		//			break;
+		//		case "replace":
+		//			l = (Location)o.value;
+		//			return Json(l);
+		//			break;
 
-				}
+		//		}
+				
+		//		newlocations.Add(loc);
+		//	}
+		//	// match those locations with existing locations to check if the "move" is valid
+			
+		//	foreach(Location l in newlocations)
+		//	{
+
+		//		var wf = Workflow.Find(l.WorkflowId);
+		//		Movement move;
+		//		if(!wf.IsMoveValid("somewhere",l.NodeId, out move))
+		//		{
+		//			return StatusCode(403, "move is not valid per workflow rules");
+		//		}
+
+		//	}
 
 
-			}
-			//if (current.Move(item)) ;
-			//Workflow.Update(item);
-			return Json("not sure what to do here");
-		}
+		//	//string sVar = JsonConvert.SerializeObject(locationUpdates.First().value);
+		//	//var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto };
+		//	//Location loc =  JsonConvert.DeserializeObject<Location>(sVar, settings);
+
+		//	return Json(loc);  // the above works.
+
+		//	return Json(locationUpdates.First().value);
+
+		//	foreach (Microsoft.AspNetCore.JsonPatch.Operations.Operation<Trackable> o in locationUpdates)
+		//	{
+		//		Microsoft.AspNetCore.JsonPatch.Helpers.GetValueResult gvr = new Microsoft.AspNetCore.JsonPatch.Helpers.GetValueResult(o.value, false);
+		//		if (o.op == "add")
+		//			return Ok(Json(
+		//				((Newtonsoft.Json.Linq.JObject)o.value).Property("value").Value						));
+		//		else
+		//			return Ok(Json("not add"));
+		//		Location l;
+		//		//switch (o.op)
+		//		//{
+		//		//	case "add":
+		//		//		l = (Location)o.value;
+		//		//		return Json(l);
+		//		//		break;
+		//		//	case "replace":
+		//		//		l = (Location)o.value;
+		//		//		return Json(l);
+		//		//		break;
+		//		//	case "remove":
+		//		//		l = (Location)o.value;
+		//		//		return Json(l);
+		//		//		break;
+		//		//	case "move":
+		//		//		return StatusCode(403, "move operation not supported");
+		//		//		break;
+		//		//	case "copy":
+		//		//		return StatusCode(403, "copy operation not supported");
+		//		//		break;
+		//		//	case "test":
+		//		//		return StatusCode(403, "test operation not supported");
+		//		//		break;
+		//		//	default:
+		//		//		return Json("default case");
+		//		//		break;
+		//		//}
+		//	}
+		//	return Ok(model);
+		//	//return Json(patch);
+
+		//}
+	
 		[HttpPost("isunique/{id}")]
 		public bool IsUnique(string id)
 		{
@@ -102,6 +187,7 @@ namespace workflow.Controllers
 		{
 			return Json(Guid.NewGuid());
 		}
+
 		[HttpPut("availablemoves")]
 		public IEnumerable<Movement> AvailableMoves([FromBody] Trackable item)
 		{
@@ -114,43 +200,6 @@ namespace workflow.Controllers
 			
 		}
 
-		[HttpPut("move")]
-		public IActionResult Move([FromBody]Trackable item, string workflowId)
-		{
-			Trackable currentItem = Workflow.FindTrackable(item.Key);
-			var workflow = Workflow.Find(workflowId);
-
-			if (workflow == null) 
-				return NotFound("workflow not found");
-			try
-			{
-			//	workflow.MoveTrackable(currentItem, item.Location[workflowId]);
-			}
-			catch (WorkFlowException ex)
-			{
-				return Json(ex.Message);
-			}
-			catch(Exception ex)
-			{
-				return BadRequest(ex.Message);
-			}
-			return new ObjectResult(workflow);
-		}
-
-		[HttpPut("movenext")]
-		public IActionResult MoveNext([FromBody]Trackable item, string workflowId)
-		{
-			//var currentNode = item.Location[workflowId];
-			//var workflow = Workflow.Find(workflowId);
-			//var movement = workflow.path.Where(p => p.From == currentNode).First();
-
-			//item.Location.Remove(workflowId);
-			//item.Location.Add(workflowId, movement.To);
-			//item.MoveHistory.Add(new ExecutedMove(movement) { ExecutionTime = DateTime.Now });
-			//return Json(item);
-			throw new NotImplementedException();
-			
-		}
 
 		[HttpPost("start")]
 		public IActionResult SubmitToWorkflow([FromBody]Trackable item, string workflowId)
