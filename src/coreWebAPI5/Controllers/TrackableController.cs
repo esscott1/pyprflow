@@ -9,7 +9,7 @@ using workflow.Model;
 
 namespace workflow.Controllers
 {
-	[Route("api/workflow/{workflowId}/[controller]")]
+	[Route("api/[controller]")]
 	public class TrackableController : Controller
 	{
 
@@ -18,7 +18,17 @@ namespace workflow.Controllers
 			Workflow = workflow;
 		}
 		public IWorkflowRepository Workflow { get; set; }
+		[HttpGet("example")]
+		public IActionResult GetExample()
+		{
+			string name = "SampleDoc1";
+			Trackable t = new Trackable(name);
+			t.Key = name;
+			t.TrackableId = name;
+			t.Locations.Add(new Location() { WorkflowId = "SampleWorkflow", NodeId = "SampleNode1" });
+			return Json(t);
 
+		}
 		[HttpGet]
 		public IEnumerable<Trackable> GetAll()
 		{
@@ -27,19 +37,27 @@ namespace workflow.Controllers
 		}
 
 		[HttpGet("{id}", Name ="GetTrackable") ]
-		public IActionResult GetTrackable(string workflowId, string id)
+		public IActionResult GetTrackable(string id)
 		{
-			Workflow w = Workflow.Find(workflowId);
 			Trackable t = Workflow.FindTrackable(id);
 			return Json(t);
 		}
 
+		
 		[HttpPost]
 		public IActionResult CreateTrackable([FromBody] Trackable item)
 		{
+			// should check for existance and if exist throw error telling to use Put
 			Workflow.Add(item);
 			return CreatedAtRoute("GetTrackable", new { id = item.Key }, Workflow);
-
+		}
+		[HttpPut]
+		public IActionResult Update([FromBody] Trackable item)
+		{
+			//Trackable current = Workflow.FindTrackable(item.Key);
+			//if (current.Move(item)) ;
+			//Workflow.Update(item);
+			return Json("not sure what to do here");
 		}
 		[HttpPost("isunique/{id}")]
 		public bool IsUnique(string id)
@@ -47,16 +65,13 @@ namespace workflow.Controllers
 			return true;
 		}
 		
-		
 		[HttpGet("newId")]
 		public IActionResult NewTrackableId()
 		{
 			return Json(Guid.NewGuid());
 		}
-
-
 		[HttpPut("availablemoves")]
-		public IEnumerable<Movement> AvailableMoves([FromBody] Trackable item, string workflowId)
+		public IEnumerable<Movement> AvailableMoves([FromBody] Trackable item)
 		{
 			throw new NotImplementedException();
 			//var nodeName = item.Location[workflowId];

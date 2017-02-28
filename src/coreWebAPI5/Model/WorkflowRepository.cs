@@ -14,6 +14,10 @@ namespace workflow.Model
 			new ConcurrentDictionary<string, Workflow>();
 		private static ConcurrentDictionary<string, Trackable> _Trackable =
 				 new ConcurrentDictionary<string, Trackable>();
+		private static ConcurrentDictionary<string, ExecutedMove> _ExecutedMove =
+				 new ConcurrentDictionary<string, ExecutedMove>();
+		private static ConcurrentDictionary<string, Transaction> _Transaction =
+				 new ConcurrentDictionary<string, Transaction>();
 		public WorkflowRepository()
 		{
 			Add(new Workflow("_blank"));
@@ -23,6 +27,13 @@ namespace workflow.Model
 			td2.Demo("_blank", "Step1");
 			Add(td);
 			Add(td2);
+			Transaction t = new Transaction();
+			t.Key = "t1";
+			t.NewNodeId = "Step2";
+			t.PreviousNodeId = "Step1";
+			t.TrackableId = "doc1";
+			t.WorkflowId = "_blank";
+			Add(t);
 		}
 		public void Add(Workflow workflow)
 		{
@@ -37,6 +48,19 @@ namespace workflow.Model
 				trackable.Key = Guid.NewGuid().ToString();
 			_Trackable[trackable.Key] = trackable;
 		}
+		public void Add(ExecutedMove executedMove)
+		{
+			if (executedMove.Key == null || executedMove.Key == String.Empty)
+				executedMove.Key = Guid.NewGuid().ToString();
+			_ExecutedMove[executedMove.Key] = executedMove;
+		}
+
+		public void Add(Transaction trans)
+		{
+			if (trans.Key == null || trans.Key == String.Empty)
+				trans.Key = Guid.NewGuid().ToString();
+			_Transaction[trans.Key] = trans;
+		}
 
 		public bool CheckValidUserKey(string stringValue)
 		{
@@ -48,7 +72,6 @@ namespace workflow.Model
 			return false;
 		}
 
-		
 		public Workflow Find(string key)
 		{
 			Workflow workflow;
@@ -63,6 +86,25 @@ namespace workflow.Model
 			return Trackable;
 		}
 
+		public ExecutedMove FindExecutedMove(string key)
+		{
+			ExecutedMove ExecutedMove;
+			_ExecutedMove.TryGetValue(key, out ExecutedMove);
+			return ExecutedMove;
+		}
+
+		public Transaction FindTransaction(string key)
+		{
+			Transaction transaction;
+			_Transaction.TryGetValue(key, out transaction);
+			return transaction;
+		}
+
+		public IEnumerable<ExecutedMove> FindExecutedMoves(string trackableId)
+		{
+			return _ExecutedMove.Values.Where(m => m.TrackableId == trackableId);
+		}
+
 		public IEnumerable<Workflow> GetAll()
 		{
 			return _Workflow.Values;
@@ -71,6 +113,15 @@ namespace workflow.Model
 		public IEnumerable<Trackable> GetAllTrackable()
 		{
 			return _Trackable.Values;
+		}
+
+		public IEnumerable<ExecutedMove> GetAllExecutedMoves()
+		{
+			return _ExecutedMove.Values;
+		}
+		public IEnumerable<Transaction> GetAllTransactions()
+		{
+			return _Transaction.Values;
 		}
 
 		public Workflow Remove(string key)

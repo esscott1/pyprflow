@@ -1,0 +1,14 @@
+﻿{
+	"Transaction": {
+			"type"="object",
+			"description": "represents something done within a workflow to a trackable Item.",
+			"properties" {
+							"Key": "string",
+							"trackableId": "string",
+							"comment": "string",
+							"previousNodeId": "string",
+							"newNodeId": "string",
+							"submitterId": "string"
+			}
+	}
+}

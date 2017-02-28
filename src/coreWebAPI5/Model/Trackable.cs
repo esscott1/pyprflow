@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Dependency­Injection;
 
 namespace workflow.Model
 {
@@ -10,20 +12,23 @@ namespace workflow.Model
 		public string TrackableId { get; set; }
 		public string Key { get; set; }
 		public string TrackingName { get; set; }
-		public List<string> NodeNames { get; set; }
+		//public List<string> NodeNames { get; set; }
 		/// <summary>
 		/// Location is workflow and node 
 		/// </summary>
 		public List<Location> Locations { get; set; }
-		public List<ExecutedMove> MoveHistory { get; set; }
+		public Location CurrentLocation { get; set; }
+		//[JsonIgnore]
+		//public List<ExecutedMove> MoveHistory { get; set; }
 		public Trackable(string trackableName)
 		{
-			NodeNames = new List<string>();
+			//NodeNames = new List<string>();
 			TrackingName = trackableName;
 			TrackableId = trackableName;
 			Key = trackableName;
-			MoveHistory = new List<ExecutedMove>();
+			//MoveHistory = new List<ExecutedMove>();
 			Locations = new List<Location>();
+
 			//Location.Add(workflowId, "stuff");
 		}
 
@@ -47,6 +52,7 @@ namespace workflow.Model
 			{ WorkflowId = "_blank", NodeId = "Step2" });
 		}
 
+		
 	}
 	public class Location
 	{

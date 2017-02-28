@@ -235,7 +235,7 @@ Workflow Example with simple steps and one item being tracked in first step
  ###How do I submit something to a orchestration workflow?
  Any item can be submitted to an orchestration workflow.  The details of the item should be stored in a system other than the orchestration workflow system.  However, 
  a unique identifier is required for the orchestration workflow to track and facilitate.  It also enable the items system of record to easily match the items information 
- with it's location and status within the orchestration workflow.  Below is a JSON schema and JSON example of a workflowaction.  all item management requires submission 
+ with it's location and status within the orchestration workflow.  Below is a JSON schema and JSON example of a trackable item.  a requires submission 
  of a WorkflowItemUpdate to the OW engine.
 
 ### Submitting and Managing items through a orchestration Workflow

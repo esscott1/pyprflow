@@ -17,7 +17,7 @@ namespace workflow.Model
 		internal string EndingNodeName { get; set; }
 
 		[JsonProperty]
-		private Dictionary<string, Node> Nodes;
+		internal Dictionary<string, Node> Nodes;
 	
 		[JsonProperty]
 		internal List<Movement> path;
@@ -304,7 +304,7 @@ namespace workflow.Model
 
 		
 
-		public void AddValidStateMovement(string from, string to, IUser moveUser = null)
+		public void AddValidStateMovement(string from, string to, User moveUser = null)
 		{
 			if (!Nodes.ContainsKey(from))
 			{
