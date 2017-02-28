@@ -32,8 +32,6 @@ namespace workflow.Model
 			DemoWorkflow(workflowName);
 		}
 
-		
-	
 
 		private void DemoWorkflow(string workflowName)
 		{

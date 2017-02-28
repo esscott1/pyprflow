@@ -26,7 +26,6 @@ namespace workflow.Model
 			TrackingName = trackableName;
 			TrackableId = trackableName;
 			Key = trackableName;
-			//MoveHistory = new List<ExecutedMove>();
 			Locations = new List<Location>();
 
 			//Location.Add(workflowId, "stuff");

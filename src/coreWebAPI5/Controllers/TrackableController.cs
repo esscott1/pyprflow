@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.JsonPatch;
 using workflow.Model;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
@@ -48,13 +49,44 @@ namespace workflow.Controllers
 		public IActionResult CreateTrackable([FromBody] Trackable item)
 		{
 			// should check for existance and if exist throw error telling to use Put
+			var t = Workflow.FindTrackable(item.Key);
+			if (t != null)
+				return StatusCode(403, "Trackable already exists in system, use HTTPPatch to update trackable");
 			Workflow.Add(item);
 			return CreatedAtRoute("GetTrackable", new { id = item.Key }, Workflow);
+		}
+
+		[HttpPatch("{id}")]
+		public IActionResult UpdatePatch([FromBody]JsonPatchDocument<Trackable> patch, string id)
+		{
+			Trackable trackable = Workflow.FindTrackable(id);
+			Trackable patched = Workflow.FindTrackable(id);
+			patch.ApplyTo(patched, ModelState);
+			if (!ModelState.IsValid)
+				return new BadRequestObjectResult(ModelState);
+			var model = new
+			{
+				orginal = trackable,
+				patched = patched
+			};
+			return Ok(model);
+			//return Json(patch);
+
 		}
 		[HttpPut]
 		public IActionResult Update([FromBody] Trackable item)
 		{
-			//Trackable current = Workflow.FindTrackable(item.Key);
+			Trackable current = Workflow.FindTrackable(item.Key);
+			foreach(Location l in item.Locations)
+			{
+				foreach(Location lold in current.Locations)
+				{
+					
+
+				}
+
+
+			}
 			//if (current.Move(item)) ;
 			//Workflow.Update(item);
 			return Json("not sure what to do here");
