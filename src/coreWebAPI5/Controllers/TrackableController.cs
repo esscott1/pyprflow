@@ -46,6 +46,11 @@ namespace workflow.Controllers
 			return Json(t);
 		}
 
+		[HttpGet("{trackableId}/transactions")]
+		public IEnumerable<Transaction> GetTransactions(string trackableId)
+		{
+			return Workflow.GetAllTransactions().Where(t => t.TrackableId == trackableId);
+		}
 		
 		[HttpPost]
 		public IActionResult CreateTrackable([FromBody] Trackable item)

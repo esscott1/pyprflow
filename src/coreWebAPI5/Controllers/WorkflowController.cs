@@ -54,7 +54,18 @@ namespace workflow.Controllers
 			}
 			return Json(workflow);
 		}
-
+		
+		//not working right yet, not sure i'm saving trackables correctly.
+		//[HttpGet("{workflowId}/Node/{nodeId}/trackables")]
+		//public IEnumerable<Trackable> GetNodeTrackables(string workflowId, string nodeId)
+		//{
+		//	var wf = Workflow.Find(workflowId);
+		//	var trackables = Workflow.GetAllTrackable().Select(l => new Trackable
+		//	{
+		//		Locations = l.Locations.Where(n => n.NodeId == nodeId).ToList()
+		//	});
+		//	return trackables;
+		//}
 		[HttpPost("validate", Name ="ValidateWorkflow")]
 		public IActionResult Validate([FromBody] Workflow workflow)
 		{

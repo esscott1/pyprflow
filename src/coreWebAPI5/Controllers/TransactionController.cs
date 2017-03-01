@@ -57,24 +57,34 @@ namespace workflow.Controllers
 			{ return BadRequest("trans is null"); }
 			try
 			{
+				if(Workflow.FindTransaction(trans.Key)!=null)
+					return StatusCode(403, "transaction already exists");
 				if (Workflow.GetAllTransactions().FirstOrDefault(t => t.WorkflowId == trans.WorkflowId &&
 				 t.NewNodeId == trans.NewNodeId && t.PreviousNodeId == trans.PreviousNodeId) != null)
 					return StatusCode(403, "transaction already exists");
 
 				var trackable = Workflow.FindTrackable(trans.TrackableId);
+
 				if (trackable != null) // trackable exists
 				{
+					Console.WriteLine("found trackable: "+trackable.Key);
 					if(trans.PreviousNodeId != null) // this is a starting request
 						if (!trackable.Locations.Exists(l => l.WorkflowId == trans.WorkflowId && l.NodeId == trans.PreviousNodeId))
 							return StatusCode(403, "trackable is not in the starting position for this move request");
 
 					var workflow = Workflow.Find(trans.WorkflowId); Movement move;
+					Console.WriteLine("found workflow: " + workflow.Key);
 					if (!workflow.IsMoveValid(trans.PreviousNodeId, trans.NewNodeId, out move))
 						return StatusCode(403, "requested move is not valid in the designated workflow");
 
 					Workflow.Add(trans);
-					trackable.Locations.Remove(new Location() { WorkflowId = trans.WorkflowId, NodeId = trans.PreviousNodeId });
+					Console.WriteLine("trying to remove: " + trans.WorkflowId + " " + trans.PreviousNodeId);
+					int n = trackable.Locations.RemoveAll(t => (t.NodeId == trans.PreviousNodeId) && (t.WorkflowId == trans.WorkflowId));
+					Console.WriteLine("removed : " + trans.WorkflowId + " " + trans.PreviousNodeId +" "+n+" number of times");
+
+					Console.WriteLine("trying to add: " + trans.WorkflowId + " " + trans.NewNodeId);
 					trackable.Locations.Add(new Location() { WorkflowId = trans.WorkflowId, NodeId = trans.NewNodeId });
+					Console.WriteLine("added: " + trans.WorkflowId + " " + trans.NewNodeId);
 				}
 				else
 					return StatusCode(403, "trackable you are trying to move does not exist");
