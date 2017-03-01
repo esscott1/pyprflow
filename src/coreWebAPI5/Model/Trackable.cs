@@ -17,15 +17,15 @@ namespace workflow.Model
 		/// Location is workflow and node 
 		/// </summary>
 		public List<Location> Locations { get; set; }
-		public Location CurrentLocation { get; set; }
+	//	public Location CurrentLocation { get; set; }
 		//[JsonIgnore]
 		//public List<ExecutedMove> MoveHistory { get; set; }
-		public Trackable(string trackableName)
+		public Trackable(string trackableName) : this()
 		{
 			TrackingName = trackableName;
 			TrackableId = trackableName;
 			Key = trackableName;
-			Locations = new List<Location>();
+			
 
 		}
 
@@ -40,13 +40,14 @@ namespace workflow.Model
 
 		public Trackable()
 		{
-			Trackable td = new Trackable("doc1")
-			{ TrackableId = "doc1" };
-			td.Locations.Add(new Location()
-			{ WorkflowId = "_blank", NodeId = "Step1" });
-			Trackable td2 = new Trackable("doc2") { TrackableId = "doc2" };
-			td.Locations.Add(new Location()
-			{ WorkflowId = "_blank", NodeId = "Step2" });
+			Locations = new List<Location>();
+			//Trackable td = new Trackable("doc1")
+			//{ TrackableId = "doc1" };
+			//td.Locations.Add(new Location()
+			//{ WorkflowId = "_blank", NodeId = "Step1" });
+			//Trackable td2 = new Trackable("doc2") { TrackableId = "doc2" };
+			//td.Locations.Add(new Location()
+			//{ WorkflowId = "_blank", NodeId = "Step2" });
 		}
 
 		

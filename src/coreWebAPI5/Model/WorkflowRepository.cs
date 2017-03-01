@@ -20,20 +20,20 @@ namespace workflow.Model
 				 new ConcurrentDictionary<string, Transaction>();
 		public WorkflowRepository()
 		{
-			Add(new Workflow("_blank"));
-			Trackable td = new Trackable("doc1") { TrackableId = "doc1" };
-			td.Demo("_blank", "Step1");
-			Trackable td2 = new Trackable("doc2") { TrackableId = "doc2" };
-			td2.Demo("_blank", "Step1");
-			Add(td);
-			Add(td2);
-			Transaction t = new Transaction();
-			t.Key = "t1";
-			t.NewNodeId = "Step2";
-			t.PreviousNodeId = "Step1";
-			t.TrackableId = "doc1";
-			t.WorkflowId = "_blank";
-			Add(t);
+			//Add(new Workflow("_blank"));
+			//Trackable td = new Trackable("doc1") { TrackableId = "doc1" };
+			//td.Demo("_blank", "Step1");
+			//Trackable td2 = new Trackable("doc2") { TrackableId = "doc2" };
+			//td2.Demo("_blank", "Step1");
+			//Add(td);
+			//Add(td2);
+			//Transaction t = new Transaction();
+			//t.Key = "t1";
+			//t.NewNodeId = "Step2";
+			//t.PreviousNodeId = "Step1";
+			//t.TrackableId = "doc1";
+			//t.WorkflowId = "_blank";
+			//Add(t);
 		}
 		public void Add(Workflow workflow)
 		{

@@ -193,7 +193,7 @@ namespace workflow.Controllers
 			return Json(Guid.NewGuid());
 		}
 
-		[HttpPut("availablemoves")]
+		[HttpGet("availablemoves")]
 		public IEnumerable<Movement> AvailableMoves([FromBody] Trackable item)
 		{
 			throw new NotImplementedException();

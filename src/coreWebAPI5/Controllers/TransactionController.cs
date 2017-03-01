@@ -60,7 +60,10 @@ namespace workflow.Controllers
 				if(Workflow.FindTransaction(trans.Key)!=null)
 					return StatusCode(403, "transaction already exists");
 				if (Workflow.GetAllTransactions().FirstOrDefault(t => t.WorkflowId == trans.WorkflowId &&
-				 t.NewNodeId == trans.NewNodeId && t.PreviousNodeId == trans.PreviousNodeId) != null)
+				 t.NewNodeId == trans.NewNodeId && 
+				 t.PreviousNodeId == trans.PreviousNodeId &&
+				 t.TrackableId == trans.TrackableId
+				 ) != null)
 					return StatusCode(403, "transaction already exists");
 
 				var trackable = Workflow.FindTrackable(trans.TrackableId);
