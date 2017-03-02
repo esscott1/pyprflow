@@ -34,7 +34,8 @@
   },
 
 	"runtimes": {
-		"win10-x64": { }
+			"win10-x64": {},
+			"ubuntu.16.10-x64": {}
 	},
 
   "runtimeOptions": {
