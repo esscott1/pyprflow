@@ -39,7 +39,22 @@ namespace workflow.Model
 		{
 			if(workflow.Key == null || workflow.Key ==String.Empty )
 				workflow.Key = Guid.NewGuid().ToString();
-			_Workflow[workflow.Key] = workflow;
+			using (var db = new WorkflowContext())
+			{
+				try
+				{
+					Console.WriteLine("trying to save to DB");
+					db.WorkflowTable.Add(workflow);
+					db.SaveChanges();
+				}
+				catch(Exception ex)
+				{
+					Console.WriteLine("{0} error", ex.Message);
+					Console.WriteLine("{0} inner message", ex.InnerException);
+				}
+			}
+
+				_Workflow[workflow.Key] = workflow;
 		}
 
 		public void Add(Trackable trackable)
@@ -107,7 +122,22 @@ namespace workflow.Model
 
 		public IEnumerable<Workflow> GetAll()
 		{
-			return _Workflow.Values;
+			using (var db = new WorkflowContext())
+			{
+				try
+				{
+					Console.WriteLine("trying to return all from DB");
+					return db.WorkflowTable.ToList();
+					//return _Workflow.Values;
+				}
+				catch (Exception ex)
+				{
+					Console.WriteLine("{0} error", ex.Message);
+					Console.WriteLine("{0} inner message", ex.InnerException);
+
+				}
+				return new List<Workflow>();
+			}
 		}
 
 		public IEnumerable<Trackable> GetAllTrackable()
