@@ -308,7 +308,7 @@ To submit an item to an orchestration workflow you simply Post a transaction JSO
 
 ###What RESTful services are available to me
 
-[GET]
+[GET]  
 API/workflow - returns all workflows managed by the application.  
 API/workflow/{workflowId}  - return the specific workflow.  
 API/workflow/example  - return an example workflow to get you started  
@@ -345,26 +345,23 @@ API/transactions - returns all transactions
 API/transactions/{transactionId} - returns a specific transacation  
 API/transactions/example  - returns an example transaction to get you started.  
 
+[POST]  
+API/workflow - submits the workflow definition to the OW engine.  
+API/workflow/validate - validate the posted workflow definition.  
+API/trackable - submits a trackable to the OW engine  
+API/trackable/isunique/{trackableId} - varifies if a trackableId is new to the OW engine (used for prevalidation).  
+API/transaction - submits a transaction to the OW engine  
+
+API/trackable - Registers a trackable to the OW engine  
+API/trackable/isunique/{trackableId} - varifies if a trackableId is new to the OW engine (used for prevalidation).  
+API/transaction - submits a transaction to the OW engine with will manipulates a trackable within OW engine.  
 
 
-[POST]
-API/workflow - submits the workflow definition to the OW engine
-API/workflow/validate - validate the posted workflow definition.
-
-API/trackable - submits a trackable to the OW engine
-API/trackable/isunique/{trackableId} - varifies if a trackableId is new to the OW engine (used for prevalidation).
-API/transaction - submits a transaction to the OW engine
-
-API/trackable - Registers a trackable to the OW engine
-API/trackable/isunique/{trackableId} - varifies if a trackableId is new to the OW engine (used for prevalidation).
-API/transaction - submits a transaction to the OW engine with will manipulates a trackable within OW engine.
+[PUT]  
+API/workflow/{workflowId} - updates an existing workflow definition  
+API/trackable/{trackableId} - updates an existing trackable  
 
 
-[PUT]
-API/workflow/{workflowId} - updates an existing workflow definition
-API/trackable/{trackableId} - updates an existing trackable
-
-
-[Delete]
-API/workflow/{workflowId} - removes an existing workflow definition from the OW engine
-API/trackable/{trackableId}
+[Delete]  
+API/workflow/{workflowId} - removes an existing workflow definition from the OW engine  
+API/trackable/{trackableId}  
