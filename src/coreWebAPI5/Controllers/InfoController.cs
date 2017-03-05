@@ -22,9 +22,7 @@ namespace workflow.Controllers
 		[HttpGet("{id}")]
         public IActionResult Workflow(string Id)
         {
-			Workflow w = Repo.Find(Id);
-			
-			return Json(Repo.Find(Id));
+			return Json(Repo.Find<Workflow>(Id));
         }
 
 		[HttpGet("{id}")]
@@ -35,13 +33,8 @@ namespace workflow.Controllers
 		[HttpGet("{id}")]
 		public IActionResult Trackable(string Id)
 		{
-			return Json(Repo.FindTrackable(Id));
+			return Json(Repo.Find<Trackable>(Id));
 		}
-
-		
-
-
-
 
 
 		// GET api/values/5

@@ -7,7 +7,7 @@ using Microsoft.Extensions.Dependency­Injection;
 
 namespace workflow.Model
 {
-	public class Trackable
+	public class Trackable : WorkflowItem
 	{
 		public string TrackableId { get; set; }
 		public string Key { get; set; }
@@ -17,6 +17,7 @@ namespace workflow.Model
 		/// Location is workflow and node 
 		/// </summary>
 		public List<Location> Locations { get; set; }
+		
 	//	public Location CurrentLocation { get; set; }
 		//[JsonIgnore]
 		//public List<ExecutedMove> MoveHistory { get; set; }
@@ -42,12 +43,12 @@ namespace workflow.Model
 		{
 			Locations = new List<Location>();
 			//Trackable td = new Trackable("doc1")
-			//{ TrackableId = "doc1" };
+			//{ TrackableId2 = "doc1" };
 			//td.Locations.Add(new Location()
-			//{ WorkflowId = "_blank", NodeId = "Step1" });
-			//Trackable td2 = new Trackable("doc2") { TrackableId = "doc2" };
+			//{ WorkflowGuid = "_blank", NodeId = "Step1" });
+			//Trackable td2 = new Trackable("doc2") { TrackableId2 = "doc2" };
 			//td.Locations.Add(new Location()
-			//{ WorkflowId = "_blank", NodeId = "Step2" });
+			//{ WorkflowGuid = "_blank", NodeId = "Step2" });
 		}
 
 		

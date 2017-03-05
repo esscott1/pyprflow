@@ -41,7 +41,7 @@ namespace workflow
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-			app.ApplyUserKeyValidation();
+			//app.ApplyUserKeyValidation();
 
             app.UseMvc();
         }

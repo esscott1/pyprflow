@@ -11,56 +11,35 @@ using workflow.Model;
 namespace workflow.Controllers
 {
 	[Route("api/[controller]")]
-	public class WorkflowController : Controller
+	public class WorkflowController : BaseController
 	{
 		public WorkflowController(IWorkflowRepository workflow)
 		{
-			Workflow = workflow;
+			Repository = workflow;
 		}
-		public IWorkflowRepository Workflow { get; set; }
-
 		[HttpGet("example")]
 		public IActionResult GetSample()
 		{
-			IUser user = new User() { Email = "Sample.User@somewhere.com" };
-			List<User> users = new List<User> { new User() { Email = "Sample.User@somewhere.com" } };
-			Model.Workflow w = new Model.Workflow("SampleWorkflow1");
-			w.Key = "SampleWorkflow1";
-			w.path.Add(new Movement() { From = null, To = "SampleNode1", ApproveUsers = users });
-			w.path.Add(new Movement() { From = "SampleNode1", To = "SampleNode2", ApproveUsers = users });
-			w.path.Add(new Movement() { From = "SampleNode2", To = "SampleNode3", ApproveUsers = users });
-			w.path.Add(new Movement() { From = "SampleNode3", To = "SampleNode4", ApproveUsers = users });
-			w.Nodes.Add("SampleNode1", new Node("SampleNode1") { IsStart = true});
-			w.Nodes.Add("SampleNode2", new Node("SampleNode2"));
-			w.Nodes.Add("SampleNode3", new Node("SampleNode3"));
-			w.Nodes.Add("SampleNode4", new Node("SampleNode4") { IsEnd = true });
-			
-			return Json(w);
-
+			var wkf = new Model.Workflow();
+			return Json(wkf.GetSample());
 		}
 		[HttpGet]
 		public IEnumerable<Workflow> GetAll()
-		{
-			return Workflow.GetAll();
-		}
+		{	return Repository.GetAll<Workflow>();	}
 
 		[HttpGet("{id}", Name = "GetWorkflow")]
 		public IActionResult GetById(string id)
 		{
-			var workflow = Workflow.Find(id);
-			if (workflow == null)
-			{
-				return NotFound(id);
-			}
+			var workflow = Repository.Find<Workflow>(id);
+			if (workflow == null) { return NotFound(id); }
 			return Json(workflow);
 		}
 
 		[HttpGet("{workflowId}/Node/{nodeId}/trackables")]
 		public IEnumerable<Trackable> GetNodeTrackables(string workflowId, string nodeId)
 		{
-			var ie = Workflow.GetAllTrackable();
+			IEnumerable<Trackable> ie = Repository.GetAll<Trackable>();
 			return ie.Where(t => t.Locations.Any(l => l.NodeId == nodeId));
-			
 		}
 		[HttpPost("validate", Name ="ValidateWorkflow")]
 		public IActionResult Validate([FromBody] Workflow workflow)
@@ -83,18 +62,11 @@ namespace workflow.Controllers
 			WorkflowValidationMessage message;
 			if (!workflow.IsValid(out message))
 				return StatusCode(422, message);
-			Workflow.Add(workflow);
+			Repository.Add(workflow);
 		
-			return CreatedAtRoute("GetWorkflow", new { id = workflow.Key }, Workflow);
+			return CreatedAtRoute("GetWorkflow", new { id = workflow.WorkflowItemId }, Repository);
 		}
-		//[HttpPut]
-		//public IActionResult StartTrackingItem(string workflowId, [FromBody] ITrackable item)//string workFlowId, [FromBody] ITrackable trackable)
-		//{
-		//	var workflow = Workflow.Find("_blankKey");
-		//	var t = new Model.Trackable("documentToTrack1", "_blankKey");
-		//	workflow.AddTrackableToStart(t);
-		//	return new ObjectResult(workflow);
-		//}
+		
 		
 		[HttpPut("{id}")]
 		public IActionResult Update(string id, [FromBody] Workflow workflow)
@@ -103,20 +75,18 @@ namespace workflow.Controllers
 			{
 				return BadRequest();
 			}
-			var _workflow = Workflow.Find(id);
+			var _workflow = Repository.Find<Workflow>(id);
 			if (_workflow == null)
 				return NotFound();
-			Workflow.Update(_workflow);
+			Repository.Update<Workflow>(workflow);
 			return new NoContentResult();
 
 		}
 		[HttpDelete("{id}")]
 		public IActionResult Delete(string id)
 		{
-			var deleted = Workflow.Remove(id);
-			if (deleted == null)
-				return NotFound();
-			return Json(deleted);
+			Repository.Remove<Workflow>(id);
+			return Json(String.Format("workflow with workflowItemId {0} is deleted", id));
 		}
 		
 	}

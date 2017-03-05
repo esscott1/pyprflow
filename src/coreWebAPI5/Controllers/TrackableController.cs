@@ -18,9 +18,9 @@ namespace workflow.Controllers
 
 		public TrackableController(IWorkflowRepository workflow)
 		{
-			Workflow = workflow;
+			Repository = workflow;
 		}
-		public IWorkflowRepository Workflow { get; set; }
+		public IWorkflowRepository Repository { get; set; }
 		[HttpGet("example")]
 		public IActionResult GetExample()
 		{
@@ -35,32 +35,31 @@ namespace workflow.Controllers
 		[HttpGet]
 		public IEnumerable<Trackable> GetAll()
 		{
-			//return Json("works");
-			return Workflow.GetAllTrackable();
+			return Repository.GetAll<Trackable>();
 		}
 
 		[HttpGet("{id}", Name ="GetTrackable") ]
 		public IActionResult GetTrackable(string id)
 		{
-			Trackable t = Workflow.FindTrackable(id);
+			Trackable t = Repository.Find<Trackable>(id);
 			return Json(t);
 		}
 
 		[HttpGet("{trackableId}/transactions")]
 		public IEnumerable<Transaction> GetTransactions(string trackableId)
 		{
-			return Workflow.GetAllTransactions().Where(t => t.TrackableId == trackableId);
+			return Repository.GetAll<Transaction>().Where(t => t.TrackableId2 == trackableId);
 		}
 		
 		[HttpPost]
 		public IActionResult CreateTrackable([FromBody] Trackable item)
 		{
 			// should check for existance and if exist throw error telling to use Put
-			var t = Workflow.FindTrackable(item.Key);
+			var t = Repository.Find<Trackable>(item.Key);
 			if (t != null)
 				return StatusCode(403, "Trackable already exists in system, use HTTPPatch to update trackable");
-			Workflow.Add(item);
-			return CreatedAtRoute("GetTrackable", new { id = item.Key }, Workflow);
+			Repository.Add(item);
+			return CreatedAtRoute("GetTrackable", new { id = item.Key }, Repository);
 		}
 
 		// patch is inappropriate because when an trackable is "moved" we need other information
@@ -69,8 +68,8 @@ namespace workflow.Controllers
 	//	[HttpPatch("{id}")]
 		//public IActionResult UpdatePatch([FromBody]JsonPatchDocument<Trackable> patch, string id)
 		//{
-		//	Trackable trackable = Workflow.FindTrackable(id);
-		//	Trackable patched = Workflow.FindTrackable(id);
+		//	Trackable trackable = Repository.FindTrackable(id);
+		//	Trackable patched = Repository.FindTrackable(id);
 		//	patch.ApplyTo(patched, ModelState);
 		//	if (!ModelState.IsValid)
 		//		return new BadRequestObjectResult(ModelState);
@@ -82,7 +81,7 @@ namespace workflow.Controllers
 		//	};
 			
 			
-		//	var locationUpdates = patch.Operations.Where(o => o.path.ToLowerInvariant() == "/locations/-");
+		//	var locationUpdates = patch.Operations.Where(o => o.Orchestration.ToLowerInvariant() == "/locations/-");
 		//	List<Location> newlocations = new List<Location>();
 		//	// getting a list of locations that were sent in the patch.
 		//	foreach(Microsoft.AspNetCore.JsonPatch.Operations.Operation<Trackable> o in locationUpdates)
@@ -95,9 +94,9 @@ namespace workflow.Controllers
 		//		{
 		//		case "add":
 		//				string nodeId;
-		//				if(WorkflowHelper.ExistsInWorkflow(trackable, loc.WorkflowId, out nodeId))
+		//				if(WorkflowHelper.ExistsInWorkflow(trackable, loc.WorkflowGuid, out nodeId))
 		//				{
-		//					var wf = Workflow.Find(loc.WorkflowId);
+		//					var wf = Repository.Find(loc.WorkflowGuid);
 		//					Movement move;
 		//					if(wf.IsMoveValid(nodeId,loc.NodeId, out move))
 		//					{
@@ -121,7 +120,7 @@ namespace workflow.Controllers
 		//	foreach(Location l in newlocations)
 		//	{
 
-		//		var wf = Workflow.Find(l.WorkflowId);
+		//		var wf = Repository.Find(l.WorkflowGuid);
 		//		Movement move;
 		//		if(!wf.IsMoveValid("somewhere",l.NodeId, out move))
 		//		{
@@ -199,9 +198,9 @@ namespace workflow.Controllers
 			throw new NotImplementedException();
 			//var nodeName = item.Location[workflowId];
 
-			//Workflow workflow = Workflow.Find(workflowId);
+			//Repository workflow = Repository.Find(workflowId);
 			
-			//return workflow.path.Where(p => p.From == nodeName);
+			//return workflow.Orchestration.Where(p => p.From == nodeName);
 			
 		}
 
@@ -209,9 +208,9 @@ namespace workflow.Controllers
 		[HttpPost("start")]
 		public IActionResult SubmitToWorkflow([FromBody]Trackable item, string workflowId)
 		{
-			//Workflow workflow = Workflow.Find(workflowId);
+			//Repository workflow = Repository.Find(workflowId);
 			//item.Location.Add(workflowId, workflow.StartingNodeName);
-			//Workflow.Add(item);
+			//Repository.Add(item);
 			//return Json(item);
 			throw new NotImplementedException();
 		}
@@ -220,7 +219,7 @@ namespace workflow.Controllers
 		[HttpDelete("remove")]
 		public IActionResult RemoveTrackable([FromBody] WorkflowAction workflowUpdate)
 		{
-			Workflow wf = Workflow.Find(workflowUpdate.WorkflowId);
+			Workflow wf = Repository.Find<Workflow>(workflowUpdate.WorkflowId);
 			wf.RemoveItemFromWorkflow(workflowUpdate.TrackableId);
 			return Json("tried to delete ID: " + workflowUpdate);
 		}

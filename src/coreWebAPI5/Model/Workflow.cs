@@ -6,10 +6,10 @@ using System.Net;
 
 namespace workflow.Model
 {
-	public class Workflow
+	public class Workflow : WorkflowItem
 	{
 		private static string TestStoreCategoryKey = "WorkFlow_ProofOfConcept";
-		public Guid WorkflowId { get; private set; }
+		public Guid WorkflowGuid { get; private set; }
 		public string Key { get; set; }
 		public string WorkflowName { get; private set; }
 
@@ -20,40 +20,43 @@ namespace workflow.Model
 		internal Dictionary<string, Node> Nodes;
 	
 		[JsonProperty]
-		internal List<Movement> path;
+		internal List<Movement> Orchestration;
 
-		private static IWorkflowRepository wfr { get; set; }
-		public Workflow(string workflowName)
+		private static IWorkflowRepository Repository { get; set; }
+		public Workflow(string workflowName) : this()
 		{
-			if (WorkflowId == Guid.Empty)
+			if (WorkflowGuid == Guid.Empty)
 			{
-				WorkflowId = Guid.NewGuid();
+				WorkflowGuid = Guid.NewGuid();
 			}
-			DemoWorkflow(workflowName);
 		}
 
+		public Workflow() {
+			this.Orchestration = new List<Movement>();
+			this.Nodes = new Dictionary<string, Node>();
+		}
 
-		private void DemoWorkflow(string workflowName)
+		internal Workflow GetSample()
 		{
-			WorkflowName = workflowName;
-			Nodes = new Dictionary<string, Node>();
-			path = new List<Movement>();
-			if (workflowName == "_blank")
-			{
-				Key = "_blankKey";
-				path.Add(new Movement() { From = "Step1", To = "Step2" });
-				path.Add(new Movement() { From = "Step2", To = "Step3" });
-				path.Add(new Movement() { From = "Step3", To = "Step4" });
-				Nodes.Add("Step1", new Node("Step1") { IsStart = true });
-				Nodes.Add("Step2", new Node("Step2"));
-				Nodes.Add("Step3", new Node("Step3"));
-				Nodes.Add("Step4", new Node("Step4") { IsEnd = true });
-			}
+			IUser user = new User() { Email = "Sample.User@somewhere.com" };
+			List<User> users = new List<User> { new User() { Email = "Sample.User@somewhere.com" } };
+			Model.Workflow w = new Model.Workflow("SampleWorkflow1");
+			w.Key = "SampleWorkflow1";
+			w.Orchestration.Add(new Movement() { From = null, To = "SampleNode1", ApproveUsers = users });
+			w.Orchestration.Add(new Movement() { From = "SampleNode1", To = "SampleNode2", ApproveUsers = users });
+			w.Orchestration.Add(new Movement() { From = "SampleNode2", To = "SampleNode3", ApproveUsers = users });
+			w.Orchestration.Add(new Movement() { From = "SampleNode3", To = "SampleNode4", ApproveUsers = users });
+			w.Nodes.Add("SampleNode1", new Node("SampleNode1") { IsStart = true });
+			w.Nodes.Add("SampleNode2", new Node("SampleNode2"));
+			w.Nodes.Add("SampleNode3", new Node("SampleNode3"));
+			w.Nodes.Add("SampleNode4", new Node("SampleNode4") { IsEnd = true });
+			return w;
+			
 		}
 
 		private bool CanExitNode(string nodeName)
 		{
-			foreach(Movement m in path)
+			foreach(Movement m in Orchestration)
 			{
 				if (m.From == nodeName)
 					return true;
@@ -63,7 +66,7 @@ namespace workflow.Model
 
 		private bool CanEnterNode(string nodeName)
 		{
-			foreach (Movement m in path)
+			foreach (Movement m in Orchestration)
 			{
 				if (m.To == nodeName)
 					return true;
@@ -101,7 +104,7 @@ namespace workflow.Model
 			: this(workflowname)
 		{
 			// don't generate a new GUID when deserializing the workflow
-			WorkflowId = workflowId;
+			WorkflowGuid = workflowId;
 		}
 
 		internal KeyValuePair<string, Node> GetFirstNode()
@@ -127,46 +130,46 @@ namespace workflow.Model
 		/// <param name="storeContext">Key that references the context the workflow was saved in</param>
 		/// <returns>A workflow from the ObjectStore.</returns>
 		/// <exception cref="ArgumentException">Invalid ID, No ObjectStore context</exception>
-		public static Workflow RetrieveWorkflowFromObjectStore(Guid workflowId, string storeContext)
-		{
-			var wf = wfr.GetAll().First();
-			return wf;
-			throw new NotImplementedException("need to re-implement");
-			//if (workflowId == Guid.Empty)
-			//{
-			//	throw new ArgumentException("Cannot restore from ObjectStore with an invalid Workflow ID");
-			//}
+		//public static Repository RetrieveWorkflowFromObjectStore(Guid workflowId, string storeContext)
+		//{
+		//	var wf = Repository.GetAll<Repository>();
+		//	return wf;
+		//	throw new NotImplementedException("need to re-implement");
+		//	//if (workflowId == Guid.Empty)
+		//	//{
+		//	//	throw new ArgumentException("Cannot restore from ObjectStore with an invalid Repository ID");
+		//	//}
 
-			//if (string.IsNullOrWhiteSpace(storeContext))
-			//{
-			//	throw new ArgumentException("Cannot restore from ObjectStore with an empty store context");
-			//}
+		//	//if (string.IsNullOrWhiteSpace(storeContext))
+		//	//{
+		//	//	throw new ArgumentException("Cannot restore from ObjectStore with an empty store context");
+		//	//}
 
-			//// HACK
-			//Testing.MockRequest(@"\internal");
-			//// retrieve it from ObjectStore
-			//var retrieveRequest = new MdObjectStoreServiceRequest(User.Current);
-			//if (!retrieveRequest.RetrieveObjectStoreInputs(TestStoreCategoryKey, storeContext))
-			//{
-			//	throw new Exception("Could not retrieve workflow from ObjectStore");
-			//}
-			//var found = retrieveRequest.Inputs.FirstOrDefault(k => k.Key == workflowId.ToString());
-			//if (string.IsNullOrWhiteSpace(found.Key))
-			//{
-			//	throw new Exception("Could not retrieve workflow from ObjectStore");
-			//}
-			//var serializedWorkfow = ((MOD.Common.Remoting.ByteString)found.Value).String;
-			//if (string.IsNullOrWhiteSpace(serializedWorkfow))
-			//{
-			//	throw new Exception("Workflow [" + workflowId + "] with context '" + storeContext + "' was not found in the store.");
-			//}
+		//	//// HACK
+		//	//Testing.MockRequest(@"\internal");
+		//	//// retrieve it from ObjectStore
+		//	//var retrieveRequest = new MdObjectStoreServiceRequest(User.Current);
+		//	//if (!retrieveRequest.RetrieveObjectStoreInputs(TestStoreCategoryKey, storeContext))
+		//	//{
+		//	//	throw new Exception("Could not retrieve workflow from ObjectStore");
+		//	//}
+		//	//var found = retrieveRequest.Inputs.FirstOrDefault(k => k.Key == workflowId.ToString());
+		//	//if (string.IsNullOrWhiteSpace(found.Key))
+		//	//{
+		//	//	throw new Exception("Could not retrieve workflow from ObjectStore");
+		//	//}
+		//	//var serializedWorkfow = ((MOD.Common.Remoting.ByteString)found.Value).String;
+		//	//if (string.IsNullOrWhiteSpace(serializedWorkfow))
+		//	//{
+		//	//	throw new Exception("Repository [" + workflowId + "] with context '" + storeContext + "' was not found in the store.");
+		//	//}
 
-			//return DeserializeWorkflow(serializedWorkfow);
-		}
+		//	//return DeserializeWorkflow(serializedWorkfow);
+		//}
 
 		internal void RemoveItemFromWorkflow(string trackableId)
 		{
-			// delete the trackable
+			// delete the trackables
 			return;
 			
 		}
@@ -223,7 +226,7 @@ namespace workflow.Model
 		{
 			move = null;
 
-			var mv = path.Where(m => m.To == to && m.From == from);
+			var mv = Orchestration.Where(m => m.To == to && m.From == from);
 			if(mv.Count() > 0)
 			{
 				move = mv.First();
@@ -236,7 +239,7 @@ namespace workflow.Model
 		internal  string FindNextNodeName(string nodeName)
 		{
 			
-			var nextNodeName = this.path.Find(m => m.From == nodeName).To;
+			var nextNodeName = this.Orchestration.Find(m => m.From == nodeName).To;
 			if (nextNodeName == null || nextNodeName == String.Empty)
 				throw new WorkFlowException("No next Node found");
 			return nextNodeName;
@@ -249,12 +252,12 @@ namespace workflow.Model
 			return Nodes.Keys.ToList();
 		}
 		
-		public string SerializeToJsonString()
-		{
-			// serialize arbitrary "ITrackable" concrete type http://www.newtonsoft.com/json/help/html/SerializeTypeNameHandling.htm
-			var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto };
-			return JsonConvert.SerializeObject(this, Formatting.None, settings);
-		}
+		//public string SerializeToJsonString()
+		//{
+		//	// serialize arbitrary "ITrackable" concrete type http://www.newtonsoft.com/json/help/html/SerializeTypeNameHandling.htm
+		//	var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto };
+		//	return JsonConvert.SerializeObject(this, Formatting.None, settings);
+		//}
 
 		/// <summary>
 		/// Save to WSOD.Web.ObjectDataStore.
@@ -264,8 +267,8 @@ namespace workflow.Model
 		/// <exception cref="ArgumentException">No ObjectStore context</exception>
 		public bool SaveToObjectStore(string storeContext)
 		{
-			wfr = new WorkflowRepository();
-			wfr.Add(this);
+			Repository = new WorkflowRepository();
+			Repository.Add(this);
 			return true;
 			throw new NotImplementedException("need to re-implement");
 			//if (string.IsNullOrWhiteSpace(storeContext))
@@ -277,7 +280,7 @@ namespace workflow.Model
 			//Testing.MockRequest(@"\internal");
 			//// store it into ObjectStore
 			//var storeRequest = new MdObjectStoreServiceRequest(User.Current);
-			//storeRequest.Inputs.Add(new KeyValuePair<string, object>(WorkflowId.ToString(), SerializeToJsonString()));
+			//storeRequest.Inputs.Add(new KeyValuePair<string, object>(WorkflowGuid.ToString(), SerializeToJsonString()));
 			//if (!storeRequest.StoreObjectStoreInputs(TestStoreCategoryKey, storeContext))
 			//{
 			//	throw new Exception("Could not persist workflow to ObjectStore");
@@ -291,7 +294,7 @@ namespace workflow.Model
 			
 		//	foreach(KeyValuePair<string, Node> kvp in Nodes)
 		//	{
-		//		IEnumerable<Trackable> r = kvp.Value.Trackables.Where(t => t.TrackableId == trackableId);
+		//		IEnumerable<Trackable> r = kvp.Value.Trackables.Where(t => t.TrackableId2 == trackableId);
 		//		if (r.Count() > 0)
 		//			return r.First();
 		//	}
@@ -315,11 +318,11 @@ namespace workflow.Model
 			}
 
 			// check if movement already exists
-			Movement move = path.FirstOrDefault(m => m.From == from && m.To == to);
+			Movement move = Orchestration.FirstOrDefault(m => m.From == from && m.To == to);
 			if (move == null)
 			{
 				move = new Movement { From = from, To = to };
-				path.Add(move);
+				Orchestration.Add(move);
 			}
 
 			// add move user
@@ -339,7 +342,7 @@ namespace workflow.Model
 		//			// should check if movement already exists
 		//			var move = new Movement { From = from };
 		//			move.ApproveUsers.Add(removeUser);
-		//			path.Add(move);
+		//			Orchestration.Add(move);
 		//		}
 	}
 
