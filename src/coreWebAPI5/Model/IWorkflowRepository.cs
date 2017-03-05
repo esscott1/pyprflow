@@ -13,25 +13,25 @@ namespace workflow.Model
 
 		IEnumerable<T> GetAll<T>();
 		void Add(Workflow workflow);
-		IEnumerable<Workflow> GetAll();
-		Workflow Find(string key);
-		Workflow Remove(string key);
-		void Update(Workflow workflow);
+		T Find<T>(string workflowItemId);
+		void Remove<T>(string workflowItemId) where T : WorkflowItem;
+		void Update<T>(T item) where T : WorkflowItem;
+
+
+		//Workflow Find(string key);
+		//Workflow Remove(string key);
+		//void Update(Workflow workflow);
 
 		void Add(Trackable trackable);
-		IEnumerable<Trackable> GetAllTrackable();
-		Trackable FindTrackable(string key);
-		Trackable RemoveTrackable(string key);
-		void Update(Trackable workflow);
 		
-		void Add(ExecutedMove executedMove);
-		IEnumerable<ExecutedMove> GetAllExecutedMoves();
-		ExecutedMove FindExecutedMove(string key);
-		IEnumerable<ExecutedMove> FindExecutedMoves(string trackableId);
+		//Trackable FindTrackable(string key);
+		//Trackable RemoveTrackable(string key);
+		//void Update(Trackable workflow);
+		
 		
 		void Add(Transaction trans);
 		IEnumerable<Transaction> GetAllTransactions();
-		Transaction FindTransaction(string id);
+		//Transaction FindTransaction(string id);
 
 
 		bool CheckValidUserKey(string stringValues);

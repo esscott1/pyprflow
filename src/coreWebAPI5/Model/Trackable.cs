@@ -42,10 +42,10 @@ namespace workflow.Model
 		{
 			Locations = new List<Location>();
 			//Trackable td = new Trackable("doc1")
-			//{ TrackableId = "doc1" };
+			//{ TrackableId2 = "doc1" };
 			//td.Locations.Add(new Location()
 			//{ WorkflowGuid = "_blank", NodeId = "Step1" });
-			//Trackable td2 = new Trackable("doc2") { TrackableId = "doc2" };
+			//Trackable td2 = new Trackable("doc2") { TrackableId2 = "doc2" };
 			//td.Locations.Add(new Location()
 			//{ WorkflowGuid = "_blank", NodeId = "Step2" });
 		}

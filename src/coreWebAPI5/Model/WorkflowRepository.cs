@@ -21,7 +21,6 @@ namespace workflow.Model
 				 new ConcurrentDictionary<string, Transaction>();
 		public WorkflowRepository()
 		{
-			
 		}
 
 		#region Generic Methods
@@ -34,17 +33,17 @@ namespace workflow.Model
 				try
 				{
 					/// HACK HACK HACK - should be using NoSql or create relational model for all items.
-					/// 
+
 					//save first to get DB created PK
 					WorkflowItem saveThis = new WorkflowItem();
 					saveThis.DerivedType = typeof(T).ToString();
 					db.WorkflowDb.Add(saveThis);
 					db.SaveChanges();
+					// now update with the serialized version so the workflowItemId is in the JSON
 					item.WorkflowItemId = saveThis.WorkflowItemId;
 					saveThis.SerializedObject = saveThis.Serialize<T>(item);
 					db.WorkflowDb.Update(saveThis);
 					int recordCount = db.SaveChanges();
-
 					Console.WriteLine("Saved {0} records to DB", recordCount);
 
 					Console.WriteLine("Primary Key is {0} ", saveThis.WorkflowItemId);
@@ -56,9 +55,6 @@ namespace workflow.Model
 				}
 			}
 
-			//	_Workflow[workflow.Key] = workflow;
-
-
 		}
 
 		public IEnumerable<T> GetAll<T>()
@@ -67,14 +63,12 @@ namespace workflow.Model
 			{
 				try
 				{
-					Console.WriteLine("trying to return all from DB");
+					Console.WriteLine("trying to return all {0} from DB", typeof(T).ToString());
 					var wfi = db.WorkflowDb.Where(i => i.DerivedType == typeof(T).ToString());
 					List<T> wf = new List<T>();
-					foreach (WorkflowItem item in wfi)
-					{
+					foreach (var item in wfi)
 						wf.Add(item.Deserialize<T>(item.SerializedObject));
-					}
-
+					Console.WriteLine("found {0} items from DB", wf.Count.ToString());
 					return wf;
 				}
 				catch (Exception ex)
@@ -85,51 +79,74 @@ namespace workflow.Model
 				}
 			}
 		}
+		public T Find<T>(string workflowItemId)
+		{
+			using (var db = new WorkflowContext())
+				try {
+					Console.WriteLine("searching for item {0} with Id {1}", typeof(T).ToString(), workflowItemId);
+					WorkflowItem result = db.WorkflowDb.Find(new object[] { Int32.Parse(workflowItemId) });
+					if (result == null)
+						throw new WorkFlowException(String.Format("null was returned when finding for key {0}", Int32.Parse(workflowItemId)));
+					Console.WriteLine("found item");
+					return result.Deserialize<T>(result.SerializedObject);
+
+				} catch (Exception ex) {
+					Console.WriteLine("{0} error", ex.Message);
+					Console.WriteLine("{0} inner message", ex.InnerException);
+					return default(T);
+				}
+		}
+		public void Update<T>(T item) where T : WorkflowItem
+		{
+			using (var db = new WorkflowContext())
+			{
+				try
+				{
+					Console.WriteLine("trying to update {0} itemId", item.WorkflowItemId);
+					db.WorkflowDb.Update(item);
+					db.SaveChanges();
+					Console.WriteLine("ItemId {0} updated in database");
+				}
+				catch (Exception ex)
+				{
+					Console.WriteLine("{0} error", ex.Message);
+					Console.WriteLine("{0} inner message", ex.InnerException);
+				}
+			}
+		}
+		public void Remove<T>(string workflowItemId) where T:WorkflowItem
+		{
+				using (var db = new WorkflowContext()) { 
+					try
+					{
+					var delete = Find<T>(workflowItemId);
+					Console.WriteLine("trying to delete {0} itemId", workflowItemId);
+					db.WorkflowDb.Remove(delete);
+					db.SaveChanges();
+					Console.WriteLine("ItemId {0} deleted from database");
+					}
+					catch (Exception ex)
+					{
+						Console.WriteLine("{0} error", ex.Message);
+						Console.WriteLine("{0} inner message", ex.InnerException);
+					}
+				}
+		}
 
 		#endregion
 		public void Add(Workflow workflow)
 		{
-			if(workflow.Key == null || workflow.Key ==String.Empty )
-				workflow.Key = Guid.NewGuid().ToString();
 			Add<Workflow>(workflow);
-			//using (var db = new WorkflowContext())
-			//{
-			//	try
-			//	{
-			//		Console.WriteLine("trying to save to DB");
-			//		db.WorkflowDb.Add(new WorkflowItem(workflow.SerializeToJsonString()));
-			//		db.SaveChanges();
-			//	}
-			//	catch(Exception ex)
-			//	{
-			//		Console.WriteLine("{0} error", ex.Message);
-			//		Console.WriteLine("{0} inner message", ex.InnerException);
-			//	}
-			//}
-
-			//	_Workflow[workflow.Key] = workflow;
 		}
 
 		public void Add(Trackable trackable)
 		{
-			if (trackable.Key == null || trackable.Key == String.Empty)
-				trackable.Key = Guid.NewGuid().ToString();
-			Console.WriteLine("calling generic add for trackable");
 			Add<Trackable>(trackable);
-			//_Trackable[trackable.Key] = trackable;
-		}
-		public void Add(ExecutedMove executedMove)
-		{
-			if (executedMove.Key == null || executedMove.Key == String.Empty)
-				executedMove.Key = Guid.NewGuid().ToString();
-			_ExecutedMove[executedMove.Key] = executedMove;
 		}
 
 		public void Add(Transaction trans)
 		{
-			if (trans.Key == null || trans.Key == String.Empty)
-				trans.Key = Guid.NewGuid().ToString();
-			_Transaction[trans.Key] = trans;
+			Add<Transaction>(trans);
 		}
 
 		public bool CheckValidUserKey(string stringValue)
@@ -141,135 +158,9 @@ namespace workflow.Model
 				return true;
 			return false;
 		}
-
-		public Workflow Find(string key)
-		{
-			//Workflow workflow;
-			using (var db = new WorkflowContext())
-			{
-				try
-				{
-					Console.WriteLine("trying to return with key {0}", key);
-					var wfi = db.WorkflowDb.Find(new object[] { Int32.Parse(key) });
-					if (wfi == null)
-						throw new WorkFlowException(String.Format("null was returned when finding for key {0}", Int32.Parse(key)));
-					return wfi.Deserialize<Workflow>(wfi.SerializedObject);
-				}
-				catch (Exception ex)
-				{
-					Console.WriteLine("{0} error", ex.Message);
-					Console.WriteLine("{0} inner message", ex.InnerException);
-
-				}
-				return null;
-			}
-		
-		}
-
-		public Trackable FindTrackable(string key)
-		{
-			Trackable Trackable;
-
-			_Trackable.TryGetValue(key, out Trackable);
-			return Trackable;
-		}
-
-		public ExecutedMove FindExecutedMove(string key)
-		{
-			ExecutedMove ExecutedMove;
-			_ExecutedMove.TryGetValue(key, out ExecutedMove);
-			return ExecutedMove;
-		}
-
-		public Transaction FindTransaction(string key)
-		{
-			Transaction transaction;
-			_Transaction.TryGetValue(key, out transaction);
-			return transaction;
-		}
-
-		public IEnumerable<ExecutedMove> FindExecutedMoves(string trackableId)
-		{
-			return _ExecutedMove.Values.Where(m => m.TrackableId == trackableId);
-		}
-
-		public IEnumerable<Workflow> GetAll()
-		{
-			
-			using (var db = new WorkflowContext())
-			{
-				try
-				{
-					Console.WriteLine("trying to return all from DB");
-					var wfi = db.WorkflowDb.ToList();
-					List<Workflow> wf = new List<Workflow>();
-					foreach(WorkflowItem item in wfi)
-					{
-						wf.Add(item.Deserialize<Workflow>(item.SerializedObject));
-					}
-
-					return wf;
-				}
-				catch (Exception ex)
-				{
-					Console.WriteLine("{0} error", ex.Message);
-					Console.WriteLine("{0} inner message", ex.InnerException);
-
-				}
-				return new List<Workflow>();
-			}
-		}
-
-		
-	
-		public IEnumerable<Trackable> GetAllTrackable()
-		{
-			return GetAll<Trackable>();
-		}
-
-		public IEnumerable<ExecutedMove> GetAllExecutedMoves()
-		{
-			return _ExecutedMove.Values;
-		}
 		public IEnumerable<Transaction> GetAllTransactions()
 		{
 			return _Transaction.Values;
-		}
-
-		public Workflow Remove(string key)
-		{
-			Workflow report; bool d;
-			try { d =  _Workflow.TryRemove(key, out report); }
-			catch (Exception ex)
-			{
-				throw new WorkFlowException("error TryRemove: "+ex.InnerException);
-			}
-			if (d)
-				return report;
-			return null;
-		}
-
-		public Trackable RemoveTrackable(string key)
-		{
-			Trackable report; bool d;
-			try { d = _Trackable.TryRemove(key, out report); }
-			catch (Exception ex)
-			{
-				throw new WorkFlowException("error TryRemove: " + ex.InnerException);
-			}
-			if (d)
-				return report;
-			return null;
-		}
-
-		public void Update(Workflow workflow)
-		{
-			_Workflow[workflow.Key] = workflow;
-		}
-
-		public void Update(Trackable Trackable)
-		{
-			_Trackable[Trackable.Key] = Trackable;
 		}
 	}
 }

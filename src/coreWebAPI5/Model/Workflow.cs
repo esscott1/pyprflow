@@ -22,21 +22,19 @@ namespace workflow.Model
 		[JsonProperty]
 		internal List<Movement> path;
 
-		private static IWorkflowRepository wfr { get; set; }
+		private static IWorkflowRepository Repository { get; set; }
 		public Workflow(string workflowName) : this()
 		{
 			if (WorkflowGuid == Guid.Empty)
 			{
 				WorkflowGuid = Guid.NewGuid();
 			}
-			//GetSample(workflowName);
 		}
 
 		public Workflow() {
 			this.path = new List<Movement>();
 			this.Nodes = new Dictionary<string, Node>();
 		}
-
 
 		internal Workflow GetSample()
 		{
@@ -53,20 +51,7 @@ namespace workflow.Model
 			w.Nodes.Add("SampleNode3", new Node("SampleNode3"));
 			w.Nodes.Add("SampleNode4", new Node("SampleNode4") { IsEnd = true });
 			return w;
-			//WorkflowName = workflowName;
-			//Nodes = new Dictionary<string, Node>();
-			//path = new List<Movement>();
-			//if (workflowName == "_blank")
-			//{
-			//	Key = "_blankKey";
-			//	path.Add(new Movement() { From = "Step1", To = "Step2" });
-			//	path.Add(new Movement() { From = "Step2", To = "Step3" });
-			//	path.Add(new Movement() { From = "Step3", To = "Step4" });
-			//	Nodes.Add("Step1", new Node("Step1") { IsStart = true });
-			//	Nodes.Add("Step2", new Node("Step2"));
-			//	Nodes.Add("Step3", new Node("Step3"));
-			//	Nodes.Add("Step4", new Node("Step4") { IsEnd = true });
-			//}
+			
 		}
 
 		private bool CanExitNode(string nodeName)
@@ -145,46 +130,46 @@ namespace workflow.Model
 		/// <param name="storeContext">Key that references the context the workflow was saved in</param>
 		/// <returns>A workflow from the ObjectStore.</returns>
 		/// <exception cref="ArgumentException">Invalid ID, No ObjectStore context</exception>
-		public static Workflow RetrieveWorkflowFromObjectStore(Guid workflowId, string storeContext)
-		{
-			var wf = wfr.GetAll().First();
-			return wf;
-			throw new NotImplementedException("need to re-implement");
-			//if (workflowId == Guid.Empty)
-			//{
-			//	throw new ArgumentException("Cannot restore from ObjectStore with an invalid Workflow ID");
-			//}
+		//public static Repository RetrieveWorkflowFromObjectStore(Guid workflowId, string storeContext)
+		//{
+		//	var wf = Repository.GetAll<Repository>();
+		//	return wf;
+		//	throw new NotImplementedException("need to re-implement");
+		//	//if (workflowId == Guid.Empty)
+		//	//{
+		//	//	throw new ArgumentException("Cannot restore from ObjectStore with an invalid Repository ID");
+		//	//}
 
-			//if (string.IsNullOrWhiteSpace(storeContext))
-			//{
-			//	throw new ArgumentException("Cannot restore from ObjectStore with an empty store context");
-			//}
+		//	//if (string.IsNullOrWhiteSpace(storeContext))
+		//	//{
+		//	//	throw new ArgumentException("Cannot restore from ObjectStore with an empty store context");
+		//	//}
 
-			//// HACK
-			//Testing.MockRequest(@"\internal");
-			//// retrieve it from ObjectStore
-			//var retrieveRequest = new MdObjectStoreServiceRequest(User.Current);
-			//if (!retrieveRequest.RetrieveObjectStoreInputs(TestStoreCategoryKey, storeContext))
-			//{
-			//	throw new Exception("Could not retrieve workflow from ObjectStore");
-			//}
-			//var found = retrieveRequest.Inputs.FirstOrDefault(k => k.Key == workflowId.ToString());
-			//if (string.IsNullOrWhiteSpace(found.Key))
-			//{
-			//	throw new Exception("Could not retrieve workflow from ObjectStore");
-			//}
-			//var serializedWorkfow = ((MOD.Common.Remoting.ByteString)found.Value).String;
-			//if (string.IsNullOrWhiteSpace(serializedWorkfow))
-			//{
-			//	throw new Exception("Workflow [" + workflowId + "] with context '" + storeContext + "' was not found in the store.");
-			//}
+		//	//// HACK
+		//	//Testing.MockRequest(@"\internal");
+		//	//// retrieve it from ObjectStore
+		//	//var retrieveRequest = new MdObjectStoreServiceRequest(User.Current);
+		//	//if (!retrieveRequest.RetrieveObjectStoreInputs(TestStoreCategoryKey, storeContext))
+		//	//{
+		//	//	throw new Exception("Could not retrieve workflow from ObjectStore");
+		//	//}
+		//	//var found = retrieveRequest.Inputs.FirstOrDefault(k => k.Key == workflowId.ToString());
+		//	//if (string.IsNullOrWhiteSpace(found.Key))
+		//	//{
+		//	//	throw new Exception("Could not retrieve workflow from ObjectStore");
+		//	//}
+		//	//var serializedWorkfow = ((MOD.Common.Remoting.ByteString)found.Value).String;
+		//	//if (string.IsNullOrWhiteSpace(serializedWorkfow))
+		//	//{
+		//	//	throw new Exception("Repository [" + workflowId + "] with context '" + storeContext + "' was not found in the store.");
+		//	//}
 
-			//return DeserializeWorkflow(serializedWorkfow);
-		}
+		//	//return DeserializeWorkflow(serializedWorkfow);
+		//}
 
 		internal void RemoveItemFromWorkflow(string trackableId)
 		{
-			// delete the trackable
+			// delete the trackables
 			return;
 			
 		}
@@ -282,8 +267,8 @@ namespace workflow.Model
 		/// <exception cref="ArgumentException">No ObjectStore context</exception>
 		public bool SaveToObjectStore(string storeContext)
 		{
-			wfr = new WorkflowRepository();
-			wfr.Add(this);
+			Repository = new WorkflowRepository();
+			Repository.Add(this);
 			return true;
 			throw new NotImplementedException("need to re-implement");
 			//if (string.IsNullOrWhiteSpace(storeContext))
@@ -309,7 +294,7 @@ namespace workflow.Model
 			
 		//	foreach(KeyValuePair<string, Node> kvp in Nodes)
 		//	{
-		//		IEnumerable<Trackable> r = kvp.Value.Trackables.Where(t => t.TrackableId == trackableId);
+		//		IEnumerable<Trackable> r = kvp.Value.Trackables.Where(t => t.TrackableId2 == trackableId);
 		//		if (r.Count() > 0)
 		//			return r.First();
 		//	}

@@ -12,7 +12,7 @@ namespace workflow.Model
 		public DbSet<WorkflowItem> WorkflowDb { get; set; }
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
-			optionsBuilder.UseSqlite("Filename=./Workflow.db");
+			optionsBuilder.UseSqlite("Filename=./Repository.db");
 		}
 	}
 

@@ -327,9 +327,9 @@ API\transaction\example  - returns an example transaction to get you started.
 [POST]
 API\workflow - submits the workflow definition to the OW engine
 API\workflow\validate - validate the posted workflow definition.
-API\trackable - submits a trackable to the OW engine
+API\trackable - Registers a trackable to the OW engine
 API\trackable\isunique\{trackableId} - varifies if a trackableId is new to the OW engine (used for prevalidation).
-API\transaction - submits a transaction to the OW engine
+API\transaction - submits a transaction to the OW engine with will manipulates a trackable within OW engine.
 
 [PUT]
 API\workflow\{workflowId} - updates an existing workflow definition
