@@ -312,15 +312,15 @@ To submit an item to an orchestration workflow you simply Post a transaction JSO
 API/workflow - returns all workflows managed by the application.  
 stuff  
 more stuff  
-API/workflow/{workflowId}  - return the specific workflow.
-API/workflow/example  - return an example workflow to get you started
-API/workflow/{workflowId}/node/{nodeId}/trackables  - returns all the trackable in that workflow node
-API/trackable  - returns all the trackable managed by the application
-API/trackable/{trackableId} - returns that specific trackable
-API/trackable/example  - return an example of a trackable to get you started.
-API/trackable/{trackableId}/transaction  - returns the transaction history for the given trackable
-API/trackable/newId - will return a uniquely new ID for inclusion in a trackable POST
-API/trackable/availablemoves - returns the workflow NodeId's that are valid for the next moves.
+API/workflow/{workflowId}  - return the specific workflow.  
+API/workflow/example  - return an example workflow to get you started  
+API/workflow/{workflowId}/node/{nodeId}/trackables  - returns all the trackable in that workflow node  
+API/trackable  - returns all the trackable managed by the application  
+API/trackable/{trackableId} - returns that specific trackable  
+API/trackable/example  - return an example of a trackable to get you started.  
+API/trackable/{trackableId}/transaction  - returns the transaction history for the given trackable  
+API/trackable/newId - will return a uniquely new ID for inclusion in a trackable POST  
+API/trackable/availablemoves - returns the workflow NodeId's that are valid for the next moves.  
 API/transaction - returns all transactions
 API/transaction/{transactionId} - returns a specific transacation
 API/transaction/example  - returns an example transaction to get you started.
