@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,10 +9,12 @@ namespace workflow.Model
 {
     public class WorkflowContext : DbContext
     {
-		public DbSet<Workflow> WorkflowTable { get; set; }
+		public DbSet<WorkflowItem> WorkflowDb { get; set; }
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
 			optionsBuilder.UseSqlite("Filename=./Workflow.db");
 		}
 	}
+
+	
 }

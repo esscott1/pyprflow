@@ -8,26 +8,24 @@ using workflow.Model;
 namespace coreWebAPI5.Migrations
 {
     [DbContext(typeof(WorkflowContext))]
-    [Migration("20170304181925_MyFirstMigration")]
-    partial class MyFirstMigration
+    [Migration("20170304225528_addKeyMigration")]
+    partial class addKeyMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752");
 
-            modelBuilder.Entity("workflow.Model.Workflow", b =>
+            modelBuilder.Entity("workflow.Model.WorkflowItem", b =>
                 {
-                    b.Property<Guid>("WorkflowId")
+                    b.Property<int>("WorkflowItemId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Key");
+                    b.Property<string>("SerializedObject");
 
-                    b.Property<string>("WorkflowName");
+                    b.HasKey("WorkflowItemId");
 
-                    b.HasKey("WorkflowId");
-
-                    b.ToTable("WorkflowTable");
+                    b.ToTable("WorkflowDb");
                 });
         }
     }

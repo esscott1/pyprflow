@@ -10,13 +10,15 @@ namespace workflow.Model
 {
 	public interface IWorkflowRepository
 	{
+
+		IEnumerable<T> GetAll<T>();
 		void Add(Workflow workflow);
 		IEnumerable<Workflow> GetAll();
 		Workflow Find(string key);
 		Workflow Remove(string key);
 		void Update(Workflow workflow);
 
-		void Add(Trackable workflow);
+		void Add(Trackable trackable);
 		IEnumerable<Trackable> GetAllTrackable();
 		Trackable FindTrackable(string key);
 		Trackable RemoveTrackable(string key);

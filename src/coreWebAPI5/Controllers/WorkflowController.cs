@@ -22,26 +22,16 @@ namespace workflow.Controllers
 		[HttpGet("example")]
 		public IActionResult GetSample()
 		{
-			IUser user = new User() { Email = "Sample.User@somewhere.com" };
-			List<User> users = new List<User> { new User() { Email = "Sample.User@somewhere.com" } };
-			Model.Workflow w = new Model.Workflow("SampleWorkflow1");
-			w.Key = "SampleWorkflow1";
-			w.path.Add(new Movement() { From = null, To = "SampleNode1", ApproveUsers = users });
-			w.path.Add(new Movement() { From = "SampleNode1", To = "SampleNode2", ApproveUsers = users });
-			w.path.Add(new Movement() { From = "SampleNode2", To = "SampleNode3", ApproveUsers = users });
-			w.path.Add(new Movement() { From = "SampleNode3", To = "SampleNode4", ApproveUsers = users });
-			w.Nodes.Add("SampleNode1", new Node("SampleNode1") { IsStart = true});
-			w.Nodes.Add("SampleNode2", new Node("SampleNode2"));
-			w.Nodes.Add("SampleNode3", new Node("SampleNode3"));
-			w.Nodes.Add("SampleNode4", new Node("SampleNode4") { IsEnd = true });
-			
-			return Json(w);
+
+			var wkf = new Model.Workflow();
+			return Json(wkf.GetSample());
 
 		}
 		[HttpGet]
 		public IEnumerable<Workflow> GetAll()
 		{
-			return Workflow.GetAll();
+			return Workflow.GetAll<Workflow>();
+			//return Workflow.GetAll();
 		}
 
 		[HttpGet("{id}", Name = "GetWorkflow")]

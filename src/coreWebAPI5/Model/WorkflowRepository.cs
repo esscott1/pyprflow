@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Linq;
@@ -20,48 +21,102 @@ namespace workflow.Model
 				 new ConcurrentDictionary<string, Transaction>();
 		public WorkflowRepository()
 		{
-			//Add(new Workflow("_blank"));
-			//Trackable td = new Trackable("doc1") { TrackableId = "doc1" };
-			//td.Demo("_blank", "Step1");
-			//Trackable td2 = new Trackable("doc2") { TrackableId = "doc2" };
-			//td2.Demo("_blank", "Step1");
-			//Add(td);
-			//Add(td2);
-			//Transaction t = new Transaction();
-			//t.Key = "t1";
-			//t.NewNodeId = "Step2";
-			//t.PreviousNodeId = "Step1";
-			//t.TrackableId = "doc1";
-			//t.WorkflowId = "_blank";
-			//Add(t);
+			
 		}
-		public void Add(Workflow workflow)
+
+		#region Generic Methods
+		private void Add<T>(T item) where T : WorkflowItem
 		{
-			if(workflow.Key == null || workflow.Key ==String.Empty )
-				workflow.Key = Guid.NewGuid().ToString();
+			if (item == null)
+				return;
 			using (var db = new WorkflowContext())
 			{
 				try
 				{
-					Console.WriteLine("trying to save to DB");
-					db.WorkflowTable.Add(workflow);
+					/// HACK HACK HACK - should be using NoSql or create relational model for all items.
+					/// 
+					//save first to get DB created PK
+					WorkflowItem saveThis = new WorkflowItem();
+					saveThis.DerivedType = typeof(T).ToString();
+					db.WorkflowDb.Add(saveThis);
 					db.SaveChanges();
+					item.WorkflowItemId = saveThis.WorkflowItemId;
+					saveThis.SerializedObject = saveThis.Serialize<T>(item);
+					db.WorkflowDb.Update(saveThis);
+					int recordCount = db.SaveChanges();
+
+					Console.WriteLine("Saved {0} records to DB", recordCount);
+
+					Console.WriteLine("Primary Key is {0} ", saveThis.WorkflowItemId);
 				}
-				catch(Exception ex)
+				catch (Exception ex)
 				{
 					Console.WriteLine("{0} error", ex.Message);
 					Console.WriteLine("{0} inner message", ex.InnerException);
 				}
 			}
 
-				_Workflow[workflow.Key] = workflow;
+			//	_Workflow[workflow.Key] = workflow;
+
+
+		}
+
+		public IEnumerable<T> GetAll<T>()
+		{
+			using (var db = new WorkflowContext())
+			{
+				try
+				{
+					Console.WriteLine("trying to return all from DB");
+					var wfi = db.WorkflowDb.Where(i => i.DerivedType == typeof(T).ToString());
+					List<T> wf = new List<T>();
+					foreach (WorkflowItem item in wfi)
+					{
+						wf.Add(item.Deserialize<T>(item.SerializedObject));
+					}
+
+					return wf;
+				}
+				catch (Exception ex)
+				{
+					Console.WriteLine("{0} error", ex.Message);
+					Console.WriteLine("{0} inner message", ex.InnerException);
+					return null;
+				}
+			}
+		}
+
+		#endregion
+		public void Add(Workflow workflow)
+		{
+			if(workflow.Key == null || workflow.Key ==String.Empty )
+				workflow.Key = Guid.NewGuid().ToString();
+			Add<Workflow>(workflow);
+			//using (var db = new WorkflowContext())
+			//{
+			//	try
+			//	{
+			//		Console.WriteLine("trying to save to DB");
+			//		db.WorkflowDb.Add(new WorkflowItem(workflow.SerializeToJsonString()));
+			//		db.SaveChanges();
+			//	}
+			//	catch(Exception ex)
+			//	{
+			//		Console.WriteLine("{0} error", ex.Message);
+			//		Console.WriteLine("{0} inner message", ex.InnerException);
+			//	}
+			//}
+
+			//	_Workflow[workflow.Key] = workflow;
 		}
 
 		public void Add(Trackable trackable)
 		{
 			if (trackable.Key == null || trackable.Key == String.Empty)
 				trackable.Key = Guid.NewGuid().ToString();
-			_Trackable[trackable.Key] = trackable;
+			Console.WriteLine("calling generic add for trackable");
+			Add<Trackable>(trackable);
+			//_Trackable[trackable.Key] = trackable;
 		}
 		public void Add(ExecutedMove executedMove)
 		{
@@ -89,14 +144,32 @@ namespace workflow.Model
 
 		public Workflow Find(string key)
 		{
-			Workflow workflow;
-			_Workflow.TryGetValue(key, out workflow);
-			return workflow;
+			//Workflow workflow;
+			using (var db = new WorkflowContext())
+			{
+				try
+				{
+					Console.WriteLine("trying to return with key {0}", key);
+					var wfi = db.WorkflowDb.Find(new object[] { Int32.Parse(key) });
+					if (wfi == null)
+						throw new WorkFlowException(String.Format("null was returned when finding for key {0}", Int32.Parse(key)));
+					return wfi.Deserialize<Workflow>(wfi.SerializedObject);
+				}
+				catch (Exception ex)
+				{
+					Console.WriteLine("{0} error", ex.Message);
+					Console.WriteLine("{0} inner message", ex.InnerException);
+
+				}
+				return null;
+			}
+		
 		}
 
 		public Trackable FindTrackable(string key)
 		{
 			Trackable Trackable;
+
 			_Trackable.TryGetValue(key, out Trackable);
 			return Trackable;
 		}
@@ -122,13 +195,20 @@ namespace workflow.Model
 
 		public IEnumerable<Workflow> GetAll()
 		{
+			
 			using (var db = new WorkflowContext())
 			{
 				try
 				{
 					Console.WriteLine("trying to return all from DB");
-					return db.WorkflowTable.ToList();
-					//return _Workflow.Values;
+					var wfi = db.WorkflowDb.ToList();
+					List<Workflow> wf = new List<Workflow>();
+					foreach(WorkflowItem item in wfi)
+					{
+						wf.Add(item.Deserialize<Workflow>(item.SerializedObject));
+					}
+
+					return wf;
 				}
 				catch (Exception ex)
 				{
@@ -140,9 +220,11 @@ namespace workflow.Model
 			}
 		}
 
+		
+	
 		public IEnumerable<Trackable> GetAllTrackable()
 		{
-			return _Trackable.Values;
+			return GetAll<Trackable>();
 		}
 
 		public IEnumerable<ExecutedMove> GetAllExecutedMoves()

@@ -36,6 +36,7 @@ namespace workflow.Controllers
 		public IEnumerable<Trackable> GetAll()
 		{
 			//return Json("works");
+			
 			return Workflow.GetAllTrackable();
 		}
 
@@ -95,9 +96,9 @@ namespace workflow.Controllers
 		//		{
 		//		case "add":
 		//				string nodeId;
-		//				if(WorkflowHelper.ExistsInWorkflow(trackable, loc.WorkflowId, out nodeId))
+		//				if(WorkflowHelper.ExistsInWorkflow(trackable, loc.WorkflowGuid, out nodeId))
 		//				{
-		//					var wf = Workflow.Find(loc.WorkflowId);
+		//					var wf = Workflow.Find(loc.WorkflowGuid);
 		//					Movement move;
 		//					if(wf.IsMoveValid(nodeId,loc.NodeId, out move))
 		//					{
@@ -121,7 +122,7 @@ namespace workflow.Controllers
 		//	foreach(Location l in newlocations)
 		//	{
 
-		//		var wf = Workflow.Find(l.WorkflowId);
+		//		var wf = Workflow.Find(l.WorkflowGuid);
 		//		Movement move;
 		//		if(!wf.IsMoveValid("somewhere",l.NodeId, out move))
 		//		{

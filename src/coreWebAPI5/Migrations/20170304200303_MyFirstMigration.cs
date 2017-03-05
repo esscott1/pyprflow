@@ -9,23 +9,23 @@ namespace coreWebAPI5.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "WorkflowTable",
+                name: "WorkflowDb",
                 columns: table => new
                 {
-                    WorkflowId = table.Column<Guid>(nullable: false),
-                    Key = table.Column<string>(nullable: true),
-                    WorkflowName = table.Column<string>(nullable: true)
+                    WorkflowItemId = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    SerializedObject = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_WorkflowTable", x => x.WorkflowId);
+                    table.PrimaryKey("PK_WorkflowTable", x => x.WorkflowItemId);
                 });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "WorkflowTable");
+                name: "WorkflowDb");
         }
     }
 }

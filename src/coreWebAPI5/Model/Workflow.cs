@@ -6,10 +6,10 @@ using System.Net;
 
 namespace workflow.Model
 {
-	public class Workflow
+	public class Workflow : WorkflowItem
 	{
 		private static string TestStoreCategoryKey = "WorkFlow_ProofOfConcept";
-		public Guid WorkflowId { get; private set; }
+		public Guid WorkflowGuid { get; private set; }
 		public string Key { get; set; }
 		public string WorkflowName { get; private set; }
 
@@ -23,34 +23,50 @@ namespace workflow.Model
 		internal List<Movement> path;
 
 		private static IWorkflowRepository wfr { get; set; }
-		public Workflow(string workflowName)
+		public Workflow(string workflowName) : this()
 		{
-			if (WorkflowId == Guid.Empty)
+			if (WorkflowGuid == Guid.Empty)
 			{
-				WorkflowId = Guid.NewGuid();
+				WorkflowGuid = Guid.NewGuid();
 			}
-			DemoWorkflow(workflowName);
+			//GetSample(workflowName);
 		}
 
-		public Workflow() { }
+		public Workflow() {
+			this.path = new List<Movement>();
+			this.Nodes = new Dictionary<string, Node>();
+		}
 
 
-		private void DemoWorkflow(string workflowName)
+		internal Workflow GetSample()
 		{
-			WorkflowName = workflowName;
-			Nodes = new Dictionary<string, Node>();
-			path = new List<Movement>();
-			if (workflowName == "_blank")
-			{
-				Key = "_blankKey";
-				path.Add(new Movement() { From = "Step1", To = "Step2" });
-				path.Add(new Movement() { From = "Step2", To = "Step3" });
-				path.Add(new Movement() { From = "Step3", To = "Step4" });
-				Nodes.Add("Step1", new Node("Step1") { IsStart = true });
-				Nodes.Add("Step2", new Node("Step2"));
-				Nodes.Add("Step3", new Node("Step3"));
-				Nodes.Add("Step4", new Node("Step4") { IsEnd = true });
-			}
+			IUser user = new User() { Email = "Sample.User@somewhere.com" };
+			List<User> users = new List<User> { new User() { Email = "Sample.User@somewhere.com" } };
+			Model.Workflow w = new Model.Workflow("SampleWorkflow1");
+			w.Key = "SampleWorkflow1";
+			w.path.Add(new Movement() { From = null, To = "SampleNode1", ApproveUsers = users });
+			w.path.Add(new Movement() { From = "SampleNode1", To = "SampleNode2", ApproveUsers = users });
+			w.path.Add(new Movement() { From = "SampleNode2", To = "SampleNode3", ApproveUsers = users });
+			w.path.Add(new Movement() { From = "SampleNode3", To = "SampleNode4", ApproveUsers = users });
+			w.Nodes.Add("SampleNode1", new Node("SampleNode1") { IsStart = true });
+			w.Nodes.Add("SampleNode2", new Node("SampleNode2"));
+			w.Nodes.Add("SampleNode3", new Node("SampleNode3"));
+			w.Nodes.Add("SampleNode4", new Node("SampleNode4") { IsEnd = true });
+			return w;
+			//WorkflowName = workflowName;
+			//Nodes = new Dictionary<string, Node>();
+			//path = new List<Movement>();
+			//if (workflowName == "_blank")
+			//{
+			//	Key = "_blankKey";
+			//	path.Add(new Movement() { From = "Step1", To = "Step2" });
+			//	path.Add(new Movement() { From = "Step2", To = "Step3" });
+			//	path.Add(new Movement() { From = "Step3", To = "Step4" });
+			//	Nodes.Add("Step1", new Node("Step1") { IsStart = true });
+			//	Nodes.Add("Step2", new Node("Step2"));
+			//	Nodes.Add("Step3", new Node("Step3"));
+			//	Nodes.Add("Step4", new Node("Step4") { IsEnd = true });
+			//}
 		}
 
 		private bool CanExitNode(string nodeName)
@@ -103,7 +119,7 @@ namespace workflow.Model
 			: this(workflowname)
 		{
 			// don't generate a new GUID when deserializing the workflow
-			WorkflowId = workflowId;
+			WorkflowGuid = workflowId;
 		}
 
 		internal KeyValuePair<string, Node> GetFirstNode()
@@ -251,12 +267,12 @@ namespace workflow.Model
 			return Nodes.Keys.ToList();
 		}
 		
-		public string SerializeToJsonString()
-		{
-			// serialize arbitrary "ITrackable" concrete type http://www.newtonsoft.com/json/help/html/SerializeTypeNameHandling.htm
-			var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto };
-			return JsonConvert.SerializeObject(this, Formatting.None, settings);
-		}
+		//public string SerializeToJsonString()
+		//{
+		//	// serialize arbitrary "ITrackable" concrete type http://www.newtonsoft.com/json/help/html/SerializeTypeNameHandling.htm
+		//	var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto };
+		//	return JsonConvert.SerializeObject(this, Formatting.None, settings);
+		//}
 
 		/// <summary>
 		/// Save to WSOD.Web.ObjectDataStore.
@@ -279,7 +295,7 @@ namespace workflow.Model
 			//Testing.MockRequest(@"\internal");
 			//// store it into ObjectStore
 			//var storeRequest = new MdObjectStoreServiceRequest(User.Current);
-			//storeRequest.Inputs.Add(new KeyValuePair<string, object>(WorkflowId.ToString(), SerializeToJsonString()));
+			//storeRequest.Inputs.Add(new KeyValuePair<string, object>(WorkflowGuid.ToString(), SerializeToJsonString()));
 			//if (!storeRequest.StoreObjectStoreInputs(TestStoreCategoryKey, storeContext))
 			//{
 			//	throw new Exception("Could not persist workflow to ObjectStore");

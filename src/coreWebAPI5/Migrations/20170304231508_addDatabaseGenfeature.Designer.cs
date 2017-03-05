@@ -8,9 +8,10 @@ using workflow.Model;
 namespace coreWebAPI5.Migrations
 {
     [DbContext(typeof(WorkflowContext))]
-    partial class WorkflowContextModelSnapshot : ModelSnapshot
+    [Migration("20170304231508_addDatabaseGenfeature")]
+    partial class addDatabaseGenfeature
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752");
@@ -19,8 +20,6 @@ namespace coreWebAPI5.Migrations
                 {
                     b.Property<int>("WorkflowItemId")
                         .ValueGeneratedOnAdd();
-
-                    b.Property<string>("DerivedType");
 
                     b.Property<string>("SerializedObject");
 
