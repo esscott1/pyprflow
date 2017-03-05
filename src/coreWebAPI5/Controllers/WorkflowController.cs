@@ -17,8 +17,6 @@ namespace workflow.Controllers
 		{
 			Repository = workflow;
 		}
-	//	public IWorkflowRepository Repository { get; set; }
-
 		[HttpGet("example")]
 		public IActionResult GetSample()
 		{
@@ -27,14 +25,11 @@ namespace workflow.Controllers
 		}
 		[HttpGet]
 		public IEnumerable<Workflow> GetAll()
-		{
-			return Repository.GetAll<Workflow>();
-		}
+		{	return Repository.GetAll<Workflow>();	}
 
 		[HttpGet("{id}", Name = "GetWorkflow")]
 		public IActionResult GetById(string id)
 		{
-			//var workflow = Repository.Find(id);
 			var workflow = Repository.Find<Workflow>(id);
 			if (workflow == null) { return NotFound(id); }
 			return Json(workflow);
@@ -45,7 +40,6 @@ namespace workflow.Controllers
 		{
 			IEnumerable<Trackable> ie = Repository.GetAll<Trackable>();
 			return ie.Where(t => t.Locations.Any(l => l.NodeId == nodeId));
-			
 		}
 		[HttpPost("validate", Name ="ValidateWorkflow")]
 		public IActionResult Validate([FromBody] Workflow workflow)

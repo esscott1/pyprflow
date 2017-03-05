@@ -17,6 +17,7 @@ namespace workflow.Model
 		/// Location is workflow and node 
 		/// </summary>
 		public List<Location> Locations { get; set; }
+		
 	//	public Location CurrentLocation { get; set; }
 		//[JsonIgnore]
 		//public List<ExecutedMove> MoveHistory { get; set; }
