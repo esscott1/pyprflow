@@ -158,9 +158,6 @@ namespace workflow.Model
 				return true;
 			return false;
 		}
-		public IEnumerable<Transaction> GetAllTransactions()
-		{
-			return _Transaction.Values;
-		}
+		
 	}
 }

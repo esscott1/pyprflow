@@ -39,7 +39,7 @@ namespace workflow.Controllers
 		public IActionResult GetAll()
 		{
 			//return Json("stuff");
-			return Json(Repository.GetAllTransactions());
+			return Json(Repository.GetAll<Transaction>());
 		}
 	//	GET: api/values
 	   [HttpGet("{id}",Name = "GetTransaction")]
@@ -59,7 +59,7 @@ namespace workflow.Controllers
 			{
 				if(Repository.Find<Transaction>(trans.Key)!=null)
 					return StatusCode(403, "transaction already exists");
-				if (Repository.GetAllTransactions().FirstOrDefault(t => t.WorkflowId == trans.WorkflowId &&
+				if (Repository.GetAll<Transaction>().FirstOrDefault(t => t.WorkflowId == trans.WorkflowId &&
 				 t.NewNodeId == trans.NewNodeId && 
 				 t.PreviousNodeId == trans.PreviousNodeId &&
 				 t.TrackableId2 == trans.TrackableId2

@@ -48,7 +48,7 @@ namespace workflow.Controllers
 		[HttpGet("{trackableId}/transactions")]
 		public IEnumerable<Transaction> GetTransactions(string trackableId)
 		{
-			return Repository.GetAllTransactions().Where(t => t.TrackableId2 == trackableId);
+			return Repository.GetAll<Transaction>().Where(t => t.TrackableId2 == trackableId);
 		}
 		
 		[HttpPost]

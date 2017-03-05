@@ -18,20 +18,12 @@ namespace workflow.Model
 		void Update<T>(T item) where T : WorkflowItem;
 
 
-		//Workflow Find(string key);
-		//Workflow Remove(string key);
-		//void Update(Workflow workflow);
-
 		void Add(Trackable trackable);
 		
-		//Trackable FindTrackable(string key);
-		//Trackable RemoveTrackable(string key);
-		//void Update(Trackable workflow);
 		
 		
 		void Add(Transaction trans);
-		IEnumerable<Transaction> GetAllTransactions();
-		//Transaction FindTransaction(string id);
+		
 
 
 		bool CheckValidUserKey(string stringValues);
