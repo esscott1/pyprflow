@@ -311,7 +311,9 @@ To submit an item to an orchestration workflow you simply Post a transaction JSO
 [GET]
 
 API/workflow - returns all workflows managed by the application
+
 API/workflow/{workflowId}  - return the specific workflow.
+
 API/workflow/example  - return an example workflow to get you started
 API/workflow/{workflowId}/node/{nodeId}/trackables  - returns all the trackable in that workflow node
 API/trackable  - returns all the trackable managed by the application
