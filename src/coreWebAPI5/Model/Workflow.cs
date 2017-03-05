@@ -20,7 +20,7 @@ namespace workflow.Model
 		internal Dictionary<string, Node> Nodes;
 	
 		[JsonProperty]
-		internal List<Movement> path;
+		internal List<Movement> Orchestration;
 
 		private static IWorkflowRepository Repository { get; set; }
 		public Workflow(string workflowName) : this()
@@ -32,7 +32,7 @@ namespace workflow.Model
 		}
 
 		public Workflow() {
-			this.path = new List<Movement>();
+			this.Orchestration = new List<Movement>();
 			this.Nodes = new Dictionary<string, Node>();
 		}
 
@@ -42,10 +42,10 @@ namespace workflow.Model
 			List<User> users = new List<User> { new User() { Email = "Sample.User@somewhere.com" } };
 			Model.Workflow w = new Model.Workflow("SampleWorkflow1");
 			w.Key = "SampleWorkflow1";
-			w.path.Add(new Movement() { From = null, To = "SampleNode1", ApproveUsers = users });
-			w.path.Add(new Movement() { From = "SampleNode1", To = "SampleNode2", ApproveUsers = users });
-			w.path.Add(new Movement() { From = "SampleNode2", To = "SampleNode3", ApproveUsers = users });
-			w.path.Add(new Movement() { From = "SampleNode3", To = "SampleNode4", ApproveUsers = users });
+			w.Orchestration.Add(new Movement() { From = null, To = "SampleNode1", ApproveUsers = users });
+			w.Orchestration.Add(new Movement() { From = "SampleNode1", To = "SampleNode2", ApproveUsers = users });
+			w.Orchestration.Add(new Movement() { From = "SampleNode2", To = "SampleNode3", ApproveUsers = users });
+			w.Orchestration.Add(new Movement() { From = "SampleNode3", To = "SampleNode4", ApproveUsers = users });
 			w.Nodes.Add("SampleNode1", new Node("SampleNode1") { IsStart = true });
 			w.Nodes.Add("SampleNode2", new Node("SampleNode2"));
 			w.Nodes.Add("SampleNode3", new Node("SampleNode3"));
@@ -56,7 +56,7 @@ namespace workflow.Model
 
 		private bool CanExitNode(string nodeName)
 		{
-			foreach(Movement m in path)
+			foreach(Movement m in Orchestration)
 			{
 				if (m.From == nodeName)
 					return true;
@@ -66,7 +66,7 @@ namespace workflow.Model
 
 		private bool CanEnterNode(string nodeName)
 		{
-			foreach (Movement m in path)
+			foreach (Movement m in Orchestration)
 			{
 				if (m.To == nodeName)
 					return true;
@@ -226,7 +226,7 @@ namespace workflow.Model
 		{
 			move = null;
 
-			var mv = path.Where(m => m.To == to && m.From == from);
+			var mv = Orchestration.Where(m => m.To == to && m.From == from);
 			if(mv.Count() > 0)
 			{
 				move = mv.First();
@@ -239,7 +239,7 @@ namespace workflow.Model
 		internal  string FindNextNodeName(string nodeName)
 		{
 			
-			var nextNodeName = this.path.Find(m => m.From == nodeName).To;
+			var nextNodeName = this.Orchestration.Find(m => m.From == nodeName).To;
 			if (nextNodeName == null || nextNodeName == String.Empty)
 				throw new WorkFlowException("No next Node found");
 			return nextNodeName;
@@ -318,11 +318,11 @@ namespace workflow.Model
 			}
 
 			// check if movement already exists
-			Movement move = path.FirstOrDefault(m => m.From == from && m.To == to);
+			Movement move = Orchestration.FirstOrDefault(m => m.From == from && m.To == to);
 			if (move == null)
 			{
 				move = new Movement { From = from, To = to };
-				path.Add(move);
+				Orchestration.Add(move);
 			}
 
 			// add move user
@@ -342,7 +342,7 @@ namespace workflow.Model
 		//			// should check if movement already exists
 		//			var move = new Movement { From = from };
 		//			move.ApproveUsers.Add(removeUser);
-		//			path.Add(move);
+		//			Orchestration.Add(move);
 		//		}
 	}
 

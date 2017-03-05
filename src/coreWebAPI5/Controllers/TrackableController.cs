@@ -81,7 +81,7 @@ namespace workflow.Controllers
 		//	};
 			
 			
-		//	var locationUpdates = patch.Operations.Where(o => o.path.ToLowerInvariant() == "/locations/-");
+		//	var locationUpdates = patch.Operations.Where(o => o.Orchestration.ToLowerInvariant() == "/locations/-");
 		//	List<Location> newlocations = new List<Location>();
 		//	// getting a list of locations that were sent in the patch.
 		//	foreach(Microsoft.AspNetCore.JsonPatch.Operations.Operation<Trackable> o in locationUpdates)
@@ -200,7 +200,7 @@ namespace workflow.Controllers
 
 			//Repository workflow = Repository.Find(workflowId);
 			
-			//return workflow.path.Where(p => p.From == nodeName);
+			//return workflow.Orchestration.Where(p => p.From == nodeName);
 			
 		}
 
