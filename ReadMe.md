@@ -310,8 +310,6 @@ To submit an item to an orchestration workflow you simply Post a transaction JSO
 
 [GET]
 API/workflow - returns all workflows managed by the application.  
-stuff  
-more stuff  
 API/workflow/{workflowId}  - return the specific workflow.  
 API/workflow/example  - return an example workflow to get you started  
 API/workflow/{workflowId}/node/{nodeId}/trackables  - returns all the trackable in that workflow node  
@@ -321,30 +319,31 @@ API/trackable/example  - return an example of a trackable to get you started.
 API/trackable/{trackableId}/transaction  - returns the transaction history for the given trackable  
 API/trackable/newId - will return a uniquely new ID for inclusion in a trackable POST  
 API/trackable/availablemoves - returns the workflow NodeId's that are valid for the next moves.  
-API/transaction - returns all transactions
-API/transaction/{transactionId} - returns a specific transacation
-API/transaction/example  - returns an example transaction to get you started.
+API/transaction - returns all transactions  
+API/transaction/{transactionId} - returns a specific transacation  
+API/transaction/example  - returns an example transaction to get you started.  
 
-API/workflows/example  - return an example workflow to get you started
-API/workflows - returns all workflows managed by the application
-API/workflows/{workflowId}  - return the specific workflow.
-**API/workflows/{workflowId}/nodes  - return all the nodes in a specific workflow.**
-**API/workflows/{workflowId}/nodes/{nodeId}  - return all the nodes in a specific workflow.**
-**API/workflows/{workflowId}/paths  -- returns all the paths in a specific workflow **
-**API/workflows/{workflowId}/paths/{pathId}  -- returns a specific paths in a specific workflow **
-rule
-API/trackables/example  - return an example of a trackable to get you started.
-**API/trackables/{workflowId}/paths/{pathId}/trackables  - returns all the trackables that went through that path **
-**API/trackables/{workflowId}/nodes/{nodeId}/trackables  - returns all the trackable in that workflow node **
-API/trackables  - returns all the trackable managed by the application
-API/trackables/{trackableId} - returns that specific trackable
+API/workflows/example  - return an example workflow to get you started  
+API/workflows - returns all workflows managed by the application  
+API/workflows/{workflowId}  - return the specific workflow.  
+**API/workflows/{workflowId}/nodes  - return all the nodes in a specific workflow.  
 
-API/trackables/{trackableId}/transaction  - returns the transaction history for the given trackable
-API/trackables/newId - will return a uniquely new ID for inclusion in a trackable POST
-API/trackables/availablemoves - returns the workflow NodeId's that are valid for the next moves.
-API/transactions - returns all transactions
-API/transactions/{transactionId} - returns a specific transacation
-API/transactions/example  - returns an example transaction to get you started.
+**API/workflows/{workflowId}/nodes/{nodeId}  - return all the nodes in a specific workflow.  
+**API/workflows/{workflowId}/paths  -- returns all the paths in a specific workflow   
+**API/workflows/{workflowId}/paths/{pathId}  -- returns a specific paths in a specific workflow   
+
+API/trackables/example  - return an example of a trackable to get you started.  
+**API/trackables/{workflowId}/paths/{pathId}/trackables  - returns all the trackables that went through that path   
+**API/trackables/{workflowId}/nodes/{nodeId}/trackables  - returns all the trackable in that workflow node   
+API/trackables  - returns all the trackable managed by the application  
+API/trackables/{trackableId} - returns that specific trackable  
+
+API/trackables/{trackableId}/transaction  - returns the transaction history for the given trackable  
+API/trackables/newId - will return a uniquely new ID for inclusion in a trackable POST  
+API/trackables/availablemoves - returns the workflow NodeId's that are valid for the next moves.  
+API/transactions - returns all transactions  
+API/transactions/{transactionId} - returns a specific transacation  
+API/transactions/example  - returns an example transaction to get you started.  
 
 
 
