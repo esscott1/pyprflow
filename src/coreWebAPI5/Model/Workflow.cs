@@ -20,7 +20,7 @@ namespace workflow.Model
 		internal Dictionary<string, Node> Nodes;
 	
 		[JsonProperty]
-		internal List<Movement> Orchestration;
+		internal Dictionary<string, Orchestration> Orchestrations;
 
 		private static IWorkflowRepository Repository { get; set; }
 		public Workflow(string workflowName) : this()
@@ -32,7 +32,7 @@ namespace workflow.Model
 		}
 
 		public Workflow() {
-			this.Orchestration = new List<Movement>();
+			this.Orchestrations = new Dictionary<string, Orchestration>();
 			this.Nodes = new Dictionary<string, Node>();
 		}
 
@@ -42,10 +42,35 @@ namespace workflow.Model
 			List<User> users = new List<User> { new User() { Email = "Sample.User@somewhere.com" } };
 			Model.Workflow w = new Model.Workflow("SampleWorkflow1");
 			w.Key = "SampleWorkflow1";
-			w.Orchestration.Add(new Movement() { From = null, To = "SampleNode1", ApproveUsers = users });
-			w.Orchestration.Add(new Movement() { From = "SampleNode1", To = "SampleNode2", ApproveUsers = users });
-			w.Orchestration.Add(new Movement() { From = "SampleNode2", To = "SampleNode3", ApproveUsers = users });
-			w.Orchestration.Add(new Movement() { From = "SampleNode3", To = "SampleNode4", ApproveUsers = users });
+			w.Orchestrations.Add("Orch1", new Orchestration()
+			{
+				OrchestrationName = "Orch1",
+				Moves = new List<Movement>() {
+					new Movement() { From = null, To = "SampleNode1" },
+					new Movement() { From = "SampleNode1", To = "SampleNode2"},
+					new Movement() { From = "SampleNode2", To = "SampleNode3"},
+					new Movement() { From = "SampleNode3", To = "SampleNode4"}
+					}
+			});
+			w.Orchestrations.Add(
+				"Orch2", new Orchestration()
+				{
+					OrchestrationName = "Orch2",
+					Moves = new List<Movement>() {
+					new Movement() { From = null, To = "SampleNode1" },
+					new Movement() { From = "SampleNode1", To = "SampleNode2"},
+					new Movement() { From = "SampleNode2", To = "SampleNode3"},
+					new Movement() { From = "SampleNode2", To = "SampleNode4"},
+					new Movement() { From = "SampleNode2", To = "SampleNode1"},
+					new Movement() { From = "SampleNode3", To = "SampleNode2"},
+					new Movement() { From = "SampleNode3", To = "SampleNode4"}
+					}
+				});
+
+			//w.Orchestrations.Add(new Movement() { From = null, To = "SampleNode1", ApproveUsers = users });
+			//w.Orchestrations.Add(new Movement() { From = "SampleNode1", To = "SampleNode2", ApproveUsers = users });
+			//w.Orchestrations.Add(new Movement() { From = "SampleNode2", To = "SampleNode3", ApproveUsers = users });
+			//w.Orchestrations.Add(new Movement() { From = "SampleNode3", To = "SampleNode4", ApproveUsers = users });
 			w.Nodes.Add("SampleNode1", new Node("SampleNode1") { IsStart = true });
 			w.Nodes.Add("SampleNode2", new Node("SampleNode2"));
 			w.Nodes.Add("SampleNode3", new Node("SampleNode3"));
@@ -56,46 +81,44 @@ namespace workflow.Model
 
 		private bool CanExitNode(string nodeName)
 		{
-			foreach(Movement m in Orchestration)
-			{
-				if (m.From == nodeName)
-					return true;
-			}
-			return false;
+			throw new NotImplementedException();
+			
 		}
 
 		private bool CanEnterNode(string nodeName)
 		{
-			foreach (Movement m in Orchestration)
-			{
-				if (m.To == nodeName)
-					return true;
-			}
-			return false;
+			throw new NotImplementedException();	
+			//foreach (Movement m in Orchestrations)
+			//{
+			//	if (m.To == nodeName)
+			//		return true;
+			//}
+			//return false;
 
 		}
 		internal bool IsValid(out WorkflowValidationMessage message)
 		{
-			message = new WorkflowValidationMessage();
-			List<string> NodesWithoutProperPaths = new List<string>();
-			// all middle nodes can be moved into and out of 
-			foreach(KeyValuePair<string, Node> kvp in Nodes)
-			{
-				if (kvp.Value.IsStart) { message.HasStart = true; }
-				else {
-					if (!CanEnterNode(kvp.Key))
-						message.UnreachableNodeNames.Add(kvp.Key); 
-					}
-				if (kvp.Value.IsEnd) {	message.HasEnd = true; }
-				else
-				{
-					if (!CanExitNode(kvp.Key))
-						message.DeadEndNodeNames.Add(kvp.Key);
-				}
-			}
-			if (message.Valid)
-				return true;
-			return false;
+			throw new NotImplementedException();
+			//message = new WorkflowValidationMessage();
+			//List<string> NodesWithoutProperPaths = new List<string>();
+			//// all middle nodes can be moved into and out of 
+			//foreach(KeyValuePair<string, Node> kvp in Nodes)
+			//{
+			//	if (kvp.Value.IsStart) { message.HasStart = true; }
+			//	else {
+			//		if (!CanEnterNode(kvp.Key))
+			//			message.UnreachableNodeNames.Add(kvp.Key); 
+			//		}
+			//	if (kvp.Value.IsEnd) {	message.HasEnd = true; }
+			//	else
+			//	{
+			//		if (!CanExitNode(kvp.Key))
+			//			message.DeadEndNodeNames.Add(kvp.Key);
+			//	}
+			//}
+			//if (message.Valid)
+			//	return true;
+			//return false;
 		}
 
 
@@ -174,14 +197,14 @@ namespace workflow.Model
 			
 		}
 
-		public void AddNode(string stateName, string fromState = null)
-		{
-			Nodes.Add(stateName, new Node(stateName));
-			if (!string.IsNullOrWhiteSpace(fromState))
-			{
-				AddValidStateMovement(fromState, stateName);
-			}
-		}
+		//public void AddNode(string stateName, string fromState = null)
+		//{
+		//	Nodes.Add(stateName, new Node(stateName));
+		//	if (!string.IsNullOrWhiteSpace(fromState))
+		//	{
+		//		//AddValidStateMovement(fromState, stateName);
+		//	}
+		//}
 
 		public void AddTrackableToStart(Trackable item)
 		{
@@ -222,15 +245,12 @@ namespace workflow.Model
 			//item.MoveHistory.Add(new ExecutedMove(move) { ExecutionTime = DateTime.Now });
 		}
 
-		public bool IsMoveValid(string from, string to, out Movement move, IUser user=null)
+		public bool IsMoveValid(Transaction transaction)
 		{
-			move = null;
-
-			var mv = Orchestration.Where(m => m.To == to && m.From == from);
-			if(mv.Count() > 0)
+			foreach (KeyValuePair<string, Orchestration> kvp in Orchestrations)
 			{
-				move = mv.First();
-				return true;
+				if (kvp.Value.IsValid(transaction))
+					return true;
 			}
 			return false;
 			
@@ -238,11 +258,11 @@ namespace workflow.Model
 
 		internal  string FindNextNodeName(string nodeName)
 		{
-			
-			var nextNodeName = this.Orchestration.Find(m => m.From == nodeName).To;
-			if (nextNodeName == null || nextNodeName == String.Empty)
-				throw new WorkFlowException("No next Node found");
-			return nextNodeName;
+			throw new NotImplementedException();
+			//var nextNodeName = this.Orchestrations.Find(m => m.From == nodeName).To;
+			//if (nextNodeName == null || nextNodeName == String.Empty)
+			//	throw new WorkFlowException("No next Node found");
+			//return nextNodeName;
 			
 		}
 
@@ -303,33 +323,32 @@ namespace workflow.Model
 			
 		//}
 
-		
-
 		public void AddValidStateMovement(string from, string to, User moveUser = null)
 		{
-			if (!Nodes.ContainsKey(from))
-			{
-				throw new WorkFlowException("can't move from " + from);
-			}
+			throw new NotImplementedException();
+			//if (!Nodes.ContainsKey(from))
+			//{
+			//	throw new WorkFlowException("can't move from " + from);
+			//}
 
-			if (!Nodes.ContainsKey(to))
-			{
-				throw new WorkFlowException("can't move to " + to);
-			}
+			//if (!Nodes.ContainsKey(to))
+			//{
+			//	throw new WorkFlowException("can't move to " + to);
+			//}
 
-			// check if movement already exists
-			Movement move = Orchestration.FirstOrDefault(m => m.From == from && m.To == to);
-			if (move == null)
-			{
-				move = new Movement { From = from, To = to };
-				Orchestration.Add(move);
-			}
+			//// check if movement already exists
+			//Movement move = Orchestrations.FirstOrDefault(m => m.From == from && m.To == to);
+			//if (move == null)
+			//{
+			//	move = new Movement { From = from, To = to };
+			//	Orchestrations.Add(move);
+			//}
 
-			// add move user
-			if (moveUser != null)
-			{
-				move.ApproveUsers.Add(moveUser);
-			}
+			//// add move user
+			//if (moveUser != null)
+			//{
+			//	move.ApproveUsers.Add(moveUser);
+			//}
 		}
 
 		//		public void AddValidStateRemoval(string from, IUser removeUser)
@@ -342,7 +361,7 @@ namespace workflow.Model
 		//			// should check if movement already exists
 		//			var move = new Movement { From = from };
 		//			move.ApproveUsers.Add(removeUser);
-		//			Orchestration.Add(move);
+		//			Orchestrations.Add(move);
 		//		}
 	}
 

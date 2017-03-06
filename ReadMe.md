@@ -18,7 +18,7 @@ document would travel through in it's journey to be 'approved.'  First a documen
  ###Do orchestration workflows support multi-directional paths?
  Yes, orchestration workflows support multiple directions and multiple concurrent and parallel paths. 
 
- ###De orchestration workflows support single dimensional and multi-dimensional workflow paths? 
+ ###Do orchestration workflows support single dimensional and multi-dimensional workflow paths? 
  Yes, the OW engine supports single dimensional and multi-dimensional workflow paths.  Common single dimensional paths are where one task 
  leads to another task and another in a serial mannor.  Multi-dimensional paths commonly are where one completed task can simultaneouly 
  spawn multiple other tasks that are managed in parellel.  Additionally, in the multi-dimensional scenario a task that is yet to be queued 
@@ -313,6 +313,9 @@ API/workflow - returns all workflows managed by the application.
 API/workflow/{workflowId}  - return the specific workflow.  
 API/workflow/example  - return an example workflow to get you started  
 API/workflow/{workflowId}/node/{nodeId}/trackables  - returns all the trackable in that workflow node  
+API/workflow/{workflowId}/orchestration
+API/workflow/{workflowId}/orchestration/{orchestrationId}
+##API/workflow/{workflowId}/orchestration/rule?
 API/trackable  - returns all the trackable managed by the application  
 API/trackable/{trackableId} - returns that specific trackable  
 API/trackable/example  - return an example of a trackable to get you started.  

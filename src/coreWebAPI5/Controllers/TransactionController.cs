@@ -77,7 +77,7 @@ namespace workflow.Controllers
 
 					var workflow = Repository.Find<Workflow>(trans.WorkflowId); Movement move;
 					Console.WriteLine("found workflow: " + workflow.Key);
-					if (!workflow.IsMoveValid(trans.PreviousNodeId, trans.NewNodeId, out move))
+					if (!workflow.IsMoveValid(trans))
 						return StatusCode(403, "requested move is not valid in the designated workflow");
 
 					Repository.Add(trans);
