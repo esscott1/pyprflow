@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 
 namespace workflow.Model
 {
-	internal class Node
+	public class Node
 	{
 		public Node(string nodeName)
 		{

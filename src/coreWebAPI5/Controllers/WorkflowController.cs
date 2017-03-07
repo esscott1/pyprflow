@@ -11,21 +11,16 @@ using workflow.Model;
 namespace workflow.Controllers
 {
 	[Route("api/[controller]")]
-	public class WorkflowController : BaseController
+	public class WorkflowsController : BaseController
 	{
-		public WorkflowController(IWorkflowRepository workflow)
+		public WorkflowsController(IWorkflowRepository workflow)
 		{
 			Repository = workflow;
 		}
-		[HttpGet("example")]
-		public IActionResult GetSample()
-		{
-			var wkf = new Model.Workflow();
-			return Json(wkf.GetSample());
-		}
+
 		[HttpGet]
 		public IEnumerable<Workflow> GetAll()
-		{	return Repository.GetAll<Workflow>();	}
+		{ return Repository.GetAll<Workflow>(); }
 
 		[HttpGet("{id}", Name = "GetWorkflow")]
 		public IActionResult GetById(string id)
@@ -35,12 +30,57 @@ namespace workflow.Controllers
 			return Json(workflow);
 		}
 
+		[HttpGet("example")]
+		public IActionResult GetSample()
+		{
+			var wkf = new Model.Workflow();
+			return Json(wkf.GetSample());
+		}
+
 		[HttpGet("{workflowId}/Node/{nodeId}/trackables")]
 		public IEnumerable<Trackable> GetNodeTrackables(string workflowId, string nodeId)
 		{
 			IEnumerable<Trackable> ie = Repository.GetAll<Trackable>();
-			return ie.Where(t => t.Locations.Any(l => l.NodeId == nodeId));
+			return ie.Where(t => t.Locations.Any(l => (l.NodeId == nodeId) && (l.WorkflowId==workflowId)));
 		}
+
+		[HttpGet("{workflowId}/orchestrations")]
+		public IEnumerable<Orchestration> GetOrchestrations(string workflowId)
+		{
+			var workflow = Repository.Find<Workflow>(workflowId);
+			List<Orchestration> ol = new List<Orchestration>();
+			foreach (KeyValuePair<string, Orchestration> kvp in workflow.Orchestrations)
+				ol.Add(kvp.Value);
+			return ol;
+		}
+
+		[HttpGet("{workflowId}/orchestrations/{orchestrationId}")]
+		public Orchestration GetOrchestration(string workflowId, string orchestrationId)
+		{
+			return Repository.Find<Orchestration>(orchestrationId);
+		}
+
+		[HttpGet("{workflowId}/nodes")]
+		public IEnumerable<Node> GetNodes(string workflowId)
+		{
+			var workflow = Repository.Find<Workflow>(workflowId);
+			List<Node> n = new List<Node>();
+			foreach (KeyValuePair<string, Node> kvp in workflow.Nodes)
+				n.Add(kvp.Value);
+			return n;
+		}
+
+		[HttpGet("{workflowId}/orchestrations/{nodeId}")]
+		public Orchestration GetNode(string workflowId, string nodeId)
+		{
+			return Repository.Find<Orchestration>(nodeId);
+		}
+
+		/// <summary>
+		/// undocumented endpoint.  using for development testing only
+		/// </summary>
+		/// <param name="workflow"></param>
+		/// <returns></returns>
 		[HttpPost("validate", Name ="ValidateWorkflow")]
 		public IActionResult Validate([FromBody] Workflow workflow)
 		{
@@ -53,6 +93,7 @@ namespace workflow.Controllers
 
 		}
 		[HttpPost]
+
 		public IActionResult Create([FromBody] Workflow workflow)
 		{
 			if (workflow == null)
