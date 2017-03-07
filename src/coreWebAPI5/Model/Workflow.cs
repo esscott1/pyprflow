@@ -21,6 +21,10 @@ namespace workflow.Model
 	
 		[JsonProperty]
 		internal Dictionary<string, Orchestration> Orchestrations;
+		/// <summary>
+		/// true (default): a trackable can not move between orchestrations within a given workflow.  false: it can
+		/// </summary>
+		public bool OrchestrationAffinity { get; set; } = true;
 
 		private static IWorkflowRepository Repository { get; set; }
 		public Workflow(string workflowName) : this()
@@ -66,11 +70,7 @@ namespace workflow.Model
 					new Movement() { From = "SampleNode3", To = "SampleNode4"}
 					}
 				});
-
-			//w.Orchestrations.Add(new Movement() { From = null, To = "SampleNode1", ApproveUsers = users });
-			//w.Orchestrations.Add(new Movement() { From = "SampleNode1", To = "SampleNode2", ApproveUsers = users });
-			//w.Orchestrations.Add(new Movement() { From = "SampleNode2", To = "SampleNode3", ApproveUsers = users });
-			//w.Orchestrations.Add(new Movement() { From = "SampleNode3", To = "SampleNode4", ApproveUsers = users });
+			w.OrchestrationAffinity = false;
 			w.Nodes.Add("SampleNode1", new Node("SampleNode1") { IsStart = true });
 			w.Nodes.Add("SampleNode2", new Node("SampleNode2"));
 			w.Nodes.Add("SampleNode3", new Node("SampleNode3"));
