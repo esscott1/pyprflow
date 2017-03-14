@@ -10,7 +10,7 @@ namespace workflow.Model
 	public class Transaction : BaseWorkflowItem 
 	{
 		
-		public string TrackableId { get; set; }
+		public string TrackableName { get; set; }
 		[JsonConverter(typeof(StringEnumConverter))]
 		public TransactionType type { get; set; }
 		public string Comment { get; set; }
@@ -18,7 +18,7 @@ namespace workflow.Model
 		public string NewNodeId { get; set; }
 		public DateTime TransActionTime { get; internal set; }
 		public User Submitter { get; set; }
-		public string WorkflowId { get; set; }
+		public string WorkflowName { get; set; }
 		public Transaction()
 		{
 			TransActionTime = DateTime.Now;

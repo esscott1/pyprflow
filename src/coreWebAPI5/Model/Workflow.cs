@@ -334,7 +334,7 @@ namespace workflow.Model
 			
 		//	foreach(KeyValuePair<string, Node> kvp in Nodes)
 		//	{
-		//		IEnumerable<Trackable> r = kvp.Value.Trackables.Where(t => t.TrackableId == trackableId);
+		//		IEnumerable<Trackable> r = kvp.Value.Trackables.Where(t => t.TrackableName == trackableId);
 		//		if (r.Count() > 0)
 		//			return r.First();
 		//	}

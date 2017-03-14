@@ -52,7 +52,7 @@ namespace workflow.Controllers
 		public IEnumerable<Trackable> GetNodeTrackables(string workflowId, string nodeId)
 		{
 			IEnumerable<Trackable> ie = Repository.GetAll<Trackable>();
-			return ie.Where(t => t.Locations.Any(l => (l.NodeId == nodeId) && (l.WorkflowId == workflowId)));
+			return ie.Where(t => t.Locations.Any(l => (l.NodeId == nodeId) && (l.WorkflowName == workflowId)));
 		}
 
 		[HttpGet("{workflowId}/orchestrations")]

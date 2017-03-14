@@ -41,15 +41,15 @@ namespace workflow.Controllers
 			string name = "SampleDoc1";
 			Trackable t = new Trackable(name);
 			//t.Name = name;
-			t.TrackableId = name;
-			t.Locations.Add(new Location() { WorkflowId = "SampleWorkflow", NodeId = "SampleNode1" });
+			
+			t.Locations.Add(new Location() { WorkflowName = "SampleWorkflow1", NodeId = "SampleNode1" });
 			return Json(t);
 		}
 
 		[HttpGet("{trackableId}/transactions")]
 		public IEnumerable<Transaction> GetTransactions(string trackableId)
 		{
-			return Repository.GetAll<Transaction>().Where(t => t.TrackableId == trackableId);
+			return Repository.GetAll<Transaction>().Where(t => t.TrackableName == trackableId);
 		}
 		
 		[HttpPost]
@@ -221,7 +221,7 @@ namespace workflow.Controllers
 		//public IActionResult RemoveTrackable([FromBody]  workflowUpdate)
 		//{
 		//	//Workflow wf = Repository.Find<Workflow>(workflowUpdate.);
-		//	//wf.RemoveItemFromWorkflow(workflowUpdate.TrackableId);
+		//	//wf.RemoveItemFromWorkflow(workflowUpdate.TrackableName);
 		//	//return Json("tried to delete ID: " + workflowUpdate);
 		//}
 	}
