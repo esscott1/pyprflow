@@ -308,29 +308,32 @@ To submit an item to an orchestration workflow you simply Post a transaction JSO
 
 ###What RESTful services are available to me
 
+USE HATEOAS for bigger things.
 [GET]  
 API/workflows - returns all workflows managed by the application.  
 API/workflows/{workflowId}  - return the specific workflow.  
 API/workflows/example  - return an example workflow to get you started  
+## below maybe not needed / wanted
 API/workflows/{workflowId}/node/{nodeId}/trackables  - returns all the trackable in that workflow node  
 API/workflows/{workflowId}/orchestrations
 API/workflow/{workflowId}/orchestration/{orchestrationId}
 API/workflows/{workflowId}/nodes  - return all the nodes in a specific workflow.  
 API/workflows/{workflowId}/nodes/{nodeId}  - return all the nodes in a specific workflow.  
+## end of above
 
 ##API/workflow/{workflowId}/orchestration/rule?
 API/trackable  - returns all the trackable managed by the application  
 API/trackable/{trackableId} - returns that specific trackable  
 API/trackable/example  - return an example of a trackable to get you started.  
 API/trackable/{trackableId}/transaction  - returns the transaction history for the given trackable  
-API/trackable/newId - will return a uniquely new ID for inclusion in a trackable POST  
-API/trackable/availablemoves - returns the workflow NodeId's that are valid for the next moves.  
+##API/trackable/newId - will return a uniquely new ID for inclusion in a trackable POST  
+##API/trackable/availablemoves - returns the workflow NodeId's that are valid for the next moves.  
+
 API/transaction - returns all transactions  
 API/transaction/{transactionId} - returns a specific transacation  
 API/transaction/example  - returns an example transaction to get you started.  
 
 
-API/trackables/example  - return an example of a trackable to get you started.  
 **API/trackables/{workflowId}/paths/{pathId}/trackables  - returns all the trackables that went through that path   
 **API/trackables/{workflowId}/nodes/{nodeId}/trackables  - returns all the trackable in that workflow node   
 API/trackables  - returns all the trackable managed by the application  
@@ -362,3 +365,13 @@ API/trackable/{trackableId} - updates an existing trackable
 [Delete]  
 API/workflow/{workflowId} - removes an existing workflow definition from the OW engine  
 API/trackable/{trackableId}  
+
+API/Search/q=workflow&id=2
+Search parameters
+
+| Argument | Example |  Description     |
+|----------|----------------------------|------------------------------|
+| t        |   t=wf      | Type of object you are wanting [Worflow; orchestration; Trackable; 
+| id       |   id=workflowId                       |
+| nane     |
+ 
