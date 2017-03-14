@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace workflow.Model
 {
-    public class Orchestration : WorkflowItem
+    public class Orchestration : BaseWorkflowItem
     {
 		public string OrchestrationName { get; set; }
 		public List<Movement> Moves { get; set; }

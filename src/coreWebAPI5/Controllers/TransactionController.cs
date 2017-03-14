@@ -23,11 +23,11 @@ namespace workflow.Controllers
 		{
 			Transaction t = new Transaction();
 			t.Comment = "Submitting to workflow";
-			t.Key = "SampleTransaction1";
+			//t.Key = "SampleTransaction1";
 			t.NewNodeId = "SampleNode1";
 			t.PreviousNodeId = null;
 			t.Submitter = new User() { Email = "Sample.User@somewhere.com" };
-			t.TrackableId2 = "SampleDoc1";
+			t.TrackableId = "SampleDoc1";
 			t.WorkflowId = "SampleWorkflow1";
 			t.type = TransactionType.Move;
 			var d = DateTime.Now;
@@ -43,7 +43,7 @@ namespace workflow.Controllers
 		}
 	//	GET: api/values
 	   [HttpGet("{id}",Name = "GetTransaction")]
-		public IActionResult GetTransaction(string id)
+		public IActionResult GetTransaction(int id)
 		{
 			return Json(Repository.Find<Transaction>(id));
 		}
@@ -62,11 +62,11 @@ namespace workflow.Controllers
 				if (Repository.GetAll<Transaction>().FirstOrDefault(t => t.WorkflowId == trans.WorkflowId &&
 				 t.NewNodeId == trans.NewNodeId && 
 				 t.PreviousNodeId == trans.PreviousNodeId &&
-				 t.TrackableId2 == trans.TrackableId2
+				 t.TrackableId == trans.TrackableId
 				 ) != null)
 					return StatusCode(403, "transaction already exists");
 
-				var trackable = Repository.Find<Trackable>(trans.TrackableId2);
+				var trackable = Repository.Find<Trackable>(trans.Key);
 
 				if (trackable != null) // trackable exists
 				{
@@ -75,8 +75,8 @@ namespace workflow.Controllers
 						if (!trackable.Locations.Exists(l => l.WorkflowId == trans.WorkflowId && l.NodeId == trans.PreviousNodeId))
 							return StatusCode(403, "trackable is not in the starting position for this move request");
 
-					var workflow = Repository.Find<Workflow>(trans.WorkflowId); Movement move;
-					Console.WriteLine("found workflow: " + workflow.Key);
+					var workflow = Repository.Find<Workflow>(trans.Key); Movement move;
+					Console.WriteLine("found workflow: " + workflow.WorkflowName);
 					if (!workflow.IsMoveValid(trans))
 						return StatusCode(403, "requested move is not valid in the designated workflow");
 

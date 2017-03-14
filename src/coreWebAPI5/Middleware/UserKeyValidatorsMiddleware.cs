@@ -24,7 +24,7 @@ namespace workflow.Middleware
 			if (!context.Request.Headers.Keys.Contains("user-key"))
 			{
 				context.Response.StatusCode = 400; //Bad Request                
-				await context.Response.WriteAsync("User Key is missing");
+				await context.Response.WriteAsync("User WFKey is missing");
 				return;
 			}
 			else
@@ -32,7 +32,7 @@ namespace workflow.Middleware
 				if (!WorkflowRepo.CheckValidUserKey(context.Request.Headers["user-key"]))
 				{
 					context.Response.StatusCode = 401; //UnAuthorized
-					await context.Response.WriteAsync("Invalid User Key");
+					await context.Response.WriteAsync("Invalid User WFKey");
 					return;
 				}
 			}

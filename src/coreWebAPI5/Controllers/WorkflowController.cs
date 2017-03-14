@@ -11,11 +11,22 @@ using workflow.Model;
 namespace workflow.Controllers
 {
 	[Route("api/[controller]")]
-	public class WorkflowsController : BaseController
+	public class WorkflowsController : Controller
 	{
 		public WorkflowsController(IWorkflowRepository workflow)
 		{
 			Repository = workflow;
+		}
+		public IWorkflowRepository Repository { get; set; }
+
+		[HttpGet("search")]
+		public IActionResult Search(string q)
+		{
+			// t = type of object
+			// name = name of object
+			// 
+			return Json(q);
+			return Json(HttpContext.Request.Query.ToList());
 		}
 
 		[HttpGet]
@@ -23,7 +34,7 @@ namespace workflow.Controllers
 		{ return Repository.GetAll<Workflow>(); }
 
 		[HttpGet("{id}", Name = "GetWorkflow")]
-		public IActionResult GetById(string id)
+		public IActionResult GetById(int id)
 		{
 			var workflow = Repository.Find<Workflow>(id);
 			if (workflow == null) { return NotFound(id); }
@@ -41,11 +52,11 @@ namespace workflow.Controllers
 		public IEnumerable<Trackable> GetNodeTrackables(string workflowId, string nodeId)
 		{
 			IEnumerable<Trackable> ie = Repository.GetAll<Trackable>();
-			return ie.Where(t => t.Locations.Any(l => (l.NodeId == nodeId) && (l.WorkflowId==workflowId)));
+			return ie.Where(t => t.Locations.Any(l => (l.NodeId == nodeId) && (l.WorkflowId == workflowId)));
 		}
 
 		[HttpGet("{workflowId}/orchestrations")]
-		public IEnumerable<Orchestration> GetOrchestrations(string workflowId)
+		public IEnumerable<Orchestration> GetOrchestrations(int workflowId)
 		{
 			var workflow = Repository.Find<Workflow>(workflowId);
 			List<Orchestration> ol = new List<Orchestration>();
@@ -55,13 +66,13 @@ namespace workflow.Controllers
 		}
 
 		[HttpGet("{workflowId}/orchestrations/{orchestrationId}")]
-		public Orchestration GetOrchestration(string workflowId, string orchestrationId)
+		public Orchestration GetOrchestration(int workflowId, int orchestrationId)
 		{
 			return Repository.Find<Orchestration>(orchestrationId);
 		}
 
 		[HttpGet("{workflowId}/nodes")]
-		public IEnumerable<Node> GetNodes(string workflowId)
+		public IEnumerable<Node> GetNodes(int workflowId)
 		{
 			var workflow = Repository.Find<Workflow>(workflowId);
 			List<Node> n = new List<Node>();
@@ -71,7 +82,7 @@ namespace workflow.Controllers
 		}
 
 		[HttpGet("{workflowId}/orchestrations/{nodeId}")]
-		public Orchestration GetNode(string workflowId, string nodeId)
+		public Orchestration GetNode(int workflowId, int nodeId)
 		{
 			return Repository.Find<Orchestration>(nodeId);
 		}
@@ -81,7 +92,7 @@ namespace workflow.Controllers
 		/// </summary>
 		/// <param name="workflow"></param>
 		/// <returns></returns>
-		[HttpPost("validate", Name ="ValidateWorkflow")]
+		[HttpPost("validate", Name = "ValidateWorkflow")]
 		public IActionResult Validate([FromBody] Workflow workflow)
 		{
 			WorkflowValidationMessage message;
@@ -92,8 +103,8 @@ namespace workflow.Controllers
 			return StatusCode(422, message); //Json(message);
 
 		}
-		[HttpPost]
 
+		[HttpPost]
 		public IActionResult Create([FromBody] Workflow workflow)
 		{
 			if (workflow == null)
@@ -104,13 +115,13 @@ namespace workflow.Controllers
 			if (!workflow.IsValid(out message))
 				return StatusCode(422, message);
 			Repository.Add(workflow);
-		
-			return CreatedAtRoute("GetWorkflow", new { id = workflow.WorkflowItemId }, Repository);
+
+			return CreatedAtRoute("GetWorkflow", new { id = workflow.Key }, Repository);
 		}
-		
-		
+
+
 		[HttpPut("{id}")]
-		public IActionResult Update(string id, [FromBody] Workflow workflow)
+		public IActionResult Update(int id, [FromBody] Workflow workflow)
 		{
 			if (workflow == null || workflow.Key != id)
 			{
@@ -124,11 +135,11 @@ namespace workflow.Controllers
 
 		}
 		[HttpDelete("{id}")]
-		public IActionResult Delete(string id)
+		public IActionResult Delete(int id)
 		{
 			Repository.Remove<Workflow>(id);
 			return Json(String.Format("workflow with workflowItemId {0} is deleted", id));
 		}
-		
+
 	}
 }

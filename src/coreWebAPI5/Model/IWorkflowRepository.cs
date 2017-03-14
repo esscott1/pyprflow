@@ -13,9 +13,9 @@ namespace workflow.Model
 
 		IEnumerable<T> GetAll<T>();
 		void Add(Workflow workflow);
-		T Find<T>(string workflowItemId);
-		void Remove<T>(string workflowItemId) where T : WorkflowItem;
-		void Update<T>(T item) where T : WorkflowItem;
+		T Find<T>(int workflowItemId);
+		void Remove<T>(int workflowItemId) where T : BaseWorkflowItem;
+		void Update<T>(T item) where T : BaseWorkflowItem;
 
 
 		void Add(Trackable trackable);

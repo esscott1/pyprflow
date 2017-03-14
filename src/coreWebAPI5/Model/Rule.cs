@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace workflow.Model
 {
-    public class Rule : WorkflowItem
+    public class Rule : BaseWorkflowItem
     {
 		// those that can execute this rule
 		public List<User> AccessList { get; set; }

@@ -6,11 +6,11 @@ using System.Net;
 
 namespace workflow.Model
 {
-	public class Workflow : WorkflowItem
+	public class Workflow : BaseWorkflowItem
 	{
 		private static string TestStoreCategoryKey = "WorkFlow_ProofOfConcept";
 		public Guid WorkflowGuid { get; private set; }
-		public string Key { get; set; }
+		//public string WFKey { get; set; }
 		public string WorkflowName { get; private set; }
 
 		internal string StartingNodeName  {get;set;}
@@ -45,15 +45,26 @@ namespace workflow.Model
 			IUser user = new User() { Email = "Sample.User@somewhere.com" };
 			List<User> users = new List<User> { new User() { Email = "Sample.User@somewhere.com" } };
 			Model.Workflow w = new Model.Workflow("SampleWorkflow1");
-			w.Key = "SampleWorkflow1";
+			//w.WFKey = "SampleWorkflow1";
 			w.Orchestrations.Add("Orch1", new Orchestration()
 			{
 				OrchestrationName = "Orch1",
 				Moves = new List<Movement>() {
-					new Movement() { From = null, To = "SampleNode1" },
-					new Movement() { From = "SampleNode1", To = "SampleNode2"},
-					new Movement() { From = "SampleNode2", To = "SampleNode3"},
-					new Movement() { From = "SampleNode3", To = "SampleNode4"}
+					new Movement() { From = null, To = "SampleNode1",
+					 Rule = new Rule() { AccessList = new List<User>() {
+						 new User() { Email = "ericscott411@gmail.com" } } } },
+	
+					new Movement() { From = "SampleNode1", To = "SampleNode2",
+						Rule = new Rule() { AccessList = new List<User>() {
+						 new User() { Email = "ericscott411@gmail.com" } } } },
+
+					new Movement() { From = "SampleNode2", To = "SampleNode3",
+						Rule = new Rule() { AccessList = new List<User>() {
+						 new User() { Email = "ericscott411@gmail.com" } } } },
+					
+					new Movement() { From = "SampleNode3", To = "SampleNode4",
+						Rule = new Rule() { AccessList = new List<User>() {
+						 new User() { Email = "ericscott411@gmail.com" } } } },
 					}
 			});
 			w.Orchestrations.Add(
@@ -81,46 +92,54 @@ namespace workflow.Model
 
 		private bool CanExitNode(string nodeName)
 		{
+			return true;
 			throw new NotImplementedException();
 			
 		}
 
 		private bool CanEnterNode(string nodeName)
 		{
-			throw new NotImplementedException();	
-			//foreach (Movement m in Orchestrations)
-			//{
-			//	if (m.To == nodeName)
-			//		return true;
-			//}
-			//return false;
-
+			//throw new NotImplementedException();
+			foreach (KeyValuePair<string, Orchestration> kvp in Orchestrations)
+			{
+				foreach (Movement m in kvp.Value.Moves)
+				{
+					if (m.To == nodeName)
+						return true;
+				}
+			}
+			return false;
 		}
+		
 		internal bool IsValid(out WorkflowValidationMessage message)
 		{
-			throw new NotImplementedException();
-			//message = new WorkflowValidationMessage();
-			//List<string> NodesWithoutProperPaths = new List<string>();
-			//// all middle nodes can be moved into and out of 
-			//foreach(KeyValuePair<string, Node> kvp in Nodes)
-			//{
-			//	if (kvp.Value.IsStart) { message.HasStart = true; }
-			//	else {
-			//		if (!CanEnterNode(kvp.Key))
-			//			message.UnreachableNodeNames.Add(kvp.Key); 
-			//		}
-			//	if (kvp.Value.IsEnd) {	message.HasEnd = true; }
-			//	else
-			//	{
-			//		if (!CanExitNode(kvp.Key))
-			//			message.DeadEndNodeNames.Add(kvp.Key);
-			//	}
-			//}
-			//if (message.Valid)
-			//	return true;
-			//return false;
+			//throw new NotImplementedException();
+			message = new WorkflowValidationMessage();
+			List<string> NodesWithoutProperPaths = new List<string>();
+			// checking Node Validation
+			// all middle nodes can be moved into and out of 
+			foreach (KeyValuePair<string, Node> kvp in Nodes)
+			{
+				if (kvp.Value.IsStart) { message.HasStart = true; }
+				else
+				{
+					if (!CanEnterNode(kvp.Key))
+						message.UnreachableNodeNames.Add(kvp.Key);
+				}
+				if (kvp.Value.IsEnd) { message.HasEnd = true; }
+				else
+				{
+					if (!CanExitNode(kvp.Key))
+						message.DeadEndNodeNames.Add(kvp.Key);
+				}
+			}
+			if (message.Valid)
+				return true;
+			return false;
 		}
 
+		
+		
 
 		[JsonConstructor]
 		public Workflow(Guid workflowId, string workflowname)
@@ -176,8 +195,8 @@ namespace workflow.Model
 		//	//{
 		//	//	throw new Exception("Could not retrieve workflow from ObjectStore");
 		//	//}
-		//	//var found = retrieveRequest.Inputs.FirstOrDefault(k => k.Key == workflowId.ToString());
-		//	//if (string.IsNullOrWhiteSpace(found.Key))
+		//	//var found = retrieveRequest.Inputs.FirstOrDefault(k => k.WFKey == workflowId.ToString());
+		//	//if (string.IsNullOrWhiteSpace(found.WFKey))
 		//	//{
 		//	//	throw new Exception("Could not retrieve workflow from ObjectStore");
 		//	//}
@@ -209,7 +228,7 @@ namespace workflow.Model
 		public void AddTrackableToStart(Trackable item)
 		{
 			throw new NotImplementedException();
-			//item.Location.Add(this.WorkflowName, Nodes.First().Key);
+			//item.Location.Add(this.WorkflowName, Nodes.First().WFKey);
 		}
 	
 		public void MoveTrackable(Trackable item, string targetNodeName)
@@ -282,7 +301,7 @@ namespace workflow.Model
 		/// <summary>
 		/// Save to WSOD.Web.ObjectDataStore.
 		/// </summary>
-		/// <param name="storeContext">Key that references the context to save the workflow in</param>
+		/// <param name="storeContext">WFKey that references the context to save the workflow in</param>
 		/// <returns>True if successful, False otherwise</returns>
 		/// <exception cref="ArgumentException">No ObjectStore context</exception>
 		public bool SaveToObjectStore(string storeContext)
@@ -314,7 +333,7 @@ namespace workflow.Model
 			
 		//	foreach(KeyValuePair<string, Node> kvp in Nodes)
 		//	{
-		//		IEnumerable<Trackable> r = kvp.Value.Trackables.Where(t => t.TrackableId2 == trackableId);
+		//		IEnumerable<Trackable> r = kvp.Value.Trackables.Where(t => t.TrackableId == trackableId);
 		//		if (r.Count() > 0)
 		//			return r.First();
 		//	}

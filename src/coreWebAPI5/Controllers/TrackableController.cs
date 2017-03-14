@@ -21,17 +21,7 @@ namespace workflow.Controllers
 			Repository = workflow;
 		}
 		public IWorkflowRepository Repository { get; set; }
-		[HttpGet("example")]
-		public IActionResult GetExample()
-		{
-			string name = "SampleDoc1";
-			Trackable t = new Trackable(name);
-			t.Key = name;
-			t.TrackableId = name;
-			t.Locations.Add(new Location() { WorkflowId = "SampleWorkflow", NodeId = "SampleNode1" });
-			return Json(t);
-
-		}
+		
 		[HttpGet]
 		public IEnumerable<Trackable> GetAll()
 		{
@@ -39,16 +29,27 @@ namespace workflow.Controllers
 		}
 
 		[HttpGet("{id}", Name ="GetTrackable") ]
-		public IActionResult GetTrackable(string id)
+		public IActionResult GetTrackable(int id)
 		{
 			Trackable t = Repository.Find<Trackable>(id);
+			return Json(t);
+		}
+
+		[HttpGet("example")]
+		public IActionResult GetExample()
+		{
+			string name = "SampleDoc1";
+			Trackable t = new Trackable(name);
+			//t.Key = name;
+			t.TrackableId = name;
+			t.Locations.Add(new Location() { WorkflowId = "SampleWorkflow", NodeId = "SampleNode1" });
 			return Json(t);
 		}
 
 		[HttpGet("{trackableId}/transactions")]
 		public IEnumerable<Transaction> GetTransactions(string trackableId)
 		{
-			return Repository.GetAll<Transaction>().Where(t => t.TrackableId2 == trackableId);
+			return Repository.GetAll<Transaction>().Where(t => t.TrackableId == trackableId);
 		}
 		
 		[HttpPost]
@@ -216,12 +217,12 @@ namespace workflow.Controllers
 		}
 
 
-		[HttpDelete("remove")]
-		public IActionResult RemoveTrackable([FromBody] WorkflowAction workflowUpdate)
-		{
-			Workflow wf = Repository.Find<Workflow>(workflowUpdate.WorkflowId);
-			wf.RemoveItemFromWorkflow(workflowUpdate.TrackableId);
-			return Json("tried to delete ID: " + workflowUpdate);
-		}
+		//[HttpDelete("remove")]
+		//public IActionResult RemoveTrackable([FromBody]  workflowUpdate)
+		//{
+		//	//Workflow wf = Repository.Find<Workflow>(workflowUpdate.);
+		//	//wf.RemoveItemFromWorkflow(workflowUpdate.TrackableId);
+		//	//return Json("tried to delete ID: " + workflowUpdate);
+		//}
 	}
 }

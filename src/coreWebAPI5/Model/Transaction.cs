@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace workflow.Model
 {
-	public class Transaction : WorkflowItem 
+	public class Transaction : BaseWorkflowItem 
 	{
-		public string Key { get; set; }
-		public string TrackableId2 { get; set; }
+		
+		public string TrackableId { get; set; }
 		[JsonConverter(typeof(StringEnumConverter))]
 		public TransactionType type { get; set; }
 		public string Comment { get; set; }
