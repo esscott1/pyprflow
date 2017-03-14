@@ -18,9 +18,9 @@ namespace workflow.Model
 	//	}
 	//	public void Add(Trackable trackable)
 	//	{
-	//		if (trackable.Key == null || trackable.Key == String.Empty)
-	//			trackable.Key = Guid.NewGuid().ToString();
-	//		_Trackable[trackable.Key] = trackable;
+	//		if (trackable.Name == null || trackable.Name == String.Empty)
+	//			trackable.Name = Guid.NewGuid().ToString();
+	//		_Trackable[trackable.Name] = trackable;
 	//	}
 
 	//	public Trackable Find(string key)
@@ -50,7 +50,7 @@ namespace workflow.Model
 
 	//	public void Update(Trackable Trackable)
 	//	{
-	//		_Trackable[Trackable.Key] = Trackable;
+	//		_Trackable[Trackable.Name] = Trackable;
 	//	}
 	//}
 }

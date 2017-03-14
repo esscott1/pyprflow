@@ -32,21 +32,24 @@ namespace workflow.Model
 			{
 				try
 				{
-					/// HACK HACK HACK - should be using NoSql or create relational model for all items.
-
-					//save first to get DB created PK
+					Console.WriteLine("saving {0} with type {1}", item.Name, item.DerivedType);
 					BaseWorkflowItem saveThis = new BaseWorkflowItem();
-					saveThis.DerivedType = typeof(T).ToString();
-					db.WorkflowDb.Add(saveThis);
-					db.SaveChanges();
-					// now update with the serialized version so the workflowItemId is in the JSON
-					item.Key = saveThis.Key;
 					saveThis.SerializedObject = saveThis.Serialize<T>(item);
-					db.WorkflowDb.Update(saveThis);
+					saveThis.DerivedType = typeof(T).ToString();
+					saveThis.Name = item.Name;
+					db.WorkflowDb.Add(saveThis);
+					
 					int recordCount = db.SaveChanges();
+					
 					Console.WriteLine("Saved {0} records to DB", recordCount);
 
-					Console.WriteLine("Primary WFKey is {0} ", saveThis.Key);
+					//Console.WriteLine("Primary WFKey is {0} ", saveThis.Name);
+				}
+				catch(Microsoft.Data.Sqlite.SqliteException ex)
+				{
+					if (ex.SqliteErrorCode == 19)
+						throw new WorkFlowException("unique key violation");
+				
 				}
 				catch (Exception ex)
 				{
@@ -79,14 +82,14 @@ namespace workflow.Model
 				}
 			}
 		}
-		public T Find<T>(int workflowItemId)
+		public T Find<T>(string workflowName)
 		{
 			using (var db = new WorkflowContext())
 				try {
-					Console.WriteLine("searching for item {0} with Id {1}", typeof(T).ToString(), workflowItemId);
-					BaseWorkflowItem result = db.WorkflowDb.Find(new object[] { workflowItemId });
+					Console.WriteLine("searching for item {0} with Id {1}", typeof(T).ToString(), workflowName);
+					BaseWorkflowItem result = db.WorkflowDb.Find(new object[] { workflowName, typeof(T).ToString() });
 					if (result == null)
-						throw new WorkFlowException(String.Format("null was returned when finding for key {0}", workflowItemId));
+						throw new WorkFlowException(String.Format("null was returned when finding for key {0}", workflowName));
 					Console.WriteLine("found item");
 					return result.Deserialize<T>(result.SerializedObject);
 
@@ -102,7 +105,7 @@ namespace workflow.Model
 			{
 				try
 				{
-					Console.WriteLine("trying to update {0} itemId", item.Key);
+					Console.WriteLine("trying to update {0} itemId", item.Name);
 					db.WorkflowDb.Update(item);
 					db.SaveChanges();
 					Console.WriteLine("ItemId {0} updated in database");
@@ -114,7 +117,7 @@ namespace workflow.Model
 				}
 			}
 		}
-		public void Remove<T>(int workflowItemId) where T:BaseWorkflowItem
+		public void Remove<T>(string workflowItemId) where T:BaseWorkflowItem
 		{
 				using (var db = new WorkflowContext()) { 
 					try

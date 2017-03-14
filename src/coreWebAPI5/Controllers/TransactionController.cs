@@ -23,7 +23,7 @@ namespace workflow.Controllers
 		{
 			Transaction t = new Transaction();
 			t.Comment = "Submitting to workflow";
-			//t.Key = "SampleTransaction1";
+			//t.Name = "SampleTransaction1";
 			t.NewNodeId = "SampleNode1";
 			t.PreviousNodeId = null;
 			t.Submitter = new User() { Email = "Sample.User@somewhere.com" };
@@ -43,7 +43,7 @@ namespace workflow.Controllers
 		}
 	//	GET: api/values
 	   [HttpGet("{id}",Name = "GetTransaction")]
-		public IActionResult GetTransaction(int id)
+		public IActionResult GetTransaction(string id)
 		{
 			return Json(Repository.Find<Transaction>(id));
 		}
@@ -57,7 +57,7 @@ namespace workflow.Controllers
 			{ return BadRequest("trans is null"); }
 			try
 			{
-				if(Repository.Find<Transaction>(trans.Key)!=null)
+				if(Repository.Find<Transaction>(trans.Name)!=null)
 					return StatusCode(403, "transaction already exists");
 				if (Repository.GetAll<Transaction>().FirstOrDefault(t => t.WorkflowId == trans.WorkflowId &&
 				 t.NewNodeId == trans.NewNodeId && 
@@ -66,16 +66,16 @@ namespace workflow.Controllers
 				 ) != null)
 					return StatusCode(403, "transaction already exists");
 
-				var trackable = Repository.Find<Trackable>(trans.Key);
+				var trackable = Repository.Find<Trackable>(trans.Name);
 
 				if (trackable != null) // trackable exists
 				{
-					Console.WriteLine("found trackable: "+trackable.Key);
+					Console.WriteLine("found trackable: "+trackable.Name);
 					if(trans.PreviousNodeId != null) // this is a starting request
 						if (!trackable.Locations.Exists(l => l.WorkflowId == trans.WorkflowId && l.NodeId == trans.PreviousNodeId))
 							return StatusCode(403, "trackable is not in the starting position for this move request");
 
-					var workflow = Repository.Find<Workflow>(trans.Key); Movement move;
+					var workflow = Repository.Find<Workflow>(trans.Name); Movement move;
 					Console.WriteLine("found workflow: " + workflow.WorkflowName);
 					if (!workflow.IsMoveValid(trans))
 						return StatusCode(403, "requested move is not valid in the designated workflow");
@@ -92,7 +92,7 @@ namespace workflow.Controllers
 				else
 					return StatusCode(403, "trackable you are trying to move does not exist");
 
-				return CreatedAtRoute("GetTransaction", new { id = trans.Key }, Repository);
+				return CreatedAtRoute("GetTransaction", new { id = trans.Name }, Repository);
 				
 			}
 			catch(Exception ex)

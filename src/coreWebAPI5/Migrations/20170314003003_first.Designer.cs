@@ -8,8 +8,8 @@ using workflow.Model;
 namespace coreWebAPI5.Migrations
 {
     [DbContext(typeof(WorkflowContext))]
-    [Migration("20170313235544_myfirst")]
-    partial class myfirst
+    [Migration("20170314003003_first")]
+    partial class first
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -18,14 +18,13 @@ namespace coreWebAPI5.Migrations
 
             modelBuilder.Entity("workflow.Model.BaseWorkflowItem", b =>
                 {
-                    b.Property<int>("Key")
-                        .ValueGeneratedOnAdd();
+                    b.Property<string>("Name");
 
                     b.Property<string>("DerivedType");
 
                     b.Property<string>("SerializedObject");
 
-                    b.HasKey("Key");
+                    b.HasKey("Name", "DerivedType");
 
                     b.ToTable("WorkflowDb");
                 });

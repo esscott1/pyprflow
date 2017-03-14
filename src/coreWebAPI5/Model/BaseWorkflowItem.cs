@@ -29,12 +29,15 @@ namespace workflow.Model
 			return JsonConvert.SerializeObject(item, typeof(T), settings);
 		}
 
-		[Key]
-		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-		public int Key { get; set; }
+		//[Name]
+		//[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+		//[Key, Column(Order = 0)]
+		public string Name { get; set; }
 		[JsonIgnore]
+		//[Key, Column(Order =1)]
 		public string DerivedType { get; set; }
-		public string Name { get; set;}
+		//[Name]
+		//public string Name { get; set;}
 		[JsonIgnore]
 		public string SerializedObject { get; set; }
 	}

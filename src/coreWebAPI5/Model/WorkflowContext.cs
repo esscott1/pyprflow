@@ -14,6 +14,11 @@ namespace workflow.Model
 		{
 			optionsBuilder.UseSqlite("Filename=./Repository.db");
 		}
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			modelBuilder.Entity<BaseWorkflowItem>()
+				.HasKey(w => new { w.Name, w.DerivedType });
+		}
 	}
 
 	

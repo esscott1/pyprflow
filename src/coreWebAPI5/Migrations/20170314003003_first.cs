@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace coreWebAPI5.Migrations
 {
-    public partial class myfirst : Migration
+    public partial class first : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,14 +12,13 @@ namespace coreWebAPI5.Migrations
                 name: "WorkflowDb",
                 columns: table => new
                 {
-                    Key = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    DerivedType = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: false),
+                    DerivedType = table.Column<string>(nullable: false),
                     SerializedObject = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_WorkflowDb", x => x.Key);
+                    table.PrimaryKey("PK_WorkflowDb", x => new { x.Name, x.DerivedType });
                 });
         }
 

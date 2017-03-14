@@ -29,6 +29,7 @@ namespace workflow.Model
 		private static IWorkflowRepository Repository { get; set; }
 		public Workflow(string workflowName) : this()
 		{
+			this.Name = workflowName;
 			if (WorkflowGuid == Guid.Empty)
 			{
 				WorkflowGuid = Guid.NewGuid();
@@ -168,8 +169,8 @@ namespace workflow.Model
 		/// <summary>
 		/// Restores from WSOD.Web.ObjectDataStore
 		/// </summary>
-		/// <param name="workflowId">Key that references a specific workflow</param>
-		/// <param name="storeContext">Key that references the context the workflow was saved in</param>
+		/// <param name="workflowId">Name that references a specific workflow</param>
+		/// <param name="storeContext">Name that references the context the workflow was saved in</param>
 		/// <returns>A workflow from the ObjectStore.</returns>
 		/// <exception cref="ArgumentException">Invalid ID, No ObjectStore context</exception>
 		//public static Repository RetrieveWorkflowFromObjectStore(Guid workflowId, string storeContext)

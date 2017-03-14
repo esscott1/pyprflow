@@ -13,8 +13,8 @@ namespace workflow.Model
 
 		IEnumerable<T> GetAll<T>();
 		void Add(Workflow workflow);
-		T Find<T>(int workflowItemId);
-		void Remove<T>(int workflowItemId) where T : BaseWorkflowItem;
+		T Find<T>(string  name);
+		void Remove<T>(string workflowItemId) where T : BaseWorkflowItem;
 		void Update<T>(T item) where T : BaseWorkflowItem;
 
 

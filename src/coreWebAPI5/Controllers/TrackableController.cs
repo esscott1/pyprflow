@@ -29,7 +29,7 @@ namespace workflow.Controllers
 		}
 
 		[HttpGet("{id}", Name ="GetTrackable") ]
-		public IActionResult GetTrackable(int id)
+		public IActionResult GetTrackable(string id)
 		{
 			Trackable t = Repository.Find<Trackable>(id);
 			return Json(t);
@@ -40,7 +40,7 @@ namespace workflow.Controllers
 		{
 			string name = "SampleDoc1";
 			Trackable t = new Trackable(name);
-			//t.Key = name;
+			//t.Name = name;
 			t.TrackableId = name;
 			t.Locations.Add(new Location() { WorkflowId = "SampleWorkflow", NodeId = "SampleNode1" });
 			return Json(t);
@@ -56,11 +56,11 @@ namespace workflow.Controllers
 		public IActionResult CreateTrackable([FromBody] Trackable item)
 		{
 			// should check for existance and if exist throw error telling to use Put
-			var t = Repository.Find<Trackable>(item.Key);
+			var t = Repository.Find<Trackable>(item.Name);
 			if (t != null)
 				return StatusCode(403, "Trackable already exists in system, use HTTPPatch to update trackable");
 			Repository.Add(item);
-			return CreatedAtRoute("GetTrackable", new { id = item.Key }, Repository);
+			return CreatedAtRoute("GetTrackable", new { id = item.Name }, Repository);
 		}
 
 		// patch is inappropriate because when an trackable is "moved" we need other information

@@ -34,7 +34,7 @@ namespace workflow.Controllers
 		{ return Repository.GetAll<Workflow>(); }
 
 		[HttpGet("{id}", Name = "GetWorkflow")]
-		public IActionResult GetById(int id)
+		public IActionResult GetById(string id)
 		{
 			var workflow = Repository.Find<Workflow>(id);
 			if (workflow == null) { return NotFound(id); }
@@ -56,7 +56,7 @@ namespace workflow.Controllers
 		}
 
 		[HttpGet("{workflowId}/orchestrations")]
-		public IEnumerable<Orchestration> GetOrchestrations(int workflowId)
+		public IEnumerable<Orchestration> GetOrchestrations(string workflowId)
 		{
 			var workflow = Repository.Find<Workflow>(workflowId);
 			List<Orchestration> ol = new List<Orchestration>();
@@ -66,13 +66,13 @@ namespace workflow.Controllers
 		}
 
 		[HttpGet("{workflowId}/orchestrations/{orchestrationId}")]
-		public Orchestration GetOrchestration(int workflowId, int orchestrationId)
+		public Orchestration GetOrchestration(string orchestrationId)
 		{
 			return Repository.Find<Orchestration>(orchestrationId);
 		}
 
 		[HttpGet("{workflowId}/nodes")]
-		public IEnumerable<Node> GetNodes(int workflowId)
+		public IEnumerable<Node> GetNodes(string workflowId)
 		{
 			var workflow = Repository.Find<Workflow>(workflowId);
 			List<Node> n = new List<Node>();
@@ -82,7 +82,7 @@ namespace workflow.Controllers
 		}
 
 		[HttpGet("{workflowId}/orchestrations/{nodeId}")]
-		public Orchestration GetNode(int workflowId, int nodeId)
+		public Orchestration GetNode(int workflowId, string nodeId)
 		{
 			return Repository.Find<Orchestration>(nodeId);
 		}
@@ -114,16 +114,17 @@ namespace workflow.Controllers
 			WorkflowValidationMessage message;
 			if (!workflow.IsValid(out message))
 				return StatusCode(422, message);
+			Console.WriteLine("in controler trying to save {0} with type {1}", workflow.Name, workflow.DerivedType);
 			Repository.Add(workflow);
 
-			return CreatedAtRoute("GetWorkflow", new { id = workflow.Key }, Repository);
+			return CreatedAtRoute("GetWorkflow", new { id = workflow.Name }, Repository);
 		}
 
 
 		[HttpPut("{id}")]
-		public IActionResult Update(int id, [FromBody] Workflow workflow)
+		public IActionResult Update(string id, [FromBody] Workflow workflow)
 		{
-			if (workflow == null || workflow.Key != id)
+			if (workflow == null || workflow.Name != id)
 			{
 				return BadRequest();
 			}
@@ -135,7 +136,7 @@ namespace workflow.Controllers
 
 		}
 		[HttpDelete("{id}")]
-		public IActionResult Delete(int id)
+		public IActionResult Delete(string id)
 		{
 			Repository.Remove<Workflow>(id);
 			return Json(String.Format("workflow with workflowItemId {0} is deleted", id));

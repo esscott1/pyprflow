@@ -17,14 +17,13 @@ namespace coreWebAPI5.Migrations
 
             modelBuilder.Entity("workflow.Model.BaseWorkflowItem", b =>
                 {
-                    b.Property<int>("Key")
-                        .ValueGeneratedOnAdd();
+                    b.Property<string>("Name");
 
                     b.Property<string>("DerivedType");
 
                     b.Property<string>("SerializedObject");
 
-                    b.HasKey("Key");
+                    b.HasKey("Name", "DerivedType");
 
                     b.ToTable("WorkflowDb");
                 });
