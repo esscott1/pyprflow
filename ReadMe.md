@@ -308,11 +308,12 @@ To submit an item to an orchestration workflow you simply Post a transaction JSO
 
 ###What RESTful services are available to me
 
-USE HATEOAS for bigger things.
+### decidedly not holding to true RESTful Textbook but make for practicality.
 [GET]  
 API/workflows - returns all workflows managed by the application.  
 API/workflows/{workflowId}  - return the specific workflow.  
-API/workflows/example  - return an example workflow to get you started  
+API/workflows/example  - return an example workflow to get you started 
+
 ## below maybe not needed / wanted
 API/workflows/{workflowId}/node/{nodeId}/trackables  - returns all the trackable in that workflow node  
 API/workflows/{workflowId}/orchestrations
@@ -365,6 +366,22 @@ API/trackable/{trackableId} - updates an existing trackable
 [Delete]  
 API/workflow/{workflowId} - removes an existing workflow definition from the OW engine  
 API/trackable/{trackableId}  
+
+As a user I want to beable to define a workflow orchestration that represents my business process so that i can use to manage items through that process.
+as a user i want to be able to submit items to my defined workflow orchestration.
+as a user I want to be able to move item(s) through the steps of my workflow.
+as a user I want to be able to remove an item from the workflow.
+
+Wanting search capabilities so that I can satisfy the following use cases:
+
+As a user I want to see all the items in a particular node of a given workflow so that i can understand how many things are waiting review/approval of a particular step  
+As a user I want to see what node a particular trackable is within a given workflow so that I can understand what needs to happen next for a particular trackable  
+As a user i want to see the history of a particular item has been through or going through a given Workflow so that i can see the progress an item has made.  
+As a user i want to see all the items that have passed through a particular node in a workflow in a given timeframe so that see how much work has been accomplished by that step in the process  
+As a user I want to see all the items that a particular user has approved or denied in given workflow for a given timeframe so that i can understand the amount of work an individual has done.
+As a user i want to see how long a given item has spent in a particular (node) in a workflow so that I can understand if there are bottlenecks
+As a user I want to see how long a given item has spent in a particular workflow so that i can understand how long something has been under review.
+
 
 API/Search/q=workflow&id=2
 Search parameters
