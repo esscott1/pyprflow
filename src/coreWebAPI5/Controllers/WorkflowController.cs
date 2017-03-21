@@ -51,8 +51,7 @@ namespace workflow.Controllers
 		[HttpGet("{workflowId}/Node/{nodeId}/trackables")]
 		public IEnumerable<Trackable> GetNodeTrackables(string workflowId, string nodeId)
 		{
-			IEnumerable<Trackable> ie = Repository.GetAll<Trackable>();
-			return ie.Where(t => t.Locations.Any(l => (l.NodeId == nodeId) && (l.WorkflowName == workflowId)));
+			throw new NotImplementedException();
 		}
 
 		[HttpGet("{workflowId}/orchestrations")]

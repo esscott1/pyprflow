@@ -42,7 +42,7 @@ namespace workflow.Controllers
 			Trackable t = new Trackable(name);
 			//t.Name = name;
 			
-			t.Locations.Add(new Location() { WorkflowName = "SampleWorkflow1", NodeId = "SampleNode1" });
+			
 			return Json(t);
 		}
 

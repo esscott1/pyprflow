@@ -12,8 +12,42 @@ namespace workflow.Model
 
 		public bool IsValid(Transaction transaction)
 		{
-
-			return true;
+			Console.WriteLine("checking for validation in orchestration {0}", this.OrchestrationName);
+			try
+			{
+				bool validpath = false; bool validrule = false;
+				foreach(Movement m in Moves)
+				{
+					validpath = IsValidPath(m, transaction);
+					validrule = IsValidRule(m, transaction);
+					if (validpath && validrule)
+					{
+						Console.WriteLine("transaction is valid in orchestration {0}", this.OrchestrationName);
+						return true;
+					}
+				}
+				
+			}
+			catch(Exception ex)
+			{
+				Console.WriteLine("error in transaction validation in the orchestration class {0}", ex.Message);
+				Console.WriteLine("inner exception {0}", ex.InnerException);
+			}
+			 return false; 
+			 
 		}
-    }
+		private bool IsValidPath(Movement m, Transaction transaction)
+		{
+			return (m.From == transaction.PreviousNodeId && m.To == transaction.NewNodeId);
+			
+
+		}
+		private bool IsValidRule(Movement m, Transaction transaction)
+		{
+			if (m.Rule == null)
+				return true;
+			return (m.Rule.IsValid(transaction));
+		
+		}
+	}
 }
