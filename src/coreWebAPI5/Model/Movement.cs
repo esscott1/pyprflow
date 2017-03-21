@@ -12,7 +12,7 @@ namespace workflow.Model
 		//public List<Movement> TriggeredMoves { get; set; }
 		public Movement()
 		{
-			
+
 		}
 		public Movement(Movement init)
 		{

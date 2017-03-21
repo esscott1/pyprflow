@@ -15,8 +15,7 @@ namespace workflow.Model
 			new ConcurrentDictionary<string, Workflow>();
 		private static ConcurrentDictionary<string, Trackable> _Trackable =
 				 new ConcurrentDictionary<string, Trackable>();
-		private static ConcurrentDictionary<string, ExecutedMove> _ExecutedMove =
-				 new ConcurrentDictionary<string, ExecutedMove>();
+		
 		private static ConcurrentDictionary<string, Transaction> _Transaction =
 				 new ConcurrentDictionary<string, Transaction>();
 		public WorkflowRepository()
@@ -137,6 +136,35 @@ namespace workflow.Model
 		}
 
 		#endregion
+		public void Track(Transaction trans)
+		{
+			var r = new Relationship();
+			r.TransactionName = trans.Name;
+			r.TrackableName = trans.TrackableName;
+			r.NodeName = trans.NewNodeId;
+			r.WorkflowName = trans.WorkflowName;
+
+			using (var db = new WorkflowContext())
+			{
+				try
+				{
+					db.Relationships.Add(r);
+					db.SaveChanges();
+					Console.WriteLine("saved relationship {0}", r.RelationshipId);
+				}
+				catch(Exception ex)
+				{
+					Console.WriteLine("error saving to Relationships, msg: {0}", ex.Message);
+					Console.WriteLine("inner exeception, msg: {0}", ex.InnerException);
+
+				}
+
+			}
+
+		}
+
+
+
 		public void Add(Workflow workflow)
 		{
 			Add<Workflow>(workflow);

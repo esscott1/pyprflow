@@ -20,12 +20,32 @@ namespace coreWebAPI5.Migrations
                 {
                     table.PrimaryKey("PK_WorkflowDb", x => new { x.Name, x.DerivedType });
                 });
+
+            migrationBuilder.CreateTable(
+                name: "Relationships",
+                columns: table => new
+                {
+                    RelationshipId = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    NodeName = table.Column<string>(nullable: true),
+                    TimeStamp = table.Column<DateTime>(nullable: false),
+                    TrackableName = table.Column<string>(nullable: true),
+                    TransactionName = table.Column<string>(nullable: true),
+                    WorkflowName = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Relationships", x => x.RelationshipId);
+                });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "WorkflowDb");
+
+            migrationBuilder.DropTable(
+                name: "Relationships");
         }
     }
 }

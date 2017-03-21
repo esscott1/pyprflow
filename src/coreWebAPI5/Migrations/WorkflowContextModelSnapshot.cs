@@ -27,6 +27,26 @@ namespace coreWebAPI5.Migrations
 
                     b.ToTable("WorkflowDb");
                 });
+
+            modelBuilder.Entity("workflow.Model.Relationship", b =>
+                {
+                    b.Property<int>("RelationshipId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("NodeName");
+
+                    b.Property<DateTime>("TimeStamp");
+
+                    b.Property<string>("TrackableName");
+
+                    b.Property<string>("TransactionName");
+
+                    b.Property<string>("WorkflowName");
+
+                    b.HasKey("RelationshipId");
+
+                    b.ToTable("Relationships");
+                });
         }
     }
 }

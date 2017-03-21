@@ -24,7 +24,7 @@ namespace workflow.Model
 				.HasKey(w => new { w.Name, w.DerivedType });
 				
 			modelBuilder.Entity<Relationship>()
-				.HasKey(r => new { r.TransactionName, r.TrackableName });
+				.HasKey(r => new {r.RelationshipId });
 				
 		}
 	}

@@ -82,13 +82,15 @@ namespace workflow.Controllers
 						return StatusCode(403, "requested move is not valid in the designated workflow");
 
 					Repository.Add(trans);
-					Console.WriteLine("trying to remove: " + trans.WorkflowName + " " + trans.PreviousNodeId);
-					int n = trackable.Locations.RemoveAll(t => (t.NodeId == trans.PreviousNodeId) && (t.WorkflowName == trans.WorkflowName));
-					Console.WriteLine("removed : " + trans.WorkflowName + " " + trans.PreviousNodeId +" "+n+" number of times");
+					//Console.WriteLine("trying to remove: " + trans.WorkflowName + " " + trans.PreviousNodeId);
+					//int n = trackable.Locations.RemoveAll(t => (t.NodeId == trans.PreviousNodeId) && (t.WorkflowName == trans.WorkflowName));
+					//Console.WriteLine("removed : " + trans.WorkflowName + " " + trans.PreviousNodeId +" "+n+" number of times");
 
-					Console.WriteLine("trying to add: " + trans.WorkflowName + " " + trans.NewNodeId);
-					trackable.Locations.Add(new Location() { WorkflowName = trans.WorkflowName, NodeId = trans.NewNodeId });
-					Console.WriteLine("added: " + trans.WorkflowName + " " + trans.NewNodeId);
+					//Console.WriteLine("trying to add: " + trans.WorkflowName + " " + trans.NewNodeId);
+					//trackable.Locations.Add(new Location() { WorkflowName = trans.WorkflowName, NodeId = trans.NewNodeId });
+					//Console.WriteLine("added: " + trans.WorkflowName + " " + trans.NewNodeId);
+					Repository.Track(trans);
+
 				}
 				else
 					return StatusCode(403, "trackable you are trying to move does not exist");

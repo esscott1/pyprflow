@@ -27,5 +27,6 @@ namespace workflow.Model
 
 
 		bool CheckValidUserKey(string stringValues);
+		void Track(Transaction trans);
 	}
 }

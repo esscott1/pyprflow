@@ -8,7 +8,7 @@ using workflow.Model;
 namespace coreWebAPI5.Migrations
 {
     [DbContext(typeof(WorkflowContext))]
-    [Migration("20170314003003_first")]
+    [Migration("20170321190345_first")]
     partial class first
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,6 +27,26 @@ namespace coreWebAPI5.Migrations
                     b.HasKey("Name", "DerivedType");
 
                     b.ToTable("WorkflowDb");
+                });
+
+            modelBuilder.Entity("workflow.Model.Relationship", b =>
+                {
+                    b.Property<int>("RelationshipId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("NodeName");
+
+                    b.Property<DateTime>("TimeStamp");
+
+                    b.Property<string>("TrackableName");
+
+                    b.Property<string>("TransactionName");
+
+                    b.Property<string>("WorkflowName");
+
+                    b.HasKey("RelationshipId");
+
+                    b.ToTable("Relationships");
                 });
         }
     }
