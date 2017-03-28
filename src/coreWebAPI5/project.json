@@ -14,10 +14,11 @@
 		"Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",
 		"Microsoft.NETCore.App": "1.1.0",
 		"Microsoft.EntityFrameworkCore.Sqlite": "1.1.0",
-		"Microsoft.EntityFrameworkCore.Design": {
-			"version": "1.1.0",
-			"type": "build"
-		}
+    "Microsoft.EntityFrameworkCore.Design": {
+      "version": "1.1.0",
+      "type": "build"
+    },
+    "Microsoft.AspNetCore.WebUtilities": "1.1.1"
 	},
 
 	"tools": {
