@@ -23,8 +23,35 @@ namespace workflow.Db
 
 		}
 
-		
+		public BaseWorkflowItem Search(Dictionary<string,
+			Microsoft.Extensions.Primitives.StringValues> values)
+		{
+			string q = values.FirstOrDefault(v => v.Key == "q").Value;
+			BaseWorkflowItem result = null;
+			switch (q.ToLower())
+			{
+				case "workflow":
+					result = Search<Workflow>(values);
+					break;
+				case "trackable":
+					result = Search<Trackable>(values);
+					break;
+				case "node":
+					break;
+				case "transaction":
+					result = Search<Transaction>(values);
+					break;
 
-	
-    }
+
+			}
+			return result;
+
+
+		}
+
+
+
+
+
+	}
 }

@@ -23,21 +23,16 @@ namespace workflow.Controllers
 		[HttpGet]
 		public IActionResult Search(string q, string id)
 		{
-			// t = type of object
-			// name = name of object
-			// 
-			//	var workflow = Repository.Find<Workflow>(id);
-			//return Json(q);
+			
 			Dictionary<string, Microsoft.Extensions.Primitives.StringValues> dic = 
 				new Dictionary<string, Microsoft.Extensions.Primitives.StringValues>();
 
 			dic = QueryHelpers.ParseQuery(Request.QueryString.ToString());
 			SearchEngine se = new Db.SearchEngine(Repository);
 
-			Workflow result = se.Search<Workflow>(dic);
+			var result = se.Search(dic);
 			
 			return Json(result);
-			//return Json(HttpContext.Request.Query.ToList());
 		}
 	}
 }
