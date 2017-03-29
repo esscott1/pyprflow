@@ -144,6 +144,36 @@ namespace workflow.Model
 			r.NodeName = trans.NewNodeId;
 			r.WorkflowName = trans.WorkflowName;
 
+			if(trans.type==TransactionType.Move)
+				DeActivateOldTrackableRelationship(trans);
+			
+			InsertRelationship(r);
+
+		}
+
+		private Relationship DeActivateOldTrackableRelationship(Transaction r)
+		{
+			using (var db = new WorkflowContext())
+			{
+				Console.WriteLine("looking for old relationships");
+				Relationship oldr = db.Relationships.Where(o => o.TrackableName == r.TrackableName
+				&& o.WorkflowName == r.WorkflowName
+				&& r.PreviousNodeId == o.NodeName).FirstOrDefault();
+				if (oldr == null)
+				{
+					Console.WriteLine("didn't find an old relationship");
+					return null;
+				}
+				Console.WriteLine("found relationship ID {0}",oldr.RelationshipId);
+				oldr.Active = false;
+				db.Relationships.Update(oldr);
+				Console.WriteLine("updated {0} records during deactivate old relationshops", db.SaveChanges());
+				return oldr;
+			}
+		}
+
+		private static void InsertRelationship(Relationship r)
+		{
 			using (var db = new WorkflowContext())
 			{
 				try
@@ -152,7 +182,7 @@ namespace workflow.Model
 					db.SaveChanges();
 					Console.WriteLine("saved relationship {0}", r.RelationshipId);
 				}
-				catch(Exception ex)
+				catch (Exception ex)
 				{
 					Console.WriteLine("error saving to Relationships, msg: {0}", ex.Message);
 					Console.WriteLine("inner exeception, msg: {0}", ex.InnerException);
@@ -160,7 +190,6 @@ namespace workflow.Model
 				}
 
 			}
-
 		}
 
 		public List<Relationship> Where(System.Linq.Expressions.Expression<Func<Relationship, bool>> predicate)

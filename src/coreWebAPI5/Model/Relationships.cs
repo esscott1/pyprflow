@@ -18,6 +18,7 @@ namespace workflow.Model
 		public string  NodeName { get; set; }
 		public string  WorkflowName { get; set; }
 		public DateTime TimeStamp { get; set; }
+		public bool Active { get; set; } = true;
 
 		public Relationship()
 		{
