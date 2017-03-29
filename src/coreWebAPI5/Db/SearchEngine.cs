@@ -18,9 +18,39 @@ namespace workflow.Db
 			Microsoft.Extensions.Primitives.StringValues> values) where T : BaseWorkflowItem
 		{
 			string q = values.FirstOrDefault(v => v.Key == "id").Value;
-			return Repository.Find<T>(q);
+			if(q!=null)
+				return Repository.Find<T>(q);
+			return null;
 			
 
+		}
+
+		public List<T> SearchAll<T>(Dictionary<string,
+			Microsoft.Extensions.Primitives.StringValues> values) where T : BaseWorkflowItem
+		{
+
+			List<T> result = new List<T>();
+			string w = values.FirstOrDefault(v => v.Key.ToLower() == "nodeid").Value;
+			var relationships = Repository.Where(r => r.NodeName == w);
+			foreach (Relationship r in relationships)
+			{
+				result.Add(Repository.Find<T>(r.TrackableName));
+
+			}
+
+			return result;
+
+		}
+
+		public List<T> SearchAll<T>(string clause)
+		{
+			// parse the clause for conditional statements
+			//clause.Split("=")
+			//	.Select((v, i) => new { v, i })
+			//	.GroupBy(x => x.i / 2)
+			//	.ToDictionary(g => g.First().v,
+			//	g => g.Last().v);
+			return null;
 		}
 
 		public BaseWorkflowItem Search(Dictionary<string,
@@ -41,13 +71,12 @@ namespace workflow.Db
 				case "transaction":
 					result = Search<Transaction>(values);
 					break;
-
-
 			}
 			return result;
 
-
 		}
+
+
 
 
 

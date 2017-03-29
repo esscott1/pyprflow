@@ -163,6 +163,17 @@ namespace workflow.Model
 
 		}
 
+		public List<Relationship> Where(System.Linq.Expressions.Expression<Func<Relationship, bool>> predicate)
+		{
+			using (var db = new WorkflowContext())
+			{
+				return db.Relationships.Where(predicate).ToList();
+
+			}
+
+		}
+		
+		
 
 
 		public void Add(Workflow workflow)

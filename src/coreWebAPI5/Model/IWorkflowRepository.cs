@@ -20,8 +20,9 @@ namespace workflow.Model
 
 		void Add(Trackable trackable);
 		
-		
-		
+		List<Relationship> Where(System.Linq.Expressions.Expression<Func<Relationship, bool>> predicate);
+
+
 		void Add(Transaction trans);
 		
 
