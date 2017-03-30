@@ -53,44 +53,14 @@ namespace workflow.Controllers
 			dic = QueryHelpers.ParseQuery(Request.QueryString.ToString());
 			SearchEngine se = new Db.SearchEngine(Repository);
 			object result = null;
-			//if (dic.ContainsKey("id"))
-				result = se.Search(dic);
+			
+			result = se.Search(dic);
 
 			return Json(result);
 		}
 
-		private IActionResult SearchById<T>(string id)
-		{
-			return Json(Repository.Find<T>(id));
-		}
+		
 
-		[HttpGet("workflow")]
-		public IActionResult SearchWorkflow(string id, string where)
-		{
-			if (id != null)
-				return SearchById<Workflow>(id);
-			throw new NotImplementedException(); ;
-		}
-
-		[HttpGet("node")]
-		public IActionResult SearchNode(string id, string where)
-		{
-			throw new NotImplementedException(); ;
-		}
-
-		[HttpGet("transaction")]
-		public IActionResult SearchTransaction(string id, string where)
-		{
-			if (id != null)
-				return SearchById<Transaction>(id);
-			throw new NotImplementedException(); ;
-		}
-
-		[HttpGet("trackable")]
-		public IActionResult SearchTrackable(string id, string where)
-		{
-			
-			throw new NotImplementedException();
-		}
+	
 	}
 }

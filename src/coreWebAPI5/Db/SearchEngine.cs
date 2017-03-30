@@ -15,53 +15,14 @@ namespace workflow.Db
 			Repository = repository;
 		}
 
-
-		
-
-		//public List<T> SearchAll<T>(Dictionary<string,
-		//	Microsoft.Extensions.Primitives.StringValues> values) where T : BaseWorkflowItem
-		//{
-		//	List<T> result = new List<T>();
-
-		//	string w = values.FirstOrDefault(v => v.Key.ToLower() == "where").Value;
-		//	var kvp = w.Split('=');
-		//	string col = kvp[0];
-		//	string val = kvp[1];
-		//	switch (kvp.Key)
-		//	{
-		//		case "workflowid":
-		//			Repository.Where<Workflow>(j => j.WorkflowName == kvp[0]);
-		//			break;
-		//		case "trackableid":
-		//			Repository.Where<Workflow>(j => j. == kvp[0]);
-		//			break;
-		//		case "transactionid":
-		//			break;
-		//		case "nodeid":
-		//			break;
-		//		case "start":
-		//			break;
-		//		case "end":
-		//			break;
-
-		//	}
-			
-		//	return result;
-		//}
-
-
 		public List<BaseWorkflowItem> Search(Dictionary<string,
 			Microsoft.Extensions.Primitives.StringValues> values)
 		{
-			// select the Relationships that are determined by the where clause
-			//  find in Relationships based on where clause return list of strings 
-			// which are IDs of objects that are to be returned
 			List<BaseWorkflowItem> result = new List<BaseWorkflowItem>();
 			Console.WriteLine("in the search engine with {0} value count", values.Count);
 			StringValues wvalue;
 			values.TryGetValue("where", out wvalue);
 			string w = wvalue.ToString();
-			//string w = values.FirstOrDefault(v => v.Key.ToLower() == "where").Value;
 			string[] aw = w.Split('=');
 
 			Console.WriteLine("string count {0} ", aw.Count());
@@ -84,7 +45,7 @@ namespace workflow.Db
 				default:
 					Console.WriteLine("{0} is not a valid WHERE keyword", aw[0]);
 					return null;
-					break;
+					
 			}
 			Console.WriteLine("found {0} relationships ", relationships.Count);
 			//  find the return objects based on what was selected for.
@@ -103,7 +64,7 @@ namespace workflow.Db
 					default:
 						Console.WriteLine("{0} is not a valid SELECT keyword", select);
 						return null;
-						break;
+						
 			}
 
 			return result;

@@ -194,26 +194,18 @@ namespace workflow.Model
 				{
 					Console.WriteLine("error saving to Relationships, msg: {0}", ex.Message);
 					Console.WriteLine("inner exeception, msg: {0}", ex.InnerException);
-
 				}
 
 			}
 		}
 		
-
-		
-
 		public List<Relationship> Where(System.Linq.Expressions.Expression<Func<Relationship, bool>> predicate)
 		{
 			using (var db = new WorkflowContext())
 			{
 				Console.WriteLine("in the Where method of WorkflowRepository");
-				//db.Relationships.Where(r => r.NodeName == "stuff");
 				return db.Relationships.Where(predicate.Compile()).ToList();
-			
-
 			}
-
 		}
 
 
