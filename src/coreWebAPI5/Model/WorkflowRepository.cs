@@ -150,6 +150,14 @@ namespace workflow.Model
 			InsertRelationship(r);
 
 		}
+		public List<Relationship> GetAll(System.Linq.Expressions.Expression<Func<Relationship, bool>> predicate)
+		{
+			using (var db = new WorkflowContext())
+			{
+				return db.Relationships.Where(predicate).ToList();
+
+			}
+		}
 
 		private Relationship DeActivateOldTrackableRelationship(Transaction r)
 		{
@@ -191,18 +199,24 @@ namespace workflow.Model
 
 			}
 		}
+		
+
+		
 
 		public List<Relationship> Where(System.Linq.Expressions.Expression<Func<Relationship, bool>> predicate)
 		{
 			using (var db = new WorkflowContext())
 			{
-				return db.Relationships.Where(predicate).ToList();
+				Console.WriteLine("in the Where method of WorkflowRepository");
+				//db.Relationships.Where(r => r.NodeName == "stuff");
+				return db.Relationships.Where(predicate.Compile()).ToList();
+			
 
 			}
 
 		}
-		
-		
+
+
 
 
 		public void Add(Workflow workflow)

@@ -25,6 +25,7 @@ namespace workflow.Controllers
 			Dictionary<string, Microsoft.Extensions.Primitives.StringValues> dic =
 			new Dictionary<string, Microsoft.Extensions.Primitives.StringValues>();
 
+			//var result = Repository.Where<Transaction>(i => i.TrackableName == "SampleDoc1");
 			dic = QueryHelpers.ParseQuery(Request.QueryString.ToString());
 			var result = w.Split('=')
 				.Select((v, i) => new { v, i })
@@ -37,19 +38,23 @@ namespace workflow.Controllers
 		public IWorkflowRepository Repository { get; set; }
 		// GET: /<controller>/
 		[HttpGet]
-		public IActionResult Search(string q, string id, string nodeid)
+		public IActionResult Search(string select, 
+			string workflowId,
+			string trackableId,
+			string transactionId,
+			string nodeId,
+			string start,
+			string end)
 		{
 
 			Dictionary<string, Microsoft.Extensions.Primitives.StringValues> dic =
 				new Dictionary<string, Microsoft.Extensions.Primitives.StringValues>();
-
+			Console.WriteLine("in the search");
 			dic = QueryHelpers.ParseQuery(Request.QueryString.ToString());
 			SearchEngine se = new Db.SearchEngine(Repository);
 			object result = null;
-			if (dic.ContainsKey("id"))
+			//if (dic.ContainsKey("id"))
 				result = se.Search(dic);
-			else
-				result = se.SearchAll<Trackable>(dic);
 
 			return Json(result);
 		}
@@ -84,13 +89,7 @@ namespace workflow.Controllers
 		[HttpGet("trackable")]
 		public IActionResult SearchTrackable(string id, string where)
 		{
-			if (id != null)
-				return SearchById<Trackable>(id);
-			if (where != null)
-			{
-				SearchEngine se = new Db.SearchEngine(Repository);
-				se.SearchAll<Trackable>(where);
-			}
+			
 			throw new NotImplementedException();
 		}
 	}
