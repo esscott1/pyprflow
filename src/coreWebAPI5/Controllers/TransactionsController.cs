@@ -11,9 +11,9 @@ namespace workflow.Controllers
 {
 
 	[Route("api/[controller]")]
-	public class TransactionController : BaseController
+	public class TransactionsController : BaseController
 	{
-		public TransactionController(IWorkflowRepository workflow)
+		public TransactionsController(IWorkflowRepository workflow)
 		{
 			Repository = workflow;
 		}

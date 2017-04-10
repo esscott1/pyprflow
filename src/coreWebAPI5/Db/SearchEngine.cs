@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Primitives;
 using workflow.Model;
@@ -16,7 +17,7 @@ namespace workflow.Db
 		}
 
 		public List<BaseWorkflowItem> Search(Dictionary<string,
-			Microsoft.Extensions.Primitives.StringValues> values)
+			Microsoft.Extensions.Primitives.StringValues> values, bool? justActive = true)
 		{
 			List<BaseWorkflowItem> result = new List<BaseWorkflowItem>();
 			Console.WriteLine("in the search engine with {0} value count", values.Count);
@@ -27,6 +28,7 @@ namespace workflow.Db
 
 			Console.WriteLine("string count {0} ", aw.Count());
 			List<Relationship> relationships = new List<Relationship>();
+		//	Expression func = new Expression<Func<>>();
 			// finding the relationships based on teh where clause provided
 			switch (aw[0].ToLower())
 			{

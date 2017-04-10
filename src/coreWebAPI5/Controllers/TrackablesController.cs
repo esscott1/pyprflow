@@ -13,10 +13,10 @@ using workflow.Model;
 namespace workflow.Controllers
 {
 	[Route("api/[controller]")]
-	public class TrackableController : Controller
+	public class TrackablesController : Controller
 	{
 
-		public TrackableController(IWorkflowRepository workflow)
+		public TrackablesController(IWorkflowRepository workflow)
 		{
 			Repository = workflow;
 		}
