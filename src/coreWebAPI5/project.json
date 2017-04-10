@@ -18,7 +18,8 @@
       "version": "1.1.0",
       "type": "build"
     },
-    "Microsoft.AspNetCore.WebUtilities": "1.1.1"
+    "Microsoft.AspNetCore.WebUtilities": "1.1.1",
+    "System.Linq.Queryable": "4.0.1"
 	},
 
 	"tools": {

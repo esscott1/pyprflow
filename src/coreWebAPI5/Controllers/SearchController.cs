@@ -46,21 +46,22 @@ namespace workflow.Controllers
 			string start,
 			string end)
 		{
-
+		
 			Dictionary<string, Microsoft.Extensions.Primitives.StringValues> dic =
 				new Dictionary<string, Microsoft.Extensions.Primitives.StringValues>();
 			Console.WriteLine("in the search");
 			dic = QueryHelpers.ParseQuery(Request.QueryString.ToString());
+			SearchRequest request = new SearchRequest(dic);
+
 			SearchEngine se = new Db.SearchEngine(Repository);
 			object result = null;
+			result = se.Search(request);
 			
-			result = se.Search(dic);
-
 			return Json(result);
 		}
 
 		
 
-	
+
 	}
 }

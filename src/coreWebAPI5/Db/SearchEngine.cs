@@ -8,76 +8,110 @@ using workflow.Model;
 
 namespace workflow.Db
 {
-    public class SearchEngine
-    {
+	public class SearchRequest
+	{
+		public Dictionary<string,string> Where { get; set; }
+		public string Select { get; set; }
+		public bool Active { get; set; }
+
+		public SearchRequest(Dictionary<string,
+			Microsoft.Extensions.Primitives.StringValues> queryString)
+		{
+			Where = new Dictionary<string, string>();
+			
+			StringValues select;
+			queryString.TryGetValue("select", out select);
+			Select = select;
+			StringValues sWhere;
+			queryString.TryGetValue("where", out sWhere);
+
+			foreach(string s in sWhere.ToString().Split(';'))
+			{
+				string[] values = s.Split('=');
+				Where.Add(values[0], values[1]);
+			}
+			string sActive;
+			if (Where.TryGetValue("active", out sActive))
+				Active = Convert.ToBoolean(sActive);
+
+
+		
+		
+		}
+
+
+	}
+	public class SearchEngine
+	{
 		private IWorkflowRepository Repository { get; set; }
 		public SearchEngine(IWorkflowRepository repository)
 		{
 			Repository = repository;
 		}
 
-		public List<BaseWorkflowItem> Search(Dictionary<string,
-			Microsoft.Extensions.Primitives.StringValues> values, bool? justActive = true)
+		private List<Relationship> GetRelationships(string type, string whereValue, bool active)
 		{
-			List<BaseWorkflowItem> result = new List<BaseWorkflowItem>();
-			Console.WriteLine("in the search engine with {0} value count", values.Count);
-			StringValues wvalue;
-			values.TryGetValue("where", out wvalue);
-			string w = wvalue.ToString();
-			string[] aw = w.Split('=');
-
-			Console.WriteLine("string count {0} ", aw.Count());
 			List<Relationship> relationships = new List<Relationship>();
-		//	Expression func = new Expression<Func<>>();
-			// finding the relationships based on teh where clause provided
-			switch (aw[0].ToLower())
+			switch (type)
 			{
 				case "workflowid":
-					relationships = Repository.Where(r => r.WorkflowName == aw[1]);
+					relationships = Repository.Where(r => r.WorkflowName == whereValue && r.Active == active);
 					break;
 				case "trackableid":
-					relationships = Repository.Where(r => r.TrackableName == aw[1]);
+					relationships = Repository.Where(r => r.TrackableName == whereValue && r.Active == active);
 					break;
 				case "transactionid":
-					relationships = Repository.Where(r => r.TransactionName == aw[1]);
+					relationships = Repository.Where(r => r.TransactionName == whereValue && r.Active == active);
 					break;
 				case "nodeid":
-					relationships = Repository.Where(r => r.NodeName == aw[1]);
+					relationships = Repository.Where(r => r.NodeName == whereValue && r.Active == active);
 					break;
 				default:
-					Console.WriteLine("{0} is not a valid WHERE keyword", aw[0]);
+					Console.WriteLine("{0} is not a valid WHERE keyword", whereValue);
 					return null;
-					
 			}
 			Console.WriteLine("found {0} relationships ", relationships.Count);
-			//  find the return objects based on what was selected for.
-			string select = values.FirstOrDefault(v => v.Key.ToLower() == "select").Value;
-				switch (select.ToLower())
-				{
-					case "workflows":
-						relationships.ForEach(r => { result.Add(Repository.Find<Workflow>(r.WorkflowName)); });
-						break;
-					case "trackables":
-						relationships.ForEach(r => { result.Add(Repository.Find<Trackable>(r.TrackableName)); });
-						break;
-					case "transactions":
-						relationships.ForEach(r => { result.Add(Repository.Find<Transaction>(r.TransactionName)); });
-						break;
-					default:
-						Console.WriteLine("{0} is not a valid SELECT keyword", select);
-						return null;
-						
-			}
+			return relationships;
 
+		}
+
+		public List<BaseWorkflowItem> Search(SearchRequest request)
+		{
+			List<BaseWorkflowItem> result = new List<BaseWorkflowItem>();
+			List<string> types = new List<string> { "workflowid", "trackableid", "transactionid", "nodeid" };
+			string whereValue = string.Empty; string type = string.Empty;
+			foreach (string t in types)
+			{
+				if (request.Where.TryGetValue(t, out whereValue))
+				{
+					type = t;
+					break;
+				}
+			}
+			List<Relationship> relationships = GetRelationships(type, whereValue, request.Active);
+
+			switch (request.Select.ToLower())
+			{
+				case "workflows":
+					relationships.ForEach(r => { result.Add(Repository.Find<Workflow>(r.WorkflowName)); });
+					break;
+				case "trackables":
+					relationships.ForEach(r => { result.Add(Repository.Find<Trackable>(r.TrackableName)); });
+					break;
+				case "transactions":
+					relationships.ForEach(r => { result.Add(Repository.Find<Transaction>(r.TransactionName)); });
+					break;
+				default:
+					Console.WriteLine("{0} is not a valid SELECT keyword", request.Select);
+					return null;
+
+			}
 			return result;
 
 		}
 
 
-
-
-
-
-
 	}
+
+	
 }
