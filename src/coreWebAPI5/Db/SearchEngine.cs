@@ -12,7 +12,7 @@ namespace workflow.Db
 	{
 		public Dictionary<string,string> Where { get; set; }
 		public string Select { get; set; }
-		public bool Active { get; set; }
+		public bool Active { get; set; } = true;
 
 		public SearchRequest(Dictionary<string,
 			Microsoft.Extensions.Primitives.StringValues> queryString)
@@ -51,6 +51,7 @@ namespace workflow.Db
 
 		private List<Relationship> GetRelationships(string type, string whereValue, bool active)
 		{
+			Console.WriteLine("GetRelationships active flag is {0}", active);
 			List<Relationship> relationships = new List<Relationship>();
 			switch (type)
 			{
