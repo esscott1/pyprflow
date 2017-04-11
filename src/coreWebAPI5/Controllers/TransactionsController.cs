@@ -17,7 +17,6 @@ namespace workflow.Controllers
 		{
 			Repository = workflow;
 		}
-	//	public IWorkflowRepository Repository { get; set; }
 		[HttpGet("example")]
 		public IActionResult GetSample()
 		{
@@ -59,14 +58,14 @@ namespace workflow.Controllers
 			try
 			{
 				if(Repository.Find<Transaction>(trans.Name)!=null)
-					return StatusCode(400, "transaction already exists");
+					return StatusCode(400, "transaction id "+trans.Name+" already exists");
 
 				if (Repository.Find<Trackable>(trans.TrackableName) == null)
-					return StatusCode(400, "The Trackable does not exist in the system");
+					return StatusCode(400, "The Trackable named "+trans.TrackableName+" does not exist in the system");
 
 				var workflow = Repository.Find<Workflow>(trans.WorkflowName);
 				if(workflow == null)
-					return StatusCode(400, "The Workflow does not exist in the system");
+					return StatusCode(400, "The Workflow name "+trans.WorkflowName+" does not exist in the system");
 				
 				Console.WriteLine("found workflow: " + workflow.WorkflowName);
 				if (!workflow.IsMoveValid(trans))

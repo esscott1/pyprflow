@@ -23,17 +23,18 @@ namespace workflow.Db
 			queryString.TryGetValue("select", out select);
 			Select = select;
 			StringValues sWhere;
-			queryString.TryGetValue("where", out sWhere);
 
-			foreach(string s in sWhere.ToString().Split(';'))
+			if (queryString.TryGetValue("where", out sWhere))
 			{
-				string[] values = s.Split('=');
-				Where.Add(values[0], values[1]);
+				foreach (string s in sWhere.ToString().Split(';'))
+				{
+					string[] values = s.Split('=');
+					Where.Add(values[0], values[1]);
+				}
+				string sActive;
+				if (Where.TryGetValue("active", out sActive))
+					Active = Convert.ToBoolean(sActive);
 			}
-			string sActive;
-			if (Where.TryGetValue("active", out sActive))
-				Active = Convert.ToBoolean(sActive);
-
 
 		
 		
@@ -76,21 +77,31 @@ namespace workflow.Db
 
 		}
 
-		public List<BaseWorkflowItem> Search(SearchRequest request)
+		private List<BaseWorkflowItem> SelectWithoutWhere(SearchRequest request)
+		{
+			//List<BaseWorkflowItem> result = new List<BaseWorkflowItem>();
+			switch (request.Select.ToLower())
+			{
+				case "workflows":
+					return Repository.GetAll<Workflow>().ToList().Cast<BaseWorkflowItem>().ToList();
+					
+				case "trackables":
+					return Repository.GetAll<Trackable>().ToList().Cast<BaseWorkflowItem>().ToList();
+					
+				case "transactions":
+					return Repository.GetAll<Transaction>().ToList().Cast<BaseWorkflowItem>().ToList();
+					
+				default:
+					Console.WriteLine("{0} is not a valid SELECT keyword", request.Select);
+					return null;
+			}
+
+			throw new NotImplementedException();
+		}
+
+		private List<BaseWorkflowItem> SelectWithWhere(List<Relationship> relationships, SearchRequest request)
 		{
 			List<BaseWorkflowItem> result = new List<BaseWorkflowItem>();
-			List<string> types = new List<string> { "workflowid", "trackableid", "transactionid", "nodeid" };
-			string whereValue = string.Empty; string type = string.Empty;
-			foreach (string t in types)
-			{
-				if (request.Where.TryGetValue(t, out whereValue))
-				{
-					type = t;
-					break;
-				}
-			}
-			List<Relationship> relationships = GetRelationships(type, whereValue, request.Active);
-
 			switch (request.Select.ToLower())
 			{
 				case "workflows":
@@ -108,6 +119,30 @@ namespace workflow.Db
 
 			}
 			return result;
+		}
+		
+		public List<BaseWorkflowItem> Search(SearchRequest request)
+		{
+			if(request.Where.Count==0)
+			{
+				return SelectWithoutWhere(request);
+			}
+			List<BaseWorkflowItem> result = new List<BaseWorkflowItem>();
+			List<string> types = new List<string> { "workflowid", "trackableid", "transactionid", "nodeid" };
+			string whereValue = string.Empty; string type = string.Empty;
+			foreach (string t in types)
+			{
+				if (request.Where.TryGetValue(t, out whereValue))
+				{
+					type = t;
+					break;
+				}
+			}
+			List<Relationship> relationships = GetRelationships(type, whereValue, request.Active);
+
+			// issue that without where clause i have nothing to search for.
+			return SelectWithWhere(relationships, request);
+			//return result;
 
 		}
 
