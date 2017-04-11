@@ -388,7 +388,7 @@ Search parameters
 
 | Argument | Example |  Description     |
 |----------|----------------------------|------------------------------|
-| t        |   t=wf      | Type of object you are wanting [Worflow; orchestration; Trackable; 
-| id       |   id=workflowId                       |
-| nane     |
+| entityType        |   entityType=workflow|trackable|transaction      | Type of object you are wanting [Worflow; orchestration; Trackable; 
+| KVP               |   workflowId={name}|trackableId={name}|transactionId={name}|nodeId={name}|IsActive={true/false}|                       |
+
  

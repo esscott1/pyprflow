@@ -38,13 +38,14 @@ namespace workflow.Controllers
 		public IWorkflowRepository Repository { get; set; }
 		// GET: /<controller>/
 		[HttpGet]
-		public IActionResult Search(string select, 
+		public IActionResult Search(string entityType, 
 			string workflowId,
 			string trackableId,
 			string transactionId,
 			string nodeId,
 			string start,
-			string end)
+			string end,
+			string isActive)
 		{
 		
 			Dictionary<string, Microsoft.Extensions.Primitives.StringValues> dic =
