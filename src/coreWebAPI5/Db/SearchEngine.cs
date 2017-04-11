@@ -8,62 +8,6 @@ using workflow.Model;
 
 namespace workflow.Db
 {
-	public class SearchRequest
-	{
-		//public Dictionary<string,string> Where { get; set; }
-		public string Select { get; set; }
-		public bool Active { get; set; } = true;
-		public System.Linq.Expressions.Expression<Func<Relationship, bool>> Predicate { get; set; }
-
-		public SearchRequest(Dictionary<string,
-			Microsoft.Extensions.Primitives.StringValues> queryString)
-		{
-			//Where = new Dictionary<string, string>();
-			
-			StringValues select;
-			queryString.TryGetValue("entityType", out select);
-			Select = select;
-			if(queryString.Count>1)
-				BuildPredicate(queryString);
-			
-		}
-		private void BuildPredicate(Dictionary<string,
-			Microsoft.Extensions.Primitives.StringValues> queryString)
-		{
-			var predicate = PredicateBuilder.True<Relationship>();
-			StringValues sIsActive = string.Empty;
-			if(queryString.TryGetValue("isactive",out sIsActive)) 
-			{
-				bool bIsActive;
-				Boolean.TryParse(sIsActive, out bIsActive);
-				predicate = predicate.And(i => i.Active == bIsActive);
-			}
-			StringValues nodename;
-			if (queryString.TryGetValue("nodeid", out nodename))
-			{
-				predicate = predicate.And(i => i.NodeName == nodename.ToString());
-
-			}
-			StringValues transactionName;
-			if (queryString.TryGetValue("transactionid", out transactionName))
-			{
-				predicate = predicate.And(i => i.TransactionName == transactionName.ToString());
-			}
-			StringValues trackableName;
-			if (queryString.TryGetValue("trackableid", out trackableName))
-			{
-				predicate = predicate.And(i => i.TrackableName == trackableName.ToString());
-			}
-			StringValues workflowName;
-			if (queryString.TryGetValue("workflowid", out workflowName))
-			{
-				predicate = predicate.And(i => i.WorkflowName == workflowName.ToString());
-			}
-
-			Predicate = predicate;
-
-		}
-	}
 
 	public class SearchEngine
 	{
@@ -118,8 +62,6 @@ namespace workflow.Db
 					Console.WriteLine("{0} is not a valid SELECT keyword", request.Select);
 					return null;
 			}
-
-			throw new NotImplementedException();
 		}
 
 		private List<BaseWorkflowItem> SelectWithWhere( SearchRequest request)
@@ -153,23 +95,6 @@ namespace workflow.Db
 				return SelectWithoutWhere(request);
 			}
 			return SelectWithWhere(request);
-			//List<BaseWorkflowItem> result = new List<BaseWorkflowItem>();
-			//List<string> types = new List<string> { "workflowid", "trackableid", "transactionid", "nodeid" };
-			//string whereValue = string.Empty; string type = string.Empty;
-			//foreach (string t in types)
-			//{
-			//	if (request.Where.TryGetValue(t, out whereValue))
-			//	{
-			//		type = t;
-			//		break;
-			//	}
-			//}
-			//List<Relationship> relationships = GetRelationships(type, whereValue, request.Active);
-
-			// issue that without where clause i have nothing to search for.
-			//return SelectWithWhere(relationships, request);
-			//return result;
-
 		}
 
 
