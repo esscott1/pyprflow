@@ -139,9 +139,6 @@ namespace workflow.Model
 			return false;
 		}
 
-		
-		
-
 		[JsonConstructor]
 		public Workflow(Guid workflowId, string workflowname)
 			: this(workflowname)
@@ -166,105 +163,6 @@ namespace workflow.Model
 			return JsonConvert.DeserializeObject<Workflow>(workflowJson, settings);
 		}
 
-		/// <summary>
-		/// Restores from WSOD.Web.ObjectDataStore
-		/// </summary>
-		/// <param name="workflowId">Name that references a specific workflow</param>
-		/// <param name="storeContext">Name that references the context the workflow was saved in</param>
-		/// <returns>A workflow from the ObjectStore.</returns>
-		/// <exception cref="ArgumentException">Invalid ID, No ObjectStore context</exception>
-		//public static Repository RetrieveWorkflowFromObjectStore(Guid workflowId, string storeContext)
-		//{
-		//	var wf = Repository.GetAll<Repository>();
-		//	return wf;
-		//	throw new NotImplementedException("need to re-implement");
-		//	//if (workflowId == Guid.Empty)
-		//	//{
-		//	//	throw new ArgumentException("Cannot restore from ObjectStore with an invalid Repository ID");
-		//	//}
-
-		//	//if (string.IsNullOrWhiteSpace(storeContext))
-		//	//{
-		//	//	throw new ArgumentException("Cannot restore from ObjectStore with an empty store context");
-		//	//}
-
-		//	//// HACK
-		//	//Testing.MockRequest(@"\internal");
-		//	//// retrieve it from ObjectStore
-		//	//var retrieveRequest = new MdObjectStoreServiceRequest(User.Current);
-		//	//if (!retrieveRequest.RetrieveObjectStoreInputs(TestStoreCategoryKey, storeContext))
-		//	//{
-		//	//	throw new Exception("Could not retrieve workflow from ObjectStore");
-		//	//}
-		//	//var found = retrieveRequest.Inputs.FirstOrDefault(k => k.WFKey == workflowId.ToString());
-		//	//if (string.IsNullOrWhiteSpace(found.WFKey))
-		//	//{
-		//	//	throw new Exception("Could not retrieve workflow from ObjectStore");
-		//	//}
-		//	//var serializedWorkfow = ((MOD.Common.Remoting.ByteString)found.Value).String;
-		//	//if (string.IsNullOrWhiteSpace(serializedWorkfow))
-		//	//{
-		//	//	throw new Exception("Repository [" + workflowId + "] with context '" + storeContext + "' was not found in the store.");
-		//	//}
-
-		//	//return DeserializeWorkflow(serializedWorkfow);
-		//}
-
-		internal void RemoveItemFromWorkflow(string trackableId)
-		{
-			// delete the trackables
-			return;
-			
-		}
-
-		//public void AddNode(string stateName, string fromState = null)
-		//{
-		//	Nodes.Add(stateName, new Node(stateName));
-		//	if (!string.IsNullOrWhiteSpace(fromState))
-		//	{
-		//		//AddValidStateMovement(fromState, stateName);
-		//	}
-		//}
-
-		public void AddTrackableToStart(Trackable item)
-		{
-			throw new NotImplementedException();
-			//item.Location.Add(this.WorkflowName, Nodes.First().WFKey);
-		}
-	
-		public void MoveTrackable(Trackable item, string targetNodeName)
-		{
-			MoveToNode(item, targetNodeName, null);
-		}
-		private void MoveToNode(Trackable item, string targetNodeName, IUser user = null, string comment = "Moved Item")
-		{
-			throw new NotImplementedException();
-			//Movement move;
-			//if (IsMoveValid(item.Location[this.WorkflowName], targetNodeName, out move))
-			//{
-			//	item.Location.Remove(this.WorkflowName);
-			//	item.Location.Add(this.WorkflowName, targetNodeName);
-			//	item.MoveHistory.Add(new ExecutedMove(move) { ExecutionTime = DateTime.Now });
-			//	return;
-			//}
-				
-			//throw new WorkFlowException("move is not valid");
-		}
-		
-		public void CopyToNode(Trackable item, string fromState, string toState, IUser copyUser, string comment = "Copied Item")
-		{
-			throw new NotImplementedException();
-			//Movement move;
-			//if (!IsMoveValid(fromState, toState, out move, copyUser))
-			//{
-			//	var msg = string.Format("{0} cannot copy {1} from {2} to {3}", copyUser, item, fromState, toState);
-			//	throw new WorkFlowException(msg);
-			//}
-			//item.Location.Remove(this.WorkflowName);
-			//item.Location.Add(this.WorkflowName, toState);
-			//item.MoveHistory.Add(new ExecutedMove(move) { ExecutionTime = DateTime.Now });
-		}
-
 		public bool IsMoveValid(Transaction transaction)
 		{
 			foreach (KeyValuePair<string, Orchestration> kvp in Orchestrations)
@@ -273,32 +171,9 @@ namespace workflow.Model
 					return true;
 			}
 			return false;
-			
 		}
 
-		internal  string FindNextNodeName(string nodeName)
-		{
-			throw new NotImplementedException();
-			//var nextNodeName = this.Orchestrations.Find(m => m.From == nodeName).To;
-			//if (nextNodeName == null || nextNodeName == String.Empty)
-			//	throw new WorkFlowException("No next Node found");
-			//return nextNodeName;
-			
-		}
-
-		
-		public List<string> GetNodeNames()
-		{
-			return Nodes.Keys.ToList();
-		}
-		
-		//public string SerializeToJsonString()
-		//{
-		//	// serialize arbitrary "ITrackable" concrete type http://www.newtonsoft.com/json/help/html/SerializeTypeNameHandling.htm
-		//	var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto };
-		//	return JsonConvert.SerializeObject(this, Formatting.None, settings);
-		//}
-
+				
 		/// <summary>
 		/// Save to WSOD.Web.ObjectDataStore.
 		/// </summary>
@@ -329,60 +204,7 @@ namespace workflow.Model
 			//return true;
 		}
 
-		//public Trackable FindTrackableById(string trackableId)
-		//{
-			
-		//	foreach(KeyValuePair<string, Node> kvp in Nodes)
-		//	{
-		//		IEnumerable<Trackable> r = kvp.Value.Trackables.Where(t => t.TrackableName == trackableId);
-		//		if (r.Count() > 0)
-		//			return r.First();
-		//	}
-		//	return null;
-			
-			
-		//}
-
-		public void AddValidStateMovement(string from, string to, User moveUser = null)
-		{
-			throw new NotImplementedException();
-			//if (!Nodes.ContainsKey(from))
-			//{
-			//	throw new WorkFlowException("can't move from " + from);
-			//}
-
-			//if (!Nodes.ContainsKey(to))
-			//{
-			//	throw new WorkFlowException("can't move to " + to);
-			//}
-
-			//// check if movement already exists
-			//Movement move = Orchestrations.FirstOrDefault(m => m.From == from && m.To == to);
-			//if (move == null)
-			//{
-			//	move = new Movement { From = from, To = to };
-			//	Orchestrations.Add(move);
-			//}
-
-			//// add move user
-			//if (moveUser != null)
-			//{
-			//	move.ApproveUsers.Add(moveUser);
-			//}
-		}
-
-		//		public void AddValidStateRemoval(string from, IUser removeUser)
-		//		{
-		//			if (!Steps.ContainsKey(from))
-		//			{
-		//				throw new WorkFlowException("can't move from " + from);
-		//			}
-		//
-		//			// should check if movement already exists
-		//			var move = new Movement { From = from };
-		//			move.ApproveUsers.Add(removeUser);
-		//			Orchestrations.Add(move);
-		//		}
+		
 	}
 
 }

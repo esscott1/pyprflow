@@ -25,7 +25,6 @@ namespace workflow.Controllers
 			Dictionary<string, Microsoft.Extensions.Primitives.StringValues> dic =
 			new Dictionary<string, Microsoft.Extensions.Primitives.StringValues>();
 
-			//var result = Repository.Where<Transaction>(i => i.TrackableName == "SampleDoc1");
 			dic = QueryHelpers.ParseQuery(Request.QueryString.ToString());
 			var result = w.Split('=')
 				.Select((v, i) => new { v, i })
@@ -36,7 +35,6 @@ namespace workflow.Controllers
 
 		}
 		public IWorkflowRepository Repository { get; set; }
-		// GET: /<controller>/
 		[HttpGet]
 		public IActionResult Search(string entityType, 
 			string workflowId,

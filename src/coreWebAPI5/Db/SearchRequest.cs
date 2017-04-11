@@ -10,7 +10,6 @@ namespace workflow.Db
 {
     public class SearchRequest
 	{
-		//public Dictionary<string,string> Where { get; set; }
 		public string Select { get; set; }
 		public bool Active { get; set; } = true;
 		public System.Linq.Expressions.Expression<Func<Relationship, bool>> Predicate { get; set; }
@@ -18,8 +17,6 @@ namespace workflow.Db
 		public SearchRequest(Dictionary<string,
 			Microsoft.Extensions.Primitives.StringValues> queryString)
 		{
-			//Where = new Dictionary<string, string>();
-
 			StringValues select;
 			queryString.TryGetValue("entityType", out select);
 			Select = select;

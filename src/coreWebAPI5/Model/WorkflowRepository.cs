@@ -42,7 +42,6 @@ namespace workflow.Model
 					
 					Console.WriteLine("Saved {0} records to DB", recordCount);
 
-					//Console.WriteLine("Primary WFKey is {0} ", saveThis.Name);
 				}
 				catch(Microsoft.Data.Sqlite.SqliteException ex)
 				{
@@ -207,9 +206,6 @@ namespace workflow.Model
 				return db.Relationships.Where(predicate.Compile()).ToList();
 			}
 		}
-
-
-
 
 		public void Add(Workflow workflow)
 		{
