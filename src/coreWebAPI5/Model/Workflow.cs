@@ -165,11 +165,6 @@ namespace workflow.Model
 
 		public bool IsMoveValid(Transaction transaction, IWorkflowRepository repository)
 		{
-			if (!IsInNode(transaction.PreviousNodeId, transaction.TrackableName, repository))
-			{
-				Console.WriteLine("didn't find {0} in node {1}", transaction.TrackableName, transaction.PreviousNodeId);
-				return false;
-			}
 			foreach (KeyValuePair<string, Orchestration> kvp in Orchestrations)
 			{
 				if (kvp.Value.IsValid(transaction))
@@ -178,27 +173,7 @@ namespace workflow.Model
 			return false;
 		}
 
-		private bool IsInNode(string previousNodeId, string trackableName, IWorkflowRepository repository)
-		{
-			Dictionary<string, Microsoft.Extensions.Primitives.StringValues> dic =
-				new Dictionary<string, Microsoft.Extensions.Primitives.StringValues>();
-			Console.WriteLine("in IsInNodeTest");
-			dic.Add("nodeid", previousNodeId);
-			dic.Add("trackableid", trackableName);
-			dic.Add("entityType", "trackables");
-			Db.SearchRequest request = new Db.SearchRequest(dic);
-			Console.WriteLine("i have a request item, repository is null");
-
-			Db.SearchEngine se = new Db.SearchEngine(repository);
-			Console.WriteLine("looking for {0} in node {1}", trackableName, previousNodeId);
-			var response = se.Search(request);
-			Console.WriteLine("found {0} results", response.Count);
-			if (response.Count > 0)
-				return true;
-			return false;
-
-			throw new NotImplementedException();
-		}
+		
 
 
 		/// <summary>

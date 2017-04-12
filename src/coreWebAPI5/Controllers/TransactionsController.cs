@@ -60,7 +60,10 @@ namespace workflow.Controllers
 				string msg; int statusCode;
 				if (!trans.IsValid(Repository, out statusCode, out msg))
 					return StatusCode(statusCode, msg);
-			
+				var workflow = Repository.Find<Workflow>(trans.WorkflowName);
+				if (!workflow.IsMoveValid(trans,Repository))
+					return StatusCode(400, "move is not valid per workflow rules");
+
 				Console.WriteLine("passed IsValid validation");
 				Repository.Add(trans);
 				Repository.Track(trans);

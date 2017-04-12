@@ -50,23 +50,27 @@ namespace workflow.Model
 				return false;
 			}
 			//Console.WriteLine("the workflow exists in the system");
-			Dictionary<string, Microsoft.Extensions.Primitives.StringValues> dic =
-				new Dictionary<string, Microsoft.Extensions.Primitives.StringValues>();
-			dic.Add("isactive", "true");
-			dic.Add( "nodeid", this.PreviousNodeId);
-			dic.Add("trackableid", this.TrackableName);
-			dic.Add("entityType", "trackables");
-		//	Console.WriteLine("looking for trackables in {0} with trackableId = {1}", this.PreviousNodeId, this.TrackableName);
-			Db.SearchRequest request = new Db.SearchRequest(dic);
-			Db.SearchEngine se = new Db.SearchEngine(repository);
-
-			var response = se.Search(request);
-			//Console.WriteLine("found {0} number of {1} in node {2}", response.Count, this.TrackableName, this.PreviousNodeId);
-			if (response.Count == 0)
+			// if previousNodeID is null then it's a new entry into the system
+			if (this.PreviousNodeId != null)
 			{
-				statuscode = 400;
-				statusmessage = string.Format("Trackable {0} is not in the previous node {1} like you say it is", this.TrackableName, this.PreviousNodeId);
-				return false;
+				Dictionary<string, Microsoft.Extensions.Primitives.StringValues> dic =
+					new Dictionary<string, Microsoft.Extensions.Primitives.StringValues>();
+				dic.Add("isactive", "true");
+				dic.Add("nodeid", this.PreviousNodeId);
+				dic.Add("trackableid", this.TrackableName);
+				dic.Add("entityType", "trackables");
+				//	Console.WriteLine("looking for trackables in {0} with trackableId = {1}", this.PreviousNodeId, this.TrackableName);
+				Db.SearchRequest request = new Db.SearchRequest(dic);
+				Db.SearchEngine se = new Db.SearchEngine(repository);
+
+				var response = se.Search(request);
+				//Console.WriteLine("found {0} number of {1} in node {2}", response.Count, this.TrackableName, this.PreviousNodeId);
+				if (response.Count == 0)
+				{
+					statuscode = 400;
+					statusmessage = string.Format("Trackable {0} is not in the previous node {1} like you say it is", this.TrackableName, this.PreviousNodeId);
+					return false;
+				}
 			}
 			return true;
 		}
