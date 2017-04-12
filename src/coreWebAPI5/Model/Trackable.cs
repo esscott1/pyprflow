@@ -19,10 +19,6 @@ namespace workflow.Model
 		public Trackable(string trackableName) : this()
 		{
 			Name = trackableName;
-			//TrackingName = trackableName;
-			//TrackableName = trackableName;
-			
-
 		}
 
 		

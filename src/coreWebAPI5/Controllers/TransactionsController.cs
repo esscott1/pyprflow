@@ -57,21 +57,11 @@ namespace workflow.Controllers
 			{ return BadRequest("trans is null"); }
 			try
 			{
-				if(Repository.Find<Transaction>(trans.Name)!=null)
-					return StatusCode(400, "transaction id "+trans.Name+" already exists");
-
-				if (Repository.Find<Trackable>(trans.TrackableName) == null)
-					return StatusCode(400, "The Trackable named "+trans.TrackableName+" does not exist in the system");
-
-				var workflow = Repository.Find<Workflow>(trans.WorkflowName);
-				if(workflow == null)
-					return StatusCode(400, "The Workflow name "+trans.WorkflowName+" does not exist in the system");
-				
-				Console.WriteLine("found workflow: " + workflow.WorkflowName);
-				if (!workflow.IsMoveValid(trans))
-					return StatusCode(403, "requested move is not valid in the designated workflow");
-
-				Console.WriteLine("move is valid in the workflow");
+				string msg; int statusCode;
+				if (!trans.IsValid(Repository, out statusCode, out msg))
+					return StatusCode(statusCode, msg);
+			
+				Console.WriteLine("passed IsValid validation");
 				Repository.Add(trans);
 				Repository.Track(trans);
 				return CreatedAtRoute("GetTransaction", new { id = trans.Name }, Repository);

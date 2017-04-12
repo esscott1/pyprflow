@@ -31,7 +31,7 @@ namespace workflow.Model
 			{
 				try
 				{
-					Console.WriteLine("saving {0} with type {1}", item.Name, item.DerivedType);
+					//Console.WriteLine("saving {0} with type {1}", item.Name, item.DerivedType);
 					BaseWorkflowItem saveThis = new BaseWorkflowItem();
 					saveThis.SerializedObject = saveThis.Serialize<T>(item);
 					saveThis.DerivedType = typeof(T).ToString();
@@ -40,7 +40,7 @@ namespace workflow.Model
 					
 					int recordCount = db.SaveChanges();
 					
-					Console.WriteLine("Saved {0} records to DB", recordCount);
+					//Console.WriteLine("Saved {0} records to DB", recordCount);
 
 				}
 				catch(Microsoft.Data.Sqlite.SqliteException ex)
@@ -64,12 +64,12 @@ namespace workflow.Model
 			{
 				try
 				{
-					Console.WriteLine("trying to return all {0} from DB", typeof(T).ToString());
+				//	Console.WriteLine("trying to return all {0} from DB", typeof(T).ToString());
 					var wfi = db.WorkflowDb.Where(i => i.DerivedType == typeof(T).ToString());
 					List<T> wf = new List<T>();
 					foreach (var item in wfi)
 						wf.Add(item.Deserialize<T>(item.SerializedObject));
-					Console.WriteLine("found {0} items from DB", wf.Count.ToString());
+				//	Console.WriteLine("found {0} items from DB", wf.Count.ToString());
 					return wf;
 				}
 				catch (Exception ex)
@@ -84,11 +84,11 @@ namespace workflow.Model
 		{
 			using (var db = new WorkflowContext())
 				try {
-					Console.WriteLine("searching for item {0} with Id {1}", typeof(T).ToString(), workflowName);
+					//Console.WriteLine("searching for item {0} with Id {1}", typeof(T).ToString(), workflowName);
 					BaseWorkflowItem result = db.WorkflowDb.Find(new object[] { workflowName, typeof(T).ToString() });
 					if (result == null)
 						throw new WorkFlowException(String.Format("null was returned when finding for key {0}", workflowName));
-					Console.WriteLine("found item");
+				//	Console.WriteLine("found item");
 					return result.Deserialize<T>(result.SerializedObject);
 
 				} catch (Exception ex) {
@@ -103,10 +103,10 @@ namespace workflow.Model
 			{
 				try
 				{
-					Console.WriteLine("trying to update {0} itemId", item.Name);
+				//	Console.WriteLine("trying to update {0} itemId", item.Name);
 					db.WorkflowDb.Update(item);
 					db.SaveChanges();
-					Console.WriteLine("ItemId {0} updated in database");
+				//	Console.WriteLine("ItemId {0} updated in database");
 				}
 				catch (Exception ex)
 				{
@@ -121,10 +121,10 @@ namespace workflow.Model
 					try
 					{
 					var delete = Find<T>(workflowItemId);
-					Console.WriteLine("trying to delete {0} itemId", workflowItemId);
+				//	Console.WriteLine("trying to delete {0} itemId", workflowItemId);
 					db.WorkflowDb.Remove(delete);
 					db.SaveChanges();
-					Console.WriteLine("ItemId {0} deleted from database");
+				//	Console.WriteLine("ItemId {0} deleted from database");
 					}
 					catch (Exception ex)
 					{
@@ -142,7 +142,7 @@ namespace workflow.Model
 			r.TrackableName = trans.TrackableName;
 			r.NodeName = trans.NewNodeId;
 			r.WorkflowName = trans.WorkflowName;
-
+			Console.WriteLine("transacation type is {0}", trans.type);
 			if(trans.type==TransactionType.Move)
 				DeActivateOldTrackableRelationship(trans);
 			
@@ -162,19 +162,21 @@ namespace workflow.Model
 		{
 			using (var db = new WorkflowContext())
 			{
-				Console.WriteLine("looking for old relationships");
+			//	Console.WriteLine("looking for old relationships");
 				Relationship oldr = db.Relationships.Where(o => o.TrackableName == r.TrackableName
 				&& o.WorkflowName == r.WorkflowName
-				&& r.PreviousNodeId == o.NodeName).FirstOrDefault();
+				&& o.NodeName == r.PreviousNodeId).FirstOrDefault();
+			//	Console.WriteLine("looking for {0} in WF {1}, with nodeID = {2}", r.TrackableName, r.WorkflowName, r.PreviousNodeId);
 				if (oldr == null)
 				{
 					Console.WriteLine("didn't find an old relationship");
 					return null;
 				}
-				Console.WriteLine("found relationship ID {0}",oldr.RelationshipId);
+				//Console.WriteLine("found relationship ID {0}",oldr.RelationshipId);
 				oldr.Active = false;
 				db.Relationships.Update(oldr);
-				Console.WriteLine("updated {0} records during deactivate old relationshops", db.SaveChanges());
+				db.SaveChanges();
+				//Console.WriteLine("updated {0} records during deactivate old relationshops", db.SaveChanges());
 				return oldr;
 			}
 		}
@@ -187,7 +189,7 @@ namespace workflow.Model
 				{
 					db.Relationships.Add(r);
 					db.SaveChanges();
-					Console.WriteLine("saved relationship {0}", r.RelationshipId);
+				//	Console.WriteLine("saved relationship {0}", r.RelationshipId);
 				}
 				catch (Exception ex)
 				{
@@ -202,7 +204,7 @@ namespace workflow.Model
 		{
 			using (var db = new WorkflowContext())
 			{
-				Console.WriteLine("in the Where method of WorkflowRepository");
+				//Console.WriteLine("in the Where method of WorkflowRepository");
 				return db.Relationships.Where(predicate.Compile()).ToList();
 			}
 		}

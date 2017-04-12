@@ -10,8 +10,7 @@ namespace workflow.Db
 {
     public class SearchRequest
 	{
-		public string Select { get; set; }
-		public bool Active { get; set; } = true;
+		public string EntityType { get; set; }
 		public System.Linq.Expressions.Expression<Func<Relationship, bool>> Predicate { get; set; }
 
 		public SearchRequest(Dictionary<string,
@@ -19,9 +18,13 @@ namespace workflow.Db
 		{
 			StringValues select;
 			queryString.TryGetValue("entityType", out select);
-			Select = select;
+			EntityType = select;
 			if (queryString.Count > 1)
+			{
+				if (!queryString.ContainsKey("isactive"))
+					queryString.Add("isactive", "true");
 				BuildPredicate(queryString);
+			}
 
 		}
 		private void BuildPredicate(Dictionary<string,
@@ -31,10 +34,12 @@ namespace workflow.Db
 			StringValues sIsActive = string.Empty;
 			if (queryString.TryGetValue("isactive", out sIsActive))
 			{
+			//	Console.WriteLine("in if for try and get isactive value is {0}", sIsActive);
 				bool bIsActive;
 				Boolean.TryParse(sIsActive, out bIsActive);
 				predicate = predicate.And(i => i.Active == bIsActive);
 			}
+			
 			StringValues nodename;
 			if (queryString.TryGetValue("nodeid", out nodename))
 			{
