@@ -61,6 +61,14 @@ namespace workflow.Db
 			{
 				predicate = predicate.And(i => i.WorkflowName == workflowName.ToString());
 			}
+			StringValues assignedTo;
+
+			Console.WriteLine("looking for assigned to in search request predicate build");
+			if (queryString.TryGetValue("assignedto", out assignedTo))
+			{
+				Console.WriteLine("found the assignedTo value of {0}", assignedTo);
+				predicate = predicate.And(i => i.AssignedTo == assignedTo.ToString());
+			}
 
 			Predicate = predicate;
 

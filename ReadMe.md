@@ -383,7 +383,12 @@ As a user i want to see how long a given item has spent in a particular (node) i
 As a user I want to see how long a given item has spent in a particular workflow so that i can understand how long something has been under review.
 
 
-API/Search/q=workflow&id=2
+API/Search?entityType=workflow|trackable|transaction
+&trackableId={value}
+&transactionId={value}
+&nodeId={value}
+&assignedto={value} [not valid with entity type = Worflow]
+
 Search parameters
 
 | Argument | Example |  Description     |

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace workflow.Model
 {
-    public class MotionTransaction
+    public class MotionTransaction : Transaction
     {
     }
 }

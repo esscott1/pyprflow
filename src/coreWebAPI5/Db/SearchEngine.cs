@@ -71,6 +71,7 @@ namespace workflow.Db
 			{
 				List<Relationship> relationships = Repository.Where(request.Predicate);
 				
+				Console.WriteLine("going to search {0} of relationships",relationships.Count);
 			
 				switch (request.EntityType.ToLower())
 				{

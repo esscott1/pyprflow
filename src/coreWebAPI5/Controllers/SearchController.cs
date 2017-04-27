@@ -41,6 +41,7 @@ namespace workflow.Controllers
 			string trackableId,
 			string transactionId,
 			string nodeId,
+			string assignedTo,
 			string start,
 			string end,
 			string isActive)

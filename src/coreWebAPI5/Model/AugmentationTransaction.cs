@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace workflow.Model
 {
-    public class AugmentationTransaction
+    public class AugmentationTransaction : Transaction
     {
     }
 }

@@ -159,9 +159,11 @@ namespace workflow.Model
 				else if (trans.type == TransactionType.Comment)
 					r.NodeName = trans.CurrentNodeId;
 				r.WorkflowName = trans.WorkflowName;
-				r.AssignedTo = trans.AssignedTo.Email;
+				if(trans.AssignedTo !=null)
+					r.AssignedTo = trans.AssignedTo.Email;
 				r.Type = trans.type;
-				r.Submitter = trans.Submitter.Email;
+				if(trans.Submitter != null)
+					r.Submitter = trans.Submitter.Email;
 				Console.WriteLine("transacation type is {0}", trans.type);
 				if (trans.type == TransactionType.Move)
 					DeActivateOldTrackableRelationship(trans);
@@ -170,7 +172,7 @@ namespace workflow.Model
 			}
 			catch(Exception ex)
 			{
-				Console.WriteLine(ex.InnerException);
+				Console.WriteLine("and error occured {0} stack {1}",ex.Message, ex.StackTrace);
 			}
 
 		}
