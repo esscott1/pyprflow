@@ -26,8 +26,27 @@ namespace workflow.Model
 		{
 			TransActionTime = DateTime.Now;
 		}
+		public void Clean()
+		{
+			if(this.type== TransactionType.Move || this.type==TransactionType.Copy)
+			{
+				this.AssignedTo = null;
+				this.Comment = null;
+			}
+			if(this.type == TransactionType.Comment) {
+				this.NewNodeId = null;
+				this.AssignedTo = null;
+			}
+
+			if (this.type == TransactionType.Assignment)
+			{
+				this.NewNodeId = null;
+				this.Comment = null;
+			}
+		}
 		public bool Execute(IWorkflowRepository repository, out int statuscode, out string statusmessage)
 		{
+			this.Clean();
 			Console.WriteLine("executing the transaction");
 			statuscode = 0;
 			statusmessage = "success";
