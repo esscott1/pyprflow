@@ -4,21 +4,20 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace coreWebAPI5.Migrations
 {
-    public partial class active : Migration
+    public partial class addedAssignedto3 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<bool>(
-                name: "Active",
+            migrationBuilder.AddColumn<string>(
+                name: "AssignedTo",
                 table: "Relationships",
-                nullable: false,
-                defaultValue: false);
+                nullable: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "Active",
+                name: "AssignedTo",
                 table: "Relationships");
         }
     }

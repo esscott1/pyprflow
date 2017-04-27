@@ -14,27 +14,127 @@ namespace workflow.Model
 		[JsonConverter(typeof(StringEnumConverter))]
 		public TransactionType type { get; set; }
 		public string Comment { get; set; }
-		public string PreviousNodeId { get; set; }
+		public string CurrentNodeId { get; set; }
+		
 		public string NewNodeId { get; set; }
 		public DateTime TransActionTime { get; internal set; }
+		[JsonRequired]
 		public User Submitter { get; set; }
+		public User AssignedTo { get; set; }
 		public string WorkflowName { get; set; }
 		public Transaction()
 		{
 			TransActionTime = DateTime.Now;
 		}
+		public bool Execute(IWorkflowRepository repository, out int statuscode, out string statusmessage)
+		{
+			Console.WriteLine("executing the transaction");
+			statuscode = 0;
+			statusmessage = "success";
+			var workflow = repository.Find<Workflow>(this.WorkflowName);
 
+			// should the transaction object execute
+			//trans.Execute();
+			if (this.type == TransactionType.Copy && this.type == TransactionType.Move)
+			{
+				if (!workflow.IsMoveValid(this, repository))
+				{
+					statuscode = 400;
+					statusmessage = "move is not valid per workflow rules";
+					return false;
+				}
+				Console.WriteLine("passed IsValid validation");
+				
+			}
+			repository.Add(this);Console.WriteLine("added now going to track");
+
+			repository.Track(this);
+			return true;
+		}
 		public bool IsValid(IWorkflowRepository repository, out int statuscode, out string statusmessage)
 		{
 			statuscode = 0;
+			statusmessage = "success";
+			Console.WriteLine("checking for valid transaction");
+			try
+			{
+				Console.WriteLine("type of transaction is {0}",this.type.ToString());
+				if (this.type == TransactionType.Move || this.type == TransactionType.Copy)
+				{
+					return IsValidMoveCopy(repository, out statuscode, out statusmessage);
+				}
+				if (this.type == TransactionType.Assignment)
+				{
+					return IsValidAssignment(out statuscode, out statusmessage);
+				}
+				if (this.type == TransactionType.Comment)
+				{
+					Console.WriteLine("in the comment if statement");
+					bool result = IsValidComment(out statuscode, out statusmessage);
+					Console.WriteLine("is valid comment result is {0}", result);
+					return result;
+				}
+			}
+			catch(Exception ex)
+			{
+				Console.WriteLine("an error occured {0}",ex.InnerException);
+			}
+				statuscode = 400;
+				statusmessage = "not a valid type of transaction";
+			
+			return false;
+				
+		}
+
+		private bool IsValidComment(out int statuscode, out string statusmessage)
+		{
+			statuscode = 0;
+			statusmessage = "success";
+		
+			bool result = false;
+			
+				result = (!string.IsNullOrEmpty(this.CurrentNodeId) &&
+					!string.IsNullOrEmpty(this.Submitter.Email) &&
+					!string.IsNullOrEmpty(this.TrackableName) &&
+					!string.IsNullOrEmpty(this.WorkflowName) &&
+					!string.IsNullOrEmpty(this.Comment));
+			if(!result)
+			{
+				statuscode = 400;
+				statusmessage = string.Format("missing a required value, you sent {0}, {1},{2}, {3}, {4}",
+					this.CurrentNodeId, this.Submitter.Email, this.TrackableName, this.WorkflowName, this.Comment);
+			}
+			return result;
+		}
+
+		private bool IsValidAssignment(out int statuscode, out string statusmessage)
+		{
+			statuscode = 0;
+			statusmessage = "success";
+			bool result = (!string.IsNullOrEmpty(this.CurrentNodeId) &&
+				!string.IsNullOrEmpty(this.Submitter.Email) &&
+				!string.IsNullOrEmpty(this.TrackableName) &&
+				!string.IsNullOrEmpty(this.WorkflowName));
+			if(!result)
+			{
+				statuscode = 400;
+				statusmessage = "missing a required value";
+			}
+			return result;
+		}
+
+		private bool IsValidMoveCopy(IWorkflowRepository repository, out int statuscode, out string statusmessage)
+		{
+			statuscode = 0;
 			statusmessage = string.Empty;
+			
 			if (repository.Find<Transaction>(this.Name) != null)
 			{
 				statuscode = 400;
 				statusmessage = string.Format("The transactionId {0} already exists", this.Name);
 				return false;
 			}
-		//	Console.WriteLine("is unique transactionId");
+			//	Console.WriteLine("is unique transactionId");
 			if (repository.Find<Trackable>(this.TrackableName) == null)
 			{
 				statuscode = 400;
@@ -51,35 +151,35 @@ namespace workflow.Model
 			}
 			//Console.WriteLine("the workflow exists in the system");
 			// if previousNodeID is null then it's a new entry into the system
-			if (this.PreviousNodeId != null)
+			if (this.CurrentNodeId != null)
 			{
 				Dictionary<string, Microsoft.Extensions.Primitives.StringValues> dic =
 					new Dictionary<string, Microsoft.Extensions.Primitives.StringValues>();
 				dic.Add("isactive", "true");
-				dic.Add("nodeid", this.PreviousNodeId);
+				dic.Add("nodeid", this.CurrentNodeId);
 				dic.Add("trackableid", this.TrackableName);
 				dic.Add("entityType", "trackables");
-				//	Console.WriteLine("looking for trackables in {0} with trackableId = {1}", this.PreviousNodeId, this.TrackableName);
+				//	Console.WriteLine("looking for trackables in {0} with trackableId = {1}", this.CurrentNodeId, this.TrackableName);
 				Db.SearchRequest request = new Db.SearchRequest(dic);
 				Db.SearchEngine se = new Db.SearchEngine(repository);
 
 				var response = se.Search(request);
-				//Console.WriteLine("found {0} number of {1} in node {2}", response.Count, this.TrackableName, this.PreviousNodeId);
+				//Console.WriteLine("found {0} number of {1} in node {2}", response.Count, this.TrackableName, this.CurrentNodeId);
 				if (response.Count == 0)
 				{
 					statuscode = 400;
-					statusmessage = string.Format("Trackable {0} is not in the previous node {1} like you say it is", this.TrackableName, this.PreviousNodeId);
+					statusmessage = string.Format("Trackable {0} is not in the previous node {1} like you say it is", this.TrackableName, this.CurrentNodeId);
 					return false;
 				}
+
 			}
 			return true;
 		}
 
-
 		public bool Equals(Transaction other)
 		{
 			if (this.NewNodeId == other.NewNodeId &&
-				this.PreviousNodeId == other.PreviousNodeId)
+				this.CurrentNodeId == other.CurrentNodeId)
 			{
 				return true;
 			}
@@ -106,6 +206,8 @@ namespace workflow.Model
 	public enum TransactionType
 	{
 		Move,
-		Copy
+		Copy,
+		Assignment,
+		Comment
 	}
 }

@@ -84,10 +84,13 @@ namespace workflow.Model
 		{
 			using (var db = new WorkflowContext())
 				try {
-					//Console.WriteLine("searching for item {0} with Id {1}", typeof(T).ToString(), workflowName);
+					Console.WriteLine("searching for item {0} with Id {1}", typeof(T).ToString(), workflowName);
 					BaseWorkflowItem result = db.WorkflowDb.Find(new object[] { workflowName, typeof(T).ToString() });
 					if (result == null)
+					{
+						Console.WriteLine("looking for type {0} with ID {1}", typeof(T).ToString(), workflowName);
 						throw new WorkFlowException(String.Format("null was returned when finding for key {0}", workflowName));
+					}
 				//	Console.WriteLine("found item");
 					return result.Deserialize<T>(result.SerializedObject);
 
@@ -135,18 +138,40 @@ namespace workflow.Model
 		}
 
 		#endregion
+		/// <summary>
+		/// Adds the Relationship record to DB
+		/// </summary>
+		/// <param name="trans"></param>
 		public void Track(Transaction trans)
 		{
-			var r = new Relationship();
-			r.TransactionName = trans.Name;
-			r.TrackableName = trans.TrackableName;
-			r.NodeName = trans.NewNodeId;
-			r.WorkflowName = trans.WorkflowName;
-			Console.WriteLine("transacation type is {0}", trans.type);
-			if(trans.type==TransactionType.Move)
-				DeActivateOldTrackableRelationship(trans);
-			
-			InsertRelationship(r);
+			Console.WriteLine("tracking methods");
+			try
+			{
+				var r = new Relationship();
+				r.TransactionName = trans.Name;
+				r.TrackableName = trans.TrackableName;
+				if (trans.type == TransactionType.Move)
+					r.NodeName = trans.NewNodeId;
+				else if (trans.type == TransactionType.Copy)
+					r.NodeName = trans.NewNodeId;
+				else if (trans.type == TransactionType.Assignment)
+					r.NodeName = trans.CurrentNodeId;
+				else if (trans.type == TransactionType.Comment)
+					r.NodeName = trans.CurrentNodeId;
+				r.WorkflowName = trans.WorkflowName;
+				r.AssignedTo = trans.AssignedTo.Email;
+				r.Type = trans.type;
+				r.Submitter = trans.Submitter.Email;
+				Console.WriteLine("transacation type is {0}", trans.type);
+				if (trans.type == TransactionType.Move)
+					DeActivateOldTrackableRelationship(trans);
+
+				InsertRelationship(r);
+			}
+			catch(Exception ex)
+			{
+				Console.WriteLine(ex.InnerException);
+			}
 
 		}
 		public List<Relationship> GetAll(System.Linq.Expressions.Expression<Func<Relationship, bool>> predicate)
@@ -162,17 +187,18 @@ namespace workflow.Model
 		{
 			using (var db = new WorkflowContext())
 			{
-			//	Console.WriteLine("looking for old relationships");
+				Console.WriteLine("looking for old relationships");
 				Relationship oldr = db.Relationships.Where(o => o.TrackableName == r.TrackableName
 				&& o.WorkflowName == r.WorkflowName
-				&& o.NodeName == r.PreviousNodeId).FirstOrDefault();
-			//	Console.WriteLine("looking for {0} in WF {1}, with nodeID = {2}", r.TrackableName, r.WorkflowName, r.PreviousNodeId);
+				&& o.Type == r.type
+				&& o.NodeName == r.CurrentNodeId).FirstOrDefault();
+				Console.WriteLine("looking for {0} in WF {1}, with nodeID = {2}", r.TrackableName, r.WorkflowName, r.CurrentNodeId);
 				if (oldr == null)
 				{
 					Console.WriteLine("didn't find an old relationship");
 					return null;
 				}
-				//Console.WriteLine("found relationship ID {0}",oldr.RelationshipId);
+				Console.WriteLine("found relationship ID {0}",oldr.RelationshipId);
 				oldr.Active = false;
 				db.Relationships.Update(oldr);
 				db.SaveChanges();

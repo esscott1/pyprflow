@@ -24,8 +24,9 @@ namespace workflow.Controllers
 			t.Comment = "Submitting to workflow";
 			//t.Name = "SampleTransaction1";
 			t.NewNodeId = "SampleNode1";
-			t.PreviousNodeId = null;
+			t.CurrentNodeId = null;
 			t.Submitter = new User() { Email = "Sample.User@somewhere.com" };
+			t.AssignedTo = new User() { Email = "worker@somewhere.com" };
 			t.TrackableName = "SampleDoc1";
 			t.WorkflowName = "SampleWorkflow1";
 			t.type = TransactionType.Move;
@@ -40,7 +41,7 @@ namespace workflow.Controllers
 		{
 			//return Json("stuff");
 			return Json(Repository.GetAll<Transaction>());
-		}
+		}  
 	//	GET: api/values
 	   [HttpGet("{id}",Name = "GetTransaction")]
 		public IActionResult GetTransaction(string id)
@@ -52,7 +53,6 @@ namespace workflow.Controllers
 		[HttpPost]
 		public IActionResult SubmitTransaction([FromBody] Transaction trans)
 		{
-			
 			if (trans == null)
 			{ return BadRequest("trans is null"); }
 			try
@@ -60,14 +60,10 @@ namespace workflow.Controllers
 				string msg; int statusCode;
 				if (!trans.IsValid(Repository, out statusCode, out msg))
 					return StatusCode(statusCode, msg);
-				var workflow = Repository.Find<Workflow>(trans.WorkflowName);
-				if (!workflow.IsMoveValid(trans,Repository))
-					return StatusCode(400, "move is not valid per workflow rules");
-
-				Console.WriteLine("passed IsValid validation");
-				Repository.Add(trans);
-				Repository.Track(trans);
-				return CreatedAtRoute("GetTransaction", new { id = trans.Name }, Repository);
+				if (trans.Execute(Repository, out statusCode, out msg))
+					return CreatedAtRoute("GetTransaction", new { id = trans.Name }, Repository);
+				else
+					return StatusCode(statusCode, msg);
 				
 			}
 			catch(Exception ex)

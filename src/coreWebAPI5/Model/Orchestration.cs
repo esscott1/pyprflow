@@ -38,7 +38,7 @@ namespace workflow.Model
 		}
 		private bool IsValidPath(Movement m, Transaction transaction)
 		{
-			return (m.From == transaction.PreviousNodeId && m.To == transaction.NewNodeId);
+			return (m.From == transaction.CurrentNodeId && m.To == transaction.NewNodeId);
 			
 
 		}

@@ -27,10 +27,13 @@ namespace coreWebAPI5.Migrations
                 {
                     RelationshipId = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    Active = table.Column<bool>(nullable: false),
                     NodeName = table.Column<string>(nullable: true),
+                    Submitter = table.Column<string>(nullable: true),
                     TimeStamp = table.Column<DateTime>(nullable: false),
                     TrackableName = table.Column<string>(nullable: true),
                     TransactionName = table.Column<string>(nullable: true),
+                    Type = table.Column<int>(nullable: false),
                     WorkflowName = table.Column<string>(nullable: true)
                 },
                 constraints: table =>

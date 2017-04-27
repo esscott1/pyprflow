@@ -19,7 +19,9 @@ namespace workflow.Model
 		public string  WorkflowName { get; set; }
 		public DateTime TimeStamp { get; set; }
 		public bool Active { get; set; } = true;
-
+		public TransactionType Type { get; set; }
+		public string Submitter { get; set; }
+		public string AssignedTo { get; set; }
 		public Relationship()
 		{
 			TimeStamp = DateTime.Now;

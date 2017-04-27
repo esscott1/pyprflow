@@ -8,9 +8,10 @@ using workflow.Model;
 namespace coreWebAPI5.Migrations
 {
     [DbContext(typeof(WorkflowContext))]
-    partial class WorkflowContextModelSnapshot : ModelSnapshot
+    [Migration("20170426232933_addedAssignedto2")]
+    partial class addedAssignedto2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752");
@@ -34,8 +35,6 @@ namespace coreWebAPI5.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<bool>("Active");
-
-                    b.Property<string>("AssignedTo");
 
                     b.Property<string>("NodeName");
 

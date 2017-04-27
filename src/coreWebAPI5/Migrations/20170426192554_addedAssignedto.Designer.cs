@@ -8,8 +8,8 @@ using workflow.Model;
 namespace coreWebAPI5.Migrations
 {
     [DbContext(typeof(WorkflowContext))]
-    [Migration("20170329145601_active")]
-    partial class active
+    [Migration("20170426192554_addedAssignedto")]
+    partial class addedAssignedto
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -38,11 +38,15 @@ namespace coreWebAPI5.Migrations
 
                     b.Property<string>("NodeName");
 
+                    b.Property<string>("Submitter");
+
                     b.Property<DateTime>("TimeStamp");
 
                     b.Property<string>("TrackableName");
 
                     b.Property<string>("TransactionName");
+
+                    b.Property<int>("Type");
 
                     b.Property<string>("WorkflowName");
 

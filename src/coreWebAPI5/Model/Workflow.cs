@@ -172,10 +172,7 @@ namespace workflow.Model
 			}
 			return false;
 		}
-
 		
-
-
 		/// <summary>
 		/// Save to WSOD.Web.ObjectDataStore.
 		/// </summary>
