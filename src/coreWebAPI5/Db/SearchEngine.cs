@@ -81,10 +81,16 @@ namespace workflow.Db
 				switch (request.EntityType.ToLower())
 				{
 					case "workflows":
-						relationships.ForEach(r => { result.Add(Repository.Find<Workflow>(r.WorkflowName)); });
+						var uniqueRWf = relationships.Select(x => x.WorkflowName).Distinct().ToList();
+						foreach (string wn in uniqueRWf)
+							result.Add(Repository.Find<Workflow>(wn));
+						//relationships.ForEach(r => { result.Add(Repository.Find<Workflow>(r.WorkflowName)); });
 						break;
 					case "trackables":
-						relationships.ForEach(r => { result.Add(Repository.Find<Trackable>(r.TrackableName)); });
+						var uniqueR = relationships.Select(x => x.TrackableName).Distinct().ToList();
+						foreach (string tn in uniqueR)
+							result.Add(Repository.Find<Trackable>(tn));
+						//relationships.ForEach(r => { result.Add(Repository.Find<Trackable>(r.TrackableName)); });
 						break;
 					case "transactions":
 						relationships.ForEach(r => { result.Add(Repository.Find<Transaction>(r.TransactionName)); });
