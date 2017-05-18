@@ -28,33 +28,37 @@ namespace workflow.Model
 		}
 		public void Clean()
 		{
-			if(this.type== TransactionType.Move || this.type==TransactionType.Copy)
+			if(this.type== TransactionType.move || this.type==TransactionType.copy)
 			{
 				this.AssignedTo = null;
-				this.Comment = null;
+				//this.Comment = null;
 			}
-			if(this.type == TransactionType.Comment) {
+			if(this.type == TransactionType.comment) {
 				this.NewNodeId = null;
 				this.AssignedTo = null;
 			}
 
-			if (this.type == TransactionType.Assignment)
+			if (this.type == TransactionType.assignment)
 			{
 				this.NewNodeId = null;
-				this.Comment = null;
+				//this.Comment = null;
 			}
 		}
 		public bool Execute(IWorkflowRepository repository, out int statuscode, out string statusmessage)
 		{
 			this.Clean();
+			if (!this.IsUniqueTransactionId(repository, out statuscode, out statusmessage))
+				return false;
+			if (!this.IsValid(repository, out statuscode, out statusmessage))
+				return false;
 			Console.WriteLine("executing the transaction");
 			statuscode = 0;
 			statusmessage = "success";
-			var workflow = repository.Find<Workflow>(this.WorkflowName);
+			var workflow = repository.Find<Workflow>(WorkflowName);
 
 			// should the transaction object execute
 			//trans.Execute();
-			if (this.type == TransactionType.Copy && this.type == TransactionType.Move)
+			if (this.type == TransactionType.copy || this.type == TransactionType.move)
 			{
 				if (!workflow.IsMoveValid(this, repository))
 				{
@@ -70,7 +74,7 @@ namespace workflow.Model
 			repository.Track(this);
 			return true;
 		}
-		public bool IsValid(IWorkflowRepository repository, out int statuscode, out string statusmessage)
+		private bool IsValid(IWorkflowRepository repository, out int statuscode, out string statusmessage)
 		{
 			statuscode = 0;
 			statusmessage = "success";
@@ -78,25 +82,25 @@ namespace workflow.Model
 			try
 			{
 				Console.WriteLine("type of transaction is {0}",this.type.ToString());
-				if (this.type == TransactionType.Move || this.type == TransactionType.Copy)
+				if (this.type == TransactionType.move || this.type == TransactionType.copy)
 				{
 					return IsValidMoveCopy(repository, out statuscode, out statusmessage);
 				}
-				if (this.type == TransactionType.Assignment)
+				if (this.type == TransactionType.assignment)
 				{
 					return IsValidAssignment(out statuscode, out statusmessage);
 				}
-				if (this.type == TransactionType.Comment)
+				if (this.type == TransactionType.comment)
 				{
 					Console.WriteLine("in the comment if statement");
 					bool result = IsValidComment(out statuscode, out statusmessage);
 					Console.WriteLine("is valid comment result is {0}", result);
 					return result;
 				}
-			}
+			} 
 			catch(Exception ex)
 			{
-				Console.WriteLine("an error occured {0}",ex.InnerException);
+				Console.WriteLine("an error occured {0}",ex.Message);
 			}
 				statuscode = 400;
 				statusmessage = "not a valid type of transaction";
@@ -130,6 +134,7 @@ namespace workflow.Model
 		{
 			statuscode = 0;
 			statusmessage = "success";
+
 			bool result = (!string.IsNullOrEmpty(this.CurrentNodeId) &&
 				!string.IsNullOrEmpty(this.Submitter.Email) &&
 				!string.IsNullOrEmpty(this.TrackableName) &&
@@ -142,17 +147,28 @@ namespace workflow.Model
 			return result;
 		}
 
-		private bool IsValidMoveCopy(IWorkflowRepository repository, out int statuscode, out string statusmessage)
+		private bool IsUniqueTransactionId(IWorkflowRepository repository, out int statuscode, out string statusmessage)
 		{
 			statuscode = 0;
 			statusmessage = string.Empty;
-			
 			if (repository.Find<Transaction>(this.Name) != null)
 			{
 				statuscode = 400;
 				statusmessage = string.Format("The transactionId {0} already exists", this.Name);
 				return false;
 			}
+			return true;
+
+
+		}
+
+		private bool IsValidMoveCopy(IWorkflowRepository repository, out int statuscode, out string statusmessage)
+		{
+			statuscode = 0;
+			statusmessage = string.Empty;
+
+			//if (!IsUniqueTransactionId(repository, out statuscode, out statusmessage))
+			//	return false;
 			//	Console.WriteLine("is unique transactionId");
 			if (repository.Find<Trackable>(this.TrackableName) == null)
 			{
@@ -224,9 +240,9 @@ namespace workflow.Model
 	 
 	public enum TransactionType
 	{
-		Move,
-		Copy,
-		Assignment,
-		Comment
+		move,
+		copy,
+		assignment,
+		comment
 	}
 }

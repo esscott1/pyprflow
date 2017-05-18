@@ -150,13 +150,13 @@ namespace workflow.Model
 				var r = new Relationship();
 				r.TransactionName = trans.Name;
 				r.TrackableName = trans.TrackableName;
-				if (trans.type == TransactionType.Move)
+				if (trans.type == TransactionType.move)
 					r.NodeName = trans.NewNodeId;
-				else if (trans.type == TransactionType.Copy)
+				else if (trans.type == TransactionType.copy)
 					r.NodeName = trans.NewNodeId;
-				else if (trans.type == TransactionType.Assignment)
+				else if (trans.type == TransactionType.assignment)
 					r.NodeName = trans.CurrentNodeId;
-				else if (trans.type == TransactionType.Comment)
+				else if (trans.type == TransactionType.comment)
 					r.NodeName = trans.CurrentNodeId;
 				r.WorkflowName = trans.WorkflowName;
 				if(trans.AssignedTo !=null)
@@ -165,7 +165,7 @@ namespace workflow.Model
 				if(trans.Submitter != null)
 					r.Submitter = trans.Submitter.Email;
 				Console.WriteLine("transacation type is {0}", trans.type);
-				if (trans.type == TransactionType.Move)
+				if (trans.type == TransactionType.move)
 					DeActivateOldTrackableRelationship(trans);
 
 				InsertRelationship(r);
@@ -185,27 +185,30 @@ namespace workflow.Model
 			}
 		}
 
-		private Relationship DeActivateOldTrackableRelationship(Transaction r)
+		private void DeActivateOldTrackableRelationship(Transaction r)
 		{
 			using (var db = new WorkflowContext())
 			{
 				Console.WriteLine("looking for old relationships");
-				Relationship oldr = db.Relationships.Where(o => o.TrackableName == r.TrackableName
+				List<Relationship> oldr = db.Relationships.Where(o => o.TrackableName == r.TrackableName
 				&& o.WorkflowName == r.WorkflowName
-				&& o.Type == r.type
-				&& o.NodeName == r.CurrentNodeId).FirstOrDefault();
+				//&& o.Type == r.type
+				&& o.NodeName == r.CurrentNodeId).ToList();
 				Console.WriteLine("looking for {0} in WF {1}, with nodeID = {2}", r.TrackableName, r.WorkflowName, r.CurrentNodeId);
 				if (oldr == null)
 				{
 					Console.WriteLine("didn't find an old relationship");
-					return null;
+					return;// null;
 				}
-				Console.WriteLine("found relationship ID {0}",oldr.RelationshipId);
-				oldr.Active = false;
-				db.Relationships.Update(oldr);
+				Console.WriteLine("found {0} relationships",oldr.Count);
+				foreach (Relationship relationship in oldr)
+				{
+					relationship.Active = false;
+					db.Relationships.Update(relationship);
+				}
 				db.SaveChanges();
 				//Console.WriteLine("updated {0} records during deactivate old relationshops", db.SaveChanges());
-				return oldr;
+				return;// oldr;
 			}
 		}
 

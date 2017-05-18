@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using workflow.Model;
 using workflow.Db;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Primitives;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -14,6 +15,12 @@ namespace workflow.Controllers
 	[Route("api/[controller]")]
 	public class SearchController : Controller
 	{
+		public static readonly string[] SearchParameters = { "entitytype","trackableid","transactionid",
+			"nodeid",
+			"assignmentto",
+			"transactiontype",
+			"isactive" };
+		public static readonly string[] sEntityTypes = { "workflows", "trackables", "transactions" };
 		public SearchController(IWorkflowRepository workflow)
 		{
 			Repository = workflow;
@@ -42,6 +49,7 @@ namespace workflow.Controllers
 			string transactionId,
 			string nodeId,
 			string assignedTo,
+			string type,
 			string start,
 			string end,
 			string isActive)
@@ -49,8 +57,26 @@ namespace workflow.Controllers
 		
 			Dictionary<string, Microsoft.Extensions.Primitives.StringValues> dic =
 				new Dictionary<string, Microsoft.Extensions.Primitives.StringValues>();
-			Console.WriteLine("in the search");
+			Console.WriteLine("in the search Controller");
+			
 			dic = QueryHelpers.ParseQuery(Request.QueryString.ToString());
+			StringValues sEntityType;
+			if (dic.TryGetValue("entitytype", out sEntityType))
+			{
+				if (!sEntityTypes.Contains(sEntityType.ToString()))
+					return StatusCode(400, "EntityType must be: "+ String.Join(" | ", sEntityTypes));
+			}
+			else
+				return StatusCode(400, "Must include Entitytype to define type of object for search to return");
+
+			foreach (KeyValuePair<string, StringValues> s in dic.ToArray())
+			{
+				if(!SearchParameters.Contains(s.Key.ToLower()))
+				{
+					return StatusCode(400, "bad search parameter provided. " + s.Key);
+				}
+			}
+				//Console.WriteLine("{0} is key {1} is value in querystring",s.Key, s.Value);
 			SearchRequest request = new SearchRequest(dic);
 
 			SearchEngine se = new Db.SearchEngine(Repository);
@@ -59,6 +85,8 @@ namespace workflow.Controllers
 			
 			return Json(result);
 		}
+
+		
 
 		
 

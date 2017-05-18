@@ -70,7 +70,12 @@ namespace workflow.Db
 			try
 			{
 				List<Relationship> relationships = Repository.Where(request.Predicate);
-				
+
+				//TransactionType tType = TransactionType.assignment;
+				//Console.WriteLine("overriden the search engine to search for {0}", tType.ToString());
+				//relationships = Repository.Where(r => r.Type == tType);
+				//
+				//relationships.ForEach(r => { result.Add(Repository.Find<Transaction>(r.Type == tType)); });
 				Console.WriteLine("going to search {0} of relationships",relationships.Count);
 			
 				switch (request.EntityType.ToLower())

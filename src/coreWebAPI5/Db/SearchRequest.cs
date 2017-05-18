@@ -16,13 +16,32 @@ namespace workflow.Db
 		public SearchRequest(Dictionary<string,
 			Microsoft.Extensions.Primitives.StringValues> queryString)
 		{
-			StringValues select;
+			StringValues select; StringValues sIsActive;
 			queryString.TryGetValue("entityType", out select);
 			EntityType = select;
 			if (queryString.Count > 1)
 			{
-				if (!queryString.ContainsKey("isactive"))
+				if (queryString.TryGetValue("isactive", out sIsActive))
+				{
+					switch (sIsActive.FirstOrDefault().ToLower())
+					{
+						case "all":
+							queryString.Remove("isactive");
+							break;
+						case "false":
+							break;
+						default:
+							queryString.Remove("isactive");
+							queryString.Add("isactive", "true");
+							break;
+					}
+					
+				}
+				else
+				{
 					queryString.Add("isactive", "true");
+				}
+			
 				BuildPredicate(queryString);
 			}
 
@@ -62,12 +81,20 @@ namespace workflow.Db
 				predicate = predicate.And(i => i.WorkflowName == workflowName.ToString());
 			}
 			StringValues assignedTo;
-
-			Console.WriteLine("looking for assigned to in search request predicate build");
 			if (queryString.TryGetValue("assignedto", out assignedTo))
 			{
-				Console.WriteLine("found the assignedTo value of {0}", assignedTo);
 				predicate = predicate.And(i => i.AssignedTo == assignedTo.ToString());
+			}
+			StringValues sType;
+			if (queryString.TryGetValue("transactiontype", out sType))
+			{
+				Console.WriteLine("found type of value {0}", sType);
+				TransactionType tType;
+				if (Enum.TryParse<TransactionType>(sType, out tType))
+				{
+					predicate = predicate.And(i => i.Type == tType);
+					Console.WriteLine("tType value is {0}", tType.ToString());
+				}
 			}
 
 			Predicate = predicate;

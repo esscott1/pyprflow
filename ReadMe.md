@@ -388,6 +388,8 @@ API/Search?entityType=workflow|trackable|transaction
 &transactionId={value}
 &nodeId={value}
 &assignedto={value} [not valid with entity type = Worflow]
+&transactionType=move|copy|comment|assignment
+&isActive=true|false|all
 
 Search parameters
 
@@ -396,4 +398,4 @@ Search parameters
 | entityType        |   entityType=workflow|trackable|transaction      | Type of object you are wanting [Worflow; orchestration; Trackable; 
 | KVP               |   workflowId={name}|trackableId={name}|transactionId={name}|nodeId={name}|IsActive={true/false}|                       |
 
- 
+ entityType=transaction&

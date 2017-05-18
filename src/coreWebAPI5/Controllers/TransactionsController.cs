@@ -29,7 +29,7 @@ namespace workflow.Controllers
 			t.AssignedTo = new User() { Email = "worker@somewhere.com" };
 			t.TrackableName = "SampleDoc1";
 			t.WorkflowName = "SampleWorkflow1";
-			t.type = TransactionType.Move;
+			t.type = TransactionType.move;
 			var d = DateTime.Now;
 			t.TransActionTime = DateTime.Now;
 			t.Name = "SampleTransaction1";
@@ -58,8 +58,6 @@ namespace workflow.Controllers
 			try
 			{
 				string msg; int statusCode;
-				if (!trans.IsValid(Repository, out statusCode, out msg))
-					return StatusCode(statusCode, msg);
 				if (trans.Execute(Repository, out statusCode, out msg))
 					return CreatedAtRoute("GetTransaction", new { id = trans.Name }, Repository);
 				else
@@ -67,7 +65,7 @@ namespace workflow.Controllers
 				
 			}
 			catch(Exception ex)
-			{ return (StatusCode(500, ex.InnerException)); }
+			{ return (StatusCode(500, ex.Message)); }
 
 		}
 
