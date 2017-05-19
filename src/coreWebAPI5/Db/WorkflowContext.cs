@@ -11,11 +11,17 @@ namespace workflow.Model
 	{
 		public DbSet<BaseWorkflowItem> WorkflowDb { get; set; }
 		public DbSet<Relationship> Relationships { get; set; }
+
+		public WorkflowContext(DbContextOptions<WorkflowContext> options)
+			: base(options) { }
+		public WorkflowContext() 
+		{
+		}
 		
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
 			optionsBuilder.UseSqlite("Filename=./Repository.db", x => x.SuppressForeignKeyEnforcement());
-				
+			//this.Database.Migrate();
 
 		}
 		protected override void OnModelCreating(ModelBuilder modelBuilder)

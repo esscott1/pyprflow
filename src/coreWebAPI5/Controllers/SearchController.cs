@@ -64,19 +64,19 @@ namespace workflow.Controllers
 			if (dic.TryGetValue("entitytype", out sEntityType))
 			{
 				if (!sEntityTypes.Contains(sEntityType.ToString()))
-					return StatusCode(400, "EntityType must be: "+ String.Join(" | ", sEntityTypes));
+					return StatusCode(400, "EntityType must be: " + String.Join(" | ", sEntityTypes));
 			}
 			else
 				return StatusCode(400, "Must include Entitytype to define type of object for search to return");
 
-			foreach (KeyValuePair<string, StringValues> s in dic.ToArray())
+			foreach (KeyValuePair<string, StringValues> s in dic)
 			{
-				if(!SearchParameters.Contains(s.Key.ToLower()))
+				if (!SearchParameters.Contains(s.Key.ToLower()))
 				{
 					return StatusCode(400, "bad search parameter provided. " + s.Key);
 				}
 			}
-				//Console.WriteLine("{0} is key {1} is value in querystring",s.Key, s.Value);
+			//Console.WriteLine("{0} is key {1} is value in querystring",s.Key, s.Value);
 			SearchRequest request = new SearchRequest(dic);
 
 			SearchEngine se = new Db.SearchEngine(Repository);

@@ -47,6 +47,13 @@ namespace workflow.Model
 				{
 					if (ex.SqliteErrorCode == 19)
 						throw new WorkFlowException("unique key violation");
+					if (ex.SqliteErrorCode == 1)
+					{
+						Console.WriteLine("need to run a migration, table does not exist");
+						Console.WriteLine("exception {0}", ex.Message);
+					}
+					Console.WriteLine("sqlite code {0}", ex.SqliteErrorCode.ToString());
+
 				
 				}
 				catch (Exception ex)
@@ -80,27 +87,46 @@ namespace workflow.Model
 				}
 			}
 		}
-		public T Find<T>(string workflowName)
+		
+	public T Find<T>(string workflowName)
+	{
+		using (var db = new WorkflowContext())
 		{
-			using (var db = new WorkflowContext())
-				try {
-					Console.WriteLine("searching for item {0} with Id {1}", typeof(T).ToString(), workflowName);
-					BaseWorkflowItem result = db.WorkflowDb.Find(new object[] { workflowName, typeof(T).ToString() });
-					if (result == null)
-					{
-						Console.WriteLine("looking for type {0} with ID {1}", typeof(T).ToString(), workflowName);
-						throw new WorkFlowException(String.Format("null was returned when finding for key {0}", workflowName));
-					}
-				//	Console.WriteLine("found item");
-					return result.Deserialize<T>(result.SerializedObject);
-
-				} catch (Exception ex) {
-					Console.WriteLine("{0} error", ex.Message);
-					Console.WriteLine("{0} inner message", ex.InnerException);
-					return default(T);
+			try
+			{
+				Console.WriteLine("searching for item {0} with Id {1}", typeof(T).ToString(), workflowName);
+				BaseWorkflowItem result = db.WorkflowDb.Find(new object[] { workflowName, typeof(T).ToString() });
+				if (result == null)
+				{
+					Console.WriteLine("looking for type {0} with ID {1}", typeof(T).ToString(), workflowName);
+					throw new WorkFlowException(String.Format("null was returned when finding for key {0}", workflowName));
 				}
+				//	Console.WriteLine("found item");
+				return result.Deserialize<T>(result.SerializedObject);
+
+			}
+			catch (Microsoft.Data.Sqlite.SqliteException ex)
+			{
+				if (ex.SqliteErrorCode == 19)
+					throw new WorkFlowException("unique key violation");
+				if (ex.SqliteErrorCode == 1)
+				{
+					Console.WriteLine("need to run a migration, table does not exist");
+					Console.WriteLine("exception {0}", ex.Message);
+				}
+				Console.WriteLine("sqlite code {0}", ex.SqliteErrorCode.ToString());
+				return default(T);
+
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine("{0} error", ex.Message);
+				Console.WriteLine("{0} inner message", ex.InnerException);
+				return default(T);
+			}
 		}
-		public void Update<T>(T item) where T : BaseWorkflowItem
+	}
+	public void Update<T>(T item) where T : BaseWorkflowItem
 		{
 			using (var db = new WorkflowContext())
 			{
@@ -264,6 +290,8 @@ namespace workflow.Model
 				return true;
 			return false;
 		}
-		
+
+
 	}
+
 }
