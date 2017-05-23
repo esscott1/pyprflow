@@ -1,5 +1,5 @@
 FROM microsoft/dotnet:latest
-COPY ./FirstWebApi /app
+COPY ./coreWebAPI5 /app
 WORKDIR /app
 RUN ["dotnet", "restore"]
 RUN ["dotnet", "build"]
