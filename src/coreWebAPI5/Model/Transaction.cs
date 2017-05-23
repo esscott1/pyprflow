@@ -194,7 +194,7 @@ namespace workflow.Model
 				dic.Add("nodeid", this.CurrentNodeId);
 				dic.Add("trackableid", this.TrackableName);
 				dic.Add("entityType", "trackables");
-				//	Console.WriteLine("looking for trackables in {0} with trackableId = {1}", this.CurrentNodeId, this.TrackableName);
+					Console.WriteLine("looking for trackables in {0} with trackableId = {1}", this.CurrentNodeId, this.TrackableName);
 				Db.SearchRequest request = new Db.SearchRequest(dic);
 				Db.SearchEngine se = new Db.SearchEngine(repository);
 

@@ -53,8 +53,10 @@ namespace workflow.Controllers
 		[HttpPost]
 		public IActionResult SubmitTransaction([FromBody] Transaction trans)
 		{
+		//	http://www.newtonsoft.com/jsonschema/help/html/ValidatingJson.htm
 			if (trans == null)
 			{ return BadRequest("trans is null"); }
+			
 			try
 			{
 				string msg; int statusCode;
