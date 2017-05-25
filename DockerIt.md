@@ -9,8 +9,11 @@ Step 2.[Install Docker](https://docs.docker.com/engine/installation/linux/ubuntu
 
 Step 3. verify you have to Dockerfile that is include in the git repository.
 
-Step 4. run '''docker build -t {name of your image}'''
+Step 4. run 
+'''docker build -t {name of your image}'''
 
-Step 5. run '''docker run -it -d -p 5000:5000 {name of your image}'''
+Step 5. run 
+'''docker run -it -d -p 5000:5000 {name of your image}'''
 
-Step 6. test it with '''curl -i http://localhost:5000/api/version'''
+Step 6. test it with 
+'''curl -i http://localhost:5000/api/version'''
