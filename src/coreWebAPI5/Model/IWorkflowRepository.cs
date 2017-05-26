@@ -13,19 +13,21 @@ namespace workflow.Model
 
 		IEnumerable<T> GetAll<T>();
 		void Add(Workflow workflow);
-		T Find<T>(string workflowItemId);
-		void Remove<T>(string workflowItemId) where T : WorkflowItem;
-		void Update<T>(T item) where T : WorkflowItem;
+		T Find<T>(string  name);
+		void Remove<T>(string workflowItemId) where T : BaseWorkflowItem;
+		void Update<T>(T item) where T : BaseWorkflowItem;
 
 
 		void Add(Trackable trackable);
-		
-		
-		
+
+		List<Relationship> Where(System.Linq.Expressions.Expression<Func<Relationship, bool>> predicate);
+
+
 		void Add(Transaction trans);
 		
 
 
 		bool CheckValidUserKey(string stringValues);
+		void Track(Transaction trans);
 	}
 }

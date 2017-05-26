@@ -1,0 +1,436 @@
+{
+	"variables": [],
+	"info": {
+		"name": "ExampleLifeCycle",
+		"_postman_id": "0d05a354-d757-ec87-8f3f-f3ba0807c278",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create Workflow",
+			"request": {
+				"url": "localhost:5000/api/workflows",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "user-key",
+						"value": "test",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"nodes\": {\n    \"SampleNode1\": {\n      \"nodeName\": \"SampleNode1\",\n      \"nodeDescription\": null,\n      \"nodeId\": null,\n      \"isStart\": true,\n      \"isEnd\": false\n    },\n    \"SampleNode2\": {\n      \"nodeName\": \"SampleNode2\",\n      \"nodeDescription\": null,\n      \"nodeId\": null,\n      \"isStart\": false,\n      \"isEnd\": false\n    },\n    \"SampleNode3\": {\n      \"nodeName\": \"SampleNode3\",\n      \"nodeDescription\": null,\n      \"nodeId\": null,\n      \"isStart\": false,\n      \"isEnd\": false\n    },\n    \"SampleNode4\": {\n      \"nodeName\": \"SampleNode4\",\n      \"nodeDescription\": null,\n      \"nodeId\": null,\n      \"isStart\": false,\n      \"isEnd\": true\n    }\n  },\n  \"orchestrations\": {\n    \"Orch1\": {\n      \"orchestrationName\": \"Orch1\",\n      \"moves\": [\n        {\n          \"from\": null,\n          \"to\": \"SampleNode1\",\n          \"rule\": {\n            \"accessList\": [\n              {\n                \"email\": \"ericscott411@gmail.com\"\n              }\n            ],\n            \"name\": null\n          }\n        },\n        {\n          \"from\": \"SampleNode1\",\n          \"to\": \"SampleNode2\",\n          \"rule\": {\n            \"accessList\": [\n              {\n                \"email\": \"ericscott411@gmail.com\"\n              }\n            ],\n            \"name\": null\n          }\n        },\n        {\n          \"from\": \"SampleNode2\",\n          \"to\": \"SampleNode3\",\n          \"rule\": {\n            \"accessList\": [\n              {\n                \"email\": \"ericscott411@gmail.com\"\n              }\n            ],\n            \"name\": null\n          }\n        },\n        {\n          \"from\": \"SampleNode3\",\n          \"to\": \"SampleNode4\",\n          \"rule\": {\n            \"accessList\": [\n              {\n                \"email\": \"ericscott411@gmail.com\"\n              }\n            ],\n            \"name\": null\n          }\n        }\n      ],\n      \"name\": null\n    },\n    \"Orch2\": {\n      \"orchestrationName\": \"Orch2\",\n      \"moves\": [\n        {\n          \"from\": null,\n          \"to\": \"SampleNode1\",\n          \"rule\": null\n        },\n        {\n          \"from\": \"SampleNode1\",\n          \"to\": \"SampleNode2\",\n          \"rule\": null\n        },\n        {\n          \"from\": \"SampleNode2\",\n          \"to\": \"SampleNode3\",\n          \"rule\": null\n        },\n        {\n          \"from\": \"SampleNode2\",\n          \"to\": \"SampleNode4\",\n          \"rule\": null\n        },\n        {\n          \"from\": \"SampleNode2\",\n          \"to\": \"SampleNode1\",\n          \"rule\": null\n        },\n        {\n          \"from\": \"SampleNode3\",\n          \"to\": \"SampleNode2\",\n          \"rule\": null\n        },\n        {\n          \"from\": \"SampleNode3\",\n          \"to\": \"SampleNode4\",\n          \"rule\": null\n        }\n      ],\n      \"name\": null\n    }\n  },\n  \"workflowGuid\": \"8f78962d-43c7-4aa8-862c-5db7d9303949\",\n  \"workflowName\": null,\n  \"orchestrationAffinity\": false,\n  \"name\": \"SampleWorkflow1\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Create Trackable 1 in system",
+			"request": {
+				"url": "http://localhost:5000/api/Trackables",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "user-key",
+						"value": "test",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \n  \"name\": \"SampleDoc1\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Create Trackable 1-1 in system",
+			"request": {
+				"url": "http://localhost:5000/api/Trackables",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "user-key",
+						"value": "test",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \n  \"name\": \"SampleDoc1-1\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "submit SampleDoc 1 to workflow",
+			"request": {
+				"url": "localhost:5000/api/transactions",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "user-key",
+						"value": "test",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"trackableName\": \"SampleDoc1\",\n  \"type\": \"move\",\n  \"comment\": \"Submitting to Workflow\",\n\t\"newNodeid\": \"SampleNode1\",\n \n   \"submitter\": {\n    \"email\": \"Sample.User@somewhere.com\"\n  },\n\n  \"assignedTo\": {\n    \"email\": \"Newworker@somewhere.com\"\n  },\n  \"workflowName\": \"SampleWorkflow1\",\n  \"name\": \"SampleTransaction1\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Add Comment to doc1 in node 1",
+			"request": {
+				"url": "localhost:5000/api/transactions",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "user-key",
+						"value": "test",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"trackableName\": \"SampleDoc1\",\n  \"type\": \"comment\",\n  \"comment\": \"this is going to be hard\",\n  \"currentNodeid\": \"SampleNode1\",\n\n \n   \"submitter\": {\n    \"email\": \"Sample.User@somewhere.com\"\n  },\n\n  \"assignedTo\": {\n    \"email\": \"sam@somewhere.com\"\n  },\n  \"workflowName\": \"SampleWorkflow1\",\n  \"name\": \"SampleTransactionC1\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Assign doc1 in node 1",
+			"request": {
+				"url": "localhost:5000/api/transactions",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "user-key",
+						"value": "test",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"trackableName\": \"SampleDoc1\",\n  \"type\": \"Assignment\",\n  \"comment\": \"Assigning to Sam because he is the man\",\n  \"currentNodeid\": \"SampleNode1\",\n\n \n   \"submitter\": {\n    \"email\": \"Sample.User@somewhere.com\"\n  },\n\n  \"assignedTo\": {\n    \"email\": \"sam@somewhere.com\"\n  },\n  \"workflowName\": \"SampleWorkflow1\",\n  \"name\": \"SampleTransactionA1\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "move doc1 step 1 to step 2",
+			"request": {
+				"url": "localhost:5000/api/transactions",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "user-key",
+						"value": "test",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"trackableName\": \"SampleDoc1\",\n  \"type\": \"move\",\n  \"comment\": \"Adding a comment\",\n  \"currentNodeid\": \"SampleNode1\",\n\t\"newNodeid\": \"SampleNode2\",\n \n   \"submitter\": {\n    \"email\": \"Sample.User@somewhere.com\"\n  },\n\n  \"assignedTo\": {\n    \"email\": \"Newworker@somewhere.com\"\n  },\n  \"workflowName\": \"SampleWorkflow1\",\n  \"name\": \"SampleTransaction1-1\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Add Comment to doc1 in node 2",
+			"request": {
+				"url": "localhost:5000/api/transactions",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "user-key",
+						"value": "test",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"trackableName\": \"SampleDoc1\",\n  \"type\": \"comment\",\n  \"comment\": \"Adding a comment on doc 1 in node 2\",\n  \"currentNodeid\": \"SampleNode2\",\n\n \n   \"submitter\": {\n    \"email\": \"Sample.User@somewhere.com\"\n  },\n\n  \"assignedTo\": {\n    \"email\": \"sam@somewhere.com\"\n  },\n  \"workflowName\": \"SampleWorkflow1\",\n  \"name\": \"SampleTransactionC3\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "submit SampleDoc 1-1 to workflow",
+			"request": {
+				"url": "localhost:5000/api/transactions",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "user-key",
+						"value": "test",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"trackableName\": \"SampleDoc1-1\",\n  \"type\": \"move\",\n  \"comment\": \"Adding a comment\",\n\t\"newNodeid\": \"SampleNode1\",\n \n   \"submitter\": {\n    \"email\": \"Sample.User@somewhere.com\"\n  },\n\n  \"assignedTo\": {\n    \"email\": \"Newworker@somewhere.com\"\n  },\n  \"workflowName\": \"SampleWorkflow1\",\n  \"name\": \"SampleTransaction1-1-0\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Assign doc1 in node 2",
+			"request": {
+				"url": "localhost:5000/api/transactions",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "user-key",
+						"value": "test",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"trackableName\": \"SampleDoc1\",\n  \"type\": \"Assignment\",\n  \"comment\": \"Assigning to Chris as it's he's turn\",\n  \"currentNodeid\": \"SampleNode2\",\n\n \n   \"submitter\": {\n    \"email\": \"Sample.User@somewhere.com\"\n  },\n\n  \"assignedTo\": {\n    \"email\": \"sam@somewhere.com\"\n  },\n  \"workflowName\": \"SampleWorkflow1\",\n  \"name\": \"SampleTransactionA2\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "move doc1 step 2 to step 3",
+			"request": {
+				"url": "localhost:5000/api/transactions",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "user-key",
+						"value": "test",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"trackableName\": \"SampleDoc1\",\n  \"type\": \"move\",\n  \"comment\": \"Moving to Node 3\",\n  \"currentNodeid\": \"SampleNode2\",\n\t\"newNodeid\": \"SampleNode3\",\n \n   \"submitter\": {\n    \"email\": \"Sample.User@somewhere.com\"\n  },\n\n  \"assignedTo\": {\n    \"email\": \"Newworker@somewhere.com\"\n  },\n  \"workflowName\": \"SampleWorkflow1\",\n  \"name\": \"SampleTransaction1-2\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "move doc1-1 step 1 to step 2",
+			"request": {
+				"url": "localhost:5000/api/transactions",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "user-key",
+						"value": "test",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"trackableName\": \"SampleDoc1-1\",\n  \"type\": \"move\",\n  \"comment\": \"Moving from SampleDoc1-1 from node1 to node2\",\n  \"currentNodeid\": \"SampleNode1\",\n\t\"newNodeid\": \"SampleNode2\",\n \n   \"submitter\": {\n    \"email\": \"Sample.User@somewhere.com\"\n  },\n\n  \"assignedTo\": {\n    \"email\": \"Newworker@somewhere.com\"\n  },\n  \"workflowName\": \"SampleWorkflow1\",\n  \"name\": \"SampleTransaction1-1-2\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Add Comment to doc1-1 in node 2",
+			"request": {
+				"url": "localhost:5000/api/transactions",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "user-key",
+						"value": "test",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"trackableName\": \"SampleDoc1-1\",\n  \"type\": \"comment\",\n  \"comment\": \"someone should do this\",\n  \"currentNodeid\": \"SampleNode2\",\n\n \n   \"submitter\": {\n    \"email\": \"Sample.User@somewhere.com\"\n  },\n\n  \"assignedTo\": {\n    \"email\": \"sam@somewhere.com\"\n  },\n  \"workflowName\": \"SampleWorkflow1\",\n  \"name\": \"SampleTransactionC1-1\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Assign doc1-1 in node 2",
+			"request": {
+				"url": "localhost:5000/api/transactions",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "user-key",
+						"value": "test",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"trackableName\": \"SampleDoc1-1\",\n  \"type\": \"Assignment\",\n  \"comment\": \"Assigning to Eric cause he needs work\",\n  \"currentNodeid\": \"SampleNode2\",\n\n \n   \"submitter\": {\n    \"email\": \"Sample.User@somewhere.com\"\n  },\n\n  \"assignedTo\": {\n    \"email\": \"Eric@somewhere.com\"\n  },\n  \"workflowName\": \"SampleWorkflow1\",\n  \"name\": \"SampleTransaction1-1-A2\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "move doc1-1 step 2 to step 4",
+			"request": {
+				"url": "localhost:5000/api/transactions",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "user-key",
+						"value": "test",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"trackableName\": \"SampleDoc1-1\",\n  \"type\": \"move\",\n  \"comment\": \"skipping step 3, not needed\",\n  \"currentNodeid\": \"SampleNode2\",\n\t\"newNodeid\": \"SampleNode4\",\n \n   \"submitter\": {\n    \"email\": \"Sample.User@somewhere.com\"\n  },\n\n  \"assignedTo\": {\n    \"email\": \"Newworker@somewhere.com\"\n  },\n  \"workflowName\": \"SampleWorkflow1\",\n  \"name\": \"SampleTransaction1-1-4\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Add Comment to doc1-1 in node 4",
+			"request": {
+				"url": "localhost:5000/api/transactions",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "user-key",
+						"value": "test",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"trackableName\": \"SampleDoc1-1\",\n  \"type\": \"comment\",\n  \"comment\": \"someone responsible for node 4 should do this\",\n  \"currentNodeid\": \"SampleNode4\",\n\n \n   \"submitter\": {\n    \"email\": \"Sample.User@somewhere.com\"\n  },\n\n  \"assignedTo\": {\n    \"email\": \"sam@somewhere.com\"\n  },\n  \"workflowName\": \"SampleWorkflow1\",\n  \"name\": \"SampleTransactionC1-2\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Assign doc1-1 in node 4",
+			"request": {
+				"url": "localhost:5000/api/transactions",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "user-key",
+						"value": "test",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"trackableName\": \"SampleDoc1-1\",\n  \"type\": \"Assignment\",\n  \"comment\": \"Assigning to Eric cause he needs work\",\n  \"currentNodeid\": \"SampleNode2\",\n\n \n   \"submitter\": {\n    \"email\": \"Joe.Worker@somewhere.com\"\n  },\n\n  \"assignedTo\": {\n    \"email\": \"Joe.Worker@somewhere.com\"\n  },\n  \"workflowName\": \"SampleWorkflow1\",\n  \"name\": \"SampleTransaction1-1-A3\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

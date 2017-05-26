@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -34,6 +35,8 @@ namespace workflow
             // Add framework services.
             services.AddMvc();
 			services.AddSingleton<IWorkflowRepository, WorkflowRepository>();
+			services.AddDbContext<WorkflowContext>(options => 
+				options.UseSqlite("Filename=./Repository.db", x => x.SuppressForeignKeyEnforcement()));
 		}
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,6 +47,11 @@ namespace workflow
 			//app.ApplyUserKeyValidation();
 
             app.UseMvc();
-        }
+			using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+			{
+				serviceScope.ServiceProvider.GetService<WorkflowContext>().Database.Migrate();
+				
+			}
+		}
     }
 }

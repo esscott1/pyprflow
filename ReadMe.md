@@ -18,7 +18,7 @@ document would travel through in it's journey to be 'approved.'  First a documen
  ###Do orchestration workflows support multi-directional paths?
  Yes, orchestration workflows support multiple directions and multiple concurrent and parallel paths. 
 
- ###De orchestration workflows support single dimensional and multi-dimensional workflow paths? 
+ ###Do orchestration workflows support single dimensional and multi-dimensional workflow paths? 
  Yes, the OW engine supports single dimensional and multi-dimensional workflow paths.  Common single dimensional paths are where one task 
  leads to another task and another in a serial mannor.  Multi-dimensional paths commonly are where one completed task can simultaneouly 
  spawn multiple other tasks that are managed in parellel.  Additionally, in the multi-dimensional scenario a task that is yet to be queued 
@@ -308,31 +308,33 @@ To submit an item to an orchestration workflow you simply Post a transaction JSO
 
 ###What RESTful services are available to me
 
+### decidedly not holding to true RESTful Textbook but make for practicality.
 [GET]  
-API/workflow - returns all workflows managed by the application.  
-API/workflow/{workflowId}  - return the specific workflow.  
-API/workflow/example  - return an example workflow to get you started  
-API/workflow/{workflowId}/node/{nodeId}/trackables  - returns all the trackable in that workflow node  
+API/workflows - returns all workflows managed by the application.  
+API/workflows/{workflowId}  - return the specific workflow.  
+API/workflows/example  - return an example workflow to get you started 
+
+## below maybe not needed / wanted
+API/workflows/{workflowId}/node/{nodeId}/trackables  - returns all the trackable in that workflow node  
+API/workflows/{workflowId}/orchestrations
+API/workflow/{workflowId}/orchestration/{orchestrationId}
+API/workflows/{workflowId}/nodes  - return all the nodes in a specific workflow.  
+API/workflows/{workflowId}/nodes/{nodeId}  - return all the nodes in a specific workflow.  
+## end of above
+
+##API/workflow/{workflowId}/orchestration/rule?
 API/trackable  - returns all the trackable managed by the application  
 API/trackable/{trackableId} - returns that specific trackable  
 API/trackable/example  - return an example of a trackable to get you started.  
 API/trackable/{trackableId}/transaction  - returns the transaction history for the given trackable  
-API/trackable/newId - will return a uniquely new ID for inclusion in a trackable POST  
-API/trackable/availablemoves - returns the workflow NodeId's that are valid for the next moves.  
+##API/trackable/newId - will return a uniquely new ID for inclusion in a trackable POST  
+##API/trackable/availablemoves - returns the workflow NodeId's that are valid for the next moves.  
+
 API/transaction - returns all transactions  
 API/transaction/{transactionId} - returns a specific transacation  
 API/transaction/example  - returns an example transaction to get you started.  
 
-API/workflows/example  - return an example workflow to get you started  
-API/workflows - returns all workflows managed by the application  
-API/workflows/{workflowId}  - return the specific workflow.  
-**API/workflows/{workflowId}/nodes  - return all the nodes in a specific workflow.  
 
-**API/workflows/{workflowId}/nodes/{nodeId}  - return all the nodes in a specific workflow.  
-**API/workflows/{workflowId}/paths  -- returns all the paths in a specific workflow   
-**API/workflows/{workflowId}/paths/{pathId}  -- returns a specific paths in a specific workflow   
-
-API/trackables/example  - return an example of a trackable to get you started.  
 **API/trackables/{workflowId}/paths/{pathId}/trackables  - returns all the trackables that went through that path   
 **API/trackables/{workflowId}/nodes/{nodeId}/trackables  - returns all the trackable in that workflow node   
 API/trackables  - returns all the trackable managed by the application  
@@ -347,7 +349,6 @@ API/transactions/example  - returns an example transaction to get you started.
 
 [POST]  
 API/workflow - submits the workflow definition to the OW engine.  
-API/workflow/validate - validate the posted workflow definition.  
 API/trackable - submits a trackable to the OW engine  
 API/trackable/isunique/{trackableId} - varifies if a trackableId is new to the OW engine (used for prevalidation).  
 API/transaction - submits a transaction to the OW engine  
@@ -365,3 +366,36 @@ API/trackable/{trackableId} - updates an existing trackable
 [Delete]  
 API/workflow/{workflowId} - removes an existing workflow definition from the OW engine  
 API/trackable/{trackableId}  
+
+As a user I want to beable to define a workflow orchestration that represents my business process so that i can use to manage items through that process.
+as a user i want to be able to submit items to my defined workflow orchestration.
+as a user I want to be able to move item(s) through the steps of my workflow.
+as a user I want to be able to remove an item from the workflow.
+
+Wanting search capabilities so that I can satisfy the following use cases:
+
+As a user I want to see all the items in a particular node of a given workflow so that i can understand how many things are waiting review/approval of a particular step  
+As a user I want to see what node a particular trackable is within a given workflow so that I can understand what needs to happen next for a particular trackable  
+As a user i want to see the history of a particular item has been through or going through a given Workflow so that i can see the progress an item has made.  
+As a user i want to see all the items that have passed through a particular node in a workflow in a given timeframe so that see how much work has been accomplished by that step in the process  
+As a user I want to see all the items that a particular user has approved or denied in given workflow for a given timeframe so that i can understand the amount of work an individual has done.
+As a user i want to see how long a given item has spent in a particular (node) in a workflow so that I can understand if there are bottlenecks
+As a user I want to see how long a given item has spent in a particular workflow so that i can understand how long something has been under review.
+
+
+API/Search?entityType=workflow|trackable|transaction
+&trackableId={value}
+&transactionId={value}
+&nodeId={value}
+&assignedto={value} [not valid with entity type = Worflow]
+&transactionType=move|copy|comment|assignment
+&isActive=true|false|all
+
+Search parameters
+
+| Argument | Example |  Description     |
+|----------|----------------------------|------------------------------|
+| entityType        |   entityType=workflow|trackable|transaction      | Type of object you are wanting [Worflow; orchestration; Trackable; 
+| KVP               |   workflowId={name}|trackableId={name}|transactionId={name}|nodeId={name}|IsActive={true/false}|                       |
+
+ entityType=transaction&

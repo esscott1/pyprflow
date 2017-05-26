@@ -14,10 +14,12 @@
 		"Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",
 		"Microsoft.NETCore.App": "1.1.0",
 		"Microsoft.EntityFrameworkCore.Sqlite": "1.1.0",
-		"Microsoft.EntityFrameworkCore.Design": {
-			"version": "1.1.0",
-			"type": "build"
-		}
+    "Microsoft.EntityFrameworkCore.Design": {
+      "version": "1.1.0",
+      "type": "build"
+    },
+    "Microsoft.AspNetCore.WebUtilities": "1.1.1",
+    "System.Linq.Queryable": "4.0.1"
 	},
 
 	"tools": {
@@ -40,8 +42,9 @@
   },
 
 	"runtimes": {
-			"win10-x64": {},
-			"ubuntu.16.10-x64": {}
+		"win10-x64": {},
+		"ubuntu.16.10-x64": {},
+		"ubuntu.16.04-x64": {}
 	},
 
   "runtimeOptions": {
