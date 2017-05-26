@@ -20,15 +20,6 @@ namespace workflow.Controllers
 		}
 		public IWorkflowRepository Repository { get; set; }
 
-		[HttpGet("search")]
-		public IActionResult Search(string q)
-		{
-			// t = type of object
-			// name = name of object
-			// 
-			return Json(q);
-			return Json(HttpContext.Request.Query.ToList());
-		}
 
 		[HttpGet]
 		public IEnumerable<Workflow> GetAll()
@@ -49,11 +40,6 @@ namespace workflow.Controllers
 			return Json(wkf.GetSample());
 		}
 
-		[HttpGet("{workflowId}/Node/{nodeId}/trackables")]
-		public IEnumerable<Trackable> GetNodeTrackables(string workflowId, string nodeId)
-		{
-			throw new NotImplementedException();
-		}
 
 		[HttpGet("{workflowId}/orchestrations")]
 		public IEnumerable<Orchestration> GetOrchestrations(string workflowId)
@@ -63,12 +49,6 @@ namespace workflow.Controllers
 			foreach (KeyValuePair<string, Orchestration> kvp in workflow.Orchestrations)
 				ol.Add(kvp.Value);
 			return ol;
-		}
-
-		[HttpGet("{workflowId}/orchestrations/{orchestrationId}")]
-		public Orchestration GetOrchestration(string orchestrationId)
-		{
-			return Repository.Find<Orchestration>(orchestrationId);
 		}
 
 		[HttpGet("{workflowId}/nodes")]
@@ -139,7 +119,7 @@ namespace workflow.Controllers
 		[HttpDelete("{id}")]
 		public IActionResult Delete(string id)
 		{
-			throw new NotImplementedException();
+			Console.WriteLine("in the delete method of controller");
 			Repository.Remove<Workflow>(id);
 			return Json(String.Format("workflow with workflowItemId {0} is deleted", id));
 		}

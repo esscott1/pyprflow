@@ -8,7 +8,6 @@ namespace workflow.Model
 {
 	public class Workflow : BaseWorkflowItem
 	{
-		private static string TestStoreCategoryKey = "WorkFlow_ProofOfConcept";
 		public Guid WorkflowGuid { get; private set; }
 		//public string WFKey { get; set; }
 		public string WorkflowName { get; private set; }
