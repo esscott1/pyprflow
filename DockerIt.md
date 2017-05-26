@@ -19,7 +19,7 @@ Step 6. test it with
 '''curl -i http://localhost:5000/api/workflows/example
 
 to push to Docker Cloud you need to tag with the repository name
- '''docker tag {image name} {dockerUserName/repositoryName}'''
+ '''docker tag {image name} {dockerUserName/repositoryName}:{optional tag}'''
 
  push to the Cloud
- '''docker push {dockerUserName/repositoryName}'''
+ '''docker push {dockerUserName/repositoryName}:{optional tag}'''
