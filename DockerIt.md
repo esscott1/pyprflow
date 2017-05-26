@@ -10,10 +10,16 @@ Step 2.[Install Docker](https://docs.docker.com/engine/installation/linux/ubuntu
 Step 3. verify you have to Dockerfile that is include in the git repository.
 
 Step 4. run
-'''docker build -t {name of your image}'''
+'''docker build -t {name of your image} .'''
 
 Step 5. run
 '''docker run -it -d -p 5000:5000 {name of your image}'''
 
 Step 6. test it with
-'''curl -i http://localhost:5000/api/version'''
+'''curl -i http://localhost:5000/api/workflows/example
+
+to push to Docker Cloud you need to tag with the repository name
+ '''docker tag {image name} {dockerUserName/repositoryName}'''
+
+ push to the Cloud
+ '''docker push {dockerUserName/repositoryName}'''
