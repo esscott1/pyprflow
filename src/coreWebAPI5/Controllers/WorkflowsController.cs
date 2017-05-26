@@ -20,7 +20,6 @@ namespace workflow.Controllers
 		}
 		public IWorkflowRepository Repository { get; set; }
 
-
 		[HttpGet]
 		public IEnumerable<Workflow> GetAll()
 		{ return Repository.GetAll<Workflow>(); }
