@@ -42,7 +42,7 @@ namespace workflow.Controllers
 		[HttpGet("version")]
 		public IActionResult GetVersion()
 		{
-			
+			var info = "stuff";
 			return Json("version information");
 		}
 
