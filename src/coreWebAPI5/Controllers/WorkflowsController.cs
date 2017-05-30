@@ -39,6 +39,13 @@ namespace workflow.Controllers
 			return Json(wkf.GetSample());
 		}
 
+		[HttpGet("version")]
+		public IActionResult GetVersion()
+		{
+			
+			return Json("version information");
+		}
+
 
 		[HttpGet("{workflowId}/orchestrations")]
 		public IEnumerable<Orchestration> GetOrchestrations(string workflowId)

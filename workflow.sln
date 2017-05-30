@@ -10,6 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		DockerIt.md = DockerIt.md
 		src\coreWebAPI5\EFcommands.md = src\coreWebAPI5\EFcommands.md
 		global.json = global.json
+		Piperflow.md = Piperflow.md
 		ReadMe.md = ReadMe.md
 	EndProjectSection
 EndProject
