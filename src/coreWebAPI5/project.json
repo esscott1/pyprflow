@@ -1,4 +1,5 @@
 {
+	"version": "0.0.1.3",
 	"dependencies": {
 		"Microsoft.AspNetCore.JsonPatch": "1.1.0",
 		"Microsoft.AspNetCore.Mvc": "1.1.1",

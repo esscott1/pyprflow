@@ -9,13 +9,16 @@ using workflow.Model;
 
 namespace workflow.Controllers
 {
-    public class BaseController : Controller
+	[Route("api")]
+	public class BaseController : Controller
     {
 		public IWorkflowRepository Repository { get; set; }
-		// GET: /<controller>/
-		//public IActionResult Index()
-  //      {
-  //          return View();
-  //      }
-    }
+		[HttpGet("version")]
+		public IActionResult Index()
+		{
+			var ver = System.Reflection.Assembly.GetEntryAssembly().ImageRuntimeVersion;
+			var msver = Microsoft.Extensions.PlatformAbstractions.PlatformServices.Default.Application.ApplicationVersion;
+			return Json(msver);
+		}
+	}
 }
