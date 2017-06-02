@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 
-namespace workflow.Model
+namespace pyprflow.Model
 {
 	public interface IWorkflowRepository
 	{

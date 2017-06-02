@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace workflow.Model
+namespace pyprflow.Model
 {
 	[JsonConverter(typeof(Trackable))]
 	public interface ITrackable

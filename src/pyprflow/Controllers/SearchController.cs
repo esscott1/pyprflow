@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using workflow.Model;
-using workflow.Db;
+using pyprflow.Model;
+using pyprflow.Db;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Primitives;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace workflow.Controllers
+namespace pyprflow.Controllers
 {
 	[Route("api/[controller]")]
 	public class SearchController : Controller

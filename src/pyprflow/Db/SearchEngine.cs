@@ -4,9 +4,9 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Primitives;
-using workflow.Model;
+using pyprflow.Model;
 
-namespace workflow.Db
+namespace pyprflow.Db
 {
 
 	public class SearchEngine

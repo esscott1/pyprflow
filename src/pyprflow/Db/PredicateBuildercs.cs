@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace workflow.Db
+namespace pyprflow.Db
 {
 	/// <summary>  
 	/// Enables the efficient, dynamic composition of query predicates.  

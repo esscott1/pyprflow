@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using workflow.Model;
+using pyprflow.Model;
 
-namespace coreWebAPI5.Migrations
+namespace pyprflow.Migrations
 {
     [DbContext(typeof(WorkflowContext))]
     partial class WorkflowContextModelSnapshot : ModelSnapshot
@@ -15,7 +15,7 @@ namespace coreWebAPI5.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752");
 
-            modelBuilder.Entity("workflow.Model.BaseWorkflowItem", b =>
+            modelBuilder.Entity("pyprflow.Model.BaseWorkflowItem", b =>
                 {
                     b.Property<string>("Name");
 
@@ -28,7 +28,7 @@ namespace coreWebAPI5.Migrations
                     b.ToTable("WorkflowDb");
                 });
 
-            modelBuilder.Entity("workflow.Model.Relationship", b =>
+            modelBuilder.Entity("pyprflow.Model.Relationship", b =>
                 {
                     b.Property<int>("RelationshipId")
                         .ValueGeneratedOnAdd();

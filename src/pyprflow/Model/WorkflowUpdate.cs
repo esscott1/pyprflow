@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace workflow.Model
+namespace pyprflow.Model
 {
 	public class WorkflowAction
 	{

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace workflow.Model
+namespace pyprflow.Model
 {
 	public class Node
 	{

@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace workflow.Model
+namespace pyprflow.Model
 {
 	public class TrackingComment
 	{

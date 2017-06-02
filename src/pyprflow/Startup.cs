@@ -8,12 +8,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using workflow.Model;
-using workflow.Middleware;
+using pyprflow.Model;
+using pyprflow.Middleware;
 
 
 
-namespace workflow
+namespace pyprflow
 {
     public class Startup
     {

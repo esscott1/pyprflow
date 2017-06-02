@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 
-namespace workflow.Model
+namespace pyprflow.Model
 {
 	public class Workflow : BaseWorkflowItem
 	{

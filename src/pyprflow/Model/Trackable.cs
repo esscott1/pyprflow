@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Dependency­Injection;
 
-namespace workflow.Model
+namespace pyprflow.Model
 {
 	public class Trackable : BaseWorkflowItem
 	{

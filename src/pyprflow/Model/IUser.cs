@@ -1,4 +1,4 @@
-﻿namespace workflow.Model
+﻿namespace pyprflow.Model
 {
 	public interface IUser
 	{

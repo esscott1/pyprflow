@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Builder;
-using workflow.Model;
+using pyprflow.Model;
 
-namespace workflow.Middleware
+namespace pyprflow.Middleware
 {
 	public class UserKeyValidatorsMiddleware
 	{

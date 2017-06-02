@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace workflow.Model
+namespace pyprflow.Model
 {
 	public class WorkFlowException : Exception
 	{

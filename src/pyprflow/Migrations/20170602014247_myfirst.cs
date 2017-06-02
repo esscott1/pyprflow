@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace coreWebAPI5.Migrations
+namespace pyprflow.Migrations
 {
-    public partial class first : Migration
+    public partial class myfirst : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -28,6 +28,7 @@ namespace coreWebAPI5.Migrations
                     RelationshipId = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Active = table.Column<bool>(nullable: false),
+                    AssignedTo = table.Column<string>(nullable: true),
                     NodeName = table.Column<string>(nullable: true),
                     Submitter = table.Column<string>(nullable: true),
                     TimeStamp = table.Column<DateTime>(nullable: false),

@@ -3,20 +3,20 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using workflow.Model;
+using pyprflow.Model;
 
-namespace coreWebAPI5.Migrations
+namespace pyprflow.Migrations
 {
     [DbContext(typeof(WorkflowContext))]
-    [Migration("20170426234325_addedAssignedto3")]
-    partial class addedAssignedto3
+    [Migration("20170602014247_myfirst")]
+    partial class myfirst
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752");
 
-            modelBuilder.Entity("workflow.Model.BaseWorkflowItem", b =>
+            modelBuilder.Entity("pyprflow.Model.BaseWorkflowItem", b =>
                 {
                     b.Property<string>("Name");
 
@@ -29,7 +29,7 @@ namespace coreWebAPI5.Migrations
                     b.ToTable("WorkflowDb");
                 });
 
-            modelBuilder.Entity("workflow.Model.Relationship", b =>
+            modelBuilder.Entity("pyprflow.Model.Relationship", b =>
                 {
                     b.Property<int>("RelationshipId")
                         .ValueGeneratedOnAdd();
