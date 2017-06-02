@@ -14,6 +14,7 @@ Step 4. run
 
 Step 5. run
 '''docker run -it -d -p 5000:5000 {name of your image}'''
+	note: -p {external port}:{port inside container}
 
 Step 6. test it with
 '''curl -i http://localhost:5000/api/workflows/example

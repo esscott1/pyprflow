@@ -11,8 +11,6 @@ using Microsoft.Extensions.Logging;
 using pyprflow.Model;
 using pyprflow.Middleware;
 
-
-
 namespace pyprflow
 {
     public class Startup
