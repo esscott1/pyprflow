@@ -1,4 +1,5 @@
-FROM microsoft/dotnet:1.1-sdk-projectjson
+FROM microsoft/aspnetcore-build:1.0-1.1
+ENV pyprflowDbType MSSql
 COPY ./pyprflow /app
 WORKDIR /app
 RUN ["dotnet", "restore"]

@@ -21,10 +21,10 @@ namespace pyprflow.Controllers
 			return Json(msver);
 		}
 
-        [HttpGet("environment")]
+        [HttpGet("db")]
         public IActionResult environment()
         {
-            var environment = Environment.GetEnvironmentVariable("term");
+            var environment = Environment.GetEnvironmentVariable("pyprflowDbType");
            
             return Json(environment);
 
