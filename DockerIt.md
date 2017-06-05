@@ -24,3 +24,10 @@ to push to Docker Cloud you need to tag with the repository name
 
  push to the Cloud
  '''docker push {dockerUserName/repositoryName}:{optional tag}'''
+
+ from: 
+ '''https://hub.docker.com/r/microsoft/mssql-server-linux/'''
+ run MSSSQL Image docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=yourStrong(!)Password' -p 1433:1433 -d microsoft/mssql-server-linux
+ 
+ To connect
+ docker exec -it <container_id|container_name> /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P <your_password>

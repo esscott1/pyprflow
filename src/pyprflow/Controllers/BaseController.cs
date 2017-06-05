@@ -20,5 +20,14 @@ namespace pyprflow.Controllers
 			var msver = Microsoft.Extensions.PlatformAbstractions.PlatformServices.Default.Application.ApplicationVersion;
 			return Json(msver);
 		}
+
+        [HttpGet("db")]
+        public IActionResult environment()
+        {
+            var environment = Environment.GetEnvironmentVariable("pyprflowDbType");
+           
+            return Json(environment);
+
+        }
 	}
 }

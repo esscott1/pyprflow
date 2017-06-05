@@ -20,7 +20,9 @@ namespace pyprflow.Model
 		
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
+            // not sure i need this now that i'm doing on startup
 			optionsBuilder.UseSqlite("Filename=./Repository.db", x => x.SuppressForeignKeyEnforcement());
+           // optionsBuilder.UseSqlServer("Server = 10.0.0.25; Database = pyprflowlocaldb; User Id = sa; Password = !!Nimda1;");
 			//this.Database.Migrate();
 
 		}
