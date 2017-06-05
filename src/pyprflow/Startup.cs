@@ -34,11 +34,15 @@ namespace pyprflow
             // Add framework services.
             services.AddMvc();
 			services.AddSingleton<IWorkflowRepository, WorkflowRepository>();
-            services.AddDbContext<WorkflowContext>(options =>
-                options.UseSqlite("Filename=./Repository.db", x => x.SuppressForeignKeyEnforcement()));
+            //services.AddDbContext<WorkflowContext>(options =>
+            //    options.UseSqlite("Filename=./Repository.db", x => x.SuppressForeignKeyEnforcement()));
 
             //services.AddDbContext<WorkflowContext>(options =>
-            //options.UseSqlServer(@"Server=10.0.0.25;Database=pyprflowlocaldb;User Id=sa;Password=!!Nimda1;"));
+            //    options.UseSqlServer(@"Server=10.0.0.25;Database=pyprflowlocaldb;User Id=sa;Password=!!Nimda1;"));
+
+            services.AddDbContext<WorkflowContext>(options =>
+               options.UseSqlServer(@"Server=EricLaptop\DEV2014;Database=pyprflowlocaldb;User Id=sa;Password=!!nimda;"));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
