@@ -59,7 +59,7 @@ namespace pyprflow.Controllers
 			
 			try
 			{
-				string msg; int statusCode;
+				string msg="error"; int statusCode =400;
 				if (trans.Execute(Repository, out statusCode, out msg))
 					return CreatedAtRoute("GetTransaction", new { id = trans.Name }, Repository);
 				else
