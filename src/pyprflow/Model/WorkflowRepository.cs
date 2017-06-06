@@ -29,9 +29,9 @@ namespace pyprflow.Model
         //{
         //          int i = 0;
         //}
-        public WorkflowRepository(DbContextOptions<WorkflowContext> options, IOptions<DatabaseSettings> dbsettings)
+        public WorkflowRepository(DbContextOptions<WorkflowContext> options)
         {
-            _dbSettings = dbsettings;
+           // _dbSettings = dbsettings;
             _options = options;
 
         }
@@ -42,7 +42,7 @@ namespace pyprflow.Model
 		{
 			if (item == null)
 				return;
-			using (var db = new WorkflowContext( _options,_dbSettings))
+			using (var db = new WorkflowContext( _options))
 			{
 				try
 				{
@@ -82,7 +82,7 @@ namespace pyprflow.Model
 
 		public IEnumerable<T> GetAll<T>()
 		{
-			using (var db = new WorkflowContext(_options, _dbSettings))
+			using (var db = new WorkflowContext(_options))
 			{
 				try
 				{
@@ -105,7 +105,7 @@ namespace pyprflow.Model
 		
 	    public T Find<T>(string workflowName)
 	    {
-		    using (var db = new WorkflowContext(_options, _dbSettings))
+		    using (var db = new WorkflowContext(_options))
 		    {
 			    try
 			    {
@@ -143,7 +143,7 @@ namespace pyprflow.Model
 	    }
 	    public void Update<T>(T item) where T : BaseWorkflowItem
 		    {
-			    using (var db = new WorkflowContext(_options, _dbSettings))
+			    using (var db = new WorkflowContext(_options))
 			    {
 				    try
 				    {
@@ -161,7 +161,7 @@ namespace pyprflow.Model
 		    }
 		public void Remove<T>(string workflowItemId) where T:BaseWorkflowItem
 		    {
-				    using (var db = new WorkflowContext(_options, _dbSettings)) { 
+				    using (var db = new WorkflowContext(_options)) { 
 					    try
 					    {
 					    var delete = Find<T>(workflowItemId);
@@ -219,7 +219,7 @@ namespace pyprflow.Model
 		}
 		public List<Relationship> GetAll(System.Linq.Expressions.Expression<Func<Relationship, bool>> predicate)
 		{
-			using (var db = new WorkflowContext(_options, _dbSettings))
+			using (var db = new WorkflowContext(_options))
 			{
 				return db.Relationships.Where(predicate).ToList();
 
@@ -228,7 +228,7 @@ namespace pyprflow.Model
 
 		private void DeActivateOldTrackableRelationship(Transaction r)
 		{
-			using (var db = new WorkflowContext(_options, _dbSettings))
+			using (var db = new WorkflowContext(_options))
 			{
                 
 				Console.WriteLine("looking for old relationships");
@@ -257,7 +257,7 @@ namespace pyprflow.Model
 		private void InsertRelationship(Relationship r)
 		{
             
-            using (var db = new WorkflowContext(_options, _dbSettings))
+            using (var db = new WorkflowContext(_options))
             {
                 try
                 {
@@ -276,7 +276,7 @@ namespace pyprflow.Model
 		
 		public List<Relationship> Where(System.Linq.Expressions.Expression<Func<Relationship, bool>> predicate)
 		{
-			using (var db = new WorkflowContext(_options, _dbSettings))
+			using (var db = new WorkflowContext(_options))
 			{
 				//Console.WriteLine("in the Where method of WorkflowRepository");
 				return db.Relationships.Where(predicate.Compile()).ToList();

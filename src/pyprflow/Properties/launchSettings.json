@@ -13,7 +13,14 @@
       "launchBrowser": true,
       "launchUrl": "api/values",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DatabaseType": "MSSQL",
+        "DbServer": "10.0.0.25",
+        "DatabaseName": "pyprflowDb",
+        "ConnectionString": "Server=10.0.0.25;Database=pyprflowDb;User Id=sa;Password=!!Nimda1;",
+        "Port": "1433",
+        "Id": "sa",
+        "Pw": "!!nimda1"
       }
     },
     "pyprflow": {
@@ -21,7 +28,14 @@
       "launchBrowser": true,
       "launchUrl": "http://localhost:5000/api/values",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DatabaseType": "MSSQL",
+        "Server": "10.0.0.25",
+        "DatabaseName": "pyprflowDb",
+        "ConnectionString": "Server=10.0.0.25;Database=pyprflowDb;User Id=sa;Password=!!Nimda1;",
+        "Port": "1433",
+        "Id": "sa",
+        "Pw": "!!nimda1"
       }
     }
   }
