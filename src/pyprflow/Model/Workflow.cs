@@ -178,30 +178,6 @@ namespace pyprflow.Model
 		/// <param name="storeContext">WFKey that references the context to save the workflow in</param>
 		/// <returns>True if successful, False otherwise</returns>
 		/// <exception cref="ArgumentException">No ObjectStore context</exception>
-		public bool SaveToObjectStore(string storeContext)
-		{
-			Repository = new WorkflowRepository();
-			Repository.Add(this);
-			return true;
-			throw new NotImplementedException("need to re-implement");
-			//if (string.IsNullOrWhiteSpace(storeContext))
-			//{
-			//	throw new ArgumentException("Cannot persist to ObjectStore with an empty store context");
-			//}
-
-			//// HACK
-			//Testing.MockRequest(@"\internal");
-			//// store it into ObjectStore
-			//var storeRequest = new MdObjectStoreServiceRequest(User.Current);
-			//storeRequest.Inputs.Add(new KeyValuePair<string, object>(WorkflowGuid.ToString(), SerializeToJsonString()));
-			//if (!storeRequest.StoreObjectStoreInputs(TestStoreCategoryKey, storeContext))
-			//{
-			//	throw new Exception("Could not persist workflow to ObjectStore");
-			//}
-
-			//return true;
-		}
-
 		
 	}
 

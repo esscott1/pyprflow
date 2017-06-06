@@ -6,6 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Primitives;
+using Microsoft.Extensions.Options;
+using Microsoft.EntityFrameworkCore;
+using pyprflow.Db;
 
 namespace pyprflow.Model
 {
@@ -18,16 +21,28 @@ namespace pyprflow.Model
 		
 		private static ConcurrentDictionary<string, Transaction> _Transaction =
 				 new ConcurrentDictionary<string, Transaction>();
-		public WorkflowRepository()
-		{
-		}
 
+        internal readonly IOptions<DatabaseSettings> _dbSettings;
+        internal readonly DbContextOptions<WorkflowContext> _options;
+
+        //public WorkflowRepository()
+        //{
+        //          int i = 0;
+        //}
+        public WorkflowRepository(DbContextOptions<WorkflowContext> options, IOptions<DatabaseSettings> dbsettings)
+        {
+            _dbSettings = dbsettings;
+            _options = options;
+
+        }
+
+       
 		#region Generic Methods
 		private void Add<T>(T item) where T : BaseWorkflowItem
 		{
 			if (item == null)
 				return;
-			using (var db = new WorkflowContext())
+			using (var db = new WorkflowContext( _options,_dbSettings))
 			{
 				try
 				{
@@ -67,7 +82,7 @@ namespace pyprflow.Model
 
 		public IEnumerable<T> GetAll<T>()
 		{
-			using (var db = new WorkflowContext())
+			using (var db = new WorkflowContext(_options, _dbSettings))
 			{
 				try
 				{
@@ -88,80 +103,80 @@ namespace pyprflow.Model
 			}
 		}
 		
-	public T Find<T>(string workflowName)
-	{
-		using (var db = new WorkflowContext())
-		{
-			try
-			{
-				Console.WriteLine("searching for item {0} with Id {1}", typeof(T).ToString(), workflowName);
-				BaseWorkflowItem result = db.WorkflowDb.Find(new object[] { workflowName, typeof(T).ToString() });
-				if (result == null)
-				{
-					Console.WriteLine("looking for type {0} with ID {1}", typeof(T).ToString(), workflowName);
-					throw new WorkFlowException(String.Format("null was returned when finding for key {0}", workflowName));
-				}
-				//	Console.WriteLine("found item");
-				return result.Deserialize<T>(result.SerializedObject);
+	    public T Find<T>(string workflowName)
+	    {
+		    using (var db = new WorkflowContext(_options, _dbSettings))
+		    {
+			    try
+			    {
+				    Console.WriteLine("searching for item {0} with Id {1}", typeof(T).ToString(), workflowName);
+				    BaseWorkflowItem result = db.WorkflowDb.Find(new object[] { workflowName, typeof(T).ToString() });
+				    if (result == null)
+				    {
+					    Console.WriteLine("looking for type {0} with ID {1}", typeof(T).ToString(), workflowName);
+					    throw new WorkFlowException(String.Format("null was returned when finding for key {0}", workflowName));
+				    }
+				    //	Console.WriteLine("found item");
+				    return result.Deserialize<T>(result.SerializedObject);
 
-			}
-			catch (Microsoft.Data.Sqlite.SqliteException ex)
-			{
-				if (ex.SqliteErrorCode == 19)
-					throw new WorkFlowException("unique key violation");
-				if (ex.SqliteErrorCode == 1)
-				{
-					Console.WriteLine("need to run a migration, table does not exist");
-					Console.WriteLine("exception {0}", ex.Message);
-				}
-				Console.WriteLine("sqlite code {0}", ex.SqliteErrorCode.ToString());
-				return default(T);
+			    }
+			    catch (Microsoft.Data.Sqlite.SqliteException ex)
+			    {
+				    if (ex.SqliteErrorCode == 19)
+					    throw new WorkFlowException("unique key violation");
+				    if (ex.SqliteErrorCode == 1)
+				    {
+					    Console.WriteLine("need to run a migration, table does not exist");
+					    Console.WriteLine("exception {0}", ex.Message);
+				    }
+				    Console.WriteLine("sqlite code {0}", ex.SqliteErrorCode.ToString());
+				    return default(T);
 
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine("{0} error", ex.Message);
-				Console.WriteLine("{0} inner message", ex.InnerException);
-				return default(T);
-			}
-		}
-	}
-	public void Update<T>(T item) where T : BaseWorkflowItem
-		{
-			using (var db = new WorkflowContext())
-			{
-				try
-				{
-				//	Console.WriteLine("trying to update {0} itemId", item.Name);
-					db.WorkflowDb.Update(item);
-					db.SaveChanges();
-				//	Console.WriteLine("ItemId {0} updated in database");
-				}
-				catch (Exception ex)
-				{
-					Console.WriteLine("{0} error", ex.Message);
-					Console.WriteLine("{0} inner message", ex.InnerException);
-				}
-			}
-		}
+			    }
+			    catch (Exception ex)
+			    {
+				    Console.WriteLine("{0} error", ex.Message);
+				    Console.WriteLine("{0} inner message", ex.InnerException);
+				    return default(T);
+			    }
+		    }
+	    }
+	    public void Update<T>(T item) where T : BaseWorkflowItem
+		    {
+			    using (var db = new WorkflowContext(_options, _dbSettings))
+			    {
+				    try
+				    {
+				    //	Console.WriteLine("trying to update {0} itemId", item.Name);
+					    db.WorkflowDb.Update(item);
+					    db.SaveChanges();
+				    //	Console.WriteLine("ItemId {0} updated in database");
+				    }
+				    catch (Exception ex)
+				    {
+					    Console.WriteLine("{0} error", ex.Message);
+					    Console.WriteLine("{0} inner message", ex.InnerException);
+				    }
+			    }
+		    }
 		public void Remove<T>(string workflowItemId) where T:BaseWorkflowItem
-		{
-				using (var db = new WorkflowContext()) { 
-					try
-					{
-					var delete = Find<T>(workflowItemId);
-				//	Console.WriteLine("trying to delete {0} itemId", workflowItemId);
-					db.WorkflowDb.Remove(delete);
-					db.SaveChanges();
-				//	Console.WriteLine("ItemId {0} deleted from database");
-					}
-					catch (Exception ex)
-					{
-						Console.WriteLine("{0} error", ex.Message);
-						Console.WriteLine("{0} inner message", ex.InnerException);
-					}
-				}
-		}
+		    {
+				    using (var db = new WorkflowContext(_options, _dbSettings)) { 
+					    try
+					    {
+					    var delete = Find<T>(workflowItemId);
+				    //	Console.WriteLine("trying to delete {0} itemId", workflowItemId);
+					    db.WorkflowDb.Remove(delete);
+					    db.SaveChanges();
+				    //	Console.WriteLine("ItemId {0} deleted from database");
+					    }
+					    catch (Exception ex)
+					    {
+						    Console.WriteLine("{0} error", ex.Message);
+						    Console.WriteLine("{0} inner message", ex.InnerException);
+					    }
+				    }
+		    }
 
 		#endregion
 		/// <summary>
@@ -204,7 +219,7 @@ namespace pyprflow.Model
 		}
 		public List<Relationship> GetAll(System.Linq.Expressions.Expression<Func<Relationship, bool>> predicate)
 		{
-			using (var db = new WorkflowContext())
+			using (var db = new WorkflowContext(_options, _dbSettings))
 			{
 				return db.Relationships.Where(predicate).ToList();
 
@@ -213,8 +228,9 @@ namespace pyprflow.Model
 
 		private void DeActivateOldTrackableRelationship(Transaction r)
 		{
-			using (var db = new WorkflowContext())
+			using (var db = new WorkflowContext(_options, _dbSettings))
 			{
+                
 				Console.WriteLine("looking for old relationships");
 				List<Relationship> oldr = db.Relationships.Where(o => o.TrackableName == r.TrackableName
 				&& o.WorkflowName == r.WorkflowName
@@ -238,28 +254,29 @@ namespace pyprflow.Model
 			}
 		}
 
-		private static void InsertRelationship(Relationship r)
+		private void InsertRelationship(Relationship r)
 		{
-			using (var db = new WorkflowContext())
-			{
-				try
-				{
-					db.Relationships.Add(r);
-					db.SaveChanges();
-				//	Console.WriteLine("saved relationship {0}", r.RelationshipId);
-				}
-				catch (Exception ex)
-				{
-					Console.WriteLine("error saving to Relationships, msg: {0}", ex.Message);
-					Console.WriteLine("inner exeception, msg: {0}", ex.InnerException);
-				}
+            
+            using (var db = new WorkflowContext(_options, _dbSettings))
+            {
+                try
+                {
+                    db.Relationships.Add(r);
+                    db.SaveChanges();
+                    //	Console.WriteLine("saved relationship {0}", r.RelationshipId);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("error saving to Relationships, msg: {0}", ex.Message);
+                    Console.WriteLine("inner exeception, msg: {0}", ex.InnerException);
+                }
 
-			}
+            }
 		}
 		
 		public List<Relationship> Where(System.Linq.Expressions.Expression<Func<Relationship, bool>> predicate)
 		{
-			using (var db = new WorkflowContext())
+			using (var db = new WorkflowContext(_options, _dbSettings))
 			{
 				//Console.WriteLine("in the Where method of WorkflowRepository");
 				return db.Relationships.Where(predicate.Compile()).ToList();

@@ -34,14 +34,30 @@ namespace pyprflow
             // Add framework services.
             services.AddMvc();
 			services.AddSingleton<IWorkflowRepository, WorkflowRepository>();
+
+            services.Configure<DatabaseSettings>(options =>
+                Configuration.GetSection("DatabaseSettings").Bind(options));
             //services.AddDbContext<WorkflowContext>(options =>
             //    options.UseSqlite("Filename=./Repository.db", x => x.SuppressForeignKeyEnforcement()));
 
             //services.AddDbContext<WorkflowContext>(options =>
             //    options.UseSqlServer(@"Server=10.0.0.25;Database=pyprflowlocaldb;User Id=sa;Password=!!Nimda1;"));
-
             services.AddDbContext<WorkflowContext>(options =>
-               options.UseSqlServer(@"Server=EricLaptop\DEV2014;Database=pyprflowlocaldb;User Id=sa;Password=!!nimda;"));
+              options.UseSqlServer(@"Server=EricLaptop\DEV2014;Database=pyprflowlocaldb;User Id=sa;Password=!!nimda;"));
+
+
+            //DatabaseSettings opt = new DatabaseSettings();
+            //Configuration.GetSection("DatabaseSettings").Bind(opt);
+
+
+            //ConfigureServices(services);
+            //var Services = services.BuildServiceProvider();
+            //var dbSettings = Services.GetRequiredService<DatabaseSettings>();
+
+
+            // services.Configure<DatabaseSettings>().
+            // Lifetime = Singleton, ServiceType = { Microsoft.Extensions.Options.IConfigureOptions`1[pyprflow.DatabaseSettings]}, ImplementationType = null
+
 
         }
 
@@ -53,10 +69,12 @@ namespace pyprflow
 			//app.ApplyUserKeyValidation();
 
             app.UseMvc();
+
+            // below is added to create the DB if it does not already exist.
 			using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
 			{
 				serviceScope.ServiceProvider.GetService<WorkflowContext>().Database.Migrate();
-				
+
 			}
 		}
     }
