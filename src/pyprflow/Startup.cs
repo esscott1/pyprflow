@@ -41,7 +41,8 @@ namespace pyprflow
             Iconn = Helpers.ConnectionStringFactory.GetConnetionString();
             string conn = Iconn.ConnectionString();
             Console.WriteLine("database type is " + Environment.GetEnvironmentVariable("DatabaseType"));
-            switch(Environment.GetEnvironmentVariable("DatabaseType"))
+            Console.WriteLine("dASPNETCORE_ENVIRONMENT is " + Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"));
+            switch (Environment.GetEnvironmentVariable("DatabaseType"))
             {
                 case "mssql":
                 //case ("mssql"):
