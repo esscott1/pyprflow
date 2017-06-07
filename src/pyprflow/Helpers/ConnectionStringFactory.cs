@@ -10,13 +10,17 @@ namespace pyprflow.Helpers
         static public IConnectionString GetConnetionString() {
 
             IConnectionString conn = null;
-            switch (Environment.GetEnvironmentVariable("DatabaseType").ToLower())
+          
+            switch (Environment.GetEnvironmentVariable("DatabaseType"))
             {
                 case ("mssql"):
                     conn = new MSSql();
                     break;
                 case ("mssql2017"):
                     conn = new MSSql2017();
+                    break;
+                case null:
+                    conn = new SQLite();
                     break;
                 default:
                     conn = new SQLite();

@@ -40,16 +40,21 @@ namespace pyprflow
             Helpers.IConnectionString Iconn = null;
             Iconn = Helpers.ConnectionStringFactory.GetConnetionString();
             string conn = Iconn.ConnectionString();
-
-            switch(Environment.GetEnvironmentVariable("DatabaseType").ToLower())
+            Console.WriteLine("database type is " + Environment.GetEnvironmentVariable("DatabaseType"));
+            switch(Environment.GetEnvironmentVariable("DatabaseType"))
             {
-                case ("mssql"):
+                case "mssql":
+                //case ("mssql"):
                     services.AddDbContext<WorkflowContext>(options =>
                        options.UseSqlServer(conn));
                     break;
-                case ("mssql2017"):
+                case "mssql2017":
                     services.AddDbContext<WorkflowContext>(options =>
                         options.UseSqlServer(conn));
+                    break;
+                case null:
+                    services.AddDbContext<WorkflowContext>(options =>
+                       options.UseSqlite(conn, x => x.SuppressForeignKeyEnforcement()));
                     break;
                 default:
                     services.AddDbContext<WorkflowContext>(options =>
