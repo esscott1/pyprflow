@@ -14,7 +14,7 @@
       "launchUrl": "api/values",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "DatabaseType": "MSSQL",
+        "DatabaseType": "mssql2017",
         "DbServer": "10.0.0.25",
         "DatabaseName": "pyprflowDb",
         "ConnectionString": "Server=10.0.0.25;Database=pyprflowDb;User Id=sa;Password=!!Nimda1;",
@@ -29,7 +29,7 @@
       "launchUrl": "http://localhost:5000/api/values",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "DatabaseType": "MSSQL",
+        "DatabaseType": "mssql2017",
         "Server": "10.0.0.25",
         "DatabaseName": "pyprflowDb",
         "ConnectionString": "Server=10.0.0.25;Database=pyprflowDb;User Id=sa;Password=!!Nimda1;",
