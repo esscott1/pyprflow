@@ -34,14 +34,31 @@ namespace pyprflow
             // Add framework services.
             services.AddMvc();
 			services.AddSingleton<IWorkflowRepository, WorkflowRepository>();
-            //services.AddDbContext<WorkflowContext>(options =>
-            //    options.UseSqlite("Filename=./Repository.db", x => x.SuppressForeignKeyEnforcement()));
 
-            //services.AddDbContext<WorkflowContext>(options =>
-            //    options.UseSqlServer(@"Server=10.0.0.25;Database=pyprflowlocaldb;User Id=sa;Password=!!Nimda1;"));
+            ///hack hack hack... i've added this to the services collection but not sure how to explicitly access
+            //todo:  need to add a helper class to build up querystring
+            Helpers.IConnectionString Iconn = null;
+            Iconn = Helpers.ConnectionStringFactory.GetConnetionString();
+            string conn = Iconn.ConnectionString();
 
-            services.AddDbContext<WorkflowContext>(options =>
-               options.UseSqlServer(@"Server=EricLaptop\DEV2014;Database=pyprflowlocaldb;User Id=sa;Password=!!nimda;"));
+            switch(Environment.GetEnvironmentVariable("DatabaseType").ToLower())
+            {
+                case ("mssql"):
+                    services.AddDbContext<WorkflowContext>(options =>
+                       options.UseSqlServer(conn));
+                    break;
+                case ("mssql2017"):
+                    services.AddDbContext<WorkflowContext>(options =>
+                        options.UseSqlServer(conn));
+                    break;
+                default:
+                    services.AddDbContext<WorkflowContext>(options =>
+                        options.UseSqlite(conn, x => x.SuppressForeignKeyEnforcement()));
+                    break;
+
+
+            }
+
 
         }
 
@@ -53,10 +70,12 @@ namespace pyprflow
 			//app.ApplyUserKeyValidation();
 
             app.UseMvc();
+            
+            // below is added to create the DB if it does not already exist.
 			using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
 			{
 				serviceScope.ServiceProvider.GetService<WorkflowContext>().Database.Migrate();
-				
+
 			}
 		}
     }

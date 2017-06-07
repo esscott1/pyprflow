@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using pyprflow;
 
 namespace pyprflow.Model
 {
@@ -13,18 +15,30 @@ namespace pyprflow.Model
 		public DbSet<Relationship> Relationships { get; set; }
 
 		public WorkflowContext(DbContextOptions<WorkflowContext> options)
-			: base(options) { }
-		public WorkflowContext() 
+			: base(options) {
+        }
+       
+       
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
-		}
-		
-		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-		{
-            // not sure i need this now that i'm doing on startup
-           // optionsBuilder.UseSqlite("Filename=./Repository.db", x => x.SuppressForeignKeyEnforcement());
-            // optionsBuilder.UseSqlServer("Server = 10.0.0.25; Database = pyprflowlocaldb; User Id = sa; Password = !!Nimda1;");
-            optionsBuilder.UseSqlServer("Server = EricLaptop\\DEV2014; Database = pyprflowlocaldb; User Id = sa; Password = !!nimda;");
-            //this.Database.Migrate();
+            Helpers.IConnectionString Iconn = null;
+            Iconn = Helpers.ConnectionStringFactory.GetConnetionString();
+            string conn = Iconn.ConnectionString();
+            switch (Environment.GetEnvironmentVariable("DatabaseType").ToLower())
+            {
+                case ("mssql"):
+                    optionsBuilder.UseSqlServer(conn);
+                    break;
+                case ("mssql2017"):
+                    optionsBuilder.UseSqlServer(conn);
+                    break;
+                default:
+                    optionsBuilder.UseSqlite(conn, x => x.SuppressForeignKeyEnforcement());
+                    break;
+
+
+            }
+          
 
         }
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
