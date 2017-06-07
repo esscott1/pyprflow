@@ -34,24 +34,26 @@ namespace pyprflow
             // Add framework services.
             services.AddMvc();
 			services.AddSingleton<IWorkflowRepository, WorkflowRepository>();
-            //services.Configure<DatabaseSettings>(options =>
-            //    Configuration.GetSection("DatabaseSettings").Bind(options));
-           
+
             ///hack hack hack... i've added this to the services collection but not sure how to explicitly access
             //todo:  need to add a helper class to build up querystring
+            Helpers.IConnectionString Iconn = null;
+            Iconn = Helpers.ConnectionStringFactory.GetConnetionString();
+            string conn = Iconn.ConnectionString();
+
             switch(Environment.GetEnvironmentVariable("DatabaseType").ToLower())
             {
                 case ("mssql"):
                     services.AddDbContext<WorkflowContext>(options =>
-                        options.UseSqlServer(@"Server=EricLaptop\DEV2014;Database=pyprflowlocaldb;User Id=sa;Password=!!nimda;"));
+                       options.UseSqlServer(conn));
                     break;
                 case ("mssql2017"):
                     services.AddDbContext<WorkflowContext>(options =>
-                        options.UseSqlServer(@"Server=10.0.0.25;Database=pyprflowlocaldb;User Id=sa;Password=!!Nimda1;"));
+                        options.UseSqlServer(conn));
                     break;
                 default:
                     services.AddDbContext<WorkflowContext>(options =>
-                        options.UseSqlite("Filename=./Repository.db", x => x.SuppressForeignKeyEnforcement()));
+                        options.UseSqlite(conn, x => x.SuppressForeignKeyEnforcement()));
                     break;
 
 

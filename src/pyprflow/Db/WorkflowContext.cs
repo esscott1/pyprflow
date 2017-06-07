@@ -13,38 +13,32 @@ namespace pyprflow.Model
 	{
 		public DbSet<BaseWorkflowItem> WorkflowDb { get; set; }
 		public DbSet<Relationship> Relationships { get; set; }
-        private readonly DatabaseSettings _databaseSettings;
 
 		public WorkflowContext(DbContextOptions<WorkflowContext> options)
 			: base(options) {
-           // _databaseSettings = dbsettings.Value;
         }
-        //public WorkflowContext()
-        //{
-        //}
-
+       
        
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
+            Helpers.IConnectionString Iconn = null;
+            Iconn = Helpers.ConnectionStringFactory.GetConnetionString();
+            string conn = Iconn.ConnectionString();
             switch (Environment.GetEnvironmentVariable("DatabaseType").ToLower())
             {
                 case ("mssql"):
-                    optionsBuilder.UseSqlServer("Server = EricLaptop\\DEV2014; Database = pyprflowlocaldb; User Id = sa; Password = !!nimda;");
+                    optionsBuilder.UseSqlServer(conn);
                     break;
                 case ("mssql2017"):
-                    optionsBuilder.UseSqlServer("Server = 10.0.0.25; Database = pyprflowlocaldb; User Id = sa; Password = !!Nimda1;");
+                    optionsBuilder.UseSqlServer(conn);
                     break;
                 default:
-                    optionsBuilder.UseSqlite("Filename=./Repository.db", x => x.SuppressForeignKeyEnforcement());
+                    optionsBuilder.UseSqlite(conn, x => x.SuppressForeignKeyEnforcement());
                     break;
 
 
             }
-            // 
-            // optionsBuilder.UseSqlServer("Server = 10.0.0.25; Database = pyprflowlocaldb; User Id = sa; Password = !!Nimda1;");
-            //optionsBuilder.UseSqlServer("Server = EricLaptop\\DEV2014; Database = pyprflowlocaldb; User Id = sa; Password = !!nimda;");
-            //Console.WriteLine("Database Port is : " + _databaseSettings.Port);
-            //this.Database.Migrate();
+          
 
         }
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
