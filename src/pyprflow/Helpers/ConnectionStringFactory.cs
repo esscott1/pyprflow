@@ -11,7 +11,7 @@ namespace pyprflow.Helpers
 
             IConnectionString conn = null;
           
-            switch (Environment.GetEnvironmentVariable("DatabaseType"))
+            switch (Environment.GetEnvironmentVariable("pfdatabasetype"))
             {
                 case ("mssql"):
                     conn = new MSSql();
@@ -39,7 +39,28 @@ namespace pyprflow.Helpers
     {
         public string ConnectionString()
         {
-            return "Server=EricLaptop\\DEV2014;Database=pyprflowlocaldb;User Id=sa;Password=!!nimda;";
+            //string dbconnstr = Environment.GetEnvironmentVariable("pfdatabasetype");
+            //if (String.IsNullOrEmpty(dbconnstr))
+            //    return dbconnstr;
+
+            var dbtype = Environment.GetEnvironmentVariable("pfdatabasetype");
+            var dbhost = Environment.GetEnvironmentVariable("pfdbhost");
+            var dbinstance = Environment.GetEnvironmentVariable("pfmsdbinstance");
+            var dbname = Environment.GetEnvironmentVariable("pfdbname");
+            var dbport = Environment.GetEnvironmentVariable("pfdbport");
+            var dbid = Environment.GetEnvironmentVariable("pfdbid"); 
+            var dbpw = Environment.GetEnvironmentVariable("pfdbpw");
+            string sConn;
+            if(String.IsNullOrEmpty(dbport))
+                sConn = string.Format("Server={0}\\{1};Database={2};User Id={3};Password={4};",
+                    dbhost, dbinstance, dbname, dbid, dbpw, dbport);
+            else
+                sConn = string.Format("Server={0},{5};Database={2};User Id={3};Password={4};",
+                    dbhost, dbinstance, dbname, dbid, dbpw, dbport);
+
+             return sConn;
+
+           // return "Server=127.0.0.1,2250;Database=pyprflowlocaldb;User Id=sa;Password=!!nimda1;";
         }
     }
     class SQLite : IConnectionString
@@ -50,12 +71,12 @@ namespace pyprflow.Helpers
         }
 
     }
-    class MSSql2017 : IConnectionString
+    class MSSql2017 : MSSql, IConnectionString
     {
-        public string ConnectionString()
-        {
-            return "Server = 10.0.0.25; Database = pyprflowlocaldb; User Id = sa; Password = !!Nimda1;";
-        }
+        //public string ConnectionString()
+        //{
+        //    return "Server = 10.0.0.25; Database = pyprflowlocaldb; User Id = sa; Password = !!Nimda1;";
+        //}
 
     }
 }

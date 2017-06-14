@@ -24,7 +24,7 @@ namespace pyprflow.Model
             Helpers.IConnectionString Iconn = null;
             Iconn = Helpers.ConnectionStringFactory.GetConnetionString();
             string conn = Iconn.ConnectionString();
-            switch (Environment.GetEnvironmentVariable("DatabaseType"))
+            switch (Environment.GetEnvironmentVariable("pfdatabasetype"))
             {
                 case "mssql":
                     optionsBuilder.UseSqlServer(conn);
