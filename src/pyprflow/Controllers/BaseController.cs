@@ -13,6 +13,8 @@ namespace pyprflow.Controllers
 	public class BaseController : Controller
     {
 		public IWorkflowRepository Repository { get; set; }
+       
+
 		[HttpGet("version")]
 		public IActionResult Index()
 		{
@@ -21,13 +23,8 @@ namespace pyprflow.Controllers
 			return Json(msver);
 		}
 
-        [HttpGet("db")]
-        public IActionResult environment()
-        {
-            var environment = Environment.GetEnvironmentVariable("pyprflowDbType");
-           
-            return Json(environment);
+      
 
-        }
+       
 	}
 }

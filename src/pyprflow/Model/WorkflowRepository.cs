@@ -10,6 +10,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using pyprflow.Db;
 
+
 namespace pyprflow.Model
 {
 	public class WorkflowRepository : IWorkflowRepository
@@ -22,18 +23,12 @@ namespace pyprflow.Model
 		private static ConcurrentDictionary<string, Transaction> _Transaction =
 				 new ConcurrentDictionary<string, Transaction>();
 
-        internal readonly IOptions<DatabaseSettings> _dbSettings;
         internal readonly DbContextOptions<WorkflowContext> _options;
 
-        //public WorkflowRepository()
-        //{
-        //          int i = 0;
-        //}
+      
         public WorkflowRepository(DbContextOptions<WorkflowContext> options)
         {
-           // _dbSettings = dbsettings;
             _options = options;
-
         }
 
        
@@ -161,24 +156,43 @@ namespace pyprflow.Model
 		    }
 		public void Remove<T>(string workflowItemId) where T:BaseWorkflowItem
 		    {
-				    using (var db = new WorkflowContext(_options)) { 
-					    try
-					    {
-					    var delete = Find<T>(workflowItemId);
-				    //	Console.WriteLine("trying to delete {0} itemId", workflowItemId);
-					    db.WorkflowDb.Remove(delete);
-					    db.SaveChanges();
-				    //	Console.WriteLine("ItemId {0} deleted from database");
-					    }
-					    catch (Exception ex)
-					    {
-						    Console.WriteLine("{0} error", ex.Message);
-						    Console.WriteLine("{0} inner message", ex.InnerException);
-					    }
+			    using (var db = new WorkflowContext(_options)) { 
+				    try
+				    {
+				    var delete = Find<T>(workflowItemId);
+			    //	Console.WriteLine("trying to delete {0} itemId", workflowItemId);
+				    db.WorkflowDb.Remove(delete);
+				    db.SaveChanges();
+			    //	Console.WriteLine("ItemId {0} deleted from database");
 				    }
+				    catch (Exception ex)
+				    {
+					    Console.WriteLine("{0} error", ex.Message);
+					    Console.WriteLine("{0} inner message", ex.InnerException);
+				    }
+			    }
 		    }
 
 		#endregion
+        public void EmptyAll()
+        {
+            using (var db = new WorkflowContext(_options))
+            {
+              
+                try
+                {
+                    db.Database.ExecuteSqlCommand("truncate table Relationships");
+                    db.Database.ExecuteSqlCommand("truncate table workflowDb");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("{0} error", ex.Message);
+                    Console.WriteLine("{0} inner message", ex.InnerException);
+                }
+            }
+
+        }
+       
 		/// <summary>
 		/// Adds the Relationship record to DB
 		/// </summary>
@@ -253,6 +267,8 @@ namespace pyprflow.Model
 				return;// oldr;
 			}
 		}
+
+       
 
 		private void InsertRelationship(Relationship r)
 		{

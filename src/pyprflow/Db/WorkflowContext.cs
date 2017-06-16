@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using pyprflow;
+using pyprflow.Model;
 
-namespace pyprflow.Model
+namespace pyprflow.Db
 {
 	public class WorkflowContext : DbContext
 	{

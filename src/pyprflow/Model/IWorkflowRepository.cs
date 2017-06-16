@@ -29,5 +29,7 @@ namespace pyprflow.Model
 
 		bool CheckValidUserKey(string stringValues);
 		void Track(Transaction trans);
-	}
+        
+        void EmptyAll();
+    }
 }

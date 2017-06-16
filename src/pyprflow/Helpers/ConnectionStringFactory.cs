@@ -26,6 +26,7 @@ namespace pyprflow.Helpers
                     conn = new SQLite();
                     break;
             }
+            Console.WriteLine("Database Connection string is: {0} ", conn.ConnectionString());
             return conn;
         }
 

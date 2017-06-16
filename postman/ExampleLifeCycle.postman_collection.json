@@ -9,8 +9,21 @@
 	"item": [
 		{
 			"name": "Create Workflow",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"",
+							"",
+							"tests[\"Status code is 201\"] = responseCode.code === 201;"
+						]
+					}
+				}
+			],
 			"request": {
-				"url": "localhost:5000/api/workflows",
+				"url": "localhost:5000/api/workflows/",
 				"method": "POST",
 				"header": [
 					{
@@ -26,7 +39,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"nodes\": {\n    \"SampleNode1\": {\n      \"nodeName\": \"SampleNode1\",\n      \"nodeDescription\": null,\n      \"nodeId\": null,\n      \"isStart\": true,\n      \"isEnd\": false\n    },\n    \"SampleNode2\": {\n      \"nodeName\": \"SampleNode2\",\n      \"nodeDescription\": null,\n      \"nodeId\": null,\n      \"isStart\": false,\n      \"isEnd\": false\n    },\n    \"SampleNode3\": {\n      \"nodeName\": \"SampleNode3\",\n      \"nodeDescription\": null,\n      \"nodeId\": null,\n      \"isStart\": false,\n      \"isEnd\": false\n    },\n    \"SampleNode4\": {\n      \"nodeName\": \"SampleNode4\",\n      \"nodeDescription\": null,\n      \"nodeId\": null,\n      \"isStart\": false,\n      \"isEnd\": true\n    }\n  },\n  \"orchestrations\": {\n    \"Orch1\": {\n      \"orchestrationName\": \"Orch1\",\n      \"moves\": [\n        {\n          \"from\": null,\n          \"to\": \"SampleNode1\",\n          \"rule\": {\n            \"accessList\": [\n              {\n                \"email\": \"ericscott411@gmail.com\"\n              }\n            ],\n            \"name\": null\n          }\n        },\n        {\n          \"from\": \"SampleNode1\",\n          \"to\": \"SampleNode2\",\n          \"rule\": {\n            \"accessList\": [\n              {\n                \"email\": \"ericscott411@gmail.com\"\n              }\n            ],\n            \"name\": null\n          }\n        },\n        {\n          \"from\": \"SampleNode2\",\n          \"to\": \"SampleNode3\",\n          \"rule\": {\n            \"accessList\": [\n              {\n                \"email\": \"ericscott411@gmail.com\"\n              }\n            ],\n            \"name\": null\n          }\n        },\n        {\n          \"from\": \"SampleNode3\",\n          \"to\": \"SampleNode4\",\n          \"rule\": {\n            \"accessList\": [\n              {\n                \"email\": \"ericscott411@gmail.com\"\n              }\n            ],\n            \"name\": null\n          }\n        }\n      ],\n      \"name\": null\n    },\n    \"Orch2\": {\n      \"orchestrationName\": \"Orch2\",\n      \"moves\": [\n        {\n          \"from\": null,\n          \"to\": \"SampleNode1\",\n          \"rule\": null\n        },\n        {\n          \"from\": \"SampleNode1\",\n          \"to\": \"SampleNode2\",\n          \"rule\": null\n        },\n        {\n          \"from\": \"SampleNode2\",\n          \"to\": \"SampleNode3\",\n          \"rule\": null\n        },\n        {\n          \"from\": \"SampleNode2\",\n          \"to\": \"SampleNode4\",\n          \"rule\": null\n        },\n        {\n          \"from\": \"SampleNode2\",\n          \"to\": \"SampleNode1\",\n          \"rule\": null\n        },\n        {\n          \"from\": \"SampleNode3\",\n          \"to\": \"SampleNode2\",\n          \"rule\": null\n        },\n        {\n          \"from\": \"SampleNode3\",\n          \"to\": \"SampleNode4\",\n          \"rule\": null\n        }\n      ],\n      \"name\": null\n    }\n  },\n  \"workflowGuid\": \"8f78962d-43c7-4aa8-862c-5db7d9303949\",\n  \"workflowName\": null,\n  \"orchestrationAffinity\": false,\n  \"name\": \"SampleWorkflow1\"\n}"
+					"raw": "{\n  \"nodes\": {\n    \"SampleNode1\": {\n      \"nodeName\": \"SampleNode1\",\n      \"nodeDescription\": null,\n      \"nodeId\": null,\n      \"isStart\": true,\n      \"isEnd\": false\n    },\n    \"SampleNode2\": {\n      \"nodeName\": \"SampleNode2\",\n      \"nodeDescription\": null,\n      \"nodeId\": null,\n      \"isStart\": false,\n      \"isEnd\": false\n    },\n    \"SampleNode3\": {\n      \"nodeName\": \"SampleNode3\",\n      \"nodeDescription\": null,\n      \"nodeId\": null,\n      \"isStart\": false,\n      \"isEnd\": false\n    },\n    \"SampleNode4\": {\n      \"nodeName\": \"SampleNode4\",\n      \"nodeDescription\": null,\n      \"nodeId\": null,\n      \"isStart\": false,\n      \"isEnd\": true\n    }\n  },\n  \"orchestrations\": {\n    \"Orch1\": {\n      \"orchestrationName\": \"Orch1\",\n      \"moves\": [\n        {\n          \"from\": null,\n          \"to\": \"SampleNode1\",\n          \"rule\": {\n            \"accessList\": [\n              {\n                \"email\": \"ericscott411@gmail.com\"\n              }\n            ],\n            \"name\": null\n          }\n        },\n        {\n          \"from\": \"SampleNode1\",\n          \"to\": \"SampleNode2\",\n          \"rule\": {\n            \"accessList\": [\n              {\n                \"email\": \"ericscott411@gmail.com\"\n              }\n            ],\n            \"name\": null\n          }\n        },\n        {\n          \"from\": \"SampleNode2\",\n          \"to\": \"SampleNode3\",\n          \"rule\": {\n            \"accessList\": [\n              {\n                \"email\": \"ericscott411@gmail.com\"\n              }\n            ],\n            \"name\": null\n          }\n        },\n        {\n          \"from\": \"SampleNode3\",\n          \"to\": \"SampleNode4\",\n          \"rule\": {\n            \"accessList\": [\n              {\n                \"email\": \"ericscott411@gmail.com\"\n              }\n            ],\n            \"name\": null\n          }\n        }\n      ],\n      \"name\": null\n    },\n    \"Orch2\": {\n      \"orchestrationName\": \"Orch2\",\n      \"moves\": [\n        {\n          \"from\": null,\n          \"to\": \"SampleNode1\",\n          \"rule\": null\n        },\n        {\n          \"from\": \"SampleNode1\",\n          \"to\": \"SampleNode2\",\n          \"rule\": null\n        },\n        {\n          \"from\": \"SampleNode2\",\n          \"to\": \"SampleNode3\",\n          \"rule\": null\n        },\n        {\n          \"from\": \"SampleNode2\",\n          \"to\": \"SampleNode4\",\n          \"rule\": null\n        },\n        {\n          \"from\": \"SampleNode2\",\n          \"to\": \"SampleNode1\",\n          \"rule\": null\n        },\n        {\n          \"from\": \"SampleNode3\",\n          \"to\": \"SampleNode2\",\n          \"rule\": null\n        },\n        {\n          \"from\": \"SampleNode3\",\n          \"to\": \"SampleNode4\",\n          \"rule\": null\n        }\n      ],\n      \"name\": null\n    }\n  },\n  \"workflowGuid\": \"ad2eb436-bf18-4ac2-8726-177fdf32449f\",\n  \"workflowName\": null,\n  \"orchestrationAffinity\": false,\n  \"name\": \"SampleWorkflow1\"\n}"
 				},
 				"description": ""
 			},
@@ -34,6 +47,17 @@
 		},
 		{
 			"name": "Create Trackable 1 in system",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 201\"] = responseCode.code === 201;"
+						]
+					}
+				}
+			],
 			"request": {
 				"url": "http://localhost:5000/api/Trackables",
 				"method": "POST",
@@ -59,6 +83,17 @@
 		},
 		{
 			"name": "Create Trackable 1-1 in system",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 201\"] = responseCode.code === 201;"
+						]
+					}
+				}
+			],
 			"request": {
 				"url": "http://localhost:5000/api/Trackables",
 				"method": "POST",
@@ -101,7 +136,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"trackableName\": \"SampleDoc1\",\n  \"type\": \"move\",\n  \"comment\": \"Submitting to Workflow\",\n\t\"newNodeid\": \"SampleNode1\",\n \n   \"submitter\": {\n    \"email\": \"Sample.User@somewhere.com\"\n  },\n\n  \"assignedTo\": {\n    \"email\": \"Newworker@somewhere.com\"\n  },\n  \"workflowName\": \"SampleWorkflow1\",\n  \"name\": \"SampleTransaction1\"\n}"
+					"raw": "{\n  \"trackableName\": \"SampleDoc1\",\n  \"type\": \"move\",\n  \"comment\": \"Submitting to Workflow\",\n\t\"newNodeid\": \"SampleNode1\",\n \n \"submitter\": {\n    \"email\": \"Sample.User@somewhere.com\"\n  },\n\n  \"assignedTo\": {\n    \"email\": \"Newworker@somewhere.com\"\n  },\n  \"workflowName\": \"SampleWorkflow1\",\n  \"name\": \"SampleTransaction2\"\n}"
 				},
 				"description": ""
 			},
@@ -109,6 +144,17 @@
 		},
 		{
 			"name": "Add Comment to doc1 in node 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 201\"] = responseCode.code === 201;"
+						]
+					}
+				}
+			],
 			"request": {
 				"url": "localhost:5000/api/transactions",
 				"method": "POST",
@@ -126,7 +172,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"trackableName\": \"SampleDoc1\",\n  \"type\": \"comment\",\n  \"comment\": \"this is going to be hard\",\n  \"currentNodeid\": \"SampleNode1\",\n\n \n   \"submitter\": {\n    \"email\": \"Sample.User@somewhere.com\"\n  },\n\n  \"assignedTo\": {\n    \"email\": \"sam@somewhere.com\"\n  },\n  \"workflowName\": \"SampleWorkflow1\",\n  \"name\": \"SampleTransactionC1\"\n}"
+					"raw": "{\n  \"trackableName\": \"SampleDoc1\",\n  \"type\": \"comment\",\n  \"comment\": \"this is going to be hard\",\n  \"currentNodeid\": \"SampleNode2\",\n\n \n   \"submitter\": {\n    \"email\": \"Sample.User@somewhere.com\"\n  },\n\n  \"assignedTo\": {\n    \"email\": \"sam@somewhere.com\"\n  },\n  \"workflowName\": \"SampleWorkflow1\",\n  \"name\": \"SampleTransactionC2\"\n}"
 				},
 				"description": ""
 			},
@@ -134,6 +180,17 @@
 		},
 		{
 			"name": "Assign doc1 in node 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 201\"] = responseCode.code === 201;"
+						]
+					}
+				}
+			],
 			"request": {
 				"url": "localhost:5000/api/transactions",
 				"method": "POST",
@@ -159,6 +216,17 @@
 		},
 		{
 			"name": "move doc1 step 1 to step 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 201\"] = responseCode.code === 201;"
+						]
+					}
+				}
+			],
 			"request": {
 				"url": "localhost:5000/api/transactions",
 				"method": "POST",
@@ -184,6 +252,17 @@
 		},
 		{
 			"name": "Add Comment to doc1 in node 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 201\"] = responseCode.code === 201;"
+						]
+					}
+				}
+			],
 			"request": {
 				"url": "localhost:5000/api/transactions",
 				"method": "POST",
@@ -209,8 +288,19 @@
 		},
 		{
 			"name": "submit SampleDoc 1-1 to workflow",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 201\"] = responseCode.code === 201;"
+						]
+					}
+				}
+			],
 			"request": {
-				"url": "localhost:5000/api/transactions",
+				"url": "localhost:5000/api/transactions/",
 				"method": "POST",
 				"header": [
 					{
@@ -226,7 +316,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"trackableName\": \"SampleDoc1-1\",\n  \"type\": \"move\",\n  \"comment\": \"Adding a comment\",\n\t\"newNodeid\": \"SampleNode1\",\n \n   \"submitter\": {\n    \"email\": \"Sample.User@somewhere.com\"\n  },\n\n  \"assignedTo\": {\n    \"email\": \"Newworker@somewhere.com\"\n  },\n  \"workflowName\": \"SampleWorkflow1\",\n  \"name\": \"SampleTransaction1-1-0\"\n}"
+					"raw": "{\n  \"trackableName\": \"SampleDoc1-1\",\n  \"type\": \"move\",\n  \"comment\": \"Adding a comment\",\n\"newNodeid\": \"SampleNode1\",\n \n   \"submitter\": {\n    \"email\": \"Sample.User@somewhere.com\"\n  },\n\n  \"assignedTo\": {\n    \"email\": \"Newworker@somewhere.com\"\n  },\n  \"workflowName\": \"SampleWorkflow1\",\n  \"name\": \"SampleTransaction1-1-0\"\n}"
 				},
 				"description": ""
 			},
@@ -234,6 +324,17 @@
 		},
 		{
 			"name": "Assign doc1 in node 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 201\"] = responseCode.code === 201;"
+						]
+					}
+				}
+			],
 			"request": {
 				"url": "localhost:5000/api/transactions",
 				"method": "POST",
@@ -259,6 +360,17 @@
 		},
 		{
 			"name": "move doc1 step 2 to step 3",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 201\"] = responseCode.code === 201;"
+						]
+					}
+				}
+			],
 			"request": {
 				"url": "localhost:5000/api/transactions",
 				"method": "POST",
@@ -284,6 +396,17 @@
 		},
 		{
 			"name": "move doc1-1 step 1 to step 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 201\"] = responseCode.code === 201;"
+						]
+					}
+				}
+			],
 			"request": {
 				"url": "localhost:5000/api/transactions",
 				"method": "POST",
@@ -309,6 +432,17 @@
 		},
 		{
 			"name": "Add Comment to doc1-1 in node 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 201\"] = responseCode.code === 201;"
+						]
+					}
+				}
+			],
 			"request": {
 				"url": "localhost:5000/api/transactions",
 				"method": "POST",
@@ -334,6 +468,17 @@
 		},
 		{
 			"name": "Assign doc1-1 in node 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 201\"] = responseCode.code === 201;"
+						]
+					}
+				}
+			],
 			"request": {
 				"url": "localhost:5000/api/transactions",
 				"method": "POST",
@@ -359,6 +504,17 @@
 		},
 		{
 			"name": "move doc1-1 step 2 to step 4",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 201\"] = responseCode.code === 201;"
+						]
+					}
+				}
+			],
 			"request": {
 				"url": "localhost:5000/api/transactions",
 				"method": "POST",
@@ -384,6 +540,17 @@
 		},
 		{
 			"name": "Add Comment to doc1-1 in node 4",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 201\"] = responseCode.code === 201;"
+						]
+					}
+				}
+			],
 			"request": {
 				"url": "localhost:5000/api/transactions",
 				"method": "POST",
@@ -409,6 +576,17 @@
 		},
 		{
 			"name": "Assign doc1-1 in node 4",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 201\"] = responseCode.code === 201;"
+						]
+					}
+				}
+			],
 			"request": {
 				"url": "localhost:5000/api/transactions",
 				"method": "POST",
@@ -428,6 +606,28 @@
 					"mode": "raw",
 					"raw": "{\n  \"trackableName\": \"SampleDoc1-1\",\n  \"type\": \"Assignment\",\n  \"comment\": \"Assigning to Eric cause he needs work\",\n  \"currentNodeid\": \"SampleNode2\",\n\n \n   \"submitter\": {\n    \"email\": \"Joe.Worker@somewhere.com\"\n  },\n\n  \"assignedTo\": {\n    \"email\": \"Joe.Worker@somewhere.com\"\n  },\n  \"workflowName\": \"SampleWorkflow1\",\n  \"name\": \"SampleTransaction1-1-A3\"\n}"
 				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:5000/api/admin/all",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 201\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "localhost:5000/api/admin/all",
+				"method": "DELETE",
+				"header": [],
+				"body": {},
 				"description": ""
 			},
 			"response": []
