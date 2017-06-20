@@ -130,23 +130,34 @@ namespace pyprflow.Controllers
 			return Json(String.Format("workflow with workflowItemId {0} is deleted", id));
 		}
 
-		//[HttpPatch("{id}")]
-		//public IActionResult UpdatePatch([FromBody] JsonPatchDocument<Workflow> patch, string id)
-		//{
-		//	Workflow wf = Repository.Find<Workflow>(id);
-		//	Workflow patched = Repository.Find<Workflow>(id);
-		//	patch.ApplyTo(patched, ModelState);
-		//	if (!ModelState.IsValid)
-		//		return new BadRequestObjectResult(ModelState);
-		//	var model = new
-		//	{
-		//		orginal = wf,
-		//		patched = patched,
-		//		operations = patch.Operations
-		//	};
 
-		//	return null;
 
-		//}
-	}
+        [HttpPut("deactivate/{id}")]
+        public IActionResult Deactivate(string id)
+        {
+            Repository.Deactivate<Workflow>(id);
+            //    var _workflow = Repository.Find<Workflow>(id);
+            return Json(String.Format("workflow with workflowItemId {0} is deleted", id));
+        }
+          
+
+            //[HttpPatch("{id}")]
+            //public IActionResult UpdatePatch([FromBody] JsonPatchDocument<Workflow> patch, string id)
+            //{
+            //	Workflow wf = Repository.Find<Workflow>(id);
+            //	Workflow patched = Repository.Find<Workflow>(id);
+            //	patch.ApplyTo(patched, ModelState);
+            //	if (!ModelState.IsValid)
+            //		return new BadRequestObjectResult(ModelState);
+            //	var model = new
+            //	{
+            //		orginal = wf,
+            //		patched = patched,
+            //		operations = patch.Operations
+            //	};
+
+            //	return null;
+
+            //}
+        }
 }

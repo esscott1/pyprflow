@@ -70,9 +70,15 @@ namespace pyprflow.Controllers
 			{ return (StatusCode(500, ex.Message)); }
 
 		}
-      
-		
-		}
+
+        [HttpDelete()]
+        public void Delete([FromBody] Transaction trans)
+        {
+            Repository.EmptyAll();
+        }
+
+
+    }
 
 	
 }

@@ -16,9 +16,10 @@ namespace pyprflow.Model
 		T Find<T>(string  name);
 		void Remove<T>(string workflowItemId) where T : BaseWorkflowItem;
 		void Update<T>(T item) where T : BaseWorkflowItem;
+        void Deactivate<T>(string workflowItemId) where T : BaseWorkflowItem;
 
 
-		void Add(Trackable trackable);
+        void Add(Trackable trackable);
 
 		List<Relationship> Where(System.Linq.Expressions.Expression<Func<Relationship, bool>> predicate);
 

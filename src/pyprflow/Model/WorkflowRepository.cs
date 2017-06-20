@@ -142,9 +142,16 @@ namespace pyprflow.Model
 			    {
 				    try
 				    {
-				    //	Console.WriteLine("trying to update {0} itemId", item.Name);
-					    db.WorkflowDb.Update(item);
-					    db.SaveChanges();
+                    BaseWorkflowItem  Update = new BaseWorkflowItem();
+
+                    //	Console.WriteLine("trying to update {0} itemId", item.Name);
+                    Update.Name = item.Name;
+                    Update.SerializedObject = item.Serialize<T>(item);
+                    Update.DerivedType = typeof(T).ToString();
+                    Update.Active = item.Active;
+                    
+                    db.WorkflowDb.Update(Update);
+					db.SaveChanges();
 				    //	Console.WriteLine("ItemId {0} updated in database");
 				    }
 				    catch (Exception ex)
@@ -154,13 +161,33 @@ namespace pyprflow.Model
 				    }
 			    }
 		    }
+
+        public void Deactivate<T>(string workflowItemId) where T : BaseWorkflowItem
+        {
+
+            try
+            {
+                var deactivate = Find<T>(workflowItemId);
+                deactivate.Active = false;
+                Update<T>(deactivate);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("{0} error", ex.Message);
+                Console.WriteLine("{0} inner message", ex.InnerException);
+            }
+
+        }
 		public void Remove<T>(string workflowItemId) where T:BaseWorkflowItem
 		    {
 			    using (var db = new WorkflowContext(_options)) { 
 				    try
 				    {
-				    var delete = Find<T>(workflowItemId);
-			    //	Console.WriteLine("trying to delete {0} itemId", workflowItemId);
+                 
+                    var delete = new BaseWorkflowItem();
+                    delete.Name = workflowItemId;
+                    delete.DerivedType = typeof(T).ToString();
+			   
 				    db.WorkflowDb.Remove(delete);
 				    db.SaveChanges();
 			    //	Console.WriteLine("ItemId {0} deleted from database");
@@ -324,7 +351,7 @@ namespace pyprflow.Model
 			return false;
 		}
 
-
-	}
+     
+    }
 
 }

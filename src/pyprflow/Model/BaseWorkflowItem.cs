@@ -10,7 +10,11 @@ namespace pyprflow.Model
 {
 	public class BaseWorkflowItem
 	{
-		public BaseWorkflowItem() { }
+		public BaseWorkflowItem() {
+          
+        }
+
+      
 		public BaseWorkflowItem(string serializedObject)
 		{
 			SerializedObject = serializedObject;
@@ -31,7 +35,8 @@ namespace pyprflow.Model
 
 		
 		public string Name { get; set; }
-		[JsonIgnore]
+        public bool Active { get; set; } = true;
+        [JsonIgnore]
 	
 		public string DerivedType { get; set; }
 		

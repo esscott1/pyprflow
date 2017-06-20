@@ -35,7 +35,7 @@ namespace pyprflow.Model
 			}
 		}
 
-		public Workflow() {
+		public Workflow() : base() {
 			this.Orchestrations = new Dictionary<string, Orchestration>();
 			this.Nodes = new Dictionary<string, Node>();
 		}
