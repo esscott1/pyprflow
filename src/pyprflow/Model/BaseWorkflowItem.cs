@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace pyprflow.Model
 {
-	public class BaseWorkflowItem
+	public class BaseWorkflowItem: BaseItem
 	{
 		public BaseWorkflowItem() {
           
@@ -29,6 +29,8 @@ namespace pyprflow.Model
             result.DerivedType = typeof(T).ToString();
             return result;
         }
+
+        
 		
 		public T Deserialize<T>(string serializedObject)
 		{
@@ -44,7 +46,7 @@ namespace pyprflow.Model
 
 		
 		public string Name { get; set; }
-        public bool Active { get; set; } = true;
+       
         [JsonIgnore]
 	
 		public string DerivedType { get; set; }

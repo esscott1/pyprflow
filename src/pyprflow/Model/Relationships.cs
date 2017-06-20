@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace pyprflow.Model
 {
-    public class Relationship
+    public class Relationship : BaseItem
     {
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -18,7 +18,6 @@ namespace pyprflow.Model
 		public string  NodeName { get; set; }
 		public string  WorkflowName { get; set; }
 		public DateTime TimeStamp { get; set; }
-		public bool Active { get; set; } = true;
 		public TransactionType Type { get; set; }
 		public string Submitter { get; set; }
 		public string AssignedTo { get; set; }

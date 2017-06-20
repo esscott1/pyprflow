@@ -31,7 +31,11 @@ namespace pyprflow.Model
 
 
 		bool CheckValidUserKey(string stringValues);
-		void Track(Transaction trans);
+        /// <summary>
+        /// this adds the Relationship entry
+        /// </summary>
+        /// <param name="trans"></param>
+        void Track(Transaction trans);
         
         void EmptyAll();
     }
