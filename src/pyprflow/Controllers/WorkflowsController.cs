@@ -137,7 +137,7 @@ namespace pyprflow.Controllers
         {
             Repository.Deactivate<Workflow>(id);
             //    var _workflow = Repository.Find<Workflow>(id);
-            return Json(String.Format("workflow with workflowItemId {0} is deleted", id));
+            return Json(String.Format("workflow with workflowItemId {0} is has been soft deleted", id));
         }
           
 

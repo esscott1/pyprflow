@@ -15,41 +15,32 @@ namespace pyprflow.Model
 {
 	public class WorkflowRepository : IWorkflowRepository
 	{
-		private static ConcurrentDictionary<string, Workflow> _Workflow =
-			new ConcurrentDictionary<string, Workflow>();
-		private static ConcurrentDictionary<string, Trackable> _Trackable =
-				 new ConcurrentDictionary<string, Trackable>();
-		
-		private static ConcurrentDictionary<string, Transaction> _Transaction =
-				 new ConcurrentDictionary<string, Transaction>();
-
+	
         internal readonly DbContextOptions<WorkflowContext> _options;
 
-      
         public WorkflowRepository(DbContextOptions<WorkflowContext> options)
         {
             _options = options;
         }
 
-       
 		#region Generic Methods
 		private void Add<T>(T item) where T : BaseWorkflowItem
 		{
-			if (item == null)
+
+          //  (item is pyprflow.Model.BaseWorkflowItem)
+
+            if (item == null)
 				return;
 			using (var db = new WorkflowContext( _options))
 			{
 				try
 				{
-					//Console.WriteLine("saving {0} with type {1}", item.Name, item.DerivedType);
-					BaseWorkflowItem saveThis = new BaseWorkflowItem();
-					saveThis.SerializedObject = saveThis.Serialize<T>(item);
-					saveThis.DerivedType = typeof(T).ToString();
-					saveThis.Name = item.Name;
+                    
+                    //Console.WriteLine("saving {0} with type {1}", item.Name, item.DerivedType);
+                    BaseWorkflowItem saveThis = item.GetBase<T>(item);
 					db.WorkflowDb.Add(saveThis);
 					
 					int recordCount = db.SaveChanges();
-					
 					//Console.WriteLine("Saved {0} records to DB", recordCount);
 
 				}
@@ -75,7 +66,7 @@ namespace pyprflow.Model
 
 		}
 
-		public IEnumerable<T> GetAll<T>()
+		public IEnumerable<T> GetAll<T>() where T : BaseWorkflowItem
 		{
 			using (var db = new WorkflowContext(_options))
 			{
@@ -98,8 +89,8 @@ namespace pyprflow.Model
 			}
 		}
 		
-	    public T Find<T>(string workflowName)
-	    {
+	    public T Find<T>(string workflowName) where T : BaseWorkflowItem
+        {
 		    using (var db = new WorkflowContext(_options))
 		    {
 			    try
@@ -142,15 +133,10 @@ namespace pyprflow.Model
 			    {
 				    try
 				    {
-                    BaseWorkflowItem  Update = new BaseWorkflowItem();
-
-                    //	Console.WriteLine("trying to update {0} itemId", item.Name);
-                    Update.Name = item.Name;
-                    Update.SerializedObject = item.Serialize<T>(item);
-                    Update.DerivedType = typeof(T).ToString();
-                    Update.Active = item.Active;
+                    item.Active = false;
+                    BaseWorkflowItem updateThis = item.GetBase<T>(item);
                     
-                    db.WorkflowDb.Update(Update);
+                    db.WorkflowDb.Update(updateThis);
 					db.SaveChanges();
 				    //	Console.WriteLine("ItemId {0} updated in database");
 				    }

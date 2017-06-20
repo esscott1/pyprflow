@@ -11,10 +11,12 @@ namespace pyprflow.Model
 	public interface IWorkflowRepository
 	{
 
-		IEnumerable<T> GetAll<T>();
-		void Add(Workflow workflow);
-		T Find<T>(string  name);
-		void Remove<T>(string workflowItemId) where T : BaseWorkflowItem;
+        IEnumerable<T> GetAll<T>() where T : BaseWorkflowItem;
+
+       
+        void Add(Workflow workflow);
+        T Find<T>(string name) where T : BaseWorkflowItem;
+        void Remove<T>(string workflowItemId) where T : BaseWorkflowItem;
 		void Update<T>(T item) where T : BaseWorkflowItem;
         void Deactivate<T>(string workflowItemId) where T : BaseWorkflowItem;
 
