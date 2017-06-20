@@ -13,29 +13,17 @@ namespace pyprflow.Model
 
         IEnumerable<T> GetAll<T>() where T : BaseWorkflowItem;
 
-       
-        void Add(Workflow workflow);
+        void Add<T>(T item) where T : BaseWorkflowItem;
         T Find<T>(string name) where T : BaseWorkflowItem;
         void Remove<T>(string workflowItemId) where T : BaseWorkflowItem;
 		void Update<T>(T item) where T : BaseWorkflowItem;
         void Deactivate<T>(string workflowItemId) where T : BaseWorkflowItem;
 
 
-        void Add(Trackable trackable);
-
 		List<Relationship> Where(System.Linq.Expressions.Expression<Func<Relationship, bool>> predicate);
 
-
-		void Add(Transaction trans);
-		
-
-
 		bool CheckValidUserKey(string stringValues);
-        /// <summary>
-        /// this adds the Relationship entry
-        /// </summary>
-        /// <param name="trans"></param>
-        void Track(Transaction trans);
+      
         
         void EmptyAll();
     }

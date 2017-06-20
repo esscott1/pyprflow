@@ -20,15 +20,15 @@ namespace pyprflow.Model
 			SerializedObject = serializedObject;
 		}
 
-        public BaseWorkflowItem GetBase<T>(T derivedObject) where T : BaseWorkflowItem
-        {
-            BaseWorkflowItem result = new BaseWorkflowItem();
-            result.Name = this.Name;
-            result.Active = derivedObject.Active;
-            result.SerializedObject = this.Serialize<T>(derivedObject);
-            result.DerivedType = typeof(T).ToString();
-            return result;
-        }
+        //public BaseWorkflowItem GetBase<T>(T derivedObject) 
+        //{
+        //    BaseWorkflowItem result = new BaseWorkflowItem();
+        //    result.Name = this.Name;
+        //    result.Active = derivedObject.Active;
+        //    result.SerializedObject = this.Serialize<T>(derivedObject);
+        //    result.DerivedType = typeof(T).ToString();
+        //    return result;
+        //}
 
         
 		

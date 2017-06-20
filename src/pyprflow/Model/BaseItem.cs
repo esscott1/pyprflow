@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace pyprflow.Model
 {
-    public class BaseItem
+    public abstract class BaseItem
     {
         public bool Active { get; set; } = true;
     }

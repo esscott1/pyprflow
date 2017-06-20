@@ -94,9 +94,8 @@ namespace pyprflow.Model
 				Console.WriteLine("passed IsValid validation");
 				
 			}
-			repository.Add(this);Console.WriteLine("added now going to track");
-            // should implement observer delegate pattern here
-			repository.Track(this);
+			repository.Add(this);
+            
 			return true;
 		}
 		private bool IsValid(IWorkflowRepository repository, out int statuscode, out string statusmessage)

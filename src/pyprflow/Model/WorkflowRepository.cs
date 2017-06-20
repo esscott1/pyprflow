@@ -16,8 +16,6 @@ namespace pyprflow.Model
 {
 	public class WorkflowRepository : IWorkflowRepository
 	{
-	
-       
         internal readonly DbContextOptions<WorkflowContext> _options;
 
         public WorkflowRepository(DbContextOptions<WorkflowContext> options)
@@ -25,23 +23,28 @@ namespace pyprflow.Model
             _options = options;
         }
 
-		#region Generic Methods
-		private void Add<T>(T item) where T : BaseWorkflowItem
-		{
+        #region Generic Methods
+        public void Add<T>(T item) where T : BaseWorkflowItem
+        {
             if (item == null)
-				return;
+                return;
             if (item is pyprflow.Model.BaseWorkflowItem)
             {
                 using (var db = new WorkflowContext(_options))
                 {
                     try
                     {
-
                         //Console.WriteLine("saving {0} with type {1}", item.Name, item.DerivedType);
-                        BaseWorkflowItem saveThis = item.GetBase<T>(item);
-                        db.WorkflowDb.Add(saveThis);
+                        Helpers.ObjectConverter converter = new Helpers.ObjectConverter();
+                        BaseWorkflowItem saveThis = converter.GetBase<T>(item);
+                       // BaseWorkflowItem saveThis = item.GetBase<T>(item);
 
+                        db.WorkflowDb.Add(saveThis);
                         int recordCount = db.SaveChanges();
+                        if (item is pyprflow.Model.Transaction)
+                            Track(item as Transaction);
+                        //Console.WriteLine("implement tracking / relationship saving here");
+
                         //Console.WriteLine("Saved {0} records to DB", recordCount);
 
                     }
@@ -65,8 +68,25 @@ namespace pyprflow.Model
                     }
                 }
             }
+            else if (item is pyprflow.Model.Relationship)
+            {
+                using (var db = new WorkflowContext(_options))
+                {
+                    try
+                    {
 
-		}
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("{0} error", ex.Message);
+                        Console.WriteLine("{0} inner message", ex.InnerException);
+                    }
+
+
+                }
+            }
+        }
 
 		public IEnumerable<T> GetAll<T>() where T : BaseWorkflowItem
 		{
@@ -148,7 +168,9 @@ namespace pyprflow.Model
                     try
                     {
                         item.Active = false;
-                        BaseWorkflowItem updateThis = item.GetBase<T>(item);
+                        Helpers.ObjectConverter converter = new Helpers.ObjectConverter();
+                        BaseWorkflowItem updateThis = converter.GetBase<T>(item);
+                      //  BaseWorkflowItem updateThis = item.GetBase<T>(item);
 
                         db.WorkflowDb.Update(updateThis);
                         db.SaveChanges();
@@ -162,7 +184,6 @@ namespace pyprflow.Model
                 }
             }
 		}
-
         public void Deactivate<T>(string workflowItemId) where T : BaseWorkflowItem
         {
             Type providedtype = typeof(T);
@@ -236,34 +257,17 @@ namespace pyprflow.Model
 		/// Adds the Relationship record to DB
 		/// </summary>
 		/// <param name="trans"></param>
-		public void Track(Transaction trans)
+		private void Track(Transaction trans)
 		{
 			Console.WriteLine("tracking methods");
 			try
 			{
-                //var r = new Relationship();
-                //r.TransactionName = trans.Name;
-                //r.TrackableName = trans.TrackableName;
-                //if (trans.type == TransactionType.move)
-                //	r.NodeName = trans.NewNodeId;
-                //else if (trans.type == TransactionType.copy)
-                //	r.NodeName = trans.NewNodeId;
-                //else if (trans.type == TransactionType.assignment)
-                //	r.NodeName = trans.CurrentNodeId;
-                //else if (trans.type == TransactionType.comment)
-                //	r.NodeName = trans.CurrentNodeId;
-                //r.WorkflowName = trans.WorkflowName;
-                //if(trans.AssignedTo !=null)
-                //	r.AssignedTo = trans.AssignedTo.Email;
-                //r.Type = trans.type;
-                //if(trans.Submitter != null)
-                //	r.Submitter = trans.Submitter.Email;
-
+                
                 var r = trans.CreateRelationshipObj();
 				Console.WriteLine("transacation type is {0}", trans.type);
 				if (trans.type == TransactionType.move)
 					DeActivateOldTrackableRelationship(trans);
-
+               // Add<Relationship>(r);
 				InsertRelationship(r);
 			}
 			catch(Exception ex)
@@ -309,8 +313,6 @@ namespace pyprflow.Model
 			}
 		}
 
-       
-
 		private void InsertRelationship(Relationship r)
 		{
             
@@ -340,21 +342,8 @@ namespace pyprflow.Model
 			}
 		}
 
-		public void Add(Workflow workflow)
-		{
-			Add<Workflow>(workflow);
-		}
-
-		public void Add(Trackable trackable)
-		{
-			Add<Trackable>(trackable);
-		}
-
-		public void Add(Transaction trans)
-		{
-			Add<Transaction>(trans);
-		}
-
+		
+       
 		public bool CheckValidUserKey(string stringValue)
 		{
 			var userkeylist = new List<string>();
