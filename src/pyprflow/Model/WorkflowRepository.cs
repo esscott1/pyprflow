@@ -11,7 +11,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using pyprflow.Db;
 using pyprflow.Database;
-
+using pyprflow.Database.Entity;
 
 namespace pyprflow.Model
 {
@@ -38,9 +38,13 @@ namespace pyprflow.Model
                         //Console.WriteLine("saving {0} with type {1}", item.Name, item.DerivedType);
                         Helpers.ObjectConverter converter = new Helpers.ObjectConverter();
                         BaseWorkflowItem saveThis = converter.GetBase<T>(item);
-                       // BaseWorkflowItem saveThis = item.GetBase<T>(item);
-
-                        db.WorkflowDb.Add(saveThis);
+                        pyprflow.Database.Entity.BaseWorkflowItem dbSaveThis =
+                            new Helpers.ObjectConverter().Map(saveThis);
+                        
+                        // BaseWorkflowItem saveThis = item.GetBase<T>(item);
+                        db.WorkflowDb.Add(dbSaveThis);
+                       
+                        // db.WorkflowDb.Add(saveThis);
                         int recordCount = db.SaveChanges();
                         if (item is pyprflow.Model.Transaction)
                             Track(item as Transaction);
@@ -89,7 +93,40 @@ namespace pyprflow.Model
             }
         }
 
-		public IEnumerable<T> GetAll<T>() where T : BaseWorkflowItem
+        public void Update<T>(T item) where T : BaseWorkflowItem
+        {
+            if (item is pyprflow.Model.BaseWorkflowItem)
+            {
+                using (var db = new ApiContext(_options))
+                {
+                    try
+                    {
+                        item.Active = false;
+                        Helpers.ObjectConverter converter = new Helpers.ObjectConverter();
+                        BaseWorkflowItem updateThis = converter.GetBase<T>(item);
+
+                        pyprflow.Database.Entity.BaseWorkflowItem dbUpdateThis =
+                            new Helpers.ObjectConverter().Map(updateThis);
+                            
+                            
+
+                        //  BaseWorkflowItem updateThis = item.GetBase<T>(item);
+
+                        //db.WorkflowDb.Update(updateThis);
+                        db.WorkflowDb.Update(dbUpdateThis);
+                        db.SaveChanges();
+                        //	Console.WriteLine("ItemId {0} updated in database");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("{0} error", ex.Message);
+                        Console.WriteLine("{0} inner message", ex.InnerException);
+                    }
+                }
+            }
+        }
+
+        public IEnumerable<T> GetAll<T>() where T : BaseWorkflowItem
 		{
             Type providedtype = typeof(T);
             if (providedtype.GetTypeInfo().BaseType == typeof(BaseWorkflowItem))
@@ -127,7 +164,12 @@ namespace pyprflow.Model
                     try
                     {
                         Console.WriteLine("searching for item {0} with Id {1}", typeof(T).ToString(), workflowName);
-                        BaseWorkflowItem result = db.WorkflowDb.Find(new object[] { workflowName, typeof(T).ToString() });
+
+                      //  BaseWorkflowItem result = db.WorkflowDb.Find(new object[] { workflowName, typeof(T).ToString() });
+                        pyprflow.Database.Entity.BaseWorkflowItem result 
+                            = db.WorkflowDb.Find(new object[] { workflowName, typeof(T).ToString() });
+
+
                         if (result == null)
                         {
                             Console.WriteLine("looking for type {0} with ID {1}", typeof(T).ToString(), workflowName);
@@ -160,31 +202,7 @@ namespace pyprflow.Model
             }
             else return default(T);
 	    }
-	    public void Update<T>(T item) where T : BaseWorkflowItem
-		{
-            if (item is pyprflow.Model.BaseWorkflowItem)
-            {
-                using (var db = new ApiContext(_options))
-                {
-                    try
-                    {
-                        item.Active = false;
-                        Helpers.ObjectConverter converter = new Helpers.ObjectConverter();
-                        BaseWorkflowItem updateThis = converter.GetBase<T>(item);
-                      //  BaseWorkflowItem updateThis = item.GetBase<T>(item);
-
-                        db.WorkflowDb.Update(updateThis);
-                        db.SaveChanges();
-                        //	Console.WriteLine("ItemId {0} updated in database");
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("{0} error", ex.Message);
-                        Console.WriteLine("{0} inner message", ex.InnerException);
-                    }
-                }
-            }
-		}
+	   
         public void Deactivate<T>(string workflowItemId) where T : BaseWorkflowItem
         {
             Type providedtype = typeof(T);
@@ -221,7 +239,12 @@ namespace pyprflow.Model
                         delete.Name = workflowItemId;
                         delete.DerivedType = typeof(T).ToString();
 
-                        db.WorkflowDb.Remove(delete);
+                        pyprflow.Database.Entity.BaseWorkflowItem dbDelete =
+                            new Helpers.ObjectConverter().Map(delete);
+
+                        db.WorkflowDb.Remove(dbDelete);
+
+                      //  db.WorkflowDb.Remove(delete);
                         db.SaveChanges();
                         //	Console.WriteLine("ItemId {0} deleted from database");
                     }
@@ -277,11 +300,14 @@ namespace pyprflow.Model
 			}
 
 		}
-		public List<Relationship> GetAll(System.Linq.Expressions.Expression<Func<Relationship, bool>> predicate)
+		public List<Relationship> GetAll(System.Linq.Expressions.Expression<Func<pyprflow.Database.Entity.Relationship, bool>> predicate)
 		{
 			using (var db = new ApiContext(_options))
 			{
-				return db.Relationships.Where(predicate).ToList();
+               // throw new NotImplementedException("refactor for mapping");
+				 
+                var dbList = db.Relationships.Where(predicate).ToList();
+                return new Helpers.ObjectConverter().Map(dbList);
 
 			}
 		}
@@ -290,27 +316,38 @@ namespace pyprflow.Model
 		{
 			using (var db = new ApiContext(_options))
 			{
-                
-				Console.WriteLine("looking for old relationships");
-				List<Relationship> oldr = db.Relationships.Where(o => o.TrackableName == r.TrackableName
-				&& o.WorkflowName == r.WorkflowName
-				//&& o.Type == r.type
-				&& o.NodeName == r.CurrentNodeId).ToList();
-				Console.WriteLine("looking for {0} in WF {1}, with nodeID = {2}", r.TrackableName, r.WorkflowName, r.CurrentNodeId);
-				if (oldr == null)
-				{
-					Console.WriteLine("didn't find an old relationship");
-					return;// null;
-				}
-				Console.WriteLine("found {0} relationships",oldr.Count);
-				foreach (Relationship relationship in oldr)
-				{
-					relationship.Active = false;
-					db.Relationships.Update(relationship);
-				}
-				db.SaveChanges();
-				//Console.WriteLine("updated {0} records during deactivate old relationshops", db.SaveChanges());
-				return;// oldr;
+
+                Console.WriteLine("looking for old relationships");
+                //List<Relationship> oldr = db.Relationships.Where(o => o.TrackableName == r.TrackableName
+                //&& o.WorkflowName == r.WorkflowName
+                ////&& o.Type == r.type
+                //&& o.NodeName == r.CurrentNodeId).ToList();
+
+                List<pyprflow.Database.Entity.Relationship> oldr = 
+                    db.Relationships.Where(o => o.TrackableName == r.TrackableName
+             && o.WorkflowName == r.WorkflowName
+             //&& o.Type == r.type
+             && o.NodeName == r.CurrentNodeId).ToList();
+
+                Console.WriteLine("looking for {0} in WF {1}, with nodeID = {2}", r.TrackableName, r.WorkflowName, r.CurrentNodeId);
+                if (oldr == null)
+                {
+                    Console.WriteLine("didn't find an old relationship");
+                    return;// null;
+                }
+                Console.WriteLine("found {0} relationships", oldr.Count);
+                foreach (pyprflow.Database.Entity.Relationship relationship in oldr)
+                {
+
+                    relationship.Active = false;
+                    //pyprflow.Database.Entity.Relationship r =
+                    //  new Helpers.ObjectConverter().Map(relationship);
+                    //db.Relationships.Update(r);
+                    db.Relationships.Update(relationship);
+                }
+                db.SaveChanges();
+               // Console.WriteLine("updated {0} records during deactivate old relationshops", db.SaveChanges());
+                return;// oldr;
 			}
 		}
 
@@ -321,7 +358,11 @@ namespace pyprflow.Model
             {
                 try
                 {
-                    db.Relationships.Add(r);
+                    pyprflow.Database.Entity.Relationship dbR =
+                        new Helpers.ObjectConverter().Map(r);
+
+                    db.Relationships.Add(dbR);
+                    //db.Relationships.Add(r);
                     db.SaveChanges();
                     //	Console.WriteLine("saved relationship {0}", r.RelationshipId);
                 }
@@ -334,12 +375,15 @@ namespace pyprflow.Model
             }
 		}
 		
-		public List<Relationship> Where(System.Linq.Expressions.Expression<Func<Relationship, bool>> predicate)
+		public List<Relationship> Where(System.Linq.Expressions.Expression<Func<pyprflow.Database.Entity.Relationship, bool>> predicate)
 		{
 			using (var db = new ApiContext(_options))
 			{
+             //   throw new NotImplementedException("mapping refactor needed");
 				//Console.WriteLine("in the Where method of WorkflowRepository");
-				return db.Relationships.Where(predicate.Compile()).ToList();
+                
+			List<pyprflow.Database.Entity.Relationship> dbList = db.Relationships.Where(predicate.Compile()).ToList();
+            return new Helpers.ObjectConverter().Map(dbList);
 			}
 		}
 

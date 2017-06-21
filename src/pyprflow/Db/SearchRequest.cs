@@ -11,9 +11,10 @@ namespace pyprflow.Db
     public class SearchRequest
 	{
 		public string EntityType { get; set; }
-		public System.Linq.Expressions.Expression<Func<Relationship, bool>> Predicate { get; set; }
+		public System.Linq.Expressions.Expression<Func<pyprflow.Database.Entity.Relationship, bool>> Predicate { get; set; }
 
-		public SearchRequest(Dictionary<string,
+
+        public SearchRequest(Dictionary<string,
 			Microsoft.Extensions.Primitives.StringValues> queryString)
 		{
 			StringValues select; StringValues sIsActive;
@@ -49,7 +50,7 @@ namespace pyprflow.Db
 		private void BuildPredicate(Dictionary<string,
 			Microsoft.Extensions.Primitives.StringValues> queryString)
 		{
-			var predicate = PredicateBuilder.True<Relationship>();
+			var predicate = PredicateBuilder.True<pyprflow.Database.Entity.Relationship>();
 			StringValues sIsActive = string.Empty;
 			if (queryString.TryGetValue("isactive", out sIsActive))
 			{
@@ -89,8 +90,8 @@ namespace pyprflow.Db
 			if (queryString.TryGetValue("transactiontype", out sType))
 			{
 				Console.WriteLine("found type of value {0}", sType);
-				TransactionType tType;
-				if (Enum.TryParse<TransactionType>(sType, out tType))
+				pyprflow.Database.Entity.TransactionType tType;
+				if (Enum.TryParse<pyprflow.Database.Entity.TransactionType>(sType, out tType))
 				{
 					predicate = predicate.And(i => i.Type == tType);
 					Console.WriteLine("tType value is {0}", tType.ToString());

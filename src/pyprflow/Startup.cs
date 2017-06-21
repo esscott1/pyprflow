@@ -82,7 +82,7 @@ namespace pyprflow
             // below is added to create the DB if it does not already exist.
 			using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
 			{
-				serviceScope.ServiceProvider.GetService<ApiContext>().Database.Migrate();
+				//serviceScope.ServiceProvider.GetService<ApiContext>().Database.Migrate();
 
 			}
 		}

@@ -20,9 +20,10 @@ namespace pyprflow.Model
         void Deactivate<T>(string workflowItemId) where T : BaseWorkflowItem;
 
 
-		List<Relationship> Where(System.Linq.Expressions.Expression<Func<Relationship, bool>> predicate);
+        //List<Relationship> Where(System.Linq.Expressions.Expression<Func<Relationship, bool>> predicate);
+        List<Relationship> Where(System.Linq.Expressions.Expression<Func<pyprflow.Database.Entity.Relationship, bool>> predicate);
 
-		bool CheckValidUserKey(string stringValues);
+        bool CheckValidUserKey(string stringValues);
       
         
         void EmptyAll();

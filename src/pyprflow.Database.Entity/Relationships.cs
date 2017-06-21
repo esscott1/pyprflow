@@ -25,12 +25,13 @@ namespace pyprflow.Database.Entity
 		{
 			TimeStamp = DateTime.Now;
 		}
-        public enum TransactionType
-        {
-            move,
-            copy,
-            assignment,
-            comment
-        }
+      
+    }
+    public enum TransactionType
+    {
+        move,
+        copy,
+        assignment,
+        comment
     }
 }

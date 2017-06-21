@@ -46,6 +46,8 @@ namespace pyprflow.Database
 
             modelBuilder.Entity<Relationship>()
                 .HasKey(r => new { r.RelationshipId });
+
+            
         }
     }
 }
