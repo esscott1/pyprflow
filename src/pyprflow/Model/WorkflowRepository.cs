@@ -10,15 +10,16 @@ using Microsoft.Extensions.Primitives;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using pyprflow.Db;
+using pyprflow.Database;
 
 
 namespace pyprflow.Model
 {
 	public class WorkflowRepository : IWorkflowRepository
 	{
-        internal readonly DbContextOptions<WorkflowContext> _options;
+        internal readonly DbContextOptions<ApiContext> _options;
 
-        public WorkflowRepository(DbContextOptions<WorkflowContext> options)
+        public WorkflowRepository(DbContextOptions<ApiContext> options)
         {
             _options = options;
         }
@@ -30,7 +31,7 @@ namespace pyprflow.Model
                 return;
             if (item is pyprflow.Model.BaseWorkflowItem)
             {
-                using (var db = new WorkflowContext(_options))
+                using (var db = new ApiContext(_options))
                 {
                     try
                     {
@@ -70,7 +71,7 @@ namespace pyprflow.Model
             }
             else if (item is pyprflow.Model.Relationship)
             {
-                using (var db = new WorkflowContext(_options))
+                using (var db = new ApiContext(_options))
                 {
                     try
                     {
@@ -93,7 +94,7 @@ namespace pyprflow.Model
             Type providedtype = typeof(T);
             if (providedtype.GetTypeInfo().BaseType == typeof(BaseWorkflowItem))
             {
-                using (var db = new WorkflowContext(_options))
+                using (var db = new ApiContext(_options))
                 {
                     try
                     {
@@ -121,7 +122,7 @@ namespace pyprflow.Model
             Type providedtype = typeof(T);
             if (providedtype.GetTypeInfo().BaseType == typeof(BaseWorkflowItem))
             {
-                using (var db = new WorkflowContext(_options))
+                using (var db = new ApiContext(_options))
                 {
                     try
                     {
@@ -163,7 +164,7 @@ namespace pyprflow.Model
 		{
             if (item is pyprflow.Model.BaseWorkflowItem)
             {
-                using (var db = new WorkflowContext(_options))
+                using (var db = new ApiContext(_options))
                 {
                     try
                     {
@@ -211,7 +212,7 @@ namespace pyprflow.Model
             Type providedtype = typeof(T);
             if (providedtype.GetTypeInfo().BaseType == typeof(BaseWorkflowItem))
             {
-                using (var db = new WorkflowContext(_options))
+                using (var db = new ApiContext(_options))
                 {
                     try
                     {
@@ -236,7 +237,7 @@ namespace pyprflow.Model
 		#endregion
         public void EmptyAll()
         {
-            using (var db = new WorkflowContext(_options))
+            using (var db = new ApiContext(_options))
             {
               
                 try
@@ -278,7 +279,7 @@ namespace pyprflow.Model
 		}
 		public List<Relationship> GetAll(System.Linq.Expressions.Expression<Func<Relationship, bool>> predicate)
 		{
-			using (var db = new WorkflowContext(_options))
+			using (var db = new ApiContext(_options))
 			{
 				return db.Relationships.Where(predicate).ToList();
 
@@ -287,7 +288,7 @@ namespace pyprflow.Model
 
 		private void DeActivateOldTrackableRelationship(Transaction r)
 		{
-			using (var db = new WorkflowContext(_options))
+			using (var db = new ApiContext(_options))
 			{
                 
 				Console.WriteLine("looking for old relationships");
@@ -316,7 +317,7 @@ namespace pyprflow.Model
 		private void InsertRelationship(Relationship r)
 		{
             
-            using (var db = new WorkflowContext(_options))
+            using (var db = new ApiContext(_options))
             {
                 try
                 {
@@ -335,7 +336,7 @@ namespace pyprflow.Model
 		
 		public List<Relationship> Where(System.Linq.Expressions.Expression<Func<Relationship, bool>> predicate)
 		{
-			using (var db = new WorkflowContext(_options))
+			using (var db = new ApiContext(_options))
 			{
 				//Console.WriteLine("in the Where method of WorkflowRepository");
 				return db.Relationships.Where(predicate.Compile()).ToList();

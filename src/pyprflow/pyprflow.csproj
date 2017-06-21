@@ -39,4 +39,9 @@
     <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="1.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\pyprflow.Database.Entity\pyprflow.Database.Entity.csproj" />
+    <ProjectReference Include="..\pyprflow.Database\pyprflow.Database.csproj" />
+  </ItemGroup>
+
 </Project>

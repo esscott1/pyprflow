@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using pyprflow;
 using pyprflow.Model;
+using pyprflow.Database;
 
 namespace pyprflow.Db
 {
@@ -15,36 +16,11 @@ namespace pyprflow.Db
 		public DbSet<BaseWorkflowItem> WorkflowDb { get; set; }
 		public DbSet<Relationship> Relationships { get; set; }
 
-		public WorkflowContext(DbContextOptions<WorkflowContext> options)
+		public WorkflowContext(DbContextOptions<ApiContext> options)
 			: base(options) {
         }
        
-       
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-		{
-            Helpers.IConnectionString Iconn = null;
-            Iconn = Helpers.ConnectionStringFactory.GetConnetionString();
-            string conn = Iconn.ConnectionString();
-            switch (Environment.GetEnvironmentVariable("pfdatabasetype"))
-            {
-                case "mssql":
-                    optionsBuilder.UseSqlServer(conn);
-                    break;
-                case "mssql2017":
-                    optionsBuilder.UseSqlServer(conn);
-                    break;
-                case null:
-                    optionsBuilder.UseSqlite(conn, x => x.SuppressForeignKeyEnforcement());
-                    break;
-                default:
-                    optionsBuilder.UseSqlite(conn, x => x.SuppressForeignKeyEnforcement());
-                    break;
 
-
-            }
-          
-
-        }
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			modelBuilder.Entity<BaseWorkflowItem>()

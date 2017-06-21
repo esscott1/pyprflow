@@ -12,6 +12,7 @@ using Microsoft.SqlServer;
 using pyprflow.Model;
 using pyprflow.Middleware;
 using pyprflow.Db;
+using pyprflow.Database;
 
 namespace pyprflow
 {
@@ -47,19 +48,19 @@ namespace pyprflow
             {
                 case "mssql":
                 //case ("mssql"):
-                    services.AddDbContext<WorkflowContext>(options =>
+                    services.AddDbContext<ApiContext>(options =>
                        options.UseSqlServer(conn));
                     break;
                 case "mssql2017":
-                    services.AddDbContext<WorkflowContext>(options =>
+                    services.AddDbContext<ApiContext>(options =>
                         options.UseSqlServer(conn));
                     break;
                 case null:
-                    services.AddDbContext<WorkflowContext>(options =>
+                    services.AddDbContext<ApiContext>(options =>
                        options.UseSqlite(conn, x => x.SuppressForeignKeyEnforcement()));
                     break;
                 default:
-                    services.AddDbContext<WorkflowContext>(options =>
+                    services.AddDbContext<ApiContext>(options =>
                         options.UseSqlite(conn, x => x.SuppressForeignKeyEnforcement()));
                     break;
 
@@ -81,7 +82,7 @@ namespace pyprflow
             // below is added to create the DB if it does not already exist.
 			using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
 			{
-				serviceScope.ServiceProvider.GetService<WorkflowContext>().Database.Migrate();
+				serviceScope.ServiceProvider.GetService<ApiContext>().Database.Migrate();
 
 			}
 		}

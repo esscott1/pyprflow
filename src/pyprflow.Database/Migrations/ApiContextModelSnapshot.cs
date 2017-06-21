@@ -3,21 +3,21 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using pyprflow.Db;
-using pyprflow.Model;
+using pyprflow.Database;
+using pyprflow.Database.Entity;
 
-namespace pyprflow.Migrations
+namespace pyprflow.Database.Migrations
 {
-    [DbContext(typeof(WorkflowContext))]
-    [Migration("20170616003001_addedactive")]
-    partial class addedactive
+    [DbContext(typeof(ApiContext))]
+    partial class ApiContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
             modelBuilder
-                .HasAnnotation("ProductVersion", "1.1.2");
+                .HasAnnotation("ProductVersion", "1.1.1")
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("pyprflow.Model.BaseWorkflowItem", b =>
+            modelBuilder.Entity("pyprflow.Database.Entity.BaseWorkflowItem", b =>
                 {
                     b.Property<string>("Name");
 
@@ -32,7 +32,7 @@ namespace pyprflow.Migrations
                     b.ToTable("WorkflowDb");
                 });
 
-            modelBuilder.Entity("pyprflow.Model.Relationship", b =>
+            modelBuilder.Entity("pyprflow.Database.Entity.Relationship", b =>
                 {
                     b.Property<int>("RelationshipId")
                         .ValueGeneratedOnAdd();
@@ -57,7 +57,7 @@ namespace pyprflow.Migrations
 
                     b.HasKey("RelationshipId");
 
-                    b.ToTable("Relationships");
+                    b.ToTable("Relationship");
                 });
         }
     }

@@ -29,8 +29,6 @@ namespace pyprflow.Model
         //    result.DerivedType = typeof(T).ToString();
         //    return result;
         //}
-
-        
 		
 		public T Deserialize<T>(string serializedObject)
 		{
