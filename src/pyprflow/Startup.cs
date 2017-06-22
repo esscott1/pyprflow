@@ -47,13 +47,14 @@ namespace pyprflow
             switch (Environment.GetEnvironmentVariable("pfdatabasetype"))
             {
                 case "mssql":
-                //case ("mssql"):
+                //case ("mssql"): 
                     services.AddDbContext<ApiContext>(options =>
                        options.UseSqlServer(conn));
                     break;
                 case "mssql2017":
                     services.AddDbContext<ApiContext>(options =>
-                        options.UseSqlServer(conn));
+                        options.UseSqlServer(conn,
+                        b => b.MigrationsAssembly("pyprflow")));
                     break;
                 case null:
                     services.AddDbContext<ApiContext>(options =>
@@ -81,10 +82,12 @@ namespace pyprflow
             
             // below is added to create the DB if it does not already exist.
 			using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-			{
-				//serviceScope.ServiceProvider.GetService<ApiContext>().Database.Migrate();
+            {
 
-			}
+               
+                serviceScope.ServiceProvider.GetService<ApiContext>().Database.Migrate();
+
+            }
 		}
     }
 }

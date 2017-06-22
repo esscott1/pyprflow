@@ -6,15 +6,16 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using pyprflow.Database;
 using pyprflow.Database.Entity;
 
-namespace pyprflow.Database.Migrations
+namespace pyprflow.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    partial class ApiContextModelSnapshot : ModelSnapshot
+    [Migration("20170622022711_myfirst")]
+    partial class myfirst
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
-                .HasAnnotation("ProductVersion", "1.1.1")
+                .HasAnnotation("ProductVersion", "1.1.2")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("pyprflow.Database.Entity.BaseWorkflowItem", b =>
@@ -57,7 +58,7 @@ namespace pyprflow.Database.Migrations
 
                     b.HasKey("RelationshipId");
 
-                    b.ToTable("Relationship");
+                    b.ToTable("Relationships");
                 });
         }
     }

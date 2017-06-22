@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace pyprflow.Database.Migrations
+namespace pyprflow.Migrations
 {
-    public partial class firstMigration : Migration
+    public partial class myfirst : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -24,7 +24,7 @@ namespace pyprflow.Database.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Relationship",
+                name: "Relationships",
                 columns: table => new
                 {
                     RelationshipId = table.Column<int>(nullable: false)
@@ -41,7 +41,7 @@ namespace pyprflow.Database.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Relationship", x => x.RelationshipId);
+                    table.PrimaryKey("PK_Relationships", x => x.RelationshipId);
                 });
         }
 
@@ -51,7 +51,7 @@ namespace pyprflow.Database.Migrations
                 name: "WorkflowDb");
 
             migrationBuilder.DropTable(
-                name: "Relationship");
+                name: "Relationships");
         }
     }
 }

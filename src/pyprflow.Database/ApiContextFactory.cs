@@ -13,7 +13,8 @@ namespace pyprflow.Database
         {
             var builder = new DbContextOptionsBuilder<ApiContext>();
             builder.UseSqlServer(
-                "Server=127.0.0.2,2250;Database=testcomponentdb;User Id=sa;Password=!!nimda1;"
+                "Server=127.0.0.2,2250;Database=testcomponentdb;User Id=sa;Password=!!nimda1;",
+                b => b.MigrationsAssembly("pyprflow")
               //  "Server=(localdb)\\mssqllocaldb;Database=config;Trusted_Connection=True;MultipleActiveResultSets=true"
                 );
 
