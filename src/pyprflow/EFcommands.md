@@ -7,3 +7,5 @@ dotnet ef migrations add MyFirstMigration
 ```
 dotnet ef database update
 ```
+use the below command for 
+dotnet ef --startup-project ../DummyDB migrations add [Migration Name]

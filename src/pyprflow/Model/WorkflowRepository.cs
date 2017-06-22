@@ -21,7 +21,7 @@ namespace pyprflow.Model
 
         public WorkflowRepository(DbContextOptions<ApiContext> options)
         {
-            _options = options;
+             _options = options; 
         }
 
         #region Generic Methods
@@ -220,10 +220,7 @@ namespace pyprflow.Model
                     Console.WriteLine("{0} inner message", ex.InnerException);
                 }
             }
-          
-
-
-
+        
         }
 		public void Remove<T>(string workflowItemId) where T:BaseWorkflowItem
 		    {
@@ -265,8 +262,17 @@ namespace pyprflow.Model
               
                 try
                 {
-                    db.Database.ExecuteSqlCommand("truncate table Relationships");
-                    db.Database.ExecuteSqlCommand("truncate table workflowDb");
+                    if (db.Database.GetDbConnection().GetType().Name == "SqliteConnection")
+                    {
+                        db.Database.ExecuteSqlCommand("delete from relationships");
+                        db.Database.ExecuteSqlCommand("delete from workflowDb");
+                        db.Database.ExecuteSqlCommand("vacuum");
+                    }
+                    else
+                    {
+                        db.Database.ExecuteSqlCommand("truncate table Relationships");
+                        db.Database.ExecuteSqlCommand("truncate table workflowDb");
+                    }
                 }
                 catch (Exception ex)
                 {

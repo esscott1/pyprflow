@@ -9,9 +9,10 @@ using pyprflow.Database.Entity;
 namespace pyprflow.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    partial class ApiContextModelSnapshot : ModelSnapshot
+    [Migration("20170622055658_newsecondwithnothing")]
+    partial class newsecondwithnothing
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2");

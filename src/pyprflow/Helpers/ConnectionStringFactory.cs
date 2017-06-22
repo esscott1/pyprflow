@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace pyprflow.Database.Helpers
+namespace pyprflow.Helpers
 {
     class ConnectionStringFactory
     {
@@ -21,7 +21,7 @@ namespace pyprflow.Database.Helpers
                     break;
                 case null:
                     conn = new SQLite();
-                    conn = new MSSql2017();
+                  //  conn = new MSSql2017();
                     break;
                 default:
                     conn = new SQLite();

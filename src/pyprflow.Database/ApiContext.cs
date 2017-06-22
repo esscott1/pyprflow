@@ -19,31 +19,8 @@ namespace pyprflow.Database
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //purposefully ignoring whatever was passed in optionsbuilder and overriding for now
-            Helpers.IConnectionString Iconn = null;
-            Iconn = Helpers.ConnectionStringFactory.GetConnetionString();
-            string conn = Iconn.ConnectionString();
-            switch (Environment.GetEnvironmentVariable("pfdatabasetype"))
-            {
-                case "mssql":
-                    optionsBuilder.UseSqlServer(conn, 
-                             b => b.MigrationsAssembly("pyprflow"));
-                    break;
-                case "mssql2017":
-                    optionsBuilder.UseSqlServer(conn,
-                         b => b.MigrationsAssembly("pyprflow"));
-                    break;
-                case null:
-                    //   optionsBuilder.UseSqlServer(conn);
-                    optionsBuilder.UseSqlite(conn, x => { x.SuppressForeignKeyEnforcement(); x.MigrationsAssembly("pyperflow"); });
-                          
-                    break;
-                default:
-                    //    optionsBuilder.UseSqlServer(conn);
-                    optionsBuilder.UseSqlite(conn, x => { x.SuppressForeignKeyEnforcement(); x.MigrationsAssembly("pyperflow"); });
-                    //  optionsBuilder.UseSqlite(conn, x => x.SuppressForeignKeyEnforcement());
-                    break;
-            }
+            base.OnConfiguring(optionsBuilder);
+          
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
