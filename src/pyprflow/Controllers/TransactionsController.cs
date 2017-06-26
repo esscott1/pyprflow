@@ -71,6 +71,14 @@ namespace pyprflow.Controllers
 
 		}
 
+        [HttpPut("deactivate/{id}")]
+        public IActionResult Deactivate(string id)
+        {
+            Repository.Deactivate<Transaction>(id);
+            //    var _workflow = Repository.Find<Workflow>(id);
+            return Json(String.Format("transaction with transactionID {0} is has been soft deleted", id));
+        }
+
         [HttpDelete()]
         public void Delete([FromBody] Transaction trans)
         {

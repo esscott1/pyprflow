@@ -39,13 +39,6 @@ namespace pyprflow.Controllers
 			return Json(wkf.GetSample());
 		}
 
-		[HttpGet("version")]
-		public IActionResult GetVersion()
-		{
-			var info = "stuff";
-			return Json("version information");
-		}
-
 
 		[HttpGet("{workflowId}/orchestrations")]
 		public IEnumerable<Orchestration> GetOrchestrations(string workflowId)
@@ -131,7 +124,6 @@ namespace pyprflow.Controllers
 		}
 
 
-
         [HttpPut("deactivate/{id}")]
         public IActionResult Deactivate(string id)
         {
@@ -139,25 +131,33 @@ namespace pyprflow.Controllers
             //    var _workflow = Repository.Find<Workflow>(id);
             return Json(String.Format("workflow with workflowItemId {0} is has been soft deleted", id));
         }
-          
 
-            //[HttpPatch("{id}")]
-            //public IActionResult UpdatePatch([FromBody] JsonPatchDocument<Workflow> patch, string id)
-            //{
-            //	Workflow wf = Repository.Find<Workflow>(id);
-            //	Workflow patched = Repository.Find<Workflow>(id);
-            //	patch.ApplyTo(patched, ModelState);
-            //	if (!ModelState.IsValid)
-            //		return new BadRequestObjectResult(ModelState);
-            //	var model = new
-            //	{
-            //		orginal = wf,
-            //		patched = patched,
-            //		operations = patch.Operations
-            //	};
+        //[HttpPut("deactivate/{id}")]
+        //public IActionResult Deactivate(string id)
+        //{
+        //    Repository.Deactivate<Workflow>(id);
+        //    //    var _workflow = Repository.Find<Workflow>(id);
+        //    return Json(String.Format("workflow with workflowItemId {0} is has been soft deleted", id));
+        //}
 
-            //	return null;
 
-            //}
-        }
+        //[HttpPatch("{id}")]
+        //public IActionResult UpdatePatch([FromBody] JsonPatchDocument<Workflow> patch, string id)
+        //{
+        //	Workflow wf = Repository.Find<Workflow>(id);
+        //	Workflow patched = Repository.Find<Workflow>(id);
+        //	patch.ApplyTo(patched, ModelState);
+        //	if (!ModelState.IsValid)
+        //		return new BadRequestObjectResult(ModelState);
+        //	var model = new
+        //	{
+        //		orginal = wf,
+        //		patched = patched,
+        //		operations = patch.Operations
+        //	};
+
+        //	return null;
+
+        //}
+    }
 }

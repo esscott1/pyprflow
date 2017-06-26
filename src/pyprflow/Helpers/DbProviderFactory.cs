@@ -5,13 +5,16 @@ using System.Threading.Tasks;
 
 namespace pyprflow.Helpers
 {
-    class ConnectionStringFactory
+    class DbProviderFactory
     {
-        static public IConnectionString GetConnetionString() {
+        private string _dbType;
+       
+        public IDbProvider Create(string dbType) {
 
-            IConnectionString conn = null;
+            _dbType = dbType;
+            IDbProvider conn = null;
           
-            switch (Environment.GetEnvironmentVariable("pfdatabasetype"))
+            switch (_dbType)
             {
                 case ("mssql"):
                     conn = new MSSql();
@@ -19,28 +22,45 @@ namespace pyprflow.Helpers
                 case ("mssql2017"):
                     conn = new MSSql2017();
                     break;
+                case "local":
+                    conn = new Local();
+                    break;
                 case null:
                     conn = new SQLite();
                   //  conn = new MSSql2017();
                     break;
-                default:
-                    conn = new SQLite();
-                    conn = new MSSql2017();
+                default:  
+                            conn = new SQLite();
+                 //   conn = new MSSql2017();
                     break;
             }
-            Console.WriteLine("Database Connection string is: {0} ", conn.ConnectionString());
+            Console.WriteLine("Database Connection string is: {0} ", conn.ConnectionString);
             return conn;
         }
 
 }
 
-    interface IConnectionString
+    interface IDbProvider
     {
-        string ConnectionString();
+        string ConnectionString { get; set; }
     }
-    class MSSql : IConnectionString
+    class DbProvider
     {
-        public string ConnectionString()
+        public string ConnectionString { get; set; }
+       
+    }
+    class Local : DbProvider, IDbProvider
+    {
+        public Local()
+        {
+            ConnectionString = "Server=127.0.0.1,2250;Database=pyprflowlocaldb;User Id = sa; Password=!!nimda1;";
+        }
+    }
+
+    
+    class MSSql : DbProvider, IDbProvider
+    {
+        public MSSql()
         {
             //string dbconnstr = Environment.GetEnvironmentVariable("pfdatabasetype");
             //if (String.IsNullOrEmpty(dbconnstr))
@@ -61,21 +81,23 @@ namespace pyprflow.Helpers
                 sConn = string.Format("Server={0},{5};Database={2};User Id={3};Password={4};",
                     dbhost, dbinstance, dbname, dbid, dbpw, dbport);
 
-           //  return sConn;
-
-            return "Server=127.0.0.1,2250;Database=pyprflowlocaldb;User Id=sa;Password=!!nimda1;";
+            Console.WriteLine("MsSQL conn string is: " + sConn);
+            ConnectionString = sConn;
+           // return "Server=127.0.0.1,2250;Database=pyprflowlocaldb;User Id=sa;Password=!!nimda1;";
         }
     }
-    class SQLite : IConnectionString
+    class SQLite : DbProvider, IDbProvider
     {
-        public string ConnectionString()
+        public SQLite()
         {
-            return "Filename=./Repository.db";
+            ConnectionString = "Filename=./Repository.db";
         }
 
     }
-    class MSSql2017 : MSSql, IConnectionString
+    class MSSql2017 : MSSql, IDbProvider
     {
+        public MSSql2017() : base()
+        { }
         //public string ConnectionString()
         //{
         //    return "Server = 10.0.0.25; Database = pyprflowlocaldb; User Id = sa; Password = !!Nimda1;";

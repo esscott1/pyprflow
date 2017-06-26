@@ -63,125 +63,132 @@ namespace pyprflow.Controllers
 			return CreatedAtRoute("GetTrackable", new { id = item.Name }, Repository);
 		}
 
-		// patch is inappropriate because when an trackable is "moved" we need other information
-		// that is not part of the Trackable Object to track the  move.
-		// Patch may be useful for partial updates of a trackable so leaving it in for now
-	//	[HttpPatch("{id}")]
-		//public IActionResult UpdatePatch([FromBody]JsonPatchDocument<Trackable> patch, string id)
-		//{
-		//	Trackable trackable = Repository.FindTrackable(id);
-		//	Trackable patched = Repository.FindTrackable(id);
-		//	patch.ApplyTo(patched, ModelState);
-		//	if (!ModelState.IsValid)
-		//		return new BadRequestObjectResult(ModelState);
-		//	var model = new
-		//	{
-		//		orginal = trackable,
-		//		patched = patched,
-		//		operations = patch.Operations
-		//	};
-			
-			
-		//	var locationUpdates = patch.Operations.Where(o => o.Orchestrations.ToLowerInvariant() == "/locations/-");
-		//	List<Location> newlocations = new List<Location>();
-		//	// getting a list of locations that were sent in the patch.
-		//	foreach(Microsoft.AspNetCore.JsonPatch.Operations.Operation<Trackable> o in locationUpdates)
-		//	{
-		//		string sVar = JsonConvert.SerializeObject(o.value);
-		//		var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto };
-		//		Location loc = JsonConvert.DeserializeObject<Location>(sVar, settings);
-
-		//		switch (o.op)
-		//		{
-		//		case "add":
-		//				string nodeId;
-		//				if(WorkflowHelper.ExistsInWorkflow(trackable, loc.WorkflowGuid, out nodeId))
-		//				{
-		//					var wf = Repository.Find(loc.WorkflowGuid);
-		//					Movement move;
-		//					if(wf.IsMoveValid(nodeId,loc.NodeId, out move))
-		//					{
-		//						// merge in patch and save the move
-		//					}
-		//				}
-		//			l = (Location)o.value;
-		//			return Json(l);
-		//			break;
-		//		case "replace":
-		//			l = (Location)o.value;
-		//			return Json(l);
-		//			break;
-
-		//		}
-				
-		//		newlocations.Add(loc);
-		//	}
-		//	// match those locations with existing locations to check if the "move" is valid
-			
-		//	foreach(Location l in newlocations)
-		//	{
-
-		//		var wf = Repository.Find(l.WorkflowGuid);
-		//		Movement move;
-		//		if(!wf.IsMoveValid("somewhere",l.NodeId, out move))
-		//		{
-		//			return StatusCode(403, "move is not valid per workflow rules");
-		//		}
-
-		//	}
+        [HttpPut("deactivate/{id}")]
+        public IActionResult Deactivate(string id)
+        {
+            Repository.Deactivate<Trackable>(id);
+            //    var _workflow = Repository.Find<Workflow>(id);
+            return Json(String.Format("trackable with trackableId {0} is has been soft deleted", id));
+        }
+        // patch is inappropriate because when an trackable is "moved" we need other information
+        // that is not part of the Trackable Object to track the  move.
+        // Patch may be useful for partial updates of a trackable so leaving it in for now
+        //	[HttpPatch("{id}")]
+        //public IActionResult UpdatePatch([FromBody]JsonPatchDocument<Trackable> patch, string id)
+        //{
+        //	Trackable trackable = Repository.FindTrackable(id);
+        //	Trackable patched = Repository.FindTrackable(id);
+        //	patch.ApplyTo(patched, ModelState);
+        //	if (!ModelState.IsValid)
+        //		return new BadRequestObjectResult(ModelState);
+        //	var model = new
+        //	{
+        //		orginal = trackable,
+        //		patched = patched,
+        //		operations = patch.Operations
+        //	};
 
 
-		//	//string sVar = JsonConvert.SerializeObject(locationUpdates.First().value);
-		//	//var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto };
-		//	//Location loc =  JsonConvert.DeserializeObject<Location>(sVar, settings);
+        //	var locationUpdates = patch.Operations.Where(o => o.Orchestrations.ToLowerInvariant() == "/locations/-");
+        //	List<Location> newlocations = new List<Location>();
+        //	// getting a list of locations that were sent in the patch.
+        //	foreach(Microsoft.AspNetCore.JsonPatch.Operations.Operation<Trackable> o in locationUpdates)
+        //	{
+        //		string sVar = JsonConvert.SerializeObject(o.value);
+        //		var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto };
+        //		Location loc = JsonConvert.DeserializeObject<Location>(sVar, settings);
 
-		//	return Json(loc);  // the above works.
+        //		switch (o.op)
+        //		{
+        //		case "add":
+        //				string nodeId;
+        //				if(WorkflowHelper.ExistsInWorkflow(trackable, loc.WorkflowGuid, out nodeId))
+        //				{
+        //					var wf = Repository.Find(loc.WorkflowGuid);
+        //					Movement move;
+        //					if(wf.IsMoveValid(nodeId,loc.NodeId, out move))
+        //					{
+        //						// merge in patch and save the move
+        //					}
+        //				}
+        //			l = (Location)o.value;
+        //			return Json(l);
+        //			break;
+        //		case "replace":
+        //			l = (Location)o.value;
+        //			return Json(l);
+        //			break;
 
-		//	return Json(locationUpdates.First().value);
+        //		}
 
-		//	foreach (Microsoft.AspNetCore.JsonPatch.Operations.Operation<Trackable> o in locationUpdates)
-		//	{
-		//		Microsoft.AspNetCore.JsonPatch.Helpers.GetValueResult gvr = new Microsoft.AspNetCore.JsonPatch.Helpers.GetValueResult(o.value, false);
-		//		if (o.op == "add")
-		//			return Ok(Json(
-		//				((Newtonsoft.Json.Linq.JObject)o.value).Property("value").Value						));
-		//		else
-		//			return Ok(Json("not add"));
-		//		Location l;
-		//		//switch (o.op)
-		//		//{
-		//		//	case "add":
-		//		//		l = (Location)o.value;
-		//		//		return Json(l);
-		//		//		break;
-		//		//	case "replace":
-		//		//		l = (Location)o.value;
-		//		//		return Json(l);
-		//		//		break;
-		//		//	case "remove":
-		//		//		l = (Location)o.value;
-		//		//		return Json(l);
-		//		//		break;
-		//		//	case "move":
-		//		//		return StatusCode(403, "move operation not supported");
-		//		//		break;
-		//		//	case "copy":
-		//		//		return StatusCode(403, "copy operation not supported");
-		//		//		break;
-		//		//	case "test":
-		//		//		return StatusCode(403, "test operation not supported");
-		//		//		break;
-		//		//	default:
-		//		//		return Json("default case");
-		//		//		break;
-		//		//}
-		//	}
-		//	return Ok(model);
-		//	//return Json(patch);
+        //		newlocations.Add(loc);
+        //	}
+        //	// match those locations with existing locations to check if the "move" is valid
 
-		//}
-	
-		[HttpPost("isunique/{id}")]
+        //	foreach(Location l in newlocations)
+        //	{
+
+        //		var wf = Repository.Find(l.WorkflowGuid);
+        //		Movement move;
+        //		if(!wf.IsMoveValid("somewhere",l.NodeId, out move))
+        //		{
+        //			return StatusCode(403, "move is not valid per workflow rules");
+        //		}
+
+        //	}
+
+
+        //	//string sVar = JsonConvert.SerializeObject(locationUpdates.First().value);
+        //	//var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto };
+        //	//Location loc =  JsonConvert.DeserializeObject<Location>(sVar, settings);
+
+        //	return Json(loc);  // the above works.
+
+        //	return Json(locationUpdates.First().value);
+
+        //	foreach (Microsoft.AspNetCore.JsonPatch.Operations.Operation<Trackable> o in locationUpdates)
+        //	{
+        //		Microsoft.AspNetCore.JsonPatch.Helpers.GetValueResult gvr = new Microsoft.AspNetCore.JsonPatch.Helpers.GetValueResult(o.value, false);
+        //		if (o.op == "add")
+        //			return Ok(Json(
+        //				((Newtonsoft.Json.Linq.JObject)o.value).Property("value").Value						));
+        //		else
+        //			return Ok(Json("not add"));
+        //		Location l;
+        //		//switch (o.op)
+        //		//{
+        //		//	case "add":
+        //		//		l = (Location)o.value;
+        //		//		return Json(l);
+        //		//		break;
+        //		//	case "replace":
+        //		//		l = (Location)o.value;
+        //		//		return Json(l);
+        //		//		break;
+        //		//	case "remove":
+        //		//		l = (Location)o.value;
+        //		//		return Json(l);
+        //		//		break;
+        //		//	case "move":
+        //		//		return StatusCode(403, "move operation not supported");
+        //		//		break;
+        //		//	case "copy":
+        //		//		return StatusCode(403, "copy operation not supported");
+        //		//		break;
+        //		//	case "test":
+        //		//		return StatusCode(403, "test operation not supported");
+        //		//		break;
+        //		//	default:
+        //		//		return Json("default case");
+        //		//		break;
+        //		//}
+        //	}
+        //	return Ok(model);
+        //	//return Json(patch);
+
+        //}
+
+        [HttpPost("isunique/{id}")]
 		public bool IsUnique(string id)
 		{
 			return true;
