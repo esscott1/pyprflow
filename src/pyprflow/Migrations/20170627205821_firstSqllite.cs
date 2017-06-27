@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace pyprflow.Migrations
 {
-    public partial class first : Migration
+    public partial class firstSqllite : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -28,7 +27,7 @@ namespace pyprflow.Migrations
                 columns: table => new
                 {
                     RelationshipId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("Sqlite:Autoincrement", true),
                     Active = table.Column<bool>(nullable: false),
                     AssignedTo = table.Column<string>(nullable: true),
                     NodeName = table.Column<string>(nullable: true),

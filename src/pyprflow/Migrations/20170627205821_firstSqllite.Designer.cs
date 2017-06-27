@@ -9,14 +9,13 @@ using pyprflow.Database.Entity;
 namespace pyprflow.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    [Migration("20170626232623_test2")]
-    partial class test2
+    [Migration("20170627205821_firstSqllite")]
+    partial class firstSqllite
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
-                .HasAnnotation("ProductVersion", "1.1.2")
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "1.1.2");
 
             modelBuilder.Entity("pyprflow.Database.Entity.BaseWorkflowItem", b =>
                 {
