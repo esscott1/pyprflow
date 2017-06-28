@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Builder;
-using pyprflow.Model;
+using pyprflow.Workflow.Model;
 
 namespace pyprflow.Middleware
 {

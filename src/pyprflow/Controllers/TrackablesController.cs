@@ -5,63 +5,63 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.JsonPatch;
-using pyprflow.Model;
+using pyprflow.Workflow.Model;
 
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace pyprflow.Controllers
 {
-	[Route("api/[controller]")]
-	public class TrackablesController : Controller
-	{
+    [Route("api/[controller]")]
+    public class TrackablesController : Controller
+    {
 
-		public TrackablesController(IWorkflowRepository workflow)
-		{
-			Repository = workflow;
-		}
-		public IWorkflowRepository Repository { get; set; }
-		
-		[HttpGet]
-		public IEnumerable<Trackable> GetAll()
-		{
-			return Repository.GetAll<Trackable>();
-		}
+        public TrackablesController(IWorkflowRepository workflow)
+        {
+            Repository = workflow;
+        }
+        public IWorkflowRepository Repository { get; set; }
 
-		[HttpGet("{id}", Name ="GetTrackable") ]
-		public IActionResult GetTrackable(string id)
-		{
-			Trackable t = Repository.Find<Trackable>(id);
-			return Json(t);
-		}
+        [HttpGet]
+        public IEnumerable<Trackable> GetAll()
+        {
+            return Repository.GetAll<Trackable>();
+        }
 
-		[HttpGet("example")]
-		public IActionResult GetExample()
-		{
-			string name = "SampleDoc1";
-			Trackable t = new Trackable(name);
-			//t.Name = name;
-			
-			
-			return Json(t);
-		}
+        [HttpGet("{id}", Name = "GetTrackable")]
+        public IActionResult GetTrackable(string id)
+        {
+            Trackable t = Repository.Find<Trackable>(id);
+            return Json(t);
+        }
 
-		[HttpGet("{trackableId}/transactions")]
-		public IEnumerable<Transaction> GetTransactions(string trackableId)
-		{
-			return Repository.GetAll<Transaction>().Where(t => t.TrackableName == trackableId);
-		}
-		
-		[HttpPost]
-		public IActionResult CreateTrackable([FromBody] Trackable item)
-		{
-			// should check for existance and if exist throw error telling to use Put
-			var t = Repository.Find<Trackable>(item.Name);
-			if (t != null)
-				return StatusCode(403, "Trackable already exists in system, use HTTPPatch to update trackable");
-			Repository.Add(item);
-			return CreatedAtRoute("GetTrackable", new { id = item.Name }, Repository);
-		}
+        [HttpGet("example")]
+        public IActionResult GetExample()
+        {
+            string name = "SampleDoc1";
+            Trackable t = new Trackable(name);
+            //t.Name = name;
+
+
+            return Json(t);
+        }
+
+        [HttpGet("{trackableId}/transactions")]
+        public IEnumerable<Transaction> GetTransactions(string trackableId)
+        {
+            return Repository.GetAll<Transaction>().Where(t => t.TrackableName == trackableId);
+        }
+
+        [HttpPost]
+        public IActionResult CreateTrackable([FromBody] Trackable item)
+        {
+            // should check for existance and if exist throw error telling to use Put
+            var t = Repository.Find<Trackable>(item.Name);
+            if (t != null)
+                return StatusCode(403, "Trackable already exists in system, use HTTPPatch to update trackable");
+            Repository.Add(item);
+            return CreatedAtRoute("GetTrackable", new { id = item.Name }, Repository);
+        }
 
         [HttpPut("deactivate/{id}")]
         public IActionResult Deactivate(string id)
@@ -189,47 +189,47 @@ namespace pyprflow.Controllers
         //}
 
         [HttpPost("isunique/{id}")]
-		public bool IsUnique(string id)
-		{
-			return true;
-		}
-		
-		[HttpGet("newId")]
-		public IActionResult NewTrackableId()
-		{
-			return Json(Guid.NewGuid());
-		}
+        public bool IsUnique(string id)
+        {
+            return true;
+        }
 
-		[HttpGet("availablemoves")]
-		public IEnumerable<Movement> AvailableMoves([FromBody] Trackable item)
-		{
-			throw new NotImplementedException();
-			//var nodeName = item.Location[workflowId];
+        [HttpGet("newId")]
+        public IActionResult NewTrackableId()
+        {
+            return Json(Guid.NewGuid());
+        }
 
-			//Repository workflow = Repository.Find(workflowId);
-			
-			//return workflow.Orchestrations.Where(p => p.From == nodeName);
-			
-		}
+        [HttpGet("availablemoves")]
+        public IEnumerable<Movement> AvailableMoves([FromBody] Trackable item)
+        {
+            throw new NotImplementedException();
+            //var nodeName = item.Location[workflowId];
 
+            //Repository workflow = Repository.Find(workflowId);
 
-		[HttpPost("start")]
-		public IActionResult SubmitToWorkflow([FromBody]Trackable item, string workflowId)
-		{
-			//Repository workflow = Repository.Find(workflowId);
-			//item.Location.Add(workflowId, workflow.StartingNodeName);
-			//Repository.Add(item);
-			//return Json(item);
-			throw new NotImplementedException();
-		}
+            //return workflow.Orchestrations.Where(p => p.From == nodeName);
+
+        }
 
 
-		//[HttpDelete("remove")]
-		//public IActionResult RemoveTrackable([FromBody]  workflowUpdate)
-		//{
-		//	//Workflow wf = Repository.Find<Workflow>(workflowUpdate.);
-		//	//wf.RemoveItemFromWorkflow(workflowUpdate.TrackableName);
-		//	//return Json("tried to delete ID: " + workflowUpdate);
-		//}
-	}
+        [HttpPost("start")]
+        public IActionResult SubmitToWorkflow([FromBody]Trackable item, string workflowId)
+        {
+            //Repository workflow = Repository.Find(workflowId);
+            //item.Location.Add(workflowId, workflow.StartingNodeName);
+            //Repository.Add(item);
+            //return Json(item);
+            throw new NotImplementedException();
+        }
+
+
+        //[HttpDelete("remove")]
+        //public IActionResult RemoveTrackable([FromBody]  workflowUpdate)
+        //{
+        //	//Workflow wf = Repository.Find<Workflow>(workflowUpdate.);
+        //	//wf.RemoveItemFromWorkflow(workflowUpdate.TrackableName);
+        //	//return Json("tried to delete ID: " + workflowUpdate);
+        //}
+    }
 }

@@ -9,9 +9,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.SqlServer;
-using pyprflow.Model;
+using pyprflow.Workflow.Helpers;
+using pyprflow.Workflow.Model;
 using pyprflow.Middleware;
-using pyprflow.Db;
+using pyprflow.Workflow.Db;
 using pyprflow.Database;
 
 namespace pyprflow
@@ -43,9 +44,11 @@ namespace pyprflow
             Console.WriteLine("pfdatabasetype ENV var is: " + dbtype);
             Console.WriteLine("is dbtype null? : "+ String.IsNullOrWhiteSpace(dbtype));
           //  Console.WriteLine("Count of dbtype? : " + dbtype.Count());
-            Helpers.IDbProvider Iconn = new Helpers.DbProviderFactory().Create(dbtype);
+            IDbProvider Iconn = new DbProviderFactory().Create(dbtype);
             var conn = Iconn.ConnectionString;
             Console.WriteLine("connection string used is: "+ Iconn.ConnectionString);
+
+            
 
             switch (dbtype)
             {
@@ -101,7 +104,7 @@ namespace pyprflow
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-			//app.ApplyUserKeyValidation();
+			//app.ApplyUserKeyValidation(); 
 
             app.UseMvc();
             

@@ -4,7 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.JsonPatch;
-using pyprflow.Model;
+using pyprflow.Workflow.Model;
+
 
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
@@ -21,13 +22,13 @@ namespace pyprflow.Controllers
 		public IWorkflowRepository Repository { get; set; }
 
 		[HttpGet]
-		public IEnumerable<Workflow> GetAll()
-		{ return Repository.GetAll<Workflow>(); }
+		public IEnumerable<Workflow.Model.Workflow> GetAll()
+		{ return Repository.GetAll<Workflow.Model.Workflow>(); }
 
 		[HttpGet("{id}", Name = "GetWorkflow")]
 		public IActionResult GetById(string id)
 		{
-			var workflow = Repository.Find<Workflow>(id);
+			var workflow = Repository.Find<Workflow.Model.Workflow>(id);
 			if (workflow == null) { return NotFound(id); }
 			return Json(workflow);
 		}
@@ -35,7 +36,7 @@ namespace pyprflow.Controllers
 		[HttpGet("example")]
 		public IActionResult GetSample()
 		{
-			var wkf = new Model.Workflow();
+			var wkf = new Workflow.Model.Workflow();
 			return Json(wkf.GetSample());
 		}
 
@@ -43,8 +44,8 @@ namespace pyprflow.Controllers
 		[HttpGet("{workflowId}/orchestrations")]
 		public IEnumerable<Orchestration> GetOrchestrations(string workflowId)
 		{
-			var workflow = Repository.Find<Workflow>(workflowId);
-			List<Orchestration> ol = new List<Orchestration>();
+			var workflow = Repository.Find<Workflow.Model.Workflow>(workflowId);
+			List<Workflow.Model.Orchestration> ol = new List<Workflow.Model.Orchestration>();
 			foreach (KeyValuePair<string, Orchestration> kvp in workflow.Orchestrations)
 				ol.Add(kvp.Value);
 			return ol;
@@ -53,9 +54,9 @@ namespace pyprflow.Controllers
 		[HttpGet("{workflowId}/nodes")]
 		public IEnumerable<Node> GetNodes(string workflowId)
 		{
-			var workflow = Repository.Find<Workflow>(workflowId);
-			List<Node> n = new List<Node>();
-			foreach (KeyValuePair<string, Node> kvp in workflow.Nodes)
+			var workflow = Repository.Find<Workflow.Model.Workflow>(workflowId);
+			List<Workflow.Model.Node> n = new List<Workflow.Model.Node>();
+			foreach (KeyValuePair<string, Workflow.Model.Node> kvp in workflow.Nodes)
 				n.Add(kvp.Value);
 			return n;
 		}
@@ -63,7 +64,7 @@ namespace pyprflow.Controllers
 		[HttpGet("{workflowId}/orchestrations/{nodeId}")]
 		public Orchestration GetNode(int workflowId, string nodeId)
 		{
-			return Repository.Find<Orchestration>(nodeId);
+			return Repository.Find<Workflow.Model.Orchestration>(nodeId);
 		}
 
 		/// <summary>
@@ -72,7 +73,7 @@ namespace pyprflow.Controllers
 		/// <param name="workflow"></param>
 		/// <returns></returns>
 		[HttpPost("validate", Name = "ValidateWorkflow")]
-		public IActionResult Validate([FromBody] Workflow workflow)
+		public IActionResult Validate([FromBody] Workflow.Model.Workflow workflow)
 		{
 			WorkflowValidationMessage message;
 
@@ -84,7 +85,7 @@ namespace pyprflow.Controllers
 		}
 
 		[HttpPost]
-		public IActionResult Create([FromBody] Workflow workflow)
+		public IActionResult Create([FromBody] Workflow.Model.Workflow workflow)
 		{
 			if (workflow == null)
 			{
@@ -101,16 +102,16 @@ namespace pyprflow.Controllers
 
 
 		[HttpPut("{id}")]
-		public IActionResult Update(string id, [FromBody] Workflow workflow)
+		public IActionResult Update(string id, [FromBody] Workflow.Model.Workflow workflow)
 		{
 			if (workflow == null || workflow.Name != id)
 			{
 				return BadRequest();
 			}
-			var _workflow = Repository.Find<Workflow>(id);
+			var _workflow = Repository.Find<Workflow.Model.Workflow>(id);
 			if (_workflow == null)
 				return NotFound();
-			Repository.Update<Workflow>(workflow);
+			Repository.Update<Workflow.Model.Workflow>(workflow);
 			return new NoContentResult();
 
 		}
@@ -119,7 +120,7 @@ namespace pyprflow.Controllers
 		public IActionResult Delete(string id)
 		{
 			Console.WriteLine("in the delete method of controller");
-			Repository.Remove<Workflow>(id);
+			Repository.Remove<Workflow.Model.Workflow>(id);
 			return Json(String.Format("workflow with workflowItemId {0} is deleted", id));
 		}
 
@@ -127,7 +128,7 @@ namespace pyprflow.Controllers
         [HttpPut("deactivate/{id}")]
         public IActionResult Deactivate(string id)
         {
-            Repository.Deactivate<Workflow>(id);
+            Repository.Deactivate<Workflow.Model.Workflow>(id);
             //    var _workflow = Repository.Find<Workflow>(id);
             return Json(String.Format("workflow with workflowItemId {0} is has been soft deleted", id));
         }

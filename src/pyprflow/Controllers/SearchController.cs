@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using pyprflow.Model;
-using pyprflow.Db;
+using pyprflow.Workflow.Model;
+using pyprflow.Workflow.Db;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Primitives;
 
@@ -79,7 +79,7 @@ namespace pyprflow.Controllers
 			//Console.WriteLine("{0} is key {1} is value in querystring",s.Key, s.Value);
 			SearchRequest request = new SearchRequest(dic);
 
-			SearchEngine se = new Db.SearchEngine(Repository);
+			SearchEngine se = new SearchEngine(Repository);
 			object result = null;
 			result = se.Search(request);
 			
