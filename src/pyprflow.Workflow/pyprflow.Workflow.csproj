@@ -9,7 +9,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\pyprflow.Database\pyprflow.Database.csproj" />
+    <ProjectReference Include="..\pyprflow.Database.Entity\pyprflow.Database.Entity.csproj" />
+    <ProjectReference Include="..\pyprflow.Database\pyprflow.Database.csproj" />
   </ItemGroup>
 
 </Project>
