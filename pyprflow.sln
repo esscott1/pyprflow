@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.12
+VisualStudioVersion = 15.0.26430.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{FDD81516-B5F4-4BC4-A0A6-BC81F67982FE}"
 EndProject
@@ -9,12 +9,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		src\Dockerfile = src\Dockerfile
 		DockerIt.md = DockerIt.md
-		src\pyprflow\EFcommands.md = src\pyprflow\EFcommands.md
+		src\pyprflow.Api\EFcommands.md = src\pyprflow.Api\EFcommands.md
 		Piperflow.md = Piperflow.md
 		ReadMe.md = ReadMe.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pyprflow", "src\pyprflow\pyprflow.csproj", "{D3BFED65-EB99-4B26-AB3D-FD8903516759}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pyprflow.Api", "src\pyprflow.Api\pyprflow.Api.csproj", "{D3BFED65-EB99-4B26-AB3D-FD8903516759}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pyprflow.Database", "src\pyprflow.Database\pyprflow.Database.csproj", "{C3581EC1-B906-45D5-AA06-79F23C411E27}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pyprflow.Database.Entity", "src\pyprflow.Database.Entity\pyprflow.Database.Entity.csproj", "{D4531030-743B-4FB3-B2B6-835A63A89040}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pyprflow.Workflow", "src\pyprflow.Workflow\pyprflow.Workflow.csproj", "{458DF408-C134-4F99-B08A-0497485E1253}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,11 +32,26 @@ Global
 		{D3BFED65-EB99-4B26-AB3D-FD8903516759}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3BFED65-EB99-4B26-AB3D-FD8903516759}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3BFED65-EB99-4B26-AB3D-FD8903516759}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3581EC1-B906-45D5-AA06-79F23C411E27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3581EC1-B906-45D5-AA06-79F23C411E27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3581EC1-B906-45D5-AA06-79F23C411E27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3581EC1-B906-45D5-AA06-79F23C411E27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4531030-743B-4FB3-B2B6-835A63A89040}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4531030-743B-4FB3-B2B6-835A63A89040}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4531030-743B-4FB3-B2B6-835A63A89040}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4531030-743B-4FB3-B2B6-835A63A89040}.Release|Any CPU.Build.0 = Release|Any CPU
+		{458DF408-C134-4F99-B08A-0497485E1253}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{458DF408-C134-4F99-B08A-0497485E1253}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{458DF408-C134-4F99-B08A-0497485E1253}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{458DF408-C134-4F99-B08A-0497485E1253}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{D3BFED65-EB99-4B26-AB3D-FD8903516759} = {FDD81516-B5F4-4BC4-A0A6-BC81F67982FE}
+		{C3581EC1-B906-45D5-AA06-79F23C411E27} = {FDD81516-B5F4-4BC4-A0A6-BC81F67982FE}
+		{D4531030-743B-4FB3-B2B6-835A63A89040} = {FDD81516-B5F4-4BC4-A0A6-BC81F67982FE}
+		{458DF408-C134-4F99-B08A-0497485E1253} = {FDD81516-B5F4-4BC4-A0A6-BC81F67982FE}
 	EndGlobalSection
 EndGlobal
