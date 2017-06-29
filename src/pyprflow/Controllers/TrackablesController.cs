@@ -10,7 +10,7 @@ using pyprflow.Workflow.Model;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace pyprflow.Controllers
+namespace pyprflow.Api.Controllers
 {
     [Route("api/[controller]")]
     public class TrackablesController : Controller

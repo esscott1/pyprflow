@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Builder;
 using pyprflow.Workflow.Model;
 
-namespace pyprflow.Middleware
+namespace pyprflow.Api.Middleware
 {
 	public class UserKeyValidatorsMiddleware
 	{

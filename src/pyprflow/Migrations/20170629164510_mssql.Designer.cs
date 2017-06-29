@@ -6,10 +6,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using pyprflow.Database;
 using pyprflow.Database.Entity;
 
-namespace pyprflow.Migrations
+namespace pyprflow.Api.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    [Migration("20170628174753_mssql")]
+    [Migration("20170629164510_mssql")]
     partial class mssql
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

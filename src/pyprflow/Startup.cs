@@ -11,11 +11,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.SqlServer;
 using pyprflow.Workflow.Helpers;
 using pyprflow.Workflow.Model;
-using pyprflow.Middleware;
+using pyprflow.Api.Middleware;
 using pyprflow.Workflow.Db;
 using pyprflow.Database;
 
-namespace pyprflow
+namespace pyprflow.Api
 {
     public class Startup
     {

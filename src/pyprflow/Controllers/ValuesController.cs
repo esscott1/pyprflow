@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
-namespace pyprflow.Controllers
+namespace pyprflow.Api.Controllers
 {
     [Route("api/[controller]")]
     public class ValuesController : Controller

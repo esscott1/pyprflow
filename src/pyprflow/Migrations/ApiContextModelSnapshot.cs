@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using pyprflow.Database;
 using pyprflow.Database.Entity;
 
-namespace pyprflow.Migrations
+namespace pyprflow.Api.Migrations
 {
     [DbContext(typeof(ApiContext))]
     partial class ApiContextModelSnapshot : ModelSnapshot

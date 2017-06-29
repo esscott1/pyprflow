@@ -40,7 +40,15 @@ namespace pyprflow.Workflow.Model
 			this.Nodes = new Dictionary<string, Node>();
 		}
 
-		public Workflow GetSample()
+        [JsonConstructor]
+        public Workflow(Guid workflowId, string workflowname)
+            : this(workflowname)
+        {
+            // don't generate a new GUID when deserializing the workflow
+            WorkflowGuid = workflowId;
+        }
+
+        public Workflow GetSample()
 		{
 			IUser user = new User() { Email = "Sample.User@somewhere.com" };
 			List<User> users = new List<User> { new User() { Email = "Sample.User@somewhere.com" } };
@@ -138,20 +146,13 @@ namespace pyprflow.Workflow.Model
 			return false;
 		}
 
-		[JsonConstructor]
-		public Workflow(Guid workflowId, string workflowname)
-			: this(workflowname)
-		{
-			// don't generate a new GUID when deserializing the workflow
-			WorkflowGuid = workflowId;
-		}
 
 		internal KeyValuePair<string, Node> GetFirstNode()
 		{
 			return Nodes.First();
 		}
 
-		public static Workflow DeserializeWorkflow(string workflowJson)
+		internal static Workflow DeserializeWorkflow(string workflowJson)
 		{
 			if (string.IsNullOrWhiteSpace(workflowJson))
 			{
@@ -162,7 +163,7 @@ namespace pyprflow.Workflow.Model
 			return JsonConvert.DeserializeObject<Workflow>(workflowJson, settings);
 		}
 
-		public bool IsMoveValid(Transaction transaction, IWorkflowRepository repository)
+		internal bool IsMoveValid(Transaction transaction, IWorkflowRepository repository)
 		{
 			foreach (KeyValuePair<string, Orchestration> kvp in Orchestrations)
 			{
