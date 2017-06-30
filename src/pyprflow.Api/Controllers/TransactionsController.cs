@@ -37,14 +37,14 @@ namespace pyprflow.Api.Controllers
 
         }
         [HttpGet]
-        public IActionResult GetAll()
+        public IEnumerable<Transaction> GetAll()
         {
             //return Json("stuff");
-            return Json(Repository.GetAll<Transaction>());
+            return Repository.GetAll<Transaction>();
         }
         //	GET: api/values
         [HttpGet("{id}", Name = "GetTransaction")]
-        public IActionResult GetTransaction(string id)
+        public IActionResult GetById(string id)
         {
             return Json(Repository.Find<Transaction>(id));
         }

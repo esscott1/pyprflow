@@ -29,7 +29,7 @@ namespace pyprflow.Api.Controllers
         }
 
         [HttpGet("{id}", Name = "GetTrackable")]
-        public IActionResult GetTrackable(string id)
+        public IActionResult GetById(string id)
         {
             Trackable t = Repository.Find<Trackable>(id);
             return Json(t);
