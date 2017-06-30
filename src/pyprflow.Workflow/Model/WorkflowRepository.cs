@@ -154,6 +154,24 @@ namespace pyprflow.Workflow.Model
             else return null;
 		}
 		
+        public bool Exist<T>(string itemName) where T : BaseWorkflowItem
+        {
+            bool result = false;
+            using (var db = new ApiContext(_options))
+            {
+                try
+                {
+                    result = db.WorkflowDb.Any(i =>
+                    i.Name == itemName && i.Active == true );
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+            }
+            return result;
+        }
+
 	    public T Find<T>(string workflowName) where T : BaseWorkflowItem
         {
             Type providedtype = typeof(T);

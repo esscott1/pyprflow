@@ -8,6 +8,28 @@
 	},
 	"item": [
 		{
+			"name": "localhost:5000/api/admin/all copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 201\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "localhost:5000/api/admin/all",
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
 			"name": "Create Workflow",
 			"event": [
 				{
@@ -46,6 +68,57 @@
 			"response": []
 		},
 		{
+			"name": "Search for Workflow by Id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"var ans = \"SampleWorkflow1\"",
+							"",
+							"tests[\"Your test name\"] = jsonData.name === ans;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": {
+					"raw": "http://localhost:5000/api/search?entityType=workflows&workflowid=SampleWorkflow1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"search"
+					],
+					"query": [
+						{
+							"key": "entityType",
+							"value": "workflows",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "workflowid",
+							"value": "SampleWorkflow1",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
 			"name": "Create Trackable 1 in system",
 			"event": [
 				{
@@ -77,6 +150,57 @@
 					"mode": "raw",
 					"raw": "{\n  \n  \"name\": \"SampleDoc1\"\n}"
 				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Search for trackable 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"var ans = \"SampleDoc1\"",
+							"",
+							"tests[\"Your test name\"] = jsonData.name === ans;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": {
+					"raw": "http://localhost:5000/api/search?entityType=trackables&trackableid=SampleDoc1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"search"
+					],
+					"query": [
+						{
+							"key": "entityType",
+							"value": "trackables",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "trackableid",
+							"value": "SampleDoc1",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
 				"description": ""
 			},
 			"response": []
@@ -172,7 +296,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"trackableName\": \"SampleDoc1\",\n  \"type\": \"comment\",\n  \"comment\": \"this is going to be hard\",\n  \"currentNodeid\": \"SampleNode2\",\n\n \n   \"submitter\": {\n    \"email\": \"Sample.User@somewhere.com\"\n  },\n\n  \"assignedTo\": {\n    \"email\": \"sam@somewhere.com\"\n  },\n  \"workflowName\": \"SampleWorkflow1\",\n  \"name\": \"SampleTransactionC2\"\n}"
+					"raw": "{\n  \"trackableName\": \"SampleDoc1\",\n  \"type\": \"comment\",\n  \"comment\": \"this is going to be hard\",\n  \"currentNodeid\": \"SampleNode1\",\n\n \n   \"submitter\": {\n    \"email\": \"Sample.User@somewhere.com\"\n  },\n\n  \"assignedTo\": {\n    \"email\": \"sam@somewhere.com\"\n  },\n  \"workflowName\": \"SampleWorkflow1\",\n  \"name\": \"SampleTransactionC2\"\n}"
 				},
 				"description": ""
 			},
@@ -575,7 +699,7 @@
 			"response": []
 		},
 		{
-			"name": "Assign doc1-1 in node 4",
+			"name": "Assign doc1 in node 3",
 			"event": [
 				{
 					"listen": "test",
@@ -604,30 +728,8 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"trackableName\": \"SampleDoc1-1\",\n  \"type\": \"Assignment\",\n  \"comment\": \"Assigning to Eric cause he needs work\",\n  \"currentNodeid\": \"SampleNode2\",\n\n \n   \"submitter\": {\n    \"email\": \"Joe.Worker@somewhere.com\"\n  },\n\n  \"assignedTo\": {\n    \"email\": \"Joe.Worker@somewhere.com\"\n  },\n  \"workflowName\": \"SampleWorkflow1\",\n  \"name\": \"SampleTransaction1-1-A3\"\n}"
+					"raw": "{\n  \"trackableName\": \"SampleDoc1\",\n  \"type\": \"Assignment\",\n  \"comment\": \"Assigning to Eric cause he needs work\",\n  \"currentNodeid\": \"SampleNode3\",\n\n \n   \"submitter\": {\n    \"email\": \"Joe.Worker@somewhere.com\"\n  },\n\n  \"assignedTo\": {\n    \"email\": \"Joe.Worker@somewhere.com\"\n  },\n  \"workflowName\": \"SampleWorkflow1\",\n  \"name\": \"SampleTransaction1-1-A3\"\n}"
 				},
-				"description": ""
-			},
-			"response": []
-		},
-		{
-			"name": "localhost:5000/api/admin/all",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"type": "text/javascript",
-						"exec": [
-							"tests[\"Status code is 201\"] = responseCode.code === 200;"
-						]
-					}
-				}
-			],
-			"request": {
-				"url": "localhost:5000/api/admin/all",
-				"method": "DELETE",
-				"header": [],
-				"body": {},
 				"description": ""
 			},
 			"response": []

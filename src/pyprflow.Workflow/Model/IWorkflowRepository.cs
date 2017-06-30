@@ -18,7 +18,7 @@ namespace pyprflow.Workflow.Model
         void Remove<T>(string workflowItemId) where T : BaseWorkflowItem;
 		void Update<T>(T item) where T : BaseWorkflowItem;
         void Deactivate<T>(string workflowItemId) where T : BaseWorkflowItem;
-
+        bool Exist<T>(string itemName) where T : BaseWorkflowItem;
 
         //List<Relationship> Where(System.Linq.Expressions.Expression<Func<Relationship, bool>> predicate);
         List<Relationship> Where(System.Linq.Expressions.Expression<Func<pyprflow.Database.Entity.Relationship, bool>> predicate);
