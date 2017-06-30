@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Primitives;
 using pyprflow.Workflow.Model;
+using pyprflow.Workflow.Model.SearchResult;
 using pyprflow.Workflow;
 
 namespace pyprflow.Workflow.Db
@@ -78,19 +79,33 @@ namespace pyprflow.Workflow.Db
 				//
 				//relationships.ForEach(r => { result.Add(Repository.Find<Transaction>(r.Type == tType)); });
 				Console.WriteLine("going to search {0} of relationships",relationships.Count);
-			
-				switch (request.EntityType.ToLower())
-				{
-					case "workflows":
-						var uniqueRWf = relationships.Select(x => x.WorkflowName).Distinct().ToList();
-						foreach (string wn in uniqueRWf)
-							result.Add(Repository.Find<Model.Workflow>(wn));
-						//relationships.ForEach(r => { result.Add(Repository.Find<Workflow>(r.WorkflowName)); });
-						break;
-					case "trackables":
-						var uniqueR = relationships.Select(x => x.TrackableName).Distinct().ToList();
-						foreach (string tn in uniqueR)
-							result.Add(Repository.Find<Trackable>(tn));
+
+                switch (request.EntityType.ToLower())
+                {
+                    case "workflows":
+                        var uniqueRWf = relationships.Select(x => x.WorkflowName).Distinct().ToList();
+                        foreach (string wn in uniqueRWf)
+                            result.Add(Repository.Find<Model.Workflow>(wn));
+                        //relationships.ForEach(r => { result.Add(Repository.Find<Workflow>(r.WorkflowName)); });
+                        break;
+                    case "trackablesenh":
+                        var uniqueR2 = relationships.Select(x => x.TrackableName).Distinct().ToList();
+                        foreach (string tn in uniqueR2)
+                        {
+                            var trackable = Repository.Find<Trackable>(tn);
+                            var trackableSearchResult = Augment(trackable);
+                            result.Add(trackableSearchResult);
+                        }
+                            break;
+                    case "trackables":
+                        var uniqueR = relationships.Select(x => x.TrackableName).Distinct().ToList();
+                        foreach (string tn in uniqueR)
+                        {
+                            //var trackable = Repository.Find<Trackable>(tn);
+                            //var trackableSearchResult = new Model.SearchResult.TrackableSearchResult(trackable);
+                            //result.Add(trackableSearchResult);
+                            result.Add(Repository.Find<Trackable>(tn));
+                        }
 						//relationships.ForEach(r => { result.Add(Repository.Find<Trackable>(r.TrackableName)); });
 						break;
 					case "transactions":
@@ -123,7 +138,24 @@ namespace pyprflow.Workflow.Db
 			return result;
 		}
 
+        private TrackableSearchResult Augment(Trackable trackable)
+        {
+            TrackableSearchResult result = new TrackableSearchResult(trackable);
+            //result.Locations = Locate(result.Name);
+            var relationships = Repository.Where(r => r.TrackableName == result.Name && r.Active == true);// && (r.Type == Database.Entity.TransactionType.move || r.Type == Database.Entity.TransactionType.copy));
+            foreach (Relationship rel in relationships) {
+                if(rel.Type==TransactionType.copy || rel.Type == TransactionType.move)
+                    result.Locations.Add(rel.NodeName);
+                if(rel.Type==TransactionType.assignment)
+                    result.CurrentAssignment.Add(rel.AssignedTo);
+                    }
+            return result;
+        }
 
+         
+                
+
+       
 	}
 
 	

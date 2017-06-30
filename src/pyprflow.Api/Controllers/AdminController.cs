@@ -13,7 +13,7 @@ namespace pyprflow.Api.Controllers
     public class AdminController : BaseController
     {
 
-        public AdminController(IWorkflowRepository workflow)
+        public AdminController(IWorkflowRepository workflow) :base(workflow)
         {
             Repository = workflow;
         }

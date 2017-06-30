@@ -11,6 +11,7 @@ namespace pyprflow.Database.Entity
     public abstract class BaseItem
     {
         public bool Active { get; set; } = true;
+        public bool Deleted { get; set; } = false;
     }
     public class BaseWorkflowItem : BaseItem
     {

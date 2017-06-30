@@ -126,6 +126,7 @@ namespace pyprflow.Workflow.Model
             }
         }
 
+       
         public IEnumerable<T> GetAll<T>() where T : BaseWorkflowItem
 		{
             Type providedtype = typeof(T);
@@ -136,7 +137,7 @@ namespace pyprflow.Workflow.Model
                     try
                     {
                         //	Console.WriteLine("trying to return all {0} from DB", typeof(T).ToString());
-                        var wfi = db.WorkflowDb.Where(i => i.DerivedType == typeof(T).ToString());
+                        var wfi = db.WorkflowDb.Where(i => i.DerivedType == typeof(T).ToString() && i.Deleted==false);
                         List<T> wf = new List<T>();
                         foreach (var item in wfi)
                             wf.Add(item.Deserialize<T>(item.SerializedObject));
@@ -172,64 +173,97 @@ namespace pyprflow.Workflow.Model
             return result;
         }
 
-	    public T Find<T>(string workflowName) where T : BaseWorkflowItem
+        private pyprflow.Database.Entity.BaseWorkflowItem FindDBItem<T>(string workflowItemName, bool deleted)
         {
-            Type providedtype = typeof(T);
-            if (providedtype.GetTypeInfo().BaseType == typeof(BaseWorkflowItem))
-            {
-                using (var db = new ApiContext(_options))
-                {
-                    try
-                    {
-                        Console.WriteLine("searching for item {0} with Id {1}", typeof(T).ToString(), workflowName);
-
-                      //  BaseWorkflowItem result = db.WorkflowDb.Find(new object[] { workflowName, typeof(T).ToString() });
-                        pyprflow.Database.Entity.BaseWorkflowItem result 
-                            = db.WorkflowDb.Find(new object[] { workflowName, typeof(T).ToString() });
-
-
-                        if (result == null)
-                        {
-                            Console.WriteLine("looking for type {0} with ID {1}", typeof(T).ToString(), workflowName);
-                            throw new WorkFlowException(String.Format("null was returned when finding for key {0}", workflowName));
-                        }
-                        //	Console.WriteLine("found item");
-                        return result.Deserialize<T>(result.SerializedObject);
-
-                    }
-                    catch (Microsoft.Data.Sqlite.SqliteException ex)
-                    {
-                        if (ex.SqliteErrorCode == 19)
-                            throw new WorkFlowException("unique key violation");
-                        if (ex.SqliteErrorCode == 1)
-                        {
-                            Console.WriteLine("need to run a migration, table does not exist");
-                            Console.WriteLine("exception {0}", ex.Message);
-                        }
-                        Console.WriteLine("sqlite code {0}", ex.SqliteErrorCode.ToString());
-                        return default(T);
-
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("{0} error", ex.Message);
-                        Console.WriteLine("{0} inner message", ex.InnerException);
-                        return default(T);
-                    }
-                }
-            }
-            else return default(T);
-	    }
-	   
-        public void Deactivate<T>(string workflowItemId) where T : BaseWorkflowItem
-        {
-            Type providedtype = typeof(T);
-            if (providedtype.GetTypeInfo().BaseType == typeof(BaseWorkflowItem))
+            using (var db = new ApiContext(_options))
             {
                 try
                 {
+                    Console.WriteLine("searching for item {0} with Id {1}", typeof(T).ToString(), workflowItemName);
+
+                    //  BaseWorkflowItem result = db.WorkflowDb.Find(new object[] { workflowName, typeof(T).ToString() });
+                    pyprflow.Database.Entity.BaseWorkflowItem result
+                        = db.WorkflowDb.Find(new object[] { workflowItemName, typeof(T).ToString()});
+
+                    if (result.Deleted != deleted)
+                        result = null; // hack hack hack.. 
+
+                    if (result == null)
+                    {
+                        Console.WriteLine("looking for type {0} with ID {1}", typeof(T).ToString(), workflowItemName);
+                        throw new WorkFlowException(String.Format("null was returned when finding for key {0}", workflowItemName));
+                    }
+                    return result;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("looking for type {0} with ID {1}", typeof(T).ToString(), workflowItemName);
+                    return null;
+                 //   throw new WorkFlowException(String.Format("null was returned when finding for key {0}", workflowItemName));
+                }
+            }
+        }
+
+	    public T Find<T>(string workflowName) where T : BaseWorkflowItem
+        {
+            //Type providedtype = typeof(T);
+            //if (providedtype.GetTypeInfo().BaseType == typeof(BaseWorkflowItem))
+            //{
+
+            var result = FindDBItem<T>(workflowName, false);
+            if (result == null)
+                return default(T);
+            return result.Deserialize<T>(result.SerializedObject);
+                //using (var db = new ApiContext(_options))
+                //{
+                //    try
+                //    {
+                //        Console.WriteLine("searching for item {0} with Id {1}", typeof(T).ToString(), workflowName);
+
+                //      //  BaseWorkflowItem result = db.WorkflowDb.Find(new object[] { workflowName, typeof(T).ToString() });
+                //        pyprflow.Database.Entity.BaseWorkflowItem result 
+                //            = db.WorkflowDb.Find(new object[] { workflowName, typeof(T).ToString() });
+
+
+                //        if (result == null)
+                //        {
+                //            Console.WriteLine("looking for type {0} with ID {1}", typeof(T).ToString(), workflowName);
+                //            throw new WorkFlowException(String.Format("null was returned when finding for key {0}", workflowName));
+                //        }
+                //        //	Console.WriteLine("found item");
+                //        return result.Deserialize<T>(result.SerializedObject);
+
+                //    }
+                //    catch (Microsoft.Data.Sqlite.SqliteException ex)
+                //    {
+                //        if (ex.SqliteErrorCode == 19)
+                //            throw new WorkFlowException("unique key violation");
+                //        if (ex.SqliteErrorCode == 1)
+                //        {
+                //            Console.WriteLine("need to run a migration, table does not exist");
+                //            Console.WriteLine("exception {0}", ex.Message);
+                //        }
+                //        Console.WriteLine("sqlite code {0}", ex.SqliteErrorCode.ToString());
+                //        return default(T);
+
+                //    }
+                //    catch (Exception ex)
+                //    {
+                //        Console.WriteLine("{0} error", ex.Message);
+                //        Console.WriteLine("{0} inner message", ex.InnerException);
+                //        return default(T);
+                //    }
+                //}
+            //}
+            //else return default(T);
+	    }
+	   
+        public void SoftDelete<T>(string workflowItemId) where T : BaseWorkflowItem
+        {
+                try
+                {
                     var deactivate = Find<T>(workflowItemId);
-                    deactivate.Active = false;
+                    deactivate.Deleted = true;
                     Update<T>(deactivate);
                 }
                 catch (Exception ex)
@@ -237,11 +271,11 @@ namespace pyprflow.Workflow.Model
                     Console.WriteLine("{0} error", ex.Message);
                     Console.WriteLine("{0} inner message", ex.InnerException);
                 }
-            }
-        
         }
-		public void Remove<T>(string workflowItemId) where T:BaseWorkflowItem
+
+		public void HardDelete<T>(string workflowItemId) where T:BaseWorkflowItem
 		    {
+            throw new NotImplementedException("needs to be tested");
             Type providedtype = typeof(T);
             if (providedtype.GetTypeInfo().BaseType == typeof(BaseWorkflowItem))
             {
@@ -335,6 +369,8 @@ namespace pyprflow.Workflow.Model
 
 			}
 		}
+
+
 
 		private void DeActivateOldTrackableRelationship(Transaction r)
 		{

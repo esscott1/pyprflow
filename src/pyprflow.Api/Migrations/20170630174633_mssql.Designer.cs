@@ -9,7 +9,7 @@ using pyprflow.Database.Entity;
 namespace pyprflow.Api.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    [Migration("20170629171640_mssql")]
+    [Migration("20170630174633_mssql")]
     partial class mssql
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,11 +24,13 @@ namespace pyprflow.Api.Migrations
 
                     b.Property<string>("DerivedType");
 
+                    b.Property<bool>("Deleted");
+
                     b.Property<bool>("Active");
 
                     b.Property<string>("SerializedObject");
 
-                    b.HasKey("Name", "DerivedType");
+                    b.HasKey("Name", "DerivedType", "Deleted");
 
                     b.ToTable("WorkflowDb");
                 });
@@ -41,6 +43,8 @@ namespace pyprflow.Api.Migrations
                     b.Property<bool>("Active");
 
                     b.Property<string>("AssignedTo");
+
+                    b.Property<bool>("Deleted");
 
                     b.Property<string>("NodeName");
 

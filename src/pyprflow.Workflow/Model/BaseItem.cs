@@ -8,5 +8,6 @@ namespace pyprflow.Workflow.Model
     public abstract class BaseItem
     {
         public bool Active { get; set; } = true;
+        public bool Deleted { get; set; } = false;
     }
 }

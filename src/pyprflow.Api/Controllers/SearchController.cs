@@ -17,10 +17,10 @@ namespace pyprflow.Api.Controllers
 	{
 		public static readonly string[] SearchParameters = { "entitytype","trackableid","transactionid","workflowid",
 			"nodeid",
-			"assignmentto",
+            "assignedto",
 			"transactiontype",
 			"isactive" };
-		public static readonly string[] sEntityTypes = { "workflows", "trackables", "transactions" };
+		public static readonly string[] sEntityTypes = { "workflows", "trackables", "transactions","trackablesenh" };
 		public SearchController(IWorkflowRepository workflow)
 		{
 			Repository = workflow;
@@ -84,6 +84,11 @@ namespace pyprflow.Api.Controllers
                     case "transactions":
                         result = new TransactionsController(Repository).GetAll();
                         break;
+                    case "trackablesenh":
+                        return StatusCode(400, "trackablesenh entityType is only supported for complex searches");
+                    default:
+                        return StatusCode(400, "non-supported entityType provided");
+
                 }
                 return Json(result);
                 // this is return all of something active or inactive

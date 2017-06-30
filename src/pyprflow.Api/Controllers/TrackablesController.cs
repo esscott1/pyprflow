@@ -56,8 +56,8 @@ namespace pyprflow.Api.Controllers
         public IActionResult CreateTrackable([FromBody] Trackable item)
         {
             // should check for existance and if exist throw error telling to use Put
-            var t = Repository.Find<Trackable>(item.Name);
-            if (t != null)
+            var t = Repository.Exist<Trackable>(item.Name);
+            if (t)
                 return StatusCode(403, "Trackable already exists in system, use HTTPPatch to update trackable");
             Repository.Add(item);
             return CreatedAtRoute("GetTrackable", new { id = item.Name }, Repository);
@@ -66,7 +66,7 @@ namespace pyprflow.Api.Controllers
         [HttpPut("deactivate/{id}")]
         public IActionResult Deactivate(string id)
         {
-            Repository.Deactivate<Trackable>(id);
+            Repository.SoftDelete<Trackable>(id);
             //    var _workflow = Repository.Find<Workflow>(id);
             return Json(String.Format("trackable with trackableId {0} is has been soft deleted", id));
         }

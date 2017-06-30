@@ -13,7 +13,7 @@ namespace pyprflow.Api.Controllers
     [Route("api/[controller]")]
     public class TransactionsController : BaseController
     {
-        public TransactionsController(IWorkflowRepository workflow)
+        public TransactionsController(IWorkflowRepository workflow) :base(workflow)
         {
             Repository = workflow;
         }
@@ -74,7 +74,7 @@ namespace pyprflow.Api.Controllers
         [HttpPut("deactivate/{id}")]
         public IActionResult Deactivate(string id)
         {
-            Repository.Deactivate<Transaction>(id);
+            Repository.SoftDelete<Transaction>(id);
             //    var _workflow = Repository.Find<Workflow>(id);
             return Json(String.Format("transaction with transactionID {0} is has been soft deleted", id));
         }

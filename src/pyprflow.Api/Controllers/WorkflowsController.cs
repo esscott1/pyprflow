@@ -120,7 +120,7 @@ namespace pyprflow.Api.Controllers
 		public IActionResult Delete(string id)
 		{
 			Console.WriteLine("in the delete method of controller");
-			Repository.Remove<Workflow.Model.Workflow>(id);
+			Repository.HardDelete<Workflow.Model.Workflow>(id);
 			return Json(String.Format("workflow with workflowItemId {0} is deleted", id));
 		}
 
@@ -128,7 +128,7 @@ namespace pyprflow.Api.Controllers
         [HttpPut("deactivate/{id}")]
         public IActionResult Deactivate(string id)
         {
-            Repository.Deactivate<Workflow.Model.Workflow>(id);
+            Repository.SoftDelete<Workflow.Model.Workflow>(id);
             //    var _workflow = Repository.Find<Workflow>(id);
             return Json(String.Format("workflow with workflowItemId {0} is has been soft deleted", id));
         }
