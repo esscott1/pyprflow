@@ -10,7 +10,8 @@ namespace pyprflow.Workflow.Model
 {
 	public class BaseWorkflowItem: BaseItem
 	{
-		public BaseWorkflowItem() {
+        public string Name { get; set; }
+        public BaseWorkflowItem() {
           
         }
 
@@ -43,7 +44,7 @@ namespace pyprflow.Workflow.Model
 		}
 
 		
-		public string Name { get; set; }
+		
        
         [JsonIgnore]
 	

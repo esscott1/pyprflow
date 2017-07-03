@@ -15,6 +15,7 @@ using pyprflow.Database.Entity;
 
 namespace pyprflow.Workflow.Model
 {
+  
 	public class WorkflowRepository : IWorkflowRepository
 	{
         internal readonly DbContextOptions<ApiContext> _options;
@@ -29,99 +30,62 @@ namespace pyprflow.Workflow.Model
         {
             if (item == null)
                 return;
-            if (item is pyprflow.Workflow.Model.BaseWorkflowItem)
+            using (var db = new ApiContext(_options))
             {
-                using (var db = new ApiContext(_options))
+                try
                 {
-                    try
-                    {
-                        //Console.WriteLine("saving {0} with type {1}", item.Name, item.DerivedType);
-                        Helpers.ObjectConverter converter = new Helpers.ObjectConverter();
-                        BaseWorkflowItem saveThis = converter.GetBase<T>(item);
-                        pyprflow.Database.Entity.BaseWorkflowItem dbSaveThis =
-                            new Helpers.ObjectConverter().Map(saveThis);
+                    //Console.WriteLine("saving {0} with type {1}", item.Name, item.DerivedType);
+                    Helpers.ObjectConverter converter = new Helpers.ObjectConverter();
+                    BaseWorkflowItem saveThis = converter.GetBase<T>(item);
+                    pyprflow.Database.Entity.BaseWorkflowItem dbSaveThis =
+                        new Helpers.ObjectConverter().Map(saveThis);
                         
-                        // BaseWorkflowItem saveThis = item.GetBase<T>(item);
-                        db.WorkflowDb.Add(dbSaveThis);
+                    db.WorkflowDb.Add(dbSaveThis);
                        
-                        // db.WorkflowDb.Add(saveThis);
-                        int recordCount = db.SaveChanges();
-                        if (item is pyprflow.Workflow.Model.Transaction)
-                            Track(item as Transaction);
-                        //Console.WriteLine("implement tracking / relationship saving here");
+                    // db.WorkflowDb.Add(saveThis);
+                    int recordCount = db.SaveChanges();
+                    if (item is pyprflow.Workflow.Model.Transaction)
+                        AddRelationship(item as Transaction);
+                    //Console.WriteLine("implement tracking / relationship saving here");
 
-                        //Console.WriteLine("Saved {0} records to DB", recordCount);
-
-                    }
-                    catch (Microsoft.Data.Sqlite.SqliteException ex)
-                    {
-                        if (ex.SqliteErrorCode == 19)
-                            throw new WorkFlowException("unique key violation");
-                        if (ex.SqliteErrorCode == 1)
-                        {
-                            Console.WriteLine("need to run a migration, table does not exist");
-                            Console.WriteLine("exception {0}", ex.Message);
-                        }
-                        Console.WriteLine("sqlite code {0}", ex.SqliteErrorCode.ToString());
-
-
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("{0} error", ex.Message);
-                        Console.WriteLine("{0} inner message", ex.InnerException);
-                    }
                 }
-            }
-            else if (item is pyprflow.Workflow.Model.Relationship)
-            {
-                using (var db = new ApiContext(_options))
+                catch (Exception ex)
                 {
-                    try
-                    {
-
-
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("{0} error", ex.Message);
-                        Console.WriteLine("{0} inner message", ex.InnerException);
-                    }
-
-
+                    Console.WriteLine("{0} error", ex.Message);
+                    Console.WriteLine("{0} inner message", ex.InnerException);
+                }
+                finally{
+                    db.Dispose();
                 }
             }
         }
 
         public void Update<T>(T item) where T : BaseWorkflowItem
         {
-            if (item is pyprflow.Workflow.Model.BaseWorkflowItem)
+            using (var db = new ApiContext(_options))
             {
-                using (var db = new ApiContext(_options))
+                try
                 {
-                    try
-                    {
-                        item.Active = false;
-                        Helpers.ObjectConverter converter = new Helpers.ObjectConverter();
-                        BaseWorkflowItem updateThis = converter.GetBase<T>(item);
+                    item.Active = false;
+                    Helpers.ObjectConverter converter = new Helpers.ObjectConverter();
+                    BaseWorkflowItem updateThis = converter.GetBase<T>(item);
 
-                        pyprflow.Database.Entity.BaseWorkflowItem dbUpdateThis =
-                            new Helpers.ObjectConverter().Map(updateThis);
+                    pyprflow.Database.Entity.BaseWorkflowItem dbUpdateThis =
+                        new Helpers.ObjectConverter().Map(updateThis);
                             
                             
 
-                        //  BaseWorkflowItem updateThis = item.GetBase<T>(item);
+                    //  BaseWorkflowItem updateThis = item.GetBase<T>(item);
 
-                        //db.WorkflowDb.Update(updateThis);
-                        db.WorkflowDb.Update(dbUpdateThis);
-                        db.SaveChanges();
-                        //	Console.WriteLine("ItemId {0} updated in database");
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("{0} error", ex.Message);
-                        Console.WriteLine("{0} inner message", ex.InnerException);
-                    }
+                    //db.WorkflowDb.Update(updateThis);
+                    db.WorkflowDb.Update(dbUpdateThis);
+                    db.SaveChanges();
+                    //	Console.WriteLine("ItemId {0} updated in database");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("{0} error", ex.Message);
+                    Console.WriteLine("{0} inner message", ex.InnerException);
                 }
             }
         }
@@ -173,89 +137,14 @@ namespace pyprflow.Workflow.Model
             return result;
         }
 
-        private pyprflow.Database.Entity.BaseWorkflowItem FindDBItem<T>(string workflowItemName, bool deleted)
-        {
-            using (var db = new ApiContext(_options))
-            {
-                try
-                {
-                    Console.WriteLine("searching for item {0} with Id {1}", typeof(T).ToString(), workflowItemName);
-
-                    //  BaseWorkflowItem result = db.WorkflowDb.Find(new object[] { workflowName, typeof(T).ToString() });
-                    pyprflow.Database.Entity.BaseWorkflowItem result
-                        = db.WorkflowDb.Find(new object[] { workflowItemName, typeof(T).ToString()});
-
-                    if (result.Deleted != deleted)
-                        result = null; // hack hack hack.. 
-
-                    if (result == null)
-                    {
-                        Console.WriteLine("looking for type {0} with ID {1}", typeof(T).ToString(), workflowItemName);
-                        throw new WorkFlowException(String.Format("null was returned when finding for key {0}", workflowItemName));
-                    }
-                    return result;
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("looking for type {0} with ID {1}", typeof(T).ToString(), workflowItemName);
-                    return null;
-                 //   throw new WorkFlowException(String.Format("null was returned when finding for key {0}", workflowItemName));
-                }
-            }
-        }
-
+      
 	    public T Find<T>(string workflowName) where T : BaseWorkflowItem
         {
-            //Type providedtype = typeof(T);
-            //if (providedtype.GetTypeInfo().BaseType == typeof(BaseWorkflowItem))
-            //{
-
             var result = FindDBItem<T>(workflowName, false);
             if (result == null)
                 return default(T);
             return result.Deserialize<T>(result.SerializedObject);
-                //using (var db = new ApiContext(_options))
-                //{
-                //    try
-                //    {
-                //        Console.WriteLine("searching for item {0} with Id {1}", typeof(T).ToString(), workflowName);
-
-                //      //  BaseWorkflowItem result = db.WorkflowDb.Find(new object[] { workflowName, typeof(T).ToString() });
-                //        pyprflow.Database.Entity.BaseWorkflowItem result 
-                //            = db.WorkflowDb.Find(new object[] { workflowName, typeof(T).ToString() });
-
-
-                //        if (result == null)
-                //        {
-                //            Console.WriteLine("looking for type {0} with ID {1}", typeof(T).ToString(), workflowName);
-                //            throw new WorkFlowException(String.Format("null was returned when finding for key {0}", workflowName));
-                //        }
-                //        //	Console.WriteLine("found item");
-                //        return result.Deserialize<T>(result.SerializedObject);
-
-                //    }
-                //    catch (Microsoft.Data.Sqlite.SqliteException ex)
-                //    {
-                //        if (ex.SqliteErrorCode == 19)
-                //            throw new WorkFlowException("unique key violation");
-                //        if (ex.SqliteErrorCode == 1)
-                //        {
-                //            Console.WriteLine("need to run a migration, table does not exist");
-                //            Console.WriteLine("exception {0}", ex.Message);
-                //        }
-                //        Console.WriteLine("sqlite code {0}", ex.SqliteErrorCode.ToString());
-                //        return default(T);
-
-                //    }
-                //    catch (Exception ex)
-                //    {
-                //        Console.WriteLine("{0} error", ex.Message);
-                //        Console.WriteLine("{0} inner message", ex.InnerException);
-                //        return default(T);
-                //    }
-                //}
-            //}
-            //else return default(T);
+                
 	    }
 	   
         public void SoftDelete<T>(string workflowItemId) where T : BaseWorkflowItem
@@ -305,89 +194,126 @@ namespace pyprflow.Workflow.Model
                 }
             }
 		    }
+        #endregion
 
-		#endregion
-        public void EmptyAll()
+
+        private pyprflow.Database.Entity.BaseWorkflowItem FindDBItem<T>(string workflowItemName, bool deleted) where T : BaseWorkflowItem
         {
             using (var db = new ApiContext(_options))
             {
-              
                 try
                 {
-                    if (db.Database.GetDbConnection().GetType().Name == "SqliteConnection")
+                    Console.WriteLine("searching for item {0} with Id {1}", typeof(T).ToString(), workflowItemName);
+
+                    //  BaseWorkflowItem result = db.WorkflowDb.Find(new object[] { workflowName, typeof(T).ToString() });
+                    pyprflow.Database.Entity.BaseWorkflowItem result
+                        = db.WorkflowDb.Find(new object[] { workflowItemName, typeof(T).ToString() });
+
+                    if (result.Deleted != deleted)
+                        result = null; // hack hack hack.. 
+
+                    if (result == null)
                     {
-                        db.Database.ExecuteSqlCommand("delete from relationships");
-                        db.Database.ExecuteSqlCommand("delete from workflowDb");
-                        db.Database.ExecuteSqlCommand("vacuum");
+                        Console.WriteLine("looking for type {0} with ID {1}", typeof(T).ToString(), workflowItemName);
+                        throw new WorkFlowException(String.Format("null was returned when finding for key {0}", workflowItemName));
                     }
-                    else
-                    {
-                        db.Database.ExecuteSqlCommand("truncate table Relationships");
-                        db.Database.ExecuteSqlCommand("truncate table workflowDb");
-                    }
+                    return result;
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("{0} error", ex.Message);
-                    Console.WriteLine("{0} inner message", ex.InnerException);
+                    Console.WriteLine("looking for type {0} with ID {1}", typeof(T).ToString(), workflowItemName);
+                    return null;
+                    //   throw new WorkFlowException(String.Format("null was returned when finding for key {0}", workflowItemName));
                 }
+            }
+        }
+
+        public List<T> Where<T>(System.Linq.Expressions.Expression<Func<pyprflow.Database.Entity.Relationship, bool>> predicate) where T :BaseWorkflowItem
+        {
+            var rel = Where(predicate);
+            List<T> result = new List<T>();
+            switch(typeof(T).ToString().ToLower())
+            {
+                case "pyprflow.workflow.model.workflow":
+                    foreach (Relationship r in rel.GroupBy(o => o.WorkflowName).Select(g => g.First()))
+                        result.Add(this.Find<T>(r.WorkflowName));
+                    break;
+                case "pyprflow.workflow.model.trackable":
+                    foreach (Relationship r in rel.GroupBy(o => o.TrackableName).Select(g => g.First()))
+                        result.Add(this.Find<T>(r.TrackableName));
+                    break;
+                case "pyprflow.workflow.model.transaction":
+                    foreach (Relationship r in rel.GroupBy(o => o.TransactionName).Select(g => g.First()))
+                        result.Add(this.Find<T>(r.TransactionName));
+                    break;
+
+            }
+
+
+            return result;
+
+        }
+
+        public List<Relationship> Where(System.Linq.Expressions.Expression<Func<pyprflow.Database.Entity.Relationship, bool>> predicate)
+        {
+            using (var db = new ApiContext(_options))
+            {
+                List<pyprflow.Database.Entity.Relationship> dbList = db.Relationships.Where(predicate.Compile()).ToList();
+                return new Helpers.ObjectConverter().Map(dbList);
+            }
+        }
+
+  //      public List<Relationship> GetAll(System.Linq.Expressions.Expression<Func<pyprflow.Database.Entity.Relationship, bool>> predicate)
+		//{
+		//	using (var db = new ApiContext(_options))
+		//	{
+  //             // throw new NotImplementedException("refactor for mapping");
+				 
+  //              var dbList = db.Relationships.Where(predicate).ToList();
+  //              return new Helpers.ObjectConverter().Map(dbList);
+
+		//	}
+		//}
+
+
+        #region Private Methods to Manage the Relationships
+
+        /// <summary>
+        /// Adds the Relationship record to DB
+        /// </summary>
+        /// <param name="trans"></param>
+        private void AddRelationship(Transaction trans)
+        {
+            Console.WriteLine("tracking methods");
+            try
+            {
+                Helpers.ObjectConverter converter = new Helpers.ObjectConverter();
+                var r = converter.CreateRelationshipObj(trans);
+                Console.WriteLine("transacation type is {0}", trans.type);
+                if (trans.type == TransactionType.move)
+                    DeActivateOldTrackableRelationship(trans);
+                // Add<Relationship>(r);
+                InsertRelationship(r);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("and error occured {0} stack {1}", ex.Message, ex.StackTrace);
             }
 
         }
-       
-		/// <summary>
-		/// Adds the Relationship record to DB
-		/// </summary>
-		/// <param name="trans"></param>
-		private void Track(Transaction trans)
-		{
-			Console.WriteLine("tracking methods");
-			try
-			{
-                
-                var r = trans.CreateRelationshipObj();
-				Console.WriteLine("transacation type is {0}", trans.type);
-				if (trans.type == TransactionType.move)
-					DeActivateOldTrackableRelationship(trans);
-               // Add<Relationship>(r);
-				InsertRelationship(r);
-			}
-			catch(Exception ex)
-			{
-				Console.WriteLine("and error occured {0} stack {1}",ex.Message, ex.StackTrace);
-			}
 
-		}
-		public List<Relationship> GetAll(System.Linq.Expressions.Expression<Func<pyprflow.Database.Entity.Relationship, bool>> predicate)
+        private void DeActivateOldTrackableRelationship(Transaction r)
 		{
+            if (r.type != TransactionType.move)
+                throw new InvalidOperationException("Deactiving old relationships is only valid for Move Transaction Types");
 			using (var db = new ApiContext(_options))
 			{
-               // throw new NotImplementedException("refactor for mapping");
-				 
-                var dbList = db.Relationships.Where(predicate).ToList();
-                return new Helpers.ObjectConverter().Map(dbList);
-
-			}
-		}
-
-
-
-		private void DeActivateOldTrackableRelationship(Transaction r)
-		{
-			using (var db = new ApiContext(_options))
-			{
-
                 Console.WriteLine("looking for old relationships");
-                //List<Relationship> oldr = db.Relationships.Where(o => o.TrackableName == r.TrackableName
-                //&& o.WorkflowName == r.WorkflowName
-                ////&& o.Type == r.type
-                //&& o.NodeName == r.CurrentNodeId).ToList();
-
+               
                 List<pyprflow.Database.Entity.Relationship> oldr = 
                     db.Relationships.Where(o => o.TrackableName == r.TrackableName
-             && o.WorkflowName == r.WorkflowName
-             //&& o.Type == r.type
-             && o.NodeName == r.CurrentNodeId).ToList();
+                    && o.WorkflowName == r.WorkflowName
+                    && o.NodeName == r.CurrentNodeId).ToList();
 
                 Console.WriteLine("looking for {0} in WF {1}, with nodeID = {2}", r.TrackableName, r.WorkflowName, r.CurrentNodeId);
                 if (oldr == null)
@@ -398,15 +324,10 @@ namespace pyprflow.Workflow.Model
                 Console.WriteLine("found {0} relationships", oldr.Count);
                 foreach (pyprflow.Database.Entity.Relationship relationship in oldr)
                 {
-
                     relationship.Active = false;
-                    //pyprflow.Database.Entity.Relationship r =
-                    //  new Helpers.ObjectConverter().Map(relationship);
-                    //db.Relationships.Update(r);
                     db.Relationships.Update(relationship);
                 }
                 db.SaveChanges();
-               // Console.WriteLine("updated {0} records during deactivate old relationshops", db.SaveChanges());
                 return;// oldr;
 			}
 		}
@@ -434,22 +355,39 @@ namespace pyprflow.Workflow.Model
 
             }
 		}
-		
-		public List<Relationship> Where(System.Linq.Expressions.Expression<Func<pyprflow.Database.Entity.Relationship, bool>> predicate)
-		{
-			using (var db = new ApiContext(_options))
-			{
-             //   throw new NotImplementedException("mapping refactor needed");
-				//Console.WriteLine("in the Where method of WorkflowRepository");
-                
-			List<pyprflow.Database.Entity.Relationship> dbList = db.Relationships.Where(predicate.Compile()).ToList();
-            return new Helpers.ObjectConverter().Map(dbList);
-			}
-		}
 
-		
-       
-		public bool CheckValidUserKey(string stringValue)
+        #endregion
+
+        public void EmptyAll()
+        {
+            using (var db = new ApiContext(_options))
+            {
+
+                try
+                {
+                    if (db.Database.GetDbConnection().GetType().Name == "SqliteConnection")
+                    {
+                        db.Database.ExecuteSqlCommand("delete from relationships");
+                        db.Database.ExecuteSqlCommand("delete from workflowDb");
+                        db.Database.ExecuteSqlCommand("vacuum");
+                    }
+                    else
+                    {
+                        db.Database.ExecuteSqlCommand("truncate table Relationships");
+                        db.Database.ExecuteSqlCommand("truncate table workflowDb");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("{0} error", ex.Message);
+                    Console.WriteLine("{0} inner message", ex.InnerException);
+                }
+            }
+
+        }
+
+
+        public bool CheckValidUserKey(string stringValue)
 		{
 			var userkeylist = new List<string>();
 			userkeylist.Add("eric");

@@ -16,34 +16,7 @@ namespace pyprflow.Workflow.Db
 		private IWorkflowRepository Repository { get; set; }
 		public SearchEngine(IWorkflowRepository repository)
 		{
-			Repository = repository;
-		}
-
-		private List<Relationship> GetRelationships(string type, string whereValue, bool active)
-		{
-			Console.WriteLine("GetRelationships active flag is {0}", active);
-			List<Relationship> relationships = new List<Relationship>();
-			switch (type)
-			{
-				case "workflowid":
-					relationships = Repository.Where(r => r.WorkflowName == whereValue && r.Active == active);
-					break;
-				case "trackableid":
-					relationships = Repository.Where(r => r.TrackableName == whereValue && r.Active == active);
-					break;
-				case "transactionid":
-					relationships = Repository.Where(r => r.TransactionName == whereValue && r.Active == active);
-					break;
-				case "nodeid":
-					relationships = Repository.Where(r => r.NodeName == whereValue && r.Active == active);
-					break;
-				default:
-					Console.WriteLine("{0} is not a valid WHERE keyword", whereValue);
-					return null;
-			}
-			Console.WriteLine("found {0} relationships ", relationships.Count);
-			return relationships;
-
+			Repository = repository; 
 		}
 
 		private List<BaseWorkflowItem> SelectWithoutWhere(SearchRequest request)
@@ -69,15 +42,12 @@ namespace pyprflow.Workflow.Db
 		{
 			Console.WriteLine("in select with where, select is {0}",request.EntityType);
 			List<BaseWorkflowItem> result = new List<BaseWorkflowItem>();
+            //todo refactor to minimize switches to the ones in the Workflow Repository.
+          //  result = Repository.Where<T>(request.Predicate).Cast<BaseWorkflowItem>().ToList();
 			try
 			{
 				List<Relationship> relationships = Repository.Where(request.Predicate);
-
-				//TransactionType tType = TransactionType.assignment;
-				//Console.WriteLine("overriden the search engine to search for {0}", tType.ToString());
-				//relationships = Repository.Where(r => r.Type == tType);
-				//
-				//relationships.ForEach(r => { result.Add(Repository.Find<Transaction>(r.Type == tType)); });
+				
 				Console.WriteLine("going to search {0} of relationships",relationships.Count);
 
                 switch (request.EntityType.ToLower())
@@ -88,23 +58,12 @@ namespace pyprflow.Workflow.Db
                             result.Add(Repository.Find<Model.Workflow>(wn));
                         //relationships.ForEach(r => { result.Add(Repository.Find<Workflow>(r.WorkflowName)); });
                         break;
-                    case "trackablesenh":
-                        var uniqueR2 = relationships.Select(x => x.TrackableName).Distinct().ToList();
-                        foreach (string tn in uniqueR2)
-                        {
-                            var trackable = Repository.Find<Trackable>(tn);
-                            //var trackableSearchResult = Augment(trackable);
-                            var trackableSearchResult = Augment(trackable,relationships);
-                            result.Add(trackableSearchResult);
-                        }
-                            break;
+                  
                     case "trackables":
+                        //var realresult = Repository.Where<Trackable>(request.Predicate);
                         var uniqueR = relationships.Select(x => x.TrackableName).Distinct().ToList();
                         foreach (string tn in uniqueR)
                         {
-                            //var trackable = Repository.Find<Trackable>(tn);
-                            //var trackableSearchResult = new Model.SearchResult.TrackableSearchResult(trackable);
-                            //result.Add(trackableSearchResult);
                             result.Add(Repository.Find<Trackable>(tn));
                         }
 						//relationships.ForEach(r => { result.Add(Repository.Find<Trackable>(r.TrackableName)); });
@@ -112,8 +71,17 @@ namespace pyprflow.Workflow.Db
 					case "transactions":
 						relationships.ForEach(r => { result.Add(Repository.Find<Transaction>(r.TransactionName)); });
 						break;
-
-					default:
+                    case "trackablesenh":
+                        var uniqueR2 = relationships.Select(x => x.TrackableName).Distinct().ToList();
+                        foreach (string tn in uniqueR2)
+                        {
+                            var trackable = Repository.Find<Trackable>(tn);
+                           // var trackableSearchResult = Augment(trackable, relationships);
+                            var trackableSearchResult = Augment(trackable);
+                            result.Add(trackableSearchResult);
+                        }
+                        break;
+                    default:
 						Console.WriteLine("{0} is not a valid SELECT keyword", request.EntityType);
 						return null;
 
@@ -140,13 +108,17 @@ namespace pyprflow.Workflow.Db
 			return result;
 		}
 
+        public List<T> Search<T>(SearchRequest request)
+        {
+            return new List<T>();
+        }
+
         private TrackableSearchResult Augment(Trackable trackable, List<Relationship> relationships)
         {
-            
+            throw new NotImplementedException("can not assume the relationships being passed in have all the one's in need");
             TrackableSearchResult result = new TrackableSearchResult(trackable);
                 foreach (Relationship rel in relationships.Where(r => r.TrackableName==result.Name))
                 {
-
                     if (rel.Type == TransactionType.copy || rel.Type == TransactionType.move)
                         result.Locations.Add(rel.NodeName);
                     if (rel.Type == TransactionType.assignment)
@@ -157,12 +129,29 @@ namespace pyprflow.Workflow.Db
             return result;
         }
 
-      
-         
-                
+        private TrackableSearchResult Augment(Trackable trackable)
+        {
+            TrackableSearchResult result = new TrackableSearchResult(trackable);
+            //result.Locations = Locate(result.Name);
+            var relationships = Repository.Where(r => r.TrackableName == result.Name && r.Active == true);// && (r.Type == Database.Entity.TransactionType.move || r.Type == Database.Entity.TransactionType.copy));
+            foreach (Relationship rel in relationships)
+            {
+                if (rel.Type == TransactionType.copy || rel.Type == TransactionType.move)
+                    result.Locations.Add(rel.NodeName);
+                if (rel.Type == TransactionType.assignment)
+                    result.CurrentAssignment.Add(rel.AssignedTo);
+                if (rel.Type == TransactionType.comment)
+                    result.Comments.Add(rel.Comment);
+            }
+            return result;
+        }
 
-       
-	}
+
+
+
+
+
+    }
 
 	
 }

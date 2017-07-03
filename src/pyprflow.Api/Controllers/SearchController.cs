@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using pyprflow.Workflow.Model;
 using pyprflow.Workflow.Db;
+
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Primitives;
 
@@ -70,6 +71,9 @@ namespace pyprflow.Api.Controllers
 				return StatusCode(400, "Must include Entitytype to define type of object for search to return");
 
             IEnumerable<BaseWorkflowItem> result = null;
+
+
+
             // route search for simple get all of one type of item
             if (dic.Count == 1) // no clause conditions
             {
@@ -117,9 +121,12 @@ namespace pyprflow.Api.Controllers
             // routing complex searches to search engine with a search request
             
 			SearchRequest request = new SearchRequest(dic);
-
+           
+            
 			SearchEngine se = new SearchEngine(Repository);
-			result = se.Search(request);
+            
+
+            result = se.Search(request);
             if (result.Count() == 1)
                 return Json(result.First());
 			return Json(result);

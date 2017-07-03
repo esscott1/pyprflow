@@ -87,6 +87,33 @@ namespace pyprflow.Workflow.Helpers
 
         }
 
+        public Relationship CreateRelationshipObj(Transaction trans)
+        {
+            var r = new Relationship();
+            r.TransactionName = trans.Name;
+            r.TrackableName = trans.TrackableName;
+            if (trans.type == TransactionType.move)
+                r.NodeName = trans.NewNodeId;
+            else if (trans.type == TransactionType.copy)
+                r.NodeName = trans.NewNodeId;
+            else if (trans.type == TransactionType.assignment)
+                r.NodeName = trans.CurrentNodeId;
+            else if (trans.type == TransactionType.comment)
+            {
+                r.Comment = trans.Comment;
+                r.NodeName = trans.CurrentNodeId;
+            }
+            r.WorkflowName = trans.WorkflowName;
+            if (trans.AssignedTo != null)
+                r.AssignedTo = trans.AssignedTo.Email;
+            r.Type = trans.type;
+            if (trans.Submitter != null)
+                r.Submitter = trans.Submitter.Email;
+            Console.WriteLine("transacation type is {0}", trans.type);
+            return r;
+        }
+
+
         public List<pyprflow.Workflow.Model.Relationship> Map(List<pyprflow.Database.Entity.Relationship> items)
         {
             List<pyprflow.Workflow.Model.Relationship> result = new List<Relationship>();

@@ -29,34 +29,7 @@ namespace pyprflow.Workflow.Model
 			TransActionTime = DateTime.Now;
            
 		}
-        public Relationship CreateRelationshipObj()
-        {
-            var r = new Relationship();
-            r.TransactionName = this.Name;
-            r.TrackableName = this.TrackableName;
-            if (this.type == TransactionType.move)
-                r.NodeName = this.NewNodeId;
-            else if (this.type == TransactionType.copy)
-                r.NodeName = this.NewNodeId;
-            else if (this.type == TransactionType.assignment)
-                r.NodeName = this.CurrentNodeId;
-            else if (this.type == TransactionType.comment)
-            {
-                r.Comment = this.Comment;
-                r.NodeName = this.CurrentNodeId;
-            }
-            r.WorkflowName = this.WorkflowName;
-            if (this.AssignedTo != null)
-                r.AssignedTo = this.AssignedTo.Email;
-            r.Type = this.type;
-            if (this.Submitter != null)
-                r.Submitter = this.Submitter.Email;
-            Console.WriteLine("transacation type is {0}", this.type);
-            return r;
-         
-
-
-        }
+  
 		public void Clean()
 		{
 			if(this.type== TransactionType.move || this.type==TransactionType.copy)
