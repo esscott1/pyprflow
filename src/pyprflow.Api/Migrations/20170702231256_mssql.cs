@@ -15,13 +15,13 @@ namespace pyprflow.Api.Migrations
                 {
                     Name = table.Column<string>(nullable: false),
                     DerivedType = table.Column<string>(nullable: false),
-                    Deleted = table.Column<bool>(nullable: false),
                     Active = table.Column<bool>(nullable: false),
+                    Deleted = table.Column<bool>(nullable: false),
                     SerializedObject = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_WorkflowDb", x => new { x.Name, x.DerivedType, x.Deleted });
+                    table.PrimaryKey("PK_WorkflowDb", x => new { x.Name, x.DerivedType });
                 });
 
             migrationBuilder.CreateTable(
@@ -32,6 +32,7 @@ namespace pyprflow.Api.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Active = table.Column<bool>(nullable: false),
                     AssignedTo = table.Column<string>(nullable: true),
+                    Comment = table.Column<string>(nullable: true),
                     Deleted = table.Column<bool>(nullable: false),
                     NodeName = table.Column<string>(nullable: true),
                     Submitter = table.Column<string>(nullable: true),

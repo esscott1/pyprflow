@@ -21,6 +21,7 @@ namespace pyprflow.Database.Entity
 		public TransactionType Type { get; set; }
 		public string Submitter { get; set; }
 		public string AssignedTo { get; set; }
+        public string Comment { get; set; }
 		public Relationship()
 		{
 			TimeStamp = DateTime.Now;

@@ -23,13 +23,13 @@ namespace pyprflow.Api.Migrations
 
                     b.Property<string>("DerivedType");
 
-                    b.Property<bool>("Deleted");
-
                     b.Property<bool>("Active");
+
+                    b.Property<bool>("Deleted");
 
                     b.Property<string>("SerializedObject");
 
-                    b.HasKey("Name", "DerivedType", "Deleted");
+                    b.HasKey("Name", "DerivedType");
 
                     b.ToTable("WorkflowDb");
                 });
@@ -42,6 +42,8 @@ namespace pyprflow.Api.Migrations
                     b.Property<bool>("Active");
 
                     b.Property<string>("AssignedTo");
+
+                    b.Property<string>("Comment");
 
                     b.Property<bool>("Deleted");
 

@@ -93,7 +93,8 @@ namespace pyprflow.Workflow.Db
                         foreach (string tn in uniqueR2)
                         {
                             var trackable = Repository.Find<Trackable>(tn);
-                            var trackableSearchResult = Augment(trackable);
+                            //var trackableSearchResult = Augment(trackable);
+                            var trackableSearchResult = Augment(trackable,relationships);
                             result.Add(trackableSearchResult);
                         }
                             break;
@@ -111,6 +112,7 @@ namespace pyprflow.Workflow.Db
 					case "transactions":
 						relationships.ForEach(r => { result.Add(Repository.Find<Transaction>(r.TransactionName)); });
 						break;
+
 					default:
 						Console.WriteLine("{0} is not a valid SELECT keyword", request.EntityType);
 						return null;
@@ -138,20 +140,24 @@ namespace pyprflow.Workflow.Db
 			return result;
 		}
 
-        private TrackableSearchResult Augment(Trackable trackable)
+        private TrackableSearchResult Augment(Trackable trackable, List<Relationship> relationships)
         {
+            
             TrackableSearchResult result = new TrackableSearchResult(trackable);
-            //result.Locations = Locate(result.Name);
-            var relationships = Repository.Where(r => r.TrackableName == result.Name && r.Active == true);// && (r.Type == Database.Entity.TransactionType.move || r.Type == Database.Entity.TransactionType.copy));
-            foreach (Relationship rel in relationships) {
-                if(rel.Type==TransactionType.copy || rel.Type == TransactionType.move)
-                    result.Locations.Add(rel.NodeName);
-                if(rel.Type==TransactionType.assignment)
-                    result.CurrentAssignment.Add(rel.AssignedTo);
-                    }
+                foreach (Relationship rel in relationships.Where(r => r.TrackableName==result.Name))
+                {
+
+                    if (rel.Type == TransactionType.copy || rel.Type == TransactionType.move)
+                        result.Locations.Add(rel.NodeName);
+                    if (rel.Type == TransactionType.assignment)
+                        result.CurrentAssignment.Add(rel.AssignedTo);
+                    if (rel.Type == TransactionType.comment)
+                        result.Comments.Add(rel.Comment);
+                }
             return result;
         }
 
+      
          
                 
 

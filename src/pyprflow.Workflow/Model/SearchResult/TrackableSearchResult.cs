@@ -15,6 +15,7 @@ namespace pyprflow.Workflow.Model.SearchResult
             this.Name = trackable.Name;
             this.Locations = new List<string>();
             this.CurrentAssignment = new List<string>();
+            this.Comments = new List<string>();
 
         }
     }

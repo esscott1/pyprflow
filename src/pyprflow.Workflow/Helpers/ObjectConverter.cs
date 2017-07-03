@@ -57,7 +57,7 @@ namespace pyprflow.Workflow.Helpers
             result.TimeStamp = item.TimeStamp;
             result.TrackableName = item.TrackableName;
             result.TransactionName = item.TransactionName;
-
+            result.Comment = item.Comment;
             int iType = (int)item.Type;
             result.Type = (pyprflow.Database.Entity.TransactionType)iType;
            
@@ -78,7 +78,7 @@ namespace pyprflow.Workflow.Helpers
             result.TimeStamp = item.TimeStamp;
             result.TrackableName = item.TrackableName;
             result.TransactionName = item.TransactionName;
-
+            result.Comment = item.Comment;
             int iType = (int)item.Type;
             result.Type = (pyprflow.Workflow.Model.TransactionType)iType;
 

@@ -41,7 +41,10 @@ namespace pyprflow.Workflow.Model
             else if (this.type == TransactionType.assignment)
                 r.NodeName = this.CurrentNodeId;
             else if (this.type == TransactionType.comment)
+            {
+                r.Comment = this.Comment;
                 r.NodeName = this.CurrentNodeId;
+            }
             r.WorkflowName = this.WorkflowName;
             if (this.AssignedTo != null)
                 r.AssignedTo = this.AssignedTo.Email;
