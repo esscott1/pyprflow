@@ -26,5 +26,10 @@ namespace pyprflow.Workflow.Model
 		{
 			TimeStamp = DateTime.Now;
 		}
+        public Relationship(TransactionType type) : this()
+        {
+            Type = type;
+
+        }
 	}
 }

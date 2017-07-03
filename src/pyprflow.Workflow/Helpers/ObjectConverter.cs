@@ -113,6 +113,22 @@ namespace pyprflow.Workflow.Helpers
             return r;
         }
 
+        public pyprflow.Database.Entity.Relationship Create(Trackable trackable)
+        {
+            pyprflow.Database.Entity.Relationship r = new pyprflow.Database.Entity.Relationship(
+                  pyprflow.Database.Entity.TransactionType.add);
+            r.TrackableName = trackable.Name;
+            return r;
+
+        }
+        public pyprflow.Database.Entity.Relationship Create(Model.Workflow workflow)
+        {
+            pyprflow.Database.Entity.Relationship r = new pyprflow.Database.Entity.Relationship(
+                pyprflow.Database.Entity.TransactionType.add);
+            r.WorkflowName = workflow.Name;
+            return r;
+
+        }
 
         public List<pyprflow.Workflow.Model.Relationship> Map(List<pyprflow.Database.Entity.Relationship> items)
         {
@@ -123,5 +139,7 @@ namespace pyprflow.Workflow.Helpers
             }
             return result;
         }
+
+        
     }
 }

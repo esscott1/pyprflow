@@ -33,8 +33,8 @@ namespace pyprflow.Workflow.Db
 
 	public class SearchEngine
 	{
-        internal static Dictionary<string, ISearchEngine> _strategies =
-            new Dictionary<string, ISearchEngine>();
+        //internal static Dictionary<string, ISearchEngine> _strategies =
+        //    new Dictionary<string, ISearchEngine>();
 		protected IWorkflowRepository Repository { get; set; }
 		public SearchEngine(IWorkflowRepository repository)
 		{
@@ -44,18 +44,20 @@ namespace pyprflow.Workflow.Db
 
         public virtual List<BaseWorkflowItem> Search(SearchRequest request)
         {
-            if(request.EntityType == "workflows")
-               return  _strategies[request.EntityType].Search(request);
+            //if(request.EntityType == "workflows")
+            SearchEngineContext context = new SearchEngineContext(Repository);
+            return context.Search(request);
+             //  return  _strategies[request.EntityType].Search(request);
 
-            if (request.Predicate == null)
-            {
-                //Console.WriteLine("predicate is null");
-                return SelectWithoutWhere(request);
-            }
-            //Console.WriteLine("predicate is not null, looking for {0}", request.EntityType.ToString());
-            var result = SelectWithWhere(request);
-            //Console.WriteLine("found this many relationships {0}", result.Count);
-            return result;
+            //if (request.Predicate == null)
+            //{
+            //    //Console.WriteLine("predicate is null");
+            //    return SelectWithoutWhere(request);
+            //}
+            ////Console.WriteLine("predicate is not null, looking for {0}", request.EntityType.ToString());
+            //var result = SelectWithWhere(request);
+            ////Console.WriteLine("found this many relationships {0}", result.Count);
+            //return result;
         }
 
         public List<T> Search<T>(SearchRequest request)

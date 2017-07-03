@@ -13,15 +13,17 @@ namespace pyprflow.Workflow.Model
 		public string TrackableName { get; set; }
 		[JsonConverter(typeof(StringEnumConverter))]
 		public TransactionType type { get; set; }
-		public string Comment { get; set; }
+		
 		public string CurrentNodeId { get; set; }
 		
 		public string NewNodeId { get; set; }
-		public DateTime TransActionTime { get; set; }
+        public string WorkflowName { get; set; }
+        public DateTime TransActionTime { get; set; }
 		[JsonRequired]
 		public User Submitter { get; set; }
 		public User AssignedTo { get; set; }
-		public string WorkflowName { get; set; }
+        public string Comment { get; set; }
+       
 
         private IWorkflowRepository Repository;
 		public Transaction()
@@ -114,6 +116,7 @@ namespace pyprflow.Workflow.Model
 		move,
 		copy,
 		assignment,
-		comment
+		comment,
+        add
 	}
 }

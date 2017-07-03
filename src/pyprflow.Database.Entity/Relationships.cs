@@ -26,13 +26,19 @@ namespace pyprflow.Database.Entity
 		{
 			TimeStamp = DateTime.Now;
 		}
-      
+        public Relationship(TransactionType type) : this()
+        {
+            Type = type;
+
+        }
+
     }
     public enum TransactionType
     {
         move,
         copy,
         assignment,
-        comment
+        comment,
+        add
     }
 }

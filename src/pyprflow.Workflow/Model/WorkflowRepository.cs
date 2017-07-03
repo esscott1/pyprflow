@@ -46,6 +46,8 @@ namespace pyprflow.Workflow.Model
                     int recordCount = db.SaveChanges();
                     if (item is pyprflow.Workflow.Model.Transaction)
                         AddRelationship(item as Transaction);
+                    else
+                        AddTransaction(item);
                     //Console.WriteLine("implement tracking / relationship saving here");
 
                 }
@@ -57,6 +59,21 @@ namespace pyprflow.Workflow.Model
                 finally{
                     db.Dispose();
                 }
+            }
+        }
+
+        private void AddTransaction<T>(T item) where T : BaseWorkflowItem
+        {
+            Helpers.ObjectConverter converter = new Helpers.ObjectConverter();
+            pyprflow.Database.Entity.Relationship r = new Database.Entity.Relationship();
+            using (var db = new ApiContext(_options))
+            {
+                if (item is Workflow)
+                   r =  converter.Create(item as Workflow);
+                if (item is Trackable)
+                    r = converter.Create(item as Trackable);
+                db.Relationships.Add(r);
+                db.SaveChanges();
             }
         }
 
