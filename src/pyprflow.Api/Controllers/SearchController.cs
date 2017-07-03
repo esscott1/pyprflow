@@ -70,47 +70,6 @@ namespace pyprflow.Api.Controllers
 			else
 				return StatusCode(400, "Must include Entitytype to define type of object for search to return");
 
-            IEnumerable<BaseWorkflowItem> result = null;
-
-            if(dic["entitytype"]=="workflows" || dic["entitytype"]=="trackables"
-                || dic["entitytype"]=="trackablesenh" 
-                || dic["entitytype"]=="transactions")
-            {
-                SearchRequest request1 = new SearchRequest(dic);
-                SearchEngineContext se1 = new SearchEngineContext(Repository);
-                result = se1.Search(request1);
-                if (result.Count() == 1)
-                    return Json(result.First());
-                return Json(result);
-            }
-
-
-
-            // route search for simple get all of one type of item
-            if (dic.Count == 1) // no clause conditions
-            {
-                switch (dic["entitytype"])
-                {
-                    case "workflows":
-                        result = new WorkflowsController(Repository).GetAll();
-                        break;
-                    case "trackables":
-                        result = new TrackablesController(Repository).GetAll();
-                        break;
-                    case "transactions":
-                        result = new TransactionsController(Repository).GetAll();
-                        break;
-                    case "trackablesenh":
-                        return StatusCode(400, "trackablesenh entityType is only supported for complex searches");
-                    default:
-                        return StatusCode(400, "non-supported entityType provided");
-
-                }
-                return Json(result);
-                // this is return all of something active or inactive
-            }
-
-            // validating search parameters
             foreach (KeyValuePair<string, StringValues> s in dic)
             {
                 if (!SearchParameters.Contains(s.Key.ToLower()))
@@ -118,35 +77,20 @@ namespace pyprflow.Api.Controllers
                     return StatusCode(400, "bad search parameter provided. " + s.Key);
                 }
             }
+            IEnumerable<BaseWorkflowItem> result = null;
 
-            // route search for searching for an item by it's ID.
-            if (dic.Count == 2)
-            {
-                if (sEntityType == "workflows" && dic.ContainsKey("workflowid"))
-                    return new WorkflowsController(Repository).GetById(dic["workflowid"]);
-                if (sEntityType == "trackables" && dic.ContainsKey("trackableid"))
-                    return new TrackablesController(Repository).GetById(dic["trackableid"]);
-                if (sEntityType == "transactions" && dic.ContainsKey("transactionid"))
-                    return new TransactionsController(Repository).GetById(dic["transactionid"]);
-            }
-
-            // routing complex searches to search engine with a search request
-            
-			SearchRequest request = new SearchRequest(dic);
-           
-            
-			SearchEngine se = new SearchEngine(Repository);
-            
-
-            result = se.Search(request);
+            //if(dic["entitytype"]=="workflows" || dic["entitytype"]=="trackables"
+            //    || dic["entitytype"]=="trackablesenh" 
+            //    || dic["entitytype"]=="transactions")
+            //{
+            SearchRequest request1 = new SearchRequest(dic);
+            SearchEngineContext se1 = new SearchEngineContext(Repository);
+            result = se1.Search(request1);
             if (result.Count() == 1)
                 return Json(result.First());
-			return Json(result);
+            return Json(result);
+           
 		}
-
-		
-
-		
 
 
 	}

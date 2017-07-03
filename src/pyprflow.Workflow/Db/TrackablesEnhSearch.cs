@@ -33,7 +33,7 @@ namespace pyprflow.Workflow.Db
             else
             {
                 List<Relationship> relationships = Repository.Where(request.Predicate);
-                var uniqueR2 = relationships.Select(x => x.TrackableName).Distinct().ToList();
+                var uniqueR2 = relationships.Where(u => u.TrackableName != null).Select(x => x.TrackableName).Distinct().ToList();
                 foreach (string tn in uniqueR2)
                 {
                     var trackable = Repository.Find<Trackable>(tn);

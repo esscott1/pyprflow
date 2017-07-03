@@ -21,7 +21,9 @@ namespace pyprflow.Workflow.Db
                 result = Repository.GetAll<Trackable>().ToList().Cast<BaseWorkflowItem>().ToList();
                 return result;
             }
-            result = Repository.Where<Trackable>(request.Predicate).Cast<BaseWorkflowItem>().ToList();
+            var stuff = Repository.Where<Trackable>(request.Predicate).Where(s => s != null);
+            result = stuff.Cast<BaseWorkflowItem>().ToList();
+          //  result = Repository.Where<Trackable>(request.Predicate).Cast<BaseWorkflowItem>().ToList();
             return result;
         }
     }

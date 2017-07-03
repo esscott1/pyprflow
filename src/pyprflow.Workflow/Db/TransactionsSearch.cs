@@ -20,7 +20,7 @@ namespace pyprflow.Workflow.Db
             {
                 result = Repository.GetAll<Transaction>().ToList().Cast<BaseWorkflowItem>().ToList();
             }
-            result = Repository.Where<Model.Transaction>(request.Predicate).Cast<BaseWorkflowItem>().ToList();
+            result = Repository.Where<Model.Transaction>(request.Predicate).Where(s => s !=null).Cast<BaseWorkflowItem>().ToList();
 
 
             return result;
