@@ -9,14 +9,19 @@ using pyprflow.Workflow.Model;
 namespace pyprflow.Workflow.Db
 {
     public class SearchRequest
-	{
-		public string EntityType { get; set; }
-		public System.Linq.Expressions.Expression<Func<pyprflow.Database.Entity.Relationship, bool>> Predicate { get; set; }
+    {
+        private Dictionary<string,
+            Microsoft.Extensions.Primitives.StringValues> _requestParameters;
 
-
+        public string EntityType { get; set; }
+        public System.Linq.Expressions.Expression<Func<pyprflow.Database.Entity.Relationship, bool>> Predicate { get; set; }
+        public Dictionary<string, Microsoft.Extensions.Primitives.StringValues> RequestParameters
+            { get { return _requestParameters; } }
+    
         public SearchRequest(Dictionary<string,
 			Microsoft.Extensions.Primitives.StringValues> queryString)
 		{
+            _requestParameters = queryString;
 			StringValues select; StringValues sIsActive;
 			queryString.TryGetValue("entityType", out select);
 			EntityType = select;

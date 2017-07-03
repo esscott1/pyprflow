@@ -10,16 +10,60 @@ using pyprflow.Workflow;
 
 namespace pyprflow.Workflow.Db
 {
+    public class SearchEngineContext
+    {
+        private readonly Dictionary<string, ISearchEngine> _strategies =
+           new Dictionary<string, ISearchEngine>();
+
+        protected IWorkflowRepository Repository { get; set; }
+        public SearchEngineContext(IWorkflowRepository repository)
+        {
+            _strategies = new Dictionary<string, ISearchEngine>();
+            _strategies.Add("workflows", new WorkflowsSearch(repository));
+            _strategies.Add("trackables", new TrackablesSearch(repository));
+            _strategies.Add("transactions", new TransactionsSearch(repository));
+            _strategies.Add("trackablesenh", new TrackablesEnhSearch(repository));
+        }
+        public List<BaseWorkflowItem> Search(SearchRequest request)
+        {
+            return _strategies[request.EntityType].Search(request);
+        }
+
+    }
 
 	public class SearchEngine
 	{
-		private IWorkflowRepository Repository { get; set; }
+        internal static Dictionary<string, ISearchEngine> _strategies =
+            new Dictionary<string, ISearchEngine>();
+		protected IWorkflowRepository Repository { get; set; }
 		public SearchEngine(IWorkflowRepository repository)
 		{
-			Repository = repository; 
+			Repository = repository;
+
 		}
 
-		private List<BaseWorkflowItem> SelectWithoutWhere(SearchRequest request)
+        public virtual List<BaseWorkflowItem> Search(SearchRequest request)
+        {
+            if(request.EntityType == "workflows")
+               return  _strategies[request.EntityType].Search(request);
+
+            if (request.Predicate == null)
+            {
+                //Console.WriteLine("predicate is null");
+                return SelectWithoutWhere(request);
+            }
+            //Console.WriteLine("predicate is not null, looking for {0}", request.EntityType.ToString());
+            var result = SelectWithWhere(request);
+            //Console.WriteLine("found this many relationships {0}", result.Count);
+            return result;
+        }
+
+        public List<T> Search<T>(SearchRequest request)
+        {
+            return new List<T>();
+        }
+
+        private List<BaseWorkflowItem> SelectWithoutWhere(SearchRequest request)
 		{
 			switch (request.EntityType.ToLower())
 			{
@@ -95,23 +139,7 @@ namespace pyprflow.Workflow.Db
 			return result;
 		}
 		
-		public List<BaseWorkflowItem> Search(SearchRequest request)
-		{
-			if (request.Predicate == null)
-			{
-				//Console.WriteLine("predicate is null");
-				return SelectWithoutWhere(request);
-			}
-			//Console.WriteLine("predicate is not null, looking for {0}", request.EntityType.ToString());
-			 var result = SelectWithWhere(request);
-			//Console.WriteLine("found this many relationships {0}", result.Count);
-			return result;
-		}
-
-        public List<T> Search<T>(SearchRequest request)
-        {
-            return new List<T>();
-        }
+		
 
         private TrackableSearchResult Augment(Trackable trackable, List<Relationship> relationships)
         {

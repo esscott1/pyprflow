@@ -231,6 +231,8 @@ namespace pyprflow.Workflow.Model
         public List<T> Where<T>(System.Linq.Expressions.Expression<Func<pyprflow.Database.Entity.Relationship, bool>> predicate) where T :BaseWorkflowItem
         {
             var rel = Where(predicate);
+            if (rel.Count == 0)
+                return GetAll<T>().ToList();
             List<T> result = new List<T>();
             switch(typeof(T).ToString().ToLower())
             {

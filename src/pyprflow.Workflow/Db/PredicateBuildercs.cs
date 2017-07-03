@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace pyprflow.Workflow.Db
 {
+     
 	/// <summary>  
 	/// Enables the efficient, dynamic composition of query predicates.  
 	/// </summary>  
@@ -70,31 +71,32 @@ namespace pyprflow.Workflow.Db
 			return Expression.Lambda<T>(merge(first.Body, secondBody), first.Parameters);
 		}
 
-		class ParameterRebinder : ExpressionVisitor
-		{
-			readonly Dictionary<ParameterExpression, ParameterExpression> map;
 
-			ParameterRebinder(Dictionary<ParameterExpression, ParameterExpression> map)
-			{
-				this.map = map ?? new Dictionary<ParameterExpression, ParameterExpression>();
-			}
+        class ParameterRebinder : ExpressionVisitor
+        {
+            readonly Dictionary<ParameterExpression, ParameterExpression> map;
 
-			public static Expression ReplaceParameters(Dictionary<ParameterExpression, ParameterExpression> map, Expression exp)
-			{
-				return new ParameterRebinder(map).Visit(exp);
-			}
+            ParameterRebinder(Dictionary<ParameterExpression, ParameterExpression> map)
+            {
+                this.map = map ?? new Dictionary<ParameterExpression, ParameterExpression>();
+            }
 
-			protected override Expression VisitParameter(ParameterExpression p)
-			{
-				ParameterExpression replacement;
+            public static Expression ReplaceParameters(Dictionary<ParameterExpression, ParameterExpression> map, Expression exp)
+            {
+                return new ParameterRebinder(map).Visit(exp);
+            }
 
-				if (map.TryGetValue(p, out replacement))
-				{
-					p = replacement;
-				}
+            protected override Expression VisitParameter(ParameterExpression p)
+            {
+                ParameterExpression replacement;
 
-				return base.VisitParameter(p);
-			}
-		}
-	}
+                if (map.TryGetValue(p, out replacement))
+                {
+                    p = replacement;
+                }
+
+                return base.VisitParameter(p);
+            }
+        }
+    }
 }
