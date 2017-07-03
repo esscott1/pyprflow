@@ -692,14 +692,14 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"trackableName\": \"SampleDoc1-1\",\n  \"type\": \"comment\",\n  \"comment\": \"someone responsible for node 4 should do this\",\n  \"currentNodeid\": \"SampleNode4\",\n\n \n   \"submitter\": {\n    \"email\": \"Sample.User@somewhere.com\"\n  },\n\n  \"assignedTo\": {\n    \"email\": \"sam@somewhere.com\"\n  },\n  \"workflowName\": \"SampleWorkflow1\",\n  \"name\": \"SampleTransactionC1-2\"\n}"
+					"raw": "{\n  \"trackableName\": \"SampleDoc1-1\",\n  \"type\": \"comment\",\n  \"comment\": \"Comment on Doc1-1. someone responsible for node 4 should do this\",\n  \"currentNodeid\": \"SampleNode4\",\n\n \n   \"submitter\": {\n    \"email\": \"Sample.User@somewhere.com\"\n  },\n\n  \"assignedTo\": {\n    \"email\": \"sam@somewhere.com\"\n  },\n  \"workflowName\": \"SampleWorkflow1\",\n  \"name\": \"SampleTransactionC1-2\"\n}"
 				},
 				"description": ""
 			},
 			"response": []
 		},
 		{
-			"name": "Assign doc1 in node 3",
+			"name": "move doc1 step3 to step 4",
 			"event": [
 				{
 					"listen": "test",
@@ -728,7 +728,151 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"trackableName\": \"SampleDoc1\",\n  \"type\": \"Assignment\",\n  \"comment\": \"Assigning to Eric cause he needs work\",\n  \"currentNodeid\": \"SampleNode3\",\n\n \n   \"submitter\": {\n    \"email\": \"Joe.Worker@somewhere.com\"\n  },\n\n  \"assignedTo\": {\n    \"email\": \"Joe.Worker@somewhere.com\"\n  },\n  \"workflowName\": \"SampleWorkflow1\",\n  \"name\": \"SampleTransaction1-1-A3\"\n}"
+					"raw": "{\n  \"trackableName\": \"SampleDoc1\",\n  \"type\": \"move\",\n  \"comment\": \"skipping step 3, not needed\",\n  \"currentNodeid\": \"SampleNode3\",\n\t\"newNodeid\": \"SampleNode4\",\n \n   \"submitter\": {\n    \"email\": \"Sample.User@somewhere.com\"\n  },\n\n  \"assignedTo\": {\n    \"email\": \"Newworker@somewhere.com\"\n  },\n  \"workflowName\": \"SampleWorkflow1\",\n  \"name\": \"SampleTransaction1-4\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Assign doc1 in node 4",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 201\"] = responseCode.code === 201;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "localhost:5000/api/transactions",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "user-key",
+						"value": "test",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"trackableName\": \"SampleDoc1\",\n  \"type\": \"Assignment\",\n  \"comment\": \"Assigning to Eric cause he needs work\",\n  \"currentNodeid\": \"SampleNode4\",\n\n \n   \"submitter\": {\n    \"email\": \"Joe.Worker@somewhere.com\"\n  },\n\n  \"assignedTo\": {\n    \"email\": \"Joe.Worker@somewhere.com\"\n  },\n  \"workflowName\": \"SampleWorkflow1\",\n  \"name\": \"SampleTransaction1-1-A3\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Assign doc1-1 in node 4",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 201\"] = responseCode.code === 201;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "localhost:5000/api/transactions",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "user-key",
+						"value": "test",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"trackableName\": \"SampleDoc1-1\",\n  \"type\": \"Assignment\",\n  \"comment\": \"Assigning to Eric cause he needs work\",\n  \"currentNodeid\": \"SampleNode4\",\n\n \n   \"submitter\": {\n    \"email\": \"Sample.User@somewhere.com\"\n  },\n\n  \"assignedTo\": {\n    \"email\": \"Joe.Worker@somewhere.com\"\n  },\n  \"workflowName\": \"SampleWorkflow1\",\n  \"name\": \"SampleTransaction1-1-A4\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Add Comment to doc1 in node 4",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 201\"] = responseCode.code === 201;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "localhost:5000/api/transactions",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "user-key",
+						"value": "test",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"trackableName\": \"SampleDoc1\",\n  \"type\": \"comment\",\n  \"comment\": \"SampleDoc1 Comment. Adding a comment on Doc1 on Node 3\",\n  \"currentNodeid\": \"SampleNode4\",\n\n \n   \"submitter\": {\n    \"email\": \"Sample.User@somewhere.com\"\n  },\n\n  \"assignedTo\": {\n    \"email\": \"sam@somewhere.com\"\n  },\n  \"workflowName\": \"SampleWorkflow1\",\n  \"name\": \"SampleTransactionC1-3\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Add second Comment to doc1 in node 4",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 201\"] = responseCode.code === 201;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "localhost:5000/api/transactions",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "user-key",
+						"value": "test",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"trackableName\": \"SampleDoc1\",\n  \"type\": \"comment\",\n  \"comment\": \"Adding a second comment on Doc1 on Node 3\",\n  \"currentNodeid\": \"SampleNode4\",\n\n \n   \"submitter\": {\n    \"email\": \"Sample.User@somewhere.com\"\n  },\n\n  \"assignedTo\": {\n    \"email\": \"sam@somewhere.com\"\n  },\n  \"workflowName\": \"SampleWorkflow1\",\n  \"name\": \"SampleTransactionC1-4\"\n}"
 				},
 				"description": ""
 			},
