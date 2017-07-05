@@ -79,10 +79,7 @@ namespace pyprflow.Api.Controllers
             }
             IEnumerable<BaseWorkflowItem> result = null;
 
-            //if(dic["entitytype"]=="workflows" || dic["entitytype"]=="trackables"
-            //    || dic["entitytype"]=="trackablesenh" 
-            //    || dic["entitytype"]=="transactions")
-            //{
+          
             SearchRequest request1 = new SearchRequest(dic);
             SearchEngineContext se1 = new SearchEngineContext(Repository);
             result = se1.Search(request1);

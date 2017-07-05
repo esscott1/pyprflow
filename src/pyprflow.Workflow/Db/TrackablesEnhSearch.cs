@@ -55,7 +55,7 @@ namespace pyprflow.Workflow.Db
                 if (rel.Type == TransactionType.copy || rel.Type == TransactionType.move)
                     result.Locations.Add(rel.NodeName);
                 if (rel.Type == TransactionType.assignment)
-                    result.CurrentAssignment.Add(rel.AssignedTo);
+                    result.CurrentAssignments.Add( new CurrentAssignment(rel.AssignedTo, rel.TimeStamp));
                 if (rel.Type == TransactionType.comment)
                     result.Comments.Add(rel.Comment);
             }
