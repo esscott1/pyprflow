@@ -79,10 +79,20 @@ namespace pyprflow.Api.Controllers
             }
             IEnumerable<BaseWorkflowItem> result = null;
 
-          
-            SearchRequest request1 = new SearchRequest(dic);
+            SearchRequestParameters srp = new SearchRequestParameters();
+            
+            HashSet<string> commonKeys = new HashSet<string>(srp.Parameters.Keys);
+            commonKeys.IntersectWith(dic.Keys);
+            foreach(string k in commonKeys)
+            {
+                srp.Parameters[k] = dic[k];
+            }
+
+            SearchRequest request2 = new SearchRequest(srp.Parameters);
+            
+         //   SearchRequest request1 = new SearchRequest(dic);
             SearchEngineContext se1 = new SearchEngineContext(Repository);
-            result = se1.Search(request1);
+            result = se1.Search(request2);
             if (result.Count() == 1)
                 return Json(result.First());
             return Json(result);

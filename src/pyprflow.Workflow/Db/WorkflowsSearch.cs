@@ -20,8 +20,10 @@ namespace pyprflow.Workflow.Db
                 result = Repository.GetAll<Model.Workflow>().ToList().Cast<BaseWorkflowItem>().ToList();
                 return result;
              }
-            
-           result =  Repository.Where<Model.Workflow>(request.Predicate).Cast<BaseWorkflowItem>().ToList();
+            var tmpresult = Repository.Where<Model.Workflow>(request.Predicate);
+            if (tmpresult == null)
+                return null;
+            result = tmpresult.Cast<BaseWorkflowItem>().ToList();
             return result;
         }
     }
