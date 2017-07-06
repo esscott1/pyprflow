@@ -52,9 +52,35 @@ namespace pyprflow.Workflow.Db
 			}
 
 		}
-		private void BuildPredicate(Dictionary<string,
+        private void eBuildPredicate(Dictionary<string,
+            Microsoft.Extensions.Primitives.StringValues> queryString)
+        {
+            var innerpredicate = PredicateBuilder.True<pyprflow.Database.Entity.Relationship>();
+            StringValues sIsActive = string.Empty;
+            if (queryString.TryGetValue("isactive", out sIsActive))
+            {
+                //	Console.WriteLine("in if for try and get isactive value is {0}", sIsActive);
+                bool bIsActive;
+                Boolean.TryParse(sIsActive, out bIsActive);
+                innerpredicate = innerpredicate.And(i => i.Active == bIsActive);
+            }
+
+
+            innerpredicate = innerpredicate.And(p => p.AssignedTo == "Joe.Worker@somewhere.com");
+            innerpredicate = innerpredicate.And(p => p.Type == Database.Entity.TransactionType.move);
+
+
+            Predicate = innerpredicate;
+        }
+
+        private void BuildPredicate(Dictionary<string,
 			Microsoft.Extensions.Primitives.StringValues> queryString)
 		{
+            if(queryString.ContainsKey("etest"))
+            {
+                eBuildPredicate(queryString);
+                return;
+            }
 			var predicate = PredicateBuilder.True<pyprflow.Database.Entity.Relationship>();
 			StringValues sIsActive = string.Empty;
 			if (queryString.TryGetValue("isactive", out sIsActive))
@@ -91,7 +117,12 @@ namespace pyprflow.Workflow.Db
 			{
 				predicate = predicate.And(i => i.AssignedTo == assignedTo.ToString());
 			}
-			StringValues sType;
+            StringValues submittedBy;
+            if (queryString.TryGetValue("submittedby", out submittedBy))
+            {
+                predicate = predicate.And(i => i.Submitter == submittedBy.ToString());
+            }
+            StringValues sType;
 			if (queryString.TryGetValue("transactiontype", out sType))
 			{
 				Console.WriteLine("found type of value {0}", sType);

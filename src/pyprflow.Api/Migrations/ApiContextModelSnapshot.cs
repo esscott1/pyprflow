@@ -49,6 +49,8 @@ namespace pyprflow.Api.Migrations
 
                     b.Property<string>("NodeName");
 
+                    b.Property<string>("PreviousNodeName");
+
                     b.Property<string>("Submitter");
 
                     b.Property<DateTime>("TimeStamp");

@@ -51,6 +51,7 @@ namespace pyprflow.Workflow.Helpers
             result.Active = item.Active;
             result.Deleted = item.Deleted;
             result.AssignedTo = item.AssignedTo;
+            result.PreviousNodeName = item.PreviousNodeName;
             result.NodeName = item.NodeName;
             result.RelationshipId = item.RelationshipId;
             result.Submitter = item.Submitter;
@@ -72,6 +73,7 @@ namespace pyprflow.Workflow.Helpers
             result.Active = item.Active;
             result.Deleted = item.Deleted;
             result.AssignedTo = item.AssignedTo;
+            result.PreviousNodeName = item.PreviousNodeName;
             result.NodeName = item.NodeName;
             result.RelationshipId = item.RelationshipId;
             result.Submitter = item.Submitter;
@@ -93,9 +95,15 @@ namespace pyprflow.Workflow.Helpers
             r.TransactionName = trans.Name;
             r.TrackableName = trans.TrackableName;
             if (trans.type == TransactionType.move)
+            {
                 r.NodeName = trans.NewNodeId;
+                r.PreviousNodeName = trans.CurrentNodeId;
+            }
             else if (trans.type == TransactionType.copy)
+            {
+                r.PreviousNodeName = trans.CurrentNodeId;
                 r.NodeName = trans.NewNodeId;
+            }
             else if (trans.type == TransactionType.assignment)
                 r.NodeName = trans.CurrentNodeId;
             else if (trans.type == TransactionType.comment)

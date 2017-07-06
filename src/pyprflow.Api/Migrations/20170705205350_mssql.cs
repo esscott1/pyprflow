@@ -35,6 +35,7 @@ namespace pyprflow.Api.Migrations
                     Comment = table.Column<string>(nullable: true),
                     Deleted = table.Column<bool>(nullable: false),
                     NodeName = table.Column<string>(nullable: true),
+                    PreviousNodeName = table.Column<string>(nullable: true),
                     Submitter = table.Column<string>(nullable: true),
                     TimeStamp = table.Column<DateTime>(nullable: false),
                     TrackableName = table.Column<string>(nullable: true),

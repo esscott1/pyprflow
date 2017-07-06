@@ -18,7 +18,7 @@ namespace pyprflow.Api.Controllers
 	{
 		public static readonly string[] SearchParameters = { "entitytype","trackableid","transactionid","workflowid",
 			"nodeid",
-            "assignedto",
+            "assignedto","submittedby", "etest",
 			"transactiontype",
 			"isactive" };
 		public static readonly string[] sEntityTypes = { "workflows", "trackables", "transactions","trackablesenh" };

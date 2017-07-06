@@ -9,7 +9,7 @@ using pyprflow.Database.Entity;
 namespace pyprflow.Api.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    [Migration("20170702231256_mssql")]
+    [Migration("20170705205350_mssql")]
     partial class mssql
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -49,6 +49,8 @@ namespace pyprflow.Api.Migrations
                     b.Property<bool>("Deleted");
 
                     b.Property<string>("NodeName");
+
+                    b.Property<string>("PreviousNodeName");
 
                     b.Property<string>("Submitter");
 

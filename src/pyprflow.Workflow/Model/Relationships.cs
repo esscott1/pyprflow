@@ -14,7 +14,7 @@ namespace pyprflow.Workflow.Model
 		public int RelationshipId { get; set; }
 		public string TransactionName { get; set; }
 		public string  TrackableName { get; set; }
-		
+		public string PreviousNodeName { get; set; }
 		public string  NodeName { get; set; }
 		public string  WorkflowName { get; set; }
 		public DateTime TimeStamp { get; set; }

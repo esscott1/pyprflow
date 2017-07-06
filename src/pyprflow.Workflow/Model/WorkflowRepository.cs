@@ -249,7 +249,7 @@ namespace pyprflow.Workflow.Model
         {
             var rel = Where(predicate);
             if (rel.Count == 0)
-                return GetAll<T>().ToList();
+                return null;// GetAll<T>().ToList();
             List<T> result = new List<T>();
             switch(typeof(T).ToString().ToLower())
             {
@@ -344,6 +344,7 @@ namespace pyprflow.Workflow.Model
                 foreach (pyprflow.Database.Entity.Relationship relationship in oldr)
                 {
                     relationship.Active = false;
+                    DeactivateWorkflowItem<Transaction>(relationship.TransactionName);
                     db.Relationships.Update(relationship);
                 }
                 db.SaveChanges();
@@ -351,7 +352,16 @@ namespace pyprflow.Workflow.Model
 			}
 		}
 
-		private void InsertRelationship(Relationship r)
+        private void DeactivateWorkflowItem<T>(string transactionName) where T : BaseWorkflowItem
+        {
+          
+                var t = Find<T>(transactionName);
+                t.Active = false;
+                Update<T>(t);
+
+        }
+
+        private void InsertRelationship(Relationship r)
 		{
             
             using (var db = new ApiContext(_options))
