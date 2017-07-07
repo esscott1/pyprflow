@@ -78,7 +78,7 @@ namespace pyprflow.Api.Controllers
                     srp.transactiontype = tType;
 
             if (dic.TryGetValue("isactive", out StringValues sIsActive))
-                if (Enum.TryParse(sIsActive, out IsActive tIsActive))
+                if (Enum.TryParse(sIsActive.ToString().ToLower(), out IsActive tIsActive))
                     srp.isActive = tIsActive;
             
             HashSet<string> commonKeys = new HashSet<string>(srp.Parameters.Keys);

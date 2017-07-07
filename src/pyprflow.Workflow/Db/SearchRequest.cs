@@ -20,8 +20,8 @@ namespace pyprflow.Workflow.Db
     {
         
         @true = 0,
-        @false = 1
-       // Both = 2
+        @false = 1,
+        both = 2
     }
     public class SearchRequestParameters
     {
@@ -72,7 +72,8 @@ namespace pyprflow.Workflow.Db
         {
             EntityType = entityType.ToString();
             string sIsActive = searchRequestParameters.isActive.ToString();
-            searchRequestParameters.Parameters.Add("isactive" ,sIsActive);
+            if(sIsActive == "true" || sIsActive=="false")
+                searchRequestParameters.Parameters.Add("isactive" ,sIsActive);
             if (searchRequestParameters.transactiontype != Database.Entity.TransactionType.none)
             {
                 searchRequestParameters.Parameters.Add("transactiontype", searchRequestParameters.transactiontype.ToString());
