@@ -44,7 +44,7 @@ namespace pyprflow.Api.Controllers
 		}
 		public IWorkflowRepository Repository { get; set; }
 		[HttpGet]
-		public IActionResult Search(string entityType, 
+		public IActionResult Search(string sEntityType, 
 			string workflowId,
 			string trackableId,
 			string transactionId,
@@ -61,25 +61,25 @@ namespace pyprflow.Api.Controllers
 			Console.WriteLine("in the search Controller");
 			
 			dic = QueryHelpers.ParseQuery(Request.QueryString.ToString());
-			StringValues sEntityType;
-			if (dic.TryGetValue("entitytype", out sEntityType))
-			{
-				if (!sEntityTypes.Contains(sEntityType.ToString()))
-					return StatusCode(400, "EntityType must be: " + String.Join(" | ", sEntityTypes));
-			}
-			else
-				return StatusCode(400, "Must include Entitytype to define type of object for search to return");
+            StringValues svEntityType; 
+           // EntityType entityType;
 
-            foreach (KeyValuePair<string, StringValues> s in dic)
-            {
-                if (!SearchParameters.Contains(s.Key.ToLower()))
-                {
-                    return StatusCode(400, "bad search parameter provided. " + s.Key);
-                }
-            }
+            if (!dic.TryGetValue("entitytype", out svEntityType))
+                return StatusCode(400, "EntityType must be: " + string.Join(" | ", Enum.GetNames(typeof(EntityType))));
+
+            if (!Enum.TryParse(svEntityType, true, out EntityType entityType))
+                 return StatusCode(400, "EntityType must be: " + string.Join(" | ", Enum.GetNames(typeof(EntityType))));
+           
             IEnumerable<BaseWorkflowItem> result = null;
-
+            
             SearchRequestParameters srp = new SearchRequestParameters();
+            if (dic.TryGetValue("transactiontype", out StringValues sTransactiontype))
+                if (Enum.TryParse(sTransactiontype, out Database.Entity.TransactionType tType))
+                    srp.transactiontype = tType;
+
+            if (dic.TryGetValue("isactive", out StringValues sIsActive))
+                if (Enum.TryParse(sIsActive, out IsActive tIsActive))
+                    srp.isActive = tIsActive;
             
             HashSet<string> commonKeys = new HashSet<string>(srp.Parameters.Keys);
             commonKeys.IntersectWith(dic.Keys);
@@ -88,17 +88,13 @@ namespace pyprflow.Api.Controllers
                 srp.Parameters[k] = dic[k];
             }
 
-            SearchRequest request2 = new SearchRequest(srp.Parameters);
-            
-         //   SearchRequest request1 = new SearchRequest(dic);
+            SearchRequest request2 = new SearchRequest(srp, entityType);
             SearchEngineContext se1 = new SearchEngineContext(Repository);
             result = se1.Search(request2);
             if (result.Count() == 1)
                 return Json(result.First());
             return Json(result);
-           
 		}
-
 
 	}
 }

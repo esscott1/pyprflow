@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace pyprflow.Workflow.Model
 {
-	public class Transaction : BaseWorkflowItem 
+    public class Transaction : BaseWorkflowItem 
 	{
 		
 		public string TrackableName { get; set; }
@@ -107,16 +107,5 @@ namespace pyprflow.Workflow.Model
 		}
 
 	
-	}
-
-
-	 
-	public enum TransactionType
-	{
-		move,
-		copy,
-		assignment,
-		comment,
-        add
 	}
 }

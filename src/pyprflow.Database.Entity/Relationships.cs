@@ -33,12 +33,4 @@ namespace pyprflow.Database.Entity
         }
 
     }
-    public enum TransactionType
-    {
-        move,
-        copy,
-        assignment,
-        comment,
-        add
-    }
 }

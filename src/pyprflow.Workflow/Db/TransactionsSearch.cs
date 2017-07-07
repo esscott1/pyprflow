@@ -22,7 +22,7 @@ namespace pyprflow.Workflow.Db
             }
            var  tmpresult = Repository.Where<Model.Transaction>(request.Predicate);
             if (tmpresult == null)
-                return null;
+                return result;
             result = tmpresult.Where(s => s !=null).Cast<BaseWorkflowItem>().ToList();
 
 

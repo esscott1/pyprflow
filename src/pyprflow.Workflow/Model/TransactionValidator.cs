@@ -95,18 +95,14 @@ namespace pyprflow.Workflow.Model
                 return true;
             bool result = true;
             Db.SearchRequestParameters srp = new Db.SearchRequestParameters();
-            srp.Parameters["isactive"] = "true";
+            srp.isActive = Db.IsActive.@true;
             srp.Parameters["nodeid"] = _trans.CurrentNodeId;
             srp.Parameters["trackableid"] = _trans.TrackableName;
-            srp.Parameters["entityType"] = "trackables";
-            //Dictionary<string, Microsoft.Extensions.Primitives.StringValues> dic =
-            //    new Dictionary<string, Microsoft.Extensions.Primitives.StringValues>();
-            //dic.Add("isactive", "true");
-            //dic.Add("nodeid", _trans.CurrentNodeId);
-            //dic.Add("trackableid", _trans.TrackableName);
-            //dic.Add("entityType", "trackables");
-            Console.WriteLine("looking for trackables in {0} with trackableId = {1}", _trans.CurrentNodeId, _trans.TrackableName);
-            Db.SearchRequest request = new Db.SearchRequest(srp.Parameters);
+
+            if (!Enum.TryParse("trackables", true, out Db.EntityType entityType))
+                
+                Console.WriteLine("looking for trackables in {0} with trackableId = {1}", _trans.CurrentNodeId, _trans.TrackableName);
+            Db.SearchRequest request = new Db.SearchRequest(srp, entityType);
             Db.SearchEngine se = new Db.SearchEngine(_repository);
 
             var response = se.Search(request);
