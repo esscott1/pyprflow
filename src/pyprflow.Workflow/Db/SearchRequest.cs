@@ -92,7 +92,6 @@ namespace pyprflow.Workflow.Db
             {
                 if (kvp.Value != string.Empty)
                 {
-                   
                     predicate = predicate.And(_ClauseStrategy[kvp.Key]);
                 }
             }

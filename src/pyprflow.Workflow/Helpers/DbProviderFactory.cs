@@ -43,6 +43,7 @@ namespace pyprflow.Workflow.Helpers
     public interface IDbProvider
     {
         string ConnectionString { get; set; }
+      //  DbContextOptionBuilder dbContext { get; set; }
     }
     public class DbProvider
     {
