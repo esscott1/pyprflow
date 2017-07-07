@@ -49,9 +49,6 @@ namespace pyprflow.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-           // var conn = "Filename=./Repository.db";
-            // Add framework services.
-            
             services.AddMvc();
 			services.AddSingleton<IWorkflowRepository, WorkflowRepository>();
             string dbtype = Environment.GetEnvironmentVariable("pfdatabasetype");
@@ -67,57 +64,7 @@ namespace pyprflow.Api
                 dbtype = "sqlite";
             services.AddDbContext<ApiContext>(_DbContextStrategy[dbtype]);
 
-            //switch (dbtype)
-            //{
-            //    case "test":
-            //       services.AddDbContext<ApiContext>(_DbContextStrategy["test"]);
-            //        break;
-            //    case "mssql":
-            //        services.AddDbContext<ApiContext>(o => o.UseSqlServer(
-            //            conn, m => m.MigrationsAssembly("pyprflow"))
-            //        );
-            //        break;
-            //    case "mssql2017":
-            //        services.AddDbContext<ApiContext>(_DbContextStrategy["mssql2017"]);
-            //        //services.AddDbContext<ApiContext>(o => o.UseSqlServer(
-            //        //    conn, m => m.MigrationsAssembly("pyprflow"))
-            //        //);
-            //        break;
-            //    case "local":
-            //        services.AddDbContext<ApiContext>(o => o.UseSqlServer(
-            //            conn, m => m.MigrationsAssembly("pyprflow"))
-            //            );
-            //        break;
-            //    case null:
-            //        // services.AddDbContext<ApiContext>(o => o.UseSqlServer(
-            //        //    conn, m => m.MigrationsAssembly("pyprflow"))
-            //        //);
-            //        services.AddDbContext<ApiContext>(o => o.UseSqlite(conn,
-            //             x =>
-            //             {
-            //                 x.SuppressForeignKeyEnforcement();
-            //                 x.MigrationsAssembly("pyprflow");
-            //             }));
-            //        break;
-            //    default: // this is what the CLI when running dotnet ef migration thinks a not included env var is
-            //             // services.AddDbContext<ApiContext>(o => o.UseSqlServer(
-            //             //    conn, m => m.MigrationsAssembly("pyprflow"))
-            //             //);
-            //        services.AddDbContext<ApiContext>(o => o.UseSqlite(conn,
-            //            x =>
-            //            {
-            //                x.SuppressForeignKeyEnforcement();
-            //                x.MigrationsAssembly("pyprflow");
-            //            }));
-            //        break;
-            //}
            
-
-            //services.AddDbContext<ApiContext>(options => options.UseSqlServer(
-            //     "Server=127.0.0.1,2250;Database=testcomponentdb;User Id=sa;Password=!!nimda1;",
-            //    b => b.MigrationsAssembly("pyprflow"))
-            //    ); // i should send in DbContextOptionsBuidler here and remove them for the 
-            // ApiContext class.  move the connection string factory back to pyprflow.
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
