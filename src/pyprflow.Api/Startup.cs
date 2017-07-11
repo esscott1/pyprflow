@@ -55,15 +55,14 @@ namespace pyprflow.Api
             Console.WriteLine("OS is: " + System.Runtime.InteropServices.RuntimeInformation.OSDescription);
             Console.WriteLine("pfdatabasetype ENV var is: " + dbtype);
             Console.WriteLine("is dbtype null? : "+ String.IsNullOrWhiteSpace(dbtype));
-          //  Console.WriteLine("Count of dbtype? : " + dbtype.Count());
+            if (string.IsNullOrWhiteSpace(dbtype))
+                dbtype = "local";
             IDbProvider Iconn = new DbProviderFactory().Create(dbtype);
-            var conn = Iconn.ConnectionString;
-            _conn = conn;
+          
             Console.WriteLine("connection string used is: "+ Iconn.ConnectionString);
-            if (string.IsNullOrEmpty(dbtype) || string.IsNullOrWhiteSpace(dbtype))
-                dbtype = "sqlite";
-            services.AddDbContext<ApiContext>(_DbContextStrategy[dbtype]);
-
+           
+            services.AddDbContext<ApiContext>(Iconn.dbContext);
+            
            
         }
 
