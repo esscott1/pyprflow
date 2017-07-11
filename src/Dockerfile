@@ -1,5 +1,5 @@
 FROM microsoft/aspnetcore-build:1.0-1.1
-ENV pfdatabasetype mssql2017
+ENV pfdatabasetype dockertest
 ENV pfdbhost 127.0.0.1
 ENV pfmsdbinstance DEV2014
 ENV pfdbname pyprflowdb

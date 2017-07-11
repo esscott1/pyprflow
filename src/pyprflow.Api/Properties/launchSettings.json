@@ -14,7 +14,7 @@
       "launchUrl": "api/values",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "pfdatabasetype": "mssql2017",
+        "pfdatabasetype": "local",
         "pfdbhost": "127.0.0.1",
         "pfmsdbinstance": "DEV2014",
         "pfdbname": "pyprflowdb",
@@ -30,7 +30,7 @@
       "launchUrl": "http://localhost:5000/api/values",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "pfdatabasetype": "mssql2017",
+        "pfdatabasetype": "dockertest",
         "pfdbhost": "127.0.0.1",
         "pfmsdbinstance": "DEV2014",
         "pfdbname": "pyprflowdb",
