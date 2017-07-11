@@ -75,9 +75,16 @@ namespace pyprflow.Workflow.Helpers
             var dbid = Environment.GetEnvironmentVariable("pfdbid"); 
             var dbpw = Environment.GetEnvironmentVariable("pfdbpw");
             string sConn;
-            if(String.IsNullOrEmpty(dbport))
-                sConn = string.Format("Server={0}\\{1};Database={2};User Id={3};Password={4};",
+            if (String.IsNullOrEmpty(dbport))
+            {
+                if(String.IsNullOrEmpty(dbinstance))
+                sConn = string.Format("Server={0};Database={2};User Id={3};Password={4};",
                     dbhost, dbinstance, dbname, dbid, dbpw, dbport);
+                else
+                    sConn = string.Format("Server={0}\\{1};Database={2};User Id={3};Password={4};",
+                    dbhost, dbinstance, dbname, dbid, dbpw, dbport);
+
+            }
             else
                 sConn = string.Format("Server={0},{5};Database={2};User Id={3};Password={4};",
                     dbhost, dbinstance, dbname, dbid, dbpw, dbport);
