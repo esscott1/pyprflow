@@ -41,48 +41,48 @@ namespace pyprflow.Api.Controllers
 		}
 
 
-		[HttpGet("{workflowId}/orchestrations")]
-		public IEnumerable<Orchestration> GetOrchestrations(string workflowId)
-		{
-			var workflow = Repository.Find<Workflow.Model.Workflow>(workflowId);
-			List<Workflow.Model.Orchestration> ol = new List<Workflow.Model.Orchestration>();
-			foreach (KeyValuePair<string, Orchestration> kvp in workflow.Orchestrations)
-				ol.Add(kvp.Value);
-			return ol;
-		}
+		//[HttpGet("{workflowId}/orchestrations")]
+		//public IEnumerable<Orchestration> GetOrchestrations(string workflowId)
+		//{
+		//	var workflow = Repository.Find<Workflow.Model.Workflow>(workflowId);
+		//	List<Workflow.Model.Orchestration> ol = new List<Workflow.Model.Orchestration>();
+		//	foreach (KeyValuePair<string, Orchestration> kvp in workflow.Orchestrations)
+		//		ol.Add(kvp.Value);
+		//	return ol;
+		//}
 
-		[HttpGet("{workflowId}/nodes")]
-		public IEnumerable<Node> GetNodes(string workflowId)
-		{
-			var workflow = Repository.Find<Workflow.Model.Workflow>(workflowId);
-			List<Workflow.Model.Node> n = new List<Workflow.Model.Node>();
-			foreach (KeyValuePair<string, Workflow.Model.Node> kvp in workflow.Nodes)
-				n.Add(kvp.Value);
-			return n;
-		}
+		//[HttpGet("{workflowId}/nodes")]
+		//public IEnumerable<Node> GetNodes(string workflowId)
+		//{
+		//	var workflow = Repository.Find<Workflow.Model.Workflow>(workflowId);
+		//	List<Workflow.Model.Node> n = new List<Workflow.Model.Node>();
+		//	foreach (KeyValuePair<string, Workflow.Model.Node> kvp in workflow.Nodes)
+		//		n.Add(kvp.Value);
+		//	return n;
+		//}
 
-		[HttpGet("{workflowId}/orchestrations/{nodeId}")]
-		public Orchestration GetNode(int workflowId, string nodeId)
-		{
-			return Repository.Find<Workflow.Model.Orchestration>(nodeId);
-		}
+		//[HttpGet("{workflowId}/orchestrations/{nodeId}")]
+		//public Orchestration GetNode(int workflowId, string nodeId)
+		//{
+		//	return Repository.Find<Workflow.Model.Orchestration>(nodeId);
+		//}
 
 		/// <summary>
 		/// undocumented endpoint.  using for development testing only
 		/// </summary>
 		/// <param name="workflow"></param>
 		/// <returns></returns>
-		[HttpPost("validate", Name = "ValidateWorkflow")]
-		public IActionResult Validate([FromBody] Workflow.Model.Workflow workflow)
-		{
-			WorkflowValidationMessage message;
+		//[HttpPost("validate", Name = "ValidateWorkflow")]
+		//public IActionResult Validate([FromBody] Workflow.Model.Workflow workflow)
+		//{
+		//	WorkflowValidationMessage message;
 
-			bool valid = workflow.IsValid(out message);
-			if (valid)
-				return Json(new { valid = true });
-			return StatusCode(422, message); //Json(message);
+		//	bool valid = workflow.IsValid(out message);
+		//	if (valid)
+		//		return Json(new { valid = true });
+		//	return StatusCode(422, message); //Json(message);
 
-		}
+		//}
 
 		[HttpPost]
 		public IActionResult Create([FromBody] Workflow.Model.Workflow workflow)
@@ -101,20 +101,20 @@ namespace pyprflow.Api.Controllers
 		}
 
 
-		[HttpPut("{id}")]
-		public IActionResult Update(string id, [FromBody] Workflow.Model.Workflow workflow)
-		{
-			if (workflow == null || workflow.Name != id)
-			{
-				return BadRequest();
-			}
-			var _workflow = Repository.Find<Workflow.Model.Workflow>(id);
-			if (_workflow == null)
-				return NotFound();
-			Repository.Update<Workflow.Model.Workflow>(workflow);
-			return new NoContentResult();
+		//[HttpPut("{id}")]
+		//public IActionResult Update(string id, [FromBody] Workflow.Model.Workflow workflow)
+		//{
+		//	if (workflow == null || workflow.Name != id)
+		//	{
+		//		return BadRequest();
+		//	}
+		//	var _workflow = Repository.Find<Workflow.Model.Workflow>(id);
+		//	if (_workflow == null)
+		//		return NotFound();
+		//	Repository.Update<Workflow.Model.Workflow>(workflow);
+		//	return new NoContentResult();
 
-		}
+		//}
 
 		[HttpDelete("{id}")]
 		public IActionResult Delete(string id)

@@ -200,17 +200,17 @@ namespace pyprflow.Api.Controllers
             return Json(Guid.NewGuid());
         }
 
-        [HttpGet("availablemoves")]
-        public IEnumerable<Movement> AvailableMoves([FromBody] Trackable item)
-        {
-            throw new NotImplementedException();
-            //var nodeName = item.Location[workflowId];
+        //[HttpGet("availablemoves")]
+        //public IEnumerable<Movement> AvailableMoves([FromBody] Trackable item)
+        //{
+        //    throw new NotImplementedException();
+        //    //var nodeName = item.Location[workflowId];
 
-            //Repository workflow = Repository.Find(workflowId);
+        //    //Repository workflow = Repository.Find(workflowId);
 
-            //return workflow.Orchestrations.Where(p => p.From == nodeName);
+        //    //return workflow.Orchestrations.Where(p => p.From == nodeName);
 
-        }
+        //}
 
 
         [HttpPost("start")]

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace pyprflow.Workflow.Model
 {
-    public class Rule : BaseWorkflowItem
+    internal class Rule : BaseWorkflowItem
     {
 		// those that can execute this rule
 		public List<User> AccessList { get; set; }

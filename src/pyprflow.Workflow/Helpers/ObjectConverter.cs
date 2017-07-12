@@ -7,6 +7,9 @@ using pyprflow.Workflow.Model;
 
 namespace pyprflow.Workflow.Helpers
 {
+    /// <summary>
+    /// using this instead of AutoMapper due to limited mapping use and speed.  Future refactors may eliminate the need for mapping .
+    /// </summary>
     public class ObjectConverter
     {
         public BaseWorkflowItem GetBase<T>(T derivedObject) where T : BaseWorkflowItem

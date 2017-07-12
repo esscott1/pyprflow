@@ -61,22 +61,7 @@ namespace pyprflow.Workflow.Model
                 }
             }
         }
-
-        private void AddTransaction<T>(T item) where T : BaseWorkflowItem
-        {
-            Helpers.ObjectConverter converter = new Helpers.ObjectConverter();
-            pyprflow.Database.Entity.Relationship r = new Database.Entity.Relationship();
-            using (var db = new ApiContext(_options))
-            {
-                if (item is Workflow)
-                   r =  converter.Create(item as Workflow);
-                if (item is Trackable)
-                    r = converter.Create(item as Trackable);
-                db.Relationships.Add(r);
-                db.SaveChanges();
-            }
-        }
-
+       
         public void Update<T>(T item) where T : BaseWorkflowItem
         {
             using (var db = new ApiContext(_options))
@@ -106,7 +91,6 @@ namespace pyprflow.Workflow.Model
                 }
             }
         }
-
        
         public IEnumerable<T> GetAll<T>() where T : BaseWorkflowItem
 		{
@@ -153,7 +137,6 @@ namespace pyprflow.Workflow.Model
             }
             return result;
         }
-
       
 	    public T Find<T>(string workflowName) where T : BaseWorkflowItem
         {
@@ -212,39 +195,7 @@ namespace pyprflow.Workflow.Model
             }
 		    }
         #endregion
-
-
-        private pyprflow.Database.Entity.BaseWorkflowItem FindDBItem<T>(string workflowItemName, bool deleted) where T : BaseWorkflowItem
-        {
-            using (var db = new ApiContext(_options))
-            {
-                try
-                {
-                    Console.WriteLine("searching for item {0} with Id {1}", typeof(T).ToString(), workflowItemName);
-
-                    //  BaseWorkflowItem result = db.WorkflowDb.Find(new object[] { workflowName, typeof(T).ToString() });
-                    pyprflow.Database.Entity.BaseWorkflowItem result
-                        = db.WorkflowDb.Find(new object[] { workflowItemName, typeof(T).ToString() });
-
-                    if (result.Deleted != deleted)
-                        result = null; // hack hack hack.. 
-
-                    if (result == null)
-                    {
-                        Console.WriteLine("looking for type {0} with ID {1}", typeof(T).ToString(), workflowItemName);
-                        throw new WorkFlowException(String.Format("null was returned when finding for key {0}", workflowItemName));
-                    }
-                    return result;
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("looking for type {0} with ID {1}", typeof(T).ToString(), workflowItemName);
-                    return null;
-                    //   throw new WorkFlowException(String.Format("null was returned when finding for key {0}", workflowItemName));
-                }
-            }
-        }
-
+      
         public List<T> Where<T>(System.Linq.Expressions.Expression<Func<pyprflow.Database.Entity.Relationship, bool>> predicate) where T :BaseWorkflowItem
         {
             var rel = Where(predicate);
@@ -282,20 +233,72 @@ namespace pyprflow.Workflow.Model
             }
         }
 
-  //      public List<Relationship> GetAll(System.Linq.Expressions.Expression<Func<pyprflow.Database.Entity.Relationship, bool>> predicate)
-		//{
-		//	using (var db = new ApiContext(_options))
-		//	{
-  //             // throw new NotImplementedException("refactor for mapping");
-				 
-  //              var dbList = db.Relationships.Where(predicate).ToList();
-  //              return new Helpers.ObjectConverter().Map(dbList);
+        public bool Execute(Transaction trans, out int statusCode, out string msg)
+        {
+            return trans.Execute(this, out statusCode, out msg);
+            //return true;
+        }
+        //      public List<Relationship> GetAll(System.Linq.Expressions.Expression<Func<pyprflow.Database.Entity.Relationship, bool>> predicate)
+        //{
+        //	using (var db = new ApiContext(_options))
+        //	{
+        //             // throw new NotImplementedException("refactor for mapping");
 
-		//	}
-		//}
+        //              var dbList = db.Relationships.Where(predicate).ToList();
+        //              return new Helpers.ObjectConverter().Map(dbList);
+
+        //	}
+        //}
 
 
         #region Private Methods to Manage the Relationships
+
+
+        private void AddTransaction<T>(T item) where T : BaseWorkflowItem
+        {
+            Helpers.ObjectConverter converter = new Helpers.ObjectConverter();
+            pyprflow.Database.Entity.Relationship r = new Database.Entity.Relationship();
+            using (var db = new ApiContext(_options))
+            {
+                if (item is Workflow)
+                    r = converter.Create(item as Workflow);
+                if (item is Trackable)
+                    r = converter.Create(item as Trackable);
+                db.Relationships.Add(r);
+                db.SaveChanges();
+            }
+        }
+
+        private pyprflow.Database.Entity.BaseWorkflowItem FindDBItem<T>(string workflowItemName, bool deleted) where T : BaseWorkflowItem
+        {
+            using (var db = new ApiContext(_options))
+            {
+                try
+                {
+                    Console.WriteLine("searching for item {0} with Id {1}", typeof(T).ToString(), workflowItemName);
+
+                    //  BaseWorkflowItem result = db.WorkflowDb.Find(new object[] { workflowName, typeof(T).ToString() });
+                    pyprflow.Database.Entity.BaseWorkflowItem result
+                        = db.WorkflowDb.Find(new object[] { workflowItemName, typeof(T).ToString() });
+
+                    if (result.Deleted != deleted)
+                        result = null; // hack hack hack.. 
+
+                    if (result == null)
+                    {
+                        Console.WriteLine("looking for type {0} with ID {1}", typeof(T).ToString(), workflowItemName);
+                        throw new WorkFlowException(String.Format("null was returned when finding for key {0}", workflowItemName));
+                    }
+                    return result;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("looking for type {0} with ID {1}", typeof(T).ToString(), workflowItemName);
+                    return null;
+                    //   throw new WorkFlowException(String.Format("null was returned when finding for key {0}", workflowItemName));
+                }
+            }
+        }
 
         /// <summary>
         /// Adds the Relationship record to DB

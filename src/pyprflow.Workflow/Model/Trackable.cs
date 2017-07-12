@@ -21,8 +21,6 @@ namespace pyprflow.Workflow.Model
 			Name = trackableName;
 		}
 
-		
-
 		public Trackable()
 		{
 		
@@ -30,9 +28,5 @@ namespace pyprflow.Workflow.Model
 
 		
 	}
-	public class Location
-	{
-		public string WorkflowName { get; set; }
-		public string NodeId { get; set; }
-	}
+	
 }

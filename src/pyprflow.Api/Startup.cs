@@ -21,17 +21,17 @@ namespace pyprflow.Api
     public class Startup
     {
 
-        internal static Dictionary<string, Action<DbContextOptionsBuilder>> _DbContextStrategy =
-           new Dictionary<string, Action<DbContextOptionsBuilder>>()
-           {
-             { "test",  o => o.UseSqlServer(_conn, m => m.MigrationsAssembly("pyprflow")) },
-             { "mssql2017", o => o.UseSqlServer(_conn, m => m.MigrationsAssembly("pyprflow")) },
-             { "local", o => o.UseSqlServer(_conn, m => m.MigrationsAssembly("pyprflow")) },
-             { "mssql", o => o.UseSqlServer(_conn, m => m.MigrationsAssembly("pyprflow")) },
-             {"sqlite", o => o.UseSqlite(_conn, m => { m.SuppressForeignKeyEnforcement(); m.MigrationsAssembly("pyprflow"); }) }
+        //internal static Dictionary<string, Action<DbContextOptionsBuilder>> _DbContextStrategy =
+        //   new Dictionary<string, Action<DbContextOptionsBuilder>>()
+        //   {
+        //     { "test",  o => o.UseSqlServer(_conn, m => m.MigrationsAssembly("pyprflow")) },
+        //     { "mssql2017", o => o.UseSqlServer(_conn, m => m.MigrationsAssembly("pyprflow")) },
+        //     { "local", o => o.UseSqlServer(_conn, m => m.MigrationsAssembly("pyprflow")) },
+        //     { "mssql", o => o.UseSqlServer(_conn, m => m.MigrationsAssembly("pyprflow")) },
+        //     {"sqlite", o => o.UseSqlite(_conn, m => { m.SuppressForeignKeyEnforcement(); m.MigrationsAssembly("pyprflow"); }) }
 
-           };
-        static string _conn;
+        //   };
+       // static string _conn;
 
 
         public Startup(IHostingEnvironment env)

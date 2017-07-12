@@ -15,7 +15,7 @@ namespace pyprflow.Api.Controllers
 
         public AdminController(IWorkflowRepository workflow) :base(workflow)
         {
-            Repository = workflow;
+            Repository = workflow; 
         }
 
         [HttpGet("version")]

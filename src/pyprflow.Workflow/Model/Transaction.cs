@@ -18,21 +18,23 @@ namespace pyprflow.Workflow.Model
 		
 		public string NewNodeId { get; set; }
         public string WorkflowName { get; set; }
-        public DateTime TransActionTime { get; set; }
+        public DateTime TransActionTime { get; internal set; }
 		[JsonRequired]
 		public User Submitter { get; set; }
 		public User AssignedTo { get; set; }
         public string Comment { get; set; }
        
 
-        private IWorkflowRepository Repository;
+      //  private IWorkflowRepository Repository;
 		public Transaction()
 		{
 			TransActionTime = DateTime.Now;
+            if (TransActionTime.Year.Equals(1)) // the null DateTime
+                TransActionTime = DateTime.Now;
            
 		}
   
-		public void Clean()
+		private void Clean()
 		{
 			if(this.type== TransactionType.move || this.type==TransactionType.copy)
 			{
@@ -50,7 +52,8 @@ namespace pyprflow.Workflow.Model
 				//this.Comment = null;
 			}
 		}
-		public bool Execute(IWorkflowRepository repository, out int statuscode, out string statusmessage)
+
+		internal bool Execute(IWorkflowRepository repository, out int statuscode, out string statusmessage)
 		{
 			this.Clean();
             TransactionValidator validator = new TransactionValidator(repository);
@@ -84,28 +87,8 @@ namespace pyprflow.Workflow.Model
 	
 	
     
-		public bool Equals(Transaction other)
-		{
-			if (this.NewNodeId == other.NewNodeId &&
-				this.CurrentNodeId == other.CurrentNodeId)
-			{
-				return true;
-			}
-			return false;
-		}
+		
 	}
-
-	internal class TranactionComparer : IEqualityComparer<Transaction>
-	{
-		public bool Equals(Transaction t1, Transaction t2)
-		{
-			return t1.Equals(t2);
-		}
-		public int GetHashCode(Transaction obj)
-		{
-			return obj.NewNodeId.GetHashCode();
-		}
 
 	
-	}
 }

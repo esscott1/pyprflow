@@ -31,7 +31,7 @@ namespace pyprflow.Api.Controllers
             t.WorkflowName = "SampleWorkflow1";
             t.type = TransactionType.move;
             var d = DateTime.Now;
-            t.TransActionTime = DateTime.Now;
+          //  t.TransActionTime = DateTime.Now;
             t.Name = "SampleTransaction1";
             return Json(t);
 
@@ -59,8 +59,9 @@ namespace pyprflow.Api.Controllers
 
             try
             {
-                string msg = "error"; int statusCode = 400;
-                if (trans.Execute(Repository, out statusCode, out msg))
+                string msg = "error"; int statusCode = 400; 
+                if (Repository.Execute(trans, out statusCode, out msg))
+                   // if (trans.Execute(Repository, out statusCode, out msg))
                     return CreatedAtRoute("GetTransaction", new { id = trans.Name }, Repository);
                 else
                     return StatusCode(statusCode, msg);

@@ -7,10 +7,10 @@ namespace pyprflow.Workflow.Model
 {
     public class Orchestration : BaseWorkflowItem
     {
-		public string OrchestrationName { get; set; }
+        public string OrchestrationName { get; set; }
 		public List<Movement> Moves { get; set; }
 
-		public bool IsValid(Transaction transaction)
+        internal bool IsValid(Transaction transaction)
 		{
 			Console.WriteLine("checking for validation in orchestration {0}", this.OrchestrationName);
 			try
