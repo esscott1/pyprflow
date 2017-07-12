@@ -7,7 +7,7 @@ using Microsoft.Extensions.Primitives;
 using pyprflow.Workflow.Model;
 using System.Runtime.InteropServices;
 
-namespace pyprflow.Workflow.Db
+namespace pyprflow.Workflow.Search
 {
     public enum EntityType
     {

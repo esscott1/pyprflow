@@ -12,7 +12,6 @@ using Microsoft.SqlServer;
 using pyprflow.Workflow.Helpers;
 using pyprflow.Workflow.Model;
 using pyprflow.Api.Middleware;
-using pyprflow.Workflow.Db;
 using pyprflow.Database;
 using System.Linq.Expressions;
 
@@ -57,7 +56,7 @@ namespace pyprflow.Api
             Console.WriteLine("is dbtype null? : "+ String.IsNullOrWhiteSpace(dbtype));
             if (string.IsNullOrWhiteSpace(dbtype))
                 dbtype = "local";
-            IDbProvider Iconn = new DbProviderFactory().Create(dbtype);
+            pyprflow.Database.IDbProvider Iconn = new pyprflow.Database.DbProviderFactory().Create(dbtype);
           
             Console.WriteLine("connection string used is: "+ Iconn.ConnectionString);
            

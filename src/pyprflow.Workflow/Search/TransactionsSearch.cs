@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Text;
 using pyprflow.Workflow.Model;
 
-namespace pyprflow.Workflow.Db
+namespace pyprflow.Workflow.Search
 {
     class TransactionsSearch : SearchEngine, ISearchEngine
     {

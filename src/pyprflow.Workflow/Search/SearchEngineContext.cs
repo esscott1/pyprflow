@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using pyprflow.Workflow.Model;
 
-namespace pyprflow.Workflow.Db
+namespace pyprflow.Workflow.Search
 {
     public class SearchEngineContext
     {

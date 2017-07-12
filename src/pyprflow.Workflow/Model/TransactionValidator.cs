@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using pyprflow.Workflow.Search;
 
 namespace pyprflow.Workflow.Model
 {
@@ -94,16 +95,16 @@ namespace pyprflow.Workflow.Model
             if (_trans.CurrentNodeId == null && _trans.NewNodeId != null) 
                 return true;
             bool result = true;
-            Db.SearchRequestParameters srp = new Db.SearchRequestParameters();
-            srp.isActive = Db.IsActive.@true;
+            SearchRequestParameters srp = new SearchRequestParameters();
+            srp.isActive = IsActive.@true;
             srp.Parameters["nodeid"] = _trans.CurrentNodeId;
             srp.Parameters["trackableid"] = _trans.TrackableName;
 
-            if (!Enum.TryParse("trackables", true, out Db.EntityType entityType))
+            if (!Enum.TryParse("trackables", true, out EntityType entityType))
                 
                 Console.WriteLine("looking for trackables in {0} with trackableId = {1}", _trans.CurrentNodeId, _trans.TrackableName);
-            Db.SearchRequest request = new Db.SearchRequest(srp, entityType);
-            Db.SearchEngine se = new Db.SearchEngine(_repository);
+            SearchRequest request = new SearchRequest(srp, entityType);
+            SearchEngine se = new SearchEngine(_repository);
 
             var response = se.Search(request);
             //Console.WriteLine("found {0} number of {1} in node {2}", response.Count, this.TrackableName, this.CurrentNodeId);

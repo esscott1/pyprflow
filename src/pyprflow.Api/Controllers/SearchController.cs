@@ -4,8 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using pyprflow.Workflow.Model;
-using pyprflow.Workflow.Db;
-
+using pyprflow.Workflow.Search;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Primitives;
 

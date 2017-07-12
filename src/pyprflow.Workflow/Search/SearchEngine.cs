@@ -8,7 +8,7 @@ using pyprflow.Workflow.Model;
 using pyprflow.Workflow.Model.SearchResult;
 using pyprflow.Workflow;
 
-namespace pyprflow.Workflow.Db
+namespace pyprflow.Workflow.Search
 {
 
     public class SearchEngine

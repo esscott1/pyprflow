@@ -10,9 +10,9 @@ namespace pyprflow.Workflow.Helpers
     /// <summary>
     /// using this instead of AutoMapper due to limited mapping use and speed.  Future refactors may eliminate the need for mapping .
     /// </summary>
-    public class ObjectConverter
+    internal class ObjectConverter
     {
-        public BaseWorkflowItem GetBase<T>(T derivedObject) where T : BaseWorkflowItem
+        internal BaseWorkflowItem GetBase<T>(T derivedObject) where T : BaseWorkflowItem
         {
             BaseWorkflowItem result = new BaseWorkflowItem();
             result.Name = derivedObject.Name;
@@ -23,7 +23,7 @@ namespace pyprflow.Workflow.Helpers
             return result;
         }
 
-        public pyprflow.Database.Entity.BaseWorkflowItem Map(pyprflow.Workflow.Model.BaseWorkflowItem item)
+        internal pyprflow.Database.Entity.BaseWorkflowItem Map(pyprflow.Workflow.Model.BaseWorkflowItem item)
         {
             pyprflow.Database.Entity.BaseWorkflowItem result =
                 new pyprflow.Database.Entity.BaseWorkflowItem();
@@ -35,7 +35,7 @@ namespace pyprflow.Workflow.Helpers
             return result;
         }
 
-        public pyprflow.Workflow.Model.BaseWorkflowItem Map(pyprflow.Database.Entity.BaseWorkflowItem item)
+        internal pyprflow.Workflow.Model.BaseWorkflowItem Map(pyprflow.Database.Entity.BaseWorkflowItem item)
         {
             pyprflow.Workflow.Model.BaseWorkflowItem result =
                 new pyprflow.Workflow.Model.BaseWorkflowItem();
@@ -47,7 +47,7 @@ namespace pyprflow.Workflow.Helpers
             return result;
         }
 
-        public pyprflow.Database.Entity.Relationship Map(pyprflow.Workflow.Model.Relationship item)
+        internal pyprflow.Database.Entity.Relationship Map(pyprflow.Workflow.Model.Relationship item)
         {
             pyprflow.Database.Entity.Relationship result =
                 new Database.Entity.Relationship();
@@ -69,7 +69,7 @@ namespace pyprflow.Workflow.Helpers
             return result;
 
         }
-        public pyprflow.Workflow.Model.Relationship Map(pyprflow.Database.Entity.Relationship item)
+        internal pyprflow.Workflow.Model.Relationship Map(pyprflow.Database.Entity.Relationship item)
         {
             pyprflow.Workflow.Model.Relationship result =
                 new pyprflow.Workflow.Model.Relationship();
@@ -92,7 +92,7 @@ namespace pyprflow.Workflow.Helpers
 
         }
 
-        public Relationship CreateRelationshipObj(Transaction trans)
+        internal Relationship CreateRelationshipObj(Transaction trans)
         {
             var r = new Relationship();
             r.TransactionName = trans.Name;
@@ -124,7 +124,7 @@ namespace pyprflow.Workflow.Helpers
             return r;
         }
 
-        public pyprflow.Database.Entity.Relationship Create(Trackable trackable)
+        internal pyprflow.Database.Entity.Relationship Create(Trackable trackable)
         {
             pyprflow.Database.Entity.Relationship r = new pyprflow.Database.Entity.Relationship(
                   pyprflow.Database.Entity.TransactionType.add);
@@ -132,7 +132,7 @@ namespace pyprflow.Workflow.Helpers
             return r;
 
         }
-        public pyprflow.Database.Entity.Relationship Create(Model.Workflow workflow)
+        internal pyprflow.Database.Entity.Relationship Create(Model.Workflow workflow)
         {
             pyprflow.Database.Entity.Relationship r = new pyprflow.Database.Entity.Relationship(
                 pyprflow.Database.Entity.TransactionType.add);
@@ -141,7 +141,7 @@ namespace pyprflow.Workflow.Helpers
 
         }
 
-        public List<pyprflow.Workflow.Model.Relationship> Map(List<pyprflow.Database.Entity.Relationship> items)
+        internal List<pyprflow.Workflow.Model.Relationship> Map(List<pyprflow.Database.Entity.Relationship> items)
         {
             List<pyprflow.Workflow.Model.Relationship> result = new List<Relationship>();
             foreach (pyprflow.Database.Entity.Relationship item in items)

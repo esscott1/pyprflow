@@ -4,7 +4,7 @@ using System.Linq;
 using pyprflow.Workflow.Model;
 
 
-namespace pyprflow.Workflow.Db
+namespace pyprflow.Workflow.Search
 {
     internal interface ISearchEngine
     {

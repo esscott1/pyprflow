@@ -6,7 +6,7 @@ using System.Text;
 using pyprflow.Workflow.Model;
 using pyprflow.Workflow.Model.SearchResult;
 
-namespace pyprflow.Workflow.Db
+namespace pyprflow.Workflow.Search
 {
     class TrackablesEnhSearch : TrackablesSearch, ISearchEngine
     {
