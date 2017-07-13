@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 namespace pyprflow.Api.Controllers
 {
     [Route("api/[controller]")]
+    [Produces("application/json")]
     public class ValuesController : Controller
     {
 

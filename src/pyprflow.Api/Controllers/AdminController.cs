@@ -18,13 +18,13 @@ namespace pyprflow.Api.Controllers
             Repository = workflow; 
         }
 
-        [HttpGet("version")]
-        public IActionResult Version()
-        {
-            var ver = System.Reflection.Assembly.GetEntryAssembly().ImageRuntimeVersion;
-            var msver = Microsoft.Extensions.PlatformAbstractions.PlatformServices.Default.Application.ApplicationVersion;
-            return Json(msver);
-        }
+        //[HttpGet("version")]
+        //public IActionResult Version()
+        //{
+        //    var ver = System.Reflection.Assembly.GetEntryAssembly().ImageRuntimeVersion;
+        //    var msver = Microsoft.Extensions.PlatformAbstractions.PlatformServices.Default.Application.ApplicationVersion;
+        //    return Json(msver);
+        //}
 
         [HttpGet("db")]
         public IActionResult environment()

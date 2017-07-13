@@ -14,25 +14,14 @@ using pyprflow.Workflow.Model;
 using pyprflow.Api.Middleware;
 using pyprflow.Database;
 using System.Linq.Expressions;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace pyprflow.Api
 {
     public class Startup
     {
 
-        //internal static Dictionary<string, Action<DbContextOptionsBuilder>> _DbContextStrategy =
-        //   new Dictionary<string, Action<DbContextOptionsBuilder>>()
-        //   {
-        //     { "test",  o => o.UseSqlServer(_conn, m => m.MigrationsAssembly("pyprflow")) },
-        //     { "mssql2017", o => o.UseSqlServer(_conn, m => m.MigrationsAssembly("pyprflow")) },
-        //     { "local", o => o.UseSqlServer(_conn, m => m.MigrationsAssembly("pyprflow")) },
-        //     { "mssql", o => o.UseSqlServer(_conn, m => m.MigrationsAssembly("pyprflow")) },
-        //     {"sqlite", o => o.UseSqlite(_conn, m => { m.SuppressForeignKeyEnforcement(); m.MigrationsAssembly("pyprflow"); }) }
-
-        //   };
-       // static string _conn;
-
-
+       
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -61,6 +50,13 @@ namespace pyprflow.Api
             Console.WriteLine("connection string used is: "+ Iconn.ConnectionString);
            
             services.AddDbContext<ApiContext>(Iconn.dbContext);
+
+           
+            services.AddSwaggerGen(c =>
+            {
+               
+                c.SwaggerDoc("v1", new Info { Title = "My Api", Version = "v1" });
+            });
             
            
         }
@@ -70,9 +66,16 @@ namespace pyprflow.Api
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-			//app.ApplyUserKeyValidation(); 
+            //app.ApplyUserKeyValidation(); 
 
             app.UseMvc();
+            //app.UseMvcWithDefaultRoute();
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
             
             // below is added to create the DB if it does not already exist.
 			using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())

@@ -22,7 +22,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pyprflow.Database.Entity", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pyprflow.Workflow", "src\pyprflow.Workflow\pyprflow.Workflow.csproj", "{458DF408-C134-4F99-B08A-0497485E1253}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pyprflow.MetaMatcher", "pyprflow.MetaMatcher\pyprflow.MetaMatcher.csproj", "{D1039F7D-E2C0-4074-A23A-23495FF29E17}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pyprflow.MetaMatcher", "pyprflow.MetaMatcher\pyprflow.MetaMatcher.csproj", "{D1039F7D-E2C0-4074-A23A-23495FF29E17}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

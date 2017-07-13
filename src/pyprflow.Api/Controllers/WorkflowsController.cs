@@ -26,7 +26,7 @@ namespace pyprflow.Api.Controllers
 		{ return Repository.GetAll<Workflow.Model.Workflow>(); }
 
 		[HttpGet("{id}", Name = "GetWorkflow")]
-		public IActionResult GetById(string id)
+		public IActionResult GetById([FromQuery] string id)
 		{
 			var workflow = Repository.Find<Workflow.Model.Workflow>(id);
 			if (workflow == null) { return NotFound(id); }
