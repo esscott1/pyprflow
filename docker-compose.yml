@@ -1,5 +1,4 @@
 
-services:
-   pyprflow-workflow:
-       image: esscott1/pyprflow:release-0.1.0
+pyprflow-workflow:
+  image: esscott1/pyprflow:release-0.1.0
    
