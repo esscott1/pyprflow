@@ -13,7 +13,7 @@ Step 4. run
 '''docker build -t {name of your image} .'''
 
 Step 5. run
-'''docker run -it -d -p 5000:5000 {name of your image}'''
+'''docker run --name {friendlyName} -it -d -p 5000:5000 {name of your image}'''  --rm (removes when done)
 	note: -p {external port}:{port inside container}
 
 Step 6. test it with
@@ -31,3 +31,12 @@ to push to Docker Cloud you need to tag with the repository name
  
  To connect
  docker exec -it <container_id|container_name> /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P <your_password>
+
+ docker inspect [youContainerName]
+ or 
+ docker inspect [yourContainerName] | grep '"IPAddress"' | head -n 1
+
+ docker remove all containers
+ sudo docker rm $(sudo docker ps -a -q)
+
+ docker network ls

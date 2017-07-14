@@ -1,0 +1,13 @@
+version: '1'
+services:
+  pyprflow-workflow:
+    container_name: pyprflow-workflow
+    build: .
+
+  reverse-proxy:
+    container_name: reverse-proxy
+    image: nginx
+    ports:
+      - "9090:8080"
+    volumes:
+      - ./proxy.config:/etc/nginx/conf.d/default.conf
