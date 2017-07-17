@@ -1,4 +1,16 @@
-
-pyprflow-workflow:
-  image: esscott1/pyprflow:release-0.1.0
+version: '2'
+services:
+  pyprflow-workflow:
+    image: esscott1/pyprflow:release-0.1.0
+    #OR 
+    #build: .
+    #ports:
+       - "5000:5000"
+    depends_on:
+      - db
+  db:
+    image: "microsoft/mssql-server-linux"
+    environment:
+        SA_PASSWORD: "!!nimda1"
+        ACCEPT_EULA: "Y"
    
