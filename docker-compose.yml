@@ -3,7 +3,6 @@ services:
   pyprflow-workflow:
     #image: esscott1/pyprflow:release-0.1.2
     build: ./src
-    
     networks:
       - bridge
     #OR 
