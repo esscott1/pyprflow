@@ -26,7 +26,7 @@ namespace pyprflow.Database
            };
         internal static Dictionary<string, string> _conn = new Dictionary<string, string>
         {
-            { "dockertest" , "Server=db; Database=pyprflowlocaldb;User Id = sa; Password=!!nimda1;" },
+            { "dockertest" , "Server=172.17.0.2; Database=pyprflowlocaldb;User Id = sa; Password=!!nimda1;" },
             { "mssql", "Server=127.0.0.1; Database=pyprflowlocaldb;User Id = sa; Password=!!nimda1;" },
             { "mssql2017", "Server=127.0.0.1,2250; Database=pyprflowlocaldb;User Id = sa; Password=!!nimda1;" },
             { "local", "Server=127.0.0.1,2250; Database=pyprflowlocaldb;User Id = sa; Password=!!nimda1;" },
