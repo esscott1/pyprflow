@@ -22,7 +22,7 @@ Step 6. test it with
 to push to Docker Cloud you need to tag with the repository name
  '''docker tag {image name} {dockerUserName/repositoryName}:{optional tag}'''
  
- push to the Cloud
+ push to the Cloudd
  '''docker push {dockerUserName/repositoryName}:{optional tag}'''
 
  from: 
