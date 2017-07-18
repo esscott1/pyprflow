@@ -7,6 +7,7 @@ services:
       - "5000:5000"
   db:
     image: "microsoft/mssql-server-linux"
+    container_name: db
     network_mode: "bridge"
     environment:
         SA_PASSWORD: "!!nimda1"
