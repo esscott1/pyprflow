@@ -18,8 +18,8 @@ services:
     environment:
         SA_PASSWORD: "!!nimda1"
         ACCEPT_EULA: "Y"
- 
- networks:
+
+networks:
    pyprflownet:
      driver: bridge
       ipam:
