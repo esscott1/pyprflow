@@ -1,14 +1,9 @@
 version: '2'
 services:
   pyprflow-workflow:
-    #image: esscott1/pyprflow:release-0.1.2
-    build: ./src
-    networks:
-      - bridge
-    #OR 
-    #build: .
-    #ports:
-     #  - "5000:5000"
+    image: esscott1/pyprflow:release-0.1.2
+    ports:
+      -"5000:5000"
     depends_on:
       - db
   db:
@@ -16,6 +11,8 @@ services:
     environment:
         SA_PASSWORD: "!!nimda1"
         ACCEPT_EULA: "Y"
-     networks:
-       - bridge
+networks:
+  default:
+    external:
+     name: bridge
    
