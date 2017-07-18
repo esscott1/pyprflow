@@ -1,7 +1,7 @@
 version: '2'
 services:
   pyprflow-workflow:
-    image: esscott1/pyprflow:release-0.1.2
+    image: esscott1/pyprflow:release-0.1.1
     container_name: workflow
     ports:
       - "5000:5000"
