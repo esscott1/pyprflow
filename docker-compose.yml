@@ -1,18 +1,14 @@
 version: '2'
+network_mode: "bridge"
 services:
   pyprflow-workflow:
     image: esscott1/pyprflow:release-0.1.2
     ports:
       - "5000:5000"
-    depends_on:
-      - db
   db:
     image: "microsoft/mssql-server-linux"
     environment:
         SA_PASSWORD: "!!nimda1"
         ACCEPT_EULA: "Y"
-networks:
-  default:
-    external:
-     name: bridge
+
    
