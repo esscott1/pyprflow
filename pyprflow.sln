@@ -13,6 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		src\Dockerfile = src\Dockerfile
 		DockerIt.md = DockerIt.md
 		src\pyprflow.Api\EFcommands.md = src\pyprflow.Api\EFcommands.md
+		HowToParticipate.md = HowToParticipate.md
 		Piperflow.md = Piperflow.md
 		ReadMe.md = ReadMe.md
 	EndProjectSection
