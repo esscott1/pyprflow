@@ -10,10 +10,10 @@ a start event to an end event to accomplish a specific purpose or service.
 
 ### What is an example of an orchestration workflow (OW) in action?
 One common example is the process of reviewing and approving documents.  In this example the OW defines the logical flow or path a 
-document would travel through in it's journey to be 'approved.'  First a document is created, then submitted into a previously defined
- OW.  As different actions are performed (physical review by individuals; an amount of time has passed, a computerized event occurs),the 
- document is advanced (or retarded) to the  next step(s) in the OW.  In this example the specific purpose is to produce an "approved" 
- document.  this may require various changes and re-reviews, all of which are tracked and facilitated by the OW.
+document would travel through in it's journey to be 'approved.  (See PyprflowInAction.md to get your hands dirty)  First a document is created, then submitted into a previously defined
+ OW.  As different actions are performed (physical review by individuals, an amount of time has passed, a computerized event occurs),the 
+ document is advanced (or retarded) to the  next step(s) in the OW.  In this example, the specific purpose is to produce an "approved" 
+ document.  This may require various changes and re-reviews, all of which are tracked and facilitated by the OW.
  
  ### Do orchestration workflows support multi-directional paths?
  Yes, orchestration workflows support multiple directions and multiple concurrent and parallel paths. 
@@ -26,10 +26,10 @@ document would travel through in it's journey to be 'approved.'  First a documen
 
  ### How are orchestration workflows represented in this tool?
 Workflows are created by submitting a JSON object that represent the structure and rules of the workflow.  Below are the JSON Schema and 
-examples of both a Simple and Complex workflow.  Upon submission workflows are validated.  You can pre-validate by using the 
-API/Workflow/Validate api.  Workflows must have at least one starting  node and at least one ending node.  Path validation is also required, 
-where every node must have at least one entry point and one exit point.  the exceptions are,  starting nodes do not need a explicitly entry 
-paths, and ending nodes do not need to have explicit exit paths.
+examples of both a simple and complex workflow.  Upon submission workflows are validated.  You can pre-validate by using the 
+API/Workflow/Validate api.  Workflows must have at least one starting node and at least one ending node.  Path validation is also required, 
+where every node must have at least one entry point and one exit point.  The exceptions are,  starting nodes do not need a explicit entrance 
+paths, and ending nodes do not need to have explicit exit path.
 
  
 Workflow JSON Schema

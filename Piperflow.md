@@ -1,4 +1,4 @@
-# Piper Flow
+# Pyprflow
 
-Piper flow is a Business Technology solution that enables organizations to model, update, and implement
+Pyprflow is a business technology solution that enables organizations to model, update, and implement
 their businees processes.
