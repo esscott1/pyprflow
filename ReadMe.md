@@ -4,27 +4,27 @@ This API application provides endpoints for creating, managing, and deleting an 
 to be submitted into and managed through the lifecycle of an orchestration workflow.  To access the endpoints you will need to have a 
 HTTP Header key = user-key with a value of "test" in each of your API calls.
 
-###What is an orchestration workflow?
+### What is an orchestration workflow?
 An orchestration workflows is a structured representations of a business processes. it defines a logical flow of activities or tasks from 
 a start event to an end event to accomplish a specific purpose or service.
 
-###What is an example of an orchestration workflow (OW) in action?
+### What is an example of an orchestration workflow (OW) in action?
 One common example is the process of reviewing and approving documents.  In this example the OW defines the logical flow or path a 
 document would travel through in it's journey to be 'approved.'  First a document is created, then submitted into a previously defined
  OW.  As different actions are performed (physical review by individuals; an amount of time has passed, a computerized event occurs),the 
  document is advanced (or retarded) to the  next step(s) in the OW.  In this example the specific purpose is to produce an "approved" 
  document.  this may require various changes and re-reviews, all of which are tracked and facilitated by the OW.
  
- ###Do orchestration workflows support multi-directional paths?
+ ### Do orchestration workflows support multi-directional paths?
  Yes, orchestration workflows support multiple directions and multiple concurrent and parallel paths. 
 
- ###Do orchestration workflows support single dimensional and multi-dimensional workflow paths? 
+ ### Do orchestration workflows support single dimensional and multi-dimensional workflow paths? 
  Yes, the OW engine supports single dimensional and multi-dimensional workflow paths.  Common single dimensional paths are where one task 
  leads to another task and another in a serial mannor.  Multi-dimensional paths commonly are where one completed task can simultaneouly 
  spawn multiple other tasks that are managed in parellel.  Additionally, in the multi-dimensional scenario a task that is yet to be queued 
  may require the completion of multiple unrelated tasks to be complete before that task can be attempted.
 
- ###How are orchestration workflows represented in this tool?
+ ### How are orchestration workflows represented in this tool?
 Workflows are created by submitting a JSON object that represent the structure and rules of the workflow.  Below are the JSON Schema and 
 examples of both a Simple and Complex workflow.  Upon submission workflows are validated.  You can pre-validate by using the 
 API/Workflow/Validate api.  Workflows must have at least one starting  node and at least one ending node.  Path validation is also required, 
