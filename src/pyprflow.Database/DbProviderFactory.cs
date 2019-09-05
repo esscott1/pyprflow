@@ -29,7 +29,7 @@ namespace pyprflow.Database
             { "dockertest" , "Server=172.17.0.2; Database=pyprflowlocaldb;User Id = sa; Password=!!nimda1;" },
             { "mssql", "Server=127.0.0.1; Database=pyprflowlocaldb;User Id = sa; Password=!!nimda1;" },
             { "mssql2017", "Server=127.0.0.1,2250; Database=pyprflowlocaldb;User Id = sa; Password=!!nimda1;" },
-            { "local", "Server=127.0.0.1,2250; Database=pyprflowlocaldb;User Id = sa; Password=!!nimda1;" },
+            { "local", "Server=127.0.0.1\\SQLExpress2017; Database=pyprflowlocaldb;User Id = sa; Password=!!nimda1;" },
             { "sqlite" , "Filename=./Repository.db" }
         };
         internal static string conn = string.Empty;

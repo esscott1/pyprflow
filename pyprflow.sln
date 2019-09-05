@@ -28,6 +28,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pyprflow.Workflow", "src\py
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pyprflow.MetaMatcher", "pyprflow.MetaMatcher\pyprflow.MetaMatcher.csproj", "{D1039F7D-E2C0-4074-A23A-23495FF29E17}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pyprflow.Cli", "src\pyprflow.Cli\pyprflow.Cli.csproj", "{3F8DCB99-E30A-42C5-9E28-9969C0E4CA93}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,6 +56,10 @@ Global
 		{D1039F7D-E2C0-4074-A23A-23495FF29E17}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D1039F7D-E2C0-4074-A23A-23495FF29E17}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D1039F7D-E2C0-4074-A23A-23495FF29E17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F8DCB99-E30A-42C5-9E28-9969C0E4CA93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F8DCB99-E30A-42C5-9E28-9969C0E4CA93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F8DCB99-E30A-42C5-9E28-9969C0E4CA93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F8DCB99-E30A-42C5-9E28-9969C0E4CA93}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -64,5 +70,6 @@ Global
 		{D4531030-743B-4FB3-B2B6-835A63A89040} = {FDD81516-B5F4-4BC4-A0A6-BC81F67982FE}
 		{458DF408-C134-4F99-B08A-0497485E1253} = {FDD81516-B5F4-4BC4-A0A6-BC81F67982FE}
 		{D1039F7D-E2C0-4074-A23A-23495FF29E17} = {FDD81516-B5F4-4BC4-A0A6-BC81F67982FE}
+		{3F8DCB99-E30A-42C5-9E28-9969C0E4CA93} = {FDD81516-B5F4-4BC4-A0A6-BC81F67982FE}
 	EndGlobalSection
 EndGlobal

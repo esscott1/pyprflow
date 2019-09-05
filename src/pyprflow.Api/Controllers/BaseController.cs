@@ -23,7 +23,9 @@ namespace pyprflow.Api.Controllers
 		public IActionResult Index()
 		{
 			var ver = System.Reflection.Assembly.GetEntryAssembly().ImageRuntimeVersion;
-			var msver = Microsoft.Extensions.PlatformAbstractions.PlatformServices.Default.Application.ApplicationVersion;
+            var msver = "Version something";
+            
+			//var msver = Microsoft.Extensions.PlatformAbstractions.PlatformServices.Default.Application.ApplicationVersion;
 			return Json(msver);
 		}
         //[HttpPut("deactivate/{id}")]
