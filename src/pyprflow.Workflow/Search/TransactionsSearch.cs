@@ -13,20 +13,20 @@ namespace pyprflow.Workflow.Search
         {
         }
 
-        public override List<BaseWorkflowItem> Search(SearchRequest request)
-        {
-            List<BaseWorkflowItem> result = new List<BaseWorkflowItem>();
-            if (request.Predicate == null)
-            {
-                result = Repository.GetAll<Transaction>().ToList().Cast<BaseWorkflowItem>().ToList();
-            }
-           var  tmpresult = Repository.Where<Model.Transaction>(request.Predicate);
-            if (tmpresult == null)
-                return result;
-            result = tmpresult.Where(s => s !=null).Cast<BaseWorkflowItem>().ToList();
+        //public override List<BaseWorkflowItem> Search(SearchRequest request)
+        //{
+        //    List<BaseWorkflowItem> result = new List<BaseWorkflowItem>();
+        //    if (request.Predicate == null)
+        //    {
+        //        result = Repository.GetAll<Transaction>().ToList().Cast<BaseWorkflowItem>().ToList();
+        //    }
+        //   var  tmpresult = Repository.Where<Model.Transaction>(request.Predicate);
+        //    if (tmpresult == null)
+        //        return result;
+        //    result = tmpresult.Where(s => s !=null).Cast<BaseWorkflowItem>().ToList();
 
 
-            return result;
-        }
+        //    return result;
+        //}
     }
 }

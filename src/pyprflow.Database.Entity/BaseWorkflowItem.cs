@@ -35,14 +35,22 @@ namespace pyprflow.Database.Entity
         //    return result;
         //}
 
-
+        public object Deserialize(string serializedObject, Type type)
+        {
+            var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto };
+            return JsonConvert.DeserializeObject(serializedObject, type, settings);
+        }
 
         public T Deserialize<T>(string serializedObject)
         {
             var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto };
             return JsonConvert.DeserializeObject<T>(serializedObject, settings);
         }
-
+        public string Serialize(object item, Type type)
+        {
+            var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto };
+            return JsonConvert.SerializeObject(item, type, settings);
+        }
         public string Serialize<T>(T item)
         {
             var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto };

@@ -14,36 +14,36 @@ namespace pyprflow.Workflow.Search
         { 
         }
 
-        public override List<BaseWorkflowItem> Search(SearchRequest request)
-        {
-            List<BaseWorkflowItem> result = new List<BaseWorkflowItem>();
+        //public override List<BaseWorkflowItem> Search(SearchRequest request)
+        //{
+        //    List<BaseWorkflowItem> result = new List<BaseWorkflowItem>();
 
 
-            if (request.Predicate == null)
-            {
-                var t = Repository.GetAll<Trackable>().Select(tr => tr.Name);
-                foreach (string tn in t)
-                {
-                    var trackable = Repository.Find<Trackable>(tn);
-                    // var trackableSearchResult = Augment(trackable, relationships);
-                    var trackableSearchResult = Augment(trackable);
-                    result.Add(trackableSearchResult);
-                }
-            }
-            else
-            {
-                List<Relationship> relationships = Repository.Where(request.Predicate);
-                var uniqueR2 = relationships.Where(u => u.TrackableName != null).Select(x => x.TrackableName).Distinct().ToList();
-                foreach (string tn in uniqueR2)
-                {
-                    var trackable = Repository.Find<Trackable>(tn);
-                    // var trackableSearchResult = Augment(trackable, relationships);
-                    var trackableSearchResult = Augment(trackable);
-                    result.Add(trackableSearchResult);
-                }
-            }
-            return result;
-        }
+        //    if (request.Predicate == null)
+        //    {
+        //        var t = Repository.GetAll<Trackable>().Select(tr => tr.Name);
+        //        foreach (string tn in t)
+        //        {
+        //            var trackable = Repository.Find<Trackable>(tn);
+        //            // var trackableSearchResult = Augment(trackable, relationships);
+        //            var trackableSearchResult = Augment(trackable);
+        //            result.Add(trackableSearchResult);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        List<Relationship> relationships = Repository.Where(request.Predicate);
+        //        var uniqueR2 = relationships.Where(u => u.TrackableName != null).Select(x => x.TrackableName).Distinct().ToList();
+        //        foreach (string tn in uniqueR2)
+        //        {
+        //            var trackable = Repository.Find<Trackable>(tn);
+        //            // var trackableSearchResult = Augment(trackable, relationships);
+        //            var trackableSearchResult = Augment(trackable);
+        //            result.Add(trackableSearchResult);
+        //        }
+        //    }
+        //    return result;
+        //}
 
         private TrackableSearchResult Augment(Trackable trackable)
         {

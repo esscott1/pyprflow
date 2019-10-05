@@ -137,8 +137,21 @@ namespace pyprflow.Workflow.Model
             }
             return result;
         }
-      
-	    public T Find<T>(string workflowName) where T : BaseWorkflowItem
+
+        public BaseWorkflowItem Find<T>(string workflowName, Type returnType)  
+        {
+            var result = FindDBItem(workflowName, returnType,false);
+            if (result == null)
+                return null;
+            // return result ;
+            if (returnType.ToString() != result.DerivedType)
+                throw new WorkFlowException("type of object returned does not match type requested");
+            return result.Deserialize(result.SerializedObject, returnType) as BaseWorkflowItem;
+          //  return result.Deserialize<T>(result.SerializedObject);
+
+        }
+
+        public T Find<T>(string workflowName) where T : BaseWorkflowItem
         {
             var result = FindDBItem<T>(workflowName, false);
             if (result == null)
@@ -195,14 +208,42 @@ namespace pyprflow.Workflow.Model
             }
 		    }
         #endregion
-      
+        public List<BaseWorkflowItem> Where<T>(System.Linq.Expressions.Expression<Func<pyprflow.Database.Entity.Relationship, bool>> predicate, Type returnType) where T : BaseWorkflowItem
+        {
+            var rel = Where(predicate);  // query the Relationship table
+            if (rel.Count == 0)
+                return null;// GetAll<T>().ToList();
+            List<BaseWorkflowItem> result = new List<BaseWorkflowItem>();
+            switch (returnType.ToString().ToLower()) // get the object by name, take the first out of the relationship table 
+                                                    //  query the relationship table just to get the name of the object i'm looking for.
+                                                   // ToDo: deserialize to the correct type instead of T
+            {
+                case "pyprflow.workflow.model.workflow":
+                    foreach (Relationship r in rel.GroupBy(o => o.WorkflowName).Select(g => g.First()))
+                        result.Add(this.Find<T>(r.WorkflowName, returnType));
+                    break;
+                case "pyprflow.workflow.model.trackable":
+                    foreach (Relationship r in rel.GroupBy(o => o.TrackableName).Select(g => g.First()))
+                        result.Add(this.Find<T>(r.TrackableName, returnType));
+                    break;
+                case "pyprflow.workflow.model.transaction":
+                    foreach (Relationship r in rel.GroupBy(o => o.TransactionName).Select(g => g.First()))
+                        result.Add(this.Find<T>(r.TransactionName, returnType));
+                    break;
+                
+            }
+            return result;
+
+        }
+
         public List<T> Where<T>(System.Linq.Expressions.Expression<Func<pyprflow.Database.Entity.Relationship, bool>> predicate) where T :BaseWorkflowItem
         {
-            var rel = Where(predicate);
+            var rel = Where(predicate);  // query the Relationship table
             if (rel.Count == 0)
                 return null;// GetAll<T>().ToList();
             List<T> result = new List<T>();
-            switch(typeof(T).ToString().ToLower())
+            switch(typeof(T).ToString().ToLower()) // get the object by name, take the first out of the relationship table 
+                //  query the relationship table just to get the name of the object i'm looking for.
             {
                 case "pyprflow.workflow.model.workflow":
                     foreach (Relationship r in rel.GroupBy(o => o.WorkflowName).Select(g => g.First()))
@@ -215,6 +256,18 @@ namespace pyprflow.Workflow.Model
                 case "pyprflow.workflow.model.transaction":
                     foreach (Relationship r in rel.GroupBy(o => o.TransactionName).Select(g => g.First()))
                         result.Add(this.Find<T>(r.TransactionName));
+                    break;
+                default:
+                    foreach (Relationship r in rel.GroupBy(o => o.WorkflowName).Select(g => g.First()))
+                        if (!String.IsNullOrEmpty(r.WorkflowName))
+                            result.Add(this.Find<T>(r.WorkflowName));
+                    foreach (Relationship r in rel.GroupBy(o => o.TrackableName).Select(g => g.First()))
+                        if (!String.IsNullOrEmpty(r.TrackableName))
+                            result.Add(this.Find<T>(r.TrackableName));
+                    foreach (Relationship r in rel.GroupBy(o => o.TransactionName).Select(g => g.First()))
+                        if (!String.IsNullOrEmpty(r.TransactionName))
+                            result.Add(this.Find<T>(r.TransactionName));
+
                     break;
 
             }
@@ -294,6 +347,37 @@ namespace pyprflow.Workflow.Model
                 catch (Exception ex)
                 {
                     Console.WriteLine("looking for type {0} with ID {1}", typeof(T).ToString(), workflowItemName);
+                    return null;
+                    //   throw new WorkFlowException(String.Format("null was returned when finding for key {0}", workflowItemName));
+                }
+            }
+        }
+
+        private pyprflow.Database.Entity.BaseWorkflowItem FindDBItem(string workflowItemName, Type returnType, bool deleted)  
+        {
+            using (var db = new ApiContext(_options))
+            {
+                try
+                {
+                    Console.WriteLine("searching for item {0} with Id {1}", returnType, workflowItemName);
+
+                    //  BaseWorkflowItem result = db.WorkflowDb.Find(new object[] { workflowName, typeof(T).ToString() });
+                    pyprflow.Database.Entity.BaseWorkflowItem result
+                        = db.WorkflowDb.Find(new object[] { workflowItemName, returnType.ToString() });
+
+                    if (result.Deleted != deleted)
+                        result = null; // hack hack hack.. 
+
+                    if (result == null)
+                    {
+                        Console.WriteLine("looking for type {0} with ID {1}", typeof(BaseWorkflowItem).ToString(), workflowItemName);
+                        throw new WorkFlowException(String.Format("null was returned when finding for key {0}", workflowItemName));
+                    }
+                    return result;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("looking for type {0} with ID {1}", typeof(BaseWorkflowItem).ToString(), workflowItemName);
                     return null;
                     //   throw new WorkFlowException(String.Format("null was returned when finding for key {0}", workflowItemName));
                 }

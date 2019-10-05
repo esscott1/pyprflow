@@ -47,6 +47,31 @@ namespace pyprflow.Workflow.Search
 
     public class SearchRequest
     {
+        public Type GetReturnType() {
+            Type result;
+            switch(_entityType){
+                case Search.EntityType.trackables:
+                    result = Type.GetType("pyprflow.Workflow.Model.Trackable, pyprflow.Workflow");
+                    break;
+                case Search.EntityType.trackablesenh:
+                    result = Type.GetType("pyprflow.Workflow.Model.Trackable, pyprflow.Workflow");
+                    break;
+                case Search.EntityType.transactions:
+                    result = Type.GetType("pyprflow.Workflow.Model.Transaction, pyprflow.Workflow");
+                    break;
+                case Search.EntityType.workflows:
+                    result = Type.GetType("pyprflow.Workflow.Model.Workflow, pyprflow.Workflow");
+                    break;
+                default:
+                    result = Type.GetType("pyprflow.Workflow.Model.BaseWorkflowItem, pyprflow.Workflow");
+                    break;
+
+            }
+            return result;
+            //return Type.GetType("pyprflow.Workflow.Model.Trackable, pyprflow.Workflow");
+        }
+
+        internal EntityType _entityType { get; private set; }
         public static Database.Entity.TransactionType type;// = default(Database.Entity.TransactionType);
         internal static Dictionary<string, Expression<Func<Database.Entity.Relationship, bool>>> _ClauseStrategy =
            new Dictionary<string, Expression<Func<Database.Entity.Relationship, bool>>>()
@@ -70,6 +95,7 @@ namespace pyprflow.Workflow.Search
 
         public SearchRequest(SearchRequestParameters searchRequestParameters, EntityType entityType)
         {
+            _entityType = entityType;
             EntityType = entityType.ToString();
             string sIsActive = searchRequestParameters.isActive.ToString();
             if(sIsActive == "true" || sIsActive=="false")

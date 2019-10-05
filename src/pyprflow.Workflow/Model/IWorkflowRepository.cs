@@ -23,6 +23,7 @@ namespace pyprflow.Workflow.Model
         //List<Relationship> Where(System.Linq.Expressions.Expression<Func<Relationship, bool>> predicate);
         List<Relationship> Where(System.Linq.Expressions.Expression<Func<pyprflow.Database.Entity.Relationship, bool>> predicate);
         List<T> Where<T>(System.Linq.Expressions.Expression<Func<pyprflow.Database.Entity.Relationship, bool>> predicate) where T : BaseWorkflowItem;
+        List<BaseWorkflowItem> Where<T>(System.Linq.Expressions.Expression<Func<pyprflow.Database.Entity.Relationship, bool>> predicate, Type returnType) where T : BaseWorkflowItem;
         bool CheckValidUserKey(string stringValues);
         bool Execute(Transaction trans, out int statusCode, out string msg);
         
