@@ -21,13 +21,6 @@ namespace pyprflow.Workflow.Search
 
 		}
 
-        //public virtual List<BaseWorkflowItem> Search(SearchRequest request)
-        //{
-        //    //if(request.EntityType == "workflows")
-        //    SearchEngineContext context = new SearchEngineContext(Repository);
-        //    return context.Search(request);
-          
-        //}
         public List<BaseWorkflowItem> Search(SearchRequest request)
         {
             List<BaseWorkflowItem> result = new List<BaseWorkflowItem>();

@@ -12,10 +12,10 @@ namespace pyprflow.Workflow.Search
         public SearchEngineContext(IWorkflowRepository repository)
         {
             _strategies = new Dictionary<string, ISearchEngine>();
-            _strategies.Add("workflows", new WorkflowsSearch(repository));
-            _strategies.Add("trackables", new TrackablesSearch(repository));
-            _strategies.Add("transactions", new TransactionsSearch(repository));
-            _strategies.Add("trackablesenh", new TrackablesEnhSearch(repository));
+            _strategies.Add("workflows", new SearchEngine(repository));
+            _strategies.Add("trackables", new SearchEngine(repository));
+            _strategies.Add("transactions", new SearchEngine(repository));
+           // _strategies.Add("trackablesenh", new TrackablesEnhSearch(repository));
         }
         public List<BaseWorkflowItem> Search(SearchRequest request)
         {
