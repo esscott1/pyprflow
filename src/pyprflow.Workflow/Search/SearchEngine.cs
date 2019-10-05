@@ -26,11 +26,9 @@ namespace pyprflow.Workflow.Search
             List<BaseWorkflowItem> result = new List<BaseWorkflowItem>();
             if (request.Predicate == null)
             {
-                // result = Repository.GetAll<Model.Workflow>().ToList().Cast<BaseWorkflowItem>().ToList();
                 result = Repository.GetAll<Model.BaseWorkflowItem>().ToList().Cast<BaseWorkflowItem>().ToList();
                 return result;
             }
-            // var tmpresult = Repository.Where<Model.Workflow>(request.Predicate);
             var tmpresult = Repository.Where<Model.BaseWorkflowItem>(request.Predicate, request.GetReturnType());
             if (tmpresult == null)
                 return null;
