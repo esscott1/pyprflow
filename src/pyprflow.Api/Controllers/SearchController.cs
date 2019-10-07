@@ -90,6 +90,9 @@ namespace pyprflow.Api.Controllers
             SearchRequest request2 = new SearchRequest(srp, entityType);
             SearchEngineContext se1 = new SearchEngineContext(Repository);
             result = se1.Search(request2);
+            if (result == null) {
+                return Json(String.Empty);
+            }
             if (result.Count() == 1)
                 return Json(result.First());
             return Json(result);
