@@ -1,0 +1,8 @@
+Google cloud setup docker image with kubenetes
+
+1. set your project variable in gcloud cli < gcloud config set project = {project id}  >
+submit your source code with Docker file to gCloud repository.  this builds the docker image for you that you will later deploy to the kubenetes cluster.  < gcloud builds submit --tag grc.io/{project ID}/{name you want}:{tag for versioniong} {location of Docker and source files which can be a gz file}  see: C:\src\pyprflow\gDocker for an example
+create a Kubenetes cluster {us control panel or command line<gcloud container clusters create [CLUSTER-NAME]>}
+get the kubenetes credentials < gcloud container clusters get-credentials {name of cluster} --zone={if you set default via <gcloud config set compute/zone us-central1-a>}  --project{if you did not set default via <gcloud config set project [projectID] }>
+deploy the docker image in your cluster:  <kubectl create deployment echo-web --image=gcr.io/{Project ID}/{name}:{tag} 
+expose the docker image kubectl expose deployment {name of deployment} --type LoadBalancer --port 80 --target-port {whatever the docker container exposes}
