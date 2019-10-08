@@ -9,7 +9,7 @@ namespace pyprflow.Workflow.Model
 {
     public class Relationship : BaseItem
     {
-		[Key]
+		
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public int RelationshipId { get; set; }
 		public string TransactionName { get; set; }

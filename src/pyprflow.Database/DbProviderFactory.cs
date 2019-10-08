@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MySql.Data.EntityFrameworkCore.Extensions;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Design;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +23,10 @@ namespace pyprflow.Database
              { "mssql2017", o => o.UseSqlServer(conn, m => m.MigrationsAssembly("pyprflow")) },
              { "local", o => o.UseSqlServer(conn, m => m.MigrationsAssembly("pyprflow")) },
              { "mssql", o => o.UseSqlServer(conn, m => m.MigrationsAssembly("pyprflow")) },
+             { "mysql", o => o.UseMySQL(conn, m => m.MigrationsAssembly("pyprflow")) },
+             { "postgres", o => o.UseNpgsql(conn, m => m.MigrationsAssembly("pyprflow"))
+                
+              },
              {"sqlite", o => o.UseSqlite(conn, m => { m.SuppressForeignKeyEnforcement(); m.MigrationsAssembly("pyprflow"); }) }
 
            };
@@ -31,7 +37,9 @@ namespace pyprflow.Database
             { "mssql2017", "Server=127.0.0.1,2250; Database=pyprflowlocaldb;User Id = sa; Password=!!nimda1;" },
             { "local", "Server=127.0.0.1\\SQLEXPRESS2017; Database=pyprflowlocaldb;User Id = sa; Password=!!nimda1;" },
        //       { "local", "Server=127.0.0.1; Database=pyprflowlocaldb;User Id = sa; Password=!!nimda1;" },
-            { "sqlite" , "Filename=./Repository.db" }
+            { "sqlite" , "Filename=./Repository.db" },
+            {"mysql", "Server=35.232.78.33;Database=pyprflowlocaldb;uid=root;pwd=!!nimda!!1" },
+            {"postgres", "Server=35.225.105.221;Database=pyprflowlocaldb;userId=postgres;Password=!!nimda!!1" }
         };
         internal static string conn = string.Empty;
       

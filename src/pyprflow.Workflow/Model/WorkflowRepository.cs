@@ -487,6 +487,12 @@ namespace pyprflow.Workflow.Model
                         db.Database.ExecuteSqlCommand("delete from workflowDb");
                         db.Database.ExecuteSqlCommand("vacuum");
                     }
+                    if (db.Database.GetDbConnection().GetType().Name == "NpgsqlConnection")
+                    {
+                        db.Database.ExecuteSqlCommand("delete from public.\"Relationships\"");
+                        db.Database.ExecuteSqlCommand("Delete FROM public.\"WorkflowDb\"");
+                      
+                    }
                     else
                     {
                         db.Database.ExecuteSqlCommand("truncate table Relationships");

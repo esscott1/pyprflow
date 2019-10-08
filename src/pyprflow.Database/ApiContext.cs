@@ -6,7 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using System.Linq;
 using pyprflow.Database.Entity;
-
+using Npgsql.EntityFrameworkCore.PostgreSQL.Storage;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace pyprflow.Database
 {
@@ -25,11 +26,22 @@ namespace pyprflow.Database
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+        //    modelBuilder.ForNpgsqlUseSerialColumns();
             modelBuilder.Entity<BaseWorkflowItem>()
                 .HasKey(w => new { w.Name, w.DerivedType });
 
-            modelBuilder.Entity<Relationship>()
-                .HasKey(r => new { r.RelationshipId });
+        
+
+            modelBuilder.Entity<Relationship>().Property(r => r.RelationshipId)
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
+                .ValueGeneratedOnAdd();
+            //.has
+            //.HasKey(r => new { r.RelationshipId })
+            
+            
+
+            modelBuilder.ForNpgsqlUseIdentityColumns();
 
             
         }

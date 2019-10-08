@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace pyprflow.Api.Migrations
 {
@@ -29,7 +30,8 @@ namespace pyprflow.Api.Migrations
                 columns: table => new
                 {
                     RelationshipId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn)
+                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Active = table.Column<bool>(nullable: false),
                     AssignedTo = table.Column<string>(nullable: true),
                     Comment = table.Column<string>(nullable: true),

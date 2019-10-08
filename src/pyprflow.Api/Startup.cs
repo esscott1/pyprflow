@@ -44,7 +44,8 @@ namespace pyprflow.Api
             Console.WriteLine("pfdatabasetype ENV var is: " + dbtype);
             Console.WriteLine("is dbtype null? : "+ String.IsNullOrWhiteSpace(dbtype));
             if (string.IsNullOrWhiteSpace(dbtype))
-                dbtype = "local";
+                 dbtype = "local";
+          //  dbtype = "postgres";
             pyprflow.Database.IDbProvider Iconn = new pyprflow.Database.DbProviderFactory().Create(dbtype);
           
             Console.WriteLine("connection string used is: "+ Iconn.ConnectionString);

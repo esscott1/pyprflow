@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using pyprflow.Database;
 using pyprflow.Database.Entity;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace pyprflow.Api.Migrations
 {
@@ -13,9 +14,11 @@ namespace pyprflow.Api.Migrations
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
+            modelBuilder.ForNpgsqlUseIdentityColumns();
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn)
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
 
             modelBuilder.Entity("pyprflow.Database.Entity.BaseWorkflowItem", b =>
                 {

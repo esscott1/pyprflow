@@ -54,4 +54,8 @@
     <ProjectReference Include="..\pyprflow.Workflow\pyprflow.Workflow.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>
