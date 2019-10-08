@@ -11,7 +11,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 //using pyprflow.Db;
 using pyprflow.Database;
-using pyprflow.Database.Entity;
+using pyprflow.DbEntity;
 
 namespace pyprflow.Workflow.Model
 {
@@ -37,7 +37,7 @@ namespace pyprflow.Workflow.Model
                     //Console.WriteLine("saving {0} with type {1}", item.Name, item.DerivedType);
                     Helpers.ObjectConverter converter = new Helpers.ObjectConverter();
                     BaseWorkflowItem saveThis = converter.GetBase<T>(item);
-                    pyprflow.Database.Entity.BaseDbWorkFlowItem dbSaveThis =
+                    pyprflow.DbEntity.BaseDbWorkFlowItem dbSaveThis =
                         new Helpers.ObjectConverter().Map(saveThis);
                         
                     db.WorkflowDb.Add(dbSaveThis);
@@ -72,7 +72,7 @@ namespace pyprflow.Workflow.Model
                     Helpers.ObjectConverter converter = new Helpers.ObjectConverter();
                     BaseWorkflowItem updateThis = converter.GetBase<T>(item);
 
-                    pyprflow.Database.Entity.BaseDbWorkFlowItem dbUpdateThis =
+                    pyprflow.DbEntity.BaseDbWorkFlowItem dbUpdateThis =
                         new Helpers.ObjectConverter().Map(updateThis);
                             
                             
@@ -190,7 +190,7 @@ namespace pyprflow.Workflow.Model
                         delete.Name = workflowItemId;
                         delete.DerivedType = typeof(T).ToString();
 
-                        pyprflow.Database.Entity.BaseDbWorkFlowItem dbDelete =
+                        pyprflow.DbEntity.BaseDbWorkFlowItem dbDelete =
                             new Helpers.ObjectConverter().Map(delete);
 
                         db.WorkflowDb.Remove(dbDelete);
@@ -208,7 +208,7 @@ namespace pyprflow.Workflow.Model
             }
 		    }
         #endregion
-        public List<BaseWorkflowItem> Where<T>(System.Linq.Expressions.Expression<Func<pyprflow.Database.Entity.Relationship, bool>> predicate, Type returnType) where T : BaseWorkflowItem
+        public List<BaseWorkflowItem> Where<T>(System.Linq.Expressions.Expression<Func<pyprflow.DbEntity.Relationship, bool>> predicate, Type returnType) where T : BaseWorkflowItem
         {
             var rel = Where(predicate);  // query the Relationship table
             if (rel.Count == 0)
@@ -236,7 +236,7 @@ namespace pyprflow.Workflow.Model
 
         }
 
-        public List<T> Where<T>(System.Linq.Expressions.Expression<Func<pyprflow.Database.Entity.Relationship, bool>> predicate) where T :BaseWorkflowItem
+        public List<T> Where<T>(System.Linq.Expressions.Expression<Func<pyprflow.DbEntity.Relationship, bool>> predicate) where T :BaseWorkflowItem
         {
             var rel = Where(predicate);  // query the Relationship table
             if (rel.Count == 0)
@@ -277,11 +277,11 @@ namespace pyprflow.Workflow.Model
 
         }
 
-        public List<Relationship> Where(System.Linq.Expressions.Expression<Func<pyprflow.Database.Entity.Relationship, bool>> predicate)
+        public List<Relationship> Where(System.Linq.Expressions.Expression<Func<pyprflow.DbEntity.Relationship, bool>> predicate)
         {
             using (var db = new ApiContext(_options))
             {
-                List<pyprflow.Database.Entity.Relationship> dbList = db.Relationships.Where(predicate.Compile()).ToList();
+                List<pyprflow.DbEntity.Relationship> dbList = db.Relationships.Where(predicate.Compile()).ToList();
                 return new Helpers.ObjectConverter().Map(dbList);
             }
         }
@@ -291,7 +291,7 @@ namespace pyprflow.Workflow.Model
             return trans.Execute(this, out statusCode, out msg);
             //return true;
         }
-        //      public List<Relationship> GetAll(System.Linq.Expressions.Expression<Func<pyprflow.Database.Entity.Relationship, bool>> predicate)
+        //      public List<Relationship> GetAll(System.Linq.Expressions.Expression<Func<pyprflow.DbEntity.Relationship, bool>> predicate)
         //{
         //	using (var db = new ApiContext(_options))
         //	{
@@ -310,7 +310,7 @@ namespace pyprflow.Workflow.Model
         private void AddTransaction<T>(T item) where T : BaseWorkflowItem
         {
             Helpers.ObjectConverter converter = new Helpers.ObjectConverter();
-            pyprflow.Database.Entity.Relationship r = new Database.Entity.Relationship();
+            pyprflow.DbEntity.Relationship r = new DbEntity.Relationship();
             using (var db = new ApiContext(_options))
             {
                 if (item is Workflow)
@@ -322,7 +322,7 @@ namespace pyprflow.Workflow.Model
             }
         }
 
-        private pyprflow.Database.Entity.BaseDbWorkFlowItem FindDBItem<T>(string workflowItemName, bool deleted) where T : BaseWorkflowItem
+        private pyprflow.DbEntity.BaseDbWorkFlowItem FindDBItem<T>(string workflowItemName, bool deleted) where T : BaseWorkflowItem
         {
             using (var db = new ApiContext(_options))
             {
@@ -331,7 +331,7 @@ namespace pyprflow.Workflow.Model
                     Console.WriteLine("searching for item {0} with Id {1}", typeof(T).ToString(), workflowItemName);
 
                     //  BaseWorkflowItem result = db.WorkflowDb.Find(new object[] { workflowName, typeof(T).ToString() });
-                    pyprflow.Database.Entity.BaseDbWorkFlowItem result
+                    pyprflow.DbEntity.BaseDbWorkFlowItem result
                         = db.WorkflowDb.Find(new object[] { workflowItemName, typeof(T).ToString() });
 
                     if (result.Deleted != deleted)
@@ -353,7 +353,7 @@ namespace pyprflow.Workflow.Model
             }
         }
 
-        private pyprflow.Database.Entity.BaseDbWorkFlowItem FindDBItem(string workflowItemName, Type returnType, bool deleted)  
+        private pyprflow.DbEntity.BaseDbWorkFlowItem FindDBItem(string workflowItemName, Type returnType, bool deleted)  
         {
             using (var db = new ApiContext(_options))
             {
@@ -362,7 +362,7 @@ namespace pyprflow.Workflow.Model
                     Console.WriteLine("searching for item {0} with Id {1}", returnType, workflowItemName);
 
                     //  BaseWorkflowItem result = db.WorkflowDb.Find(new object[] { workflowName, typeof(T).ToString() });
-                    pyprflow.Database.Entity.BaseDbWorkFlowItem result
+                    pyprflow.DbEntity.BaseDbWorkFlowItem result
                         = db.WorkflowDb.Find(new object[] { workflowItemName, returnType.ToString() });
 
                     if (result.Deleted != deleted)
@@ -416,7 +416,7 @@ namespace pyprflow.Workflow.Model
 			{
                 Console.WriteLine("looking for old relationships");
                
-                List<pyprflow.Database.Entity.Relationship> oldr = 
+                List<pyprflow.DbEntity.Relationship> oldr = 
                     db.Relationships.Where(o => o.TrackableName == r.TrackableName
                     && o.WorkflowName == r.WorkflowName
                     && o.NodeName == r.CurrentNodeId).ToList();
@@ -428,7 +428,7 @@ namespace pyprflow.Workflow.Model
                     return;// null;
                 }
                 Console.WriteLine("found {0} relationships", oldr.Count);
-                foreach (pyprflow.Database.Entity.Relationship relationship in oldr)
+                foreach (pyprflow.DbEntity.Relationship relationship in oldr)
                 {
                     relationship.Active = false;
                     DeactivateWorkflowItem<Transaction>(relationship.TransactionName);
@@ -455,7 +455,7 @@ namespace pyprflow.Workflow.Model
             {
                 try
                 {
-                    pyprflow.Database.Entity.Relationship dbR =
+                    pyprflow.DbEntity.Relationship dbR =
                         new Helpers.ObjectConverter().Map(r);
 
                     db.Relationships.Add(dbR);

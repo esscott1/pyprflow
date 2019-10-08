@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 //using Portal.Core;
 using System.Threading.Tasks;
 using System.Linq;
-using pyprflow.Database.Entity;
+using pyprflow.DbEntity;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Storage;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 

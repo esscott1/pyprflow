@@ -1,4 +1,4 @@
-﻿namespace pyprflow.Database.Entity
+﻿namespace pyprflow.DbEntity
 {
     public enum TransactionType
     {

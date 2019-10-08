@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using pyprflow.Database;
-using pyprflow.Database.Entity;
+using pyprflow.DbEntity;
 
 namespace pyprflow.Api.Migrations
 {
@@ -18,7 +18,7 @@ namespace pyprflow.Api.Migrations
                 .HasAnnotation("ProductVersion", "1.1.2")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("pyprflow.Database.Entity.BaseWorkflowItem", b =>
+            modelBuilder.Entity("pyprflow.DbEntity.BaseWorkflowItem", b =>
                 {
                     b.Property<string>("Name");
 
@@ -35,7 +35,7 @@ namespace pyprflow.Api.Migrations
                     b.ToTable("WorkflowDb");
                 });
 
-            modelBuilder.Entity("pyprflow.Database.Entity.Relationship", b =>
+            modelBuilder.Entity("pyprflow.DbEntity.Relationship", b =>
                 {
                     b.Property<int>("RelationshipId")
                         .ValueGeneratedOnAdd();

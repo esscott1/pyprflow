@@ -49,7 +49,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\pyprflow.Database.Entity\pyprflow.Database.Entity.csproj" />
+    <ProjectReference Include="..\pyprflow.Database.Entity\pyprflow.DbEntity.csproj" />
     <ProjectReference Include="..\pyprflow.Database\pyprflow.Database.csproj" />
     <ProjectReference Include="..\pyprflow.Workflow\pyprflow.Workflow.csproj" />
   </ItemGroup>

@@ -40,7 +40,7 @@ namespace pyprflow.Workflow.Search
              { "etest", string.Empty }
         };
 
-        public Database.Entity.TransactionType transactiontype { get; set; }
+        public pyprflow.DbEntity.TransactionType transactiontype { get; set; }
         public IsActive isActive { get; set; }
     }
    
@@ -72,9 +72,9 @@ namespace pyprflow.Workflow.Search
         }
 
         internal EntityType _entityType { get; private set; }
-        public static Database.Entity.TransactionType type;// = default(Database.Entity.TransactionType);
-        internal static Dictionary<string, Expression<Func<Database.Entity.Relationship, bool>>> _ClauseStrategy =
-           new Dictionary<string, Expression<Func<Database.Entity.Relationship, bool>>>()
+        public static DbEntity.TransactionType type;// = default(Database.Entity.TransactionType);
+        internal static Dictionary<string, Expression<Func<DbEntity.Relationship, bool>>> _ClauseStrategy =
+           new Dictionary<string, Expression<Func<DbEntity.Relationship, bool>>>()
            {
               //  { "etest",  i => i.NodeName == _searchRequestParameters["nodeid"]},
               //{ "entitytype", i => i.NodeName == _searchRequestParameters["nodeid"] },
@@ -91,7 +91,7 @@ namespace pyprflow.Workflow.Search
      
 
         internal string EntityType { get; set; }
-        internal System.Linq.Expressions.Expression<Func<pyprflow.Database.Entity.Relationship, bool>> Predicate { get; set; }
+        internal System.Linq.Expressions.Expression<Func<pyprflow.DbEntity.Relationship, bool>> Predicate { get; set; }
 
         public SearchRequest(SearchRequestParameters searchRequestParameters, EntityType entityType)
         {
@@ -100,7 +100,7 @@ namespace pyprflow.Workflow.Search
             string sIsActive = searchRequestParameters.isActive.ToString();
             if(sIsActive == "true" || sIsActive=="false")
                 searchRequestParameters.Parameters.Add("isactive" ,sIsActive);
-            if (searchRequestParameters.transactiontype != Database.Entity.TransactionType.none)
+            if (searchRequestParameters.transactiontype != DbEntity.TransactionType.none)
             {
                 searchRequestParameters.Parameters.Add("transactiontype", searchRequestParameters.transactiontype.ToString());
                 type = searchRequestParameters.transactiontype;
@@ -113,7 +113,7 @@ namespace pyprflow.Workflow.Search
 
         private void eBuildPredictate2()
         {
-            var predicate = PredicateBuilder.True<pyprflow.Database.Entity.Relationship>();
+            var predicate = PredicateBuilder.True<pyprflow.DbEntity.Relationship>();
             foreach (var kvp in _searchRequestParameters)
             {
                 if (kvp.Value != string.Empty)

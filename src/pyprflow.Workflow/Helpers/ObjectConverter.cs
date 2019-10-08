@@ -23,10 +23,10 @@ namespace pyprflow.Workflow.Helpers
             return result;
         }
 
-        internal pyprflow.Database.Entity.BaseDbWorkFlowItem Map(pyprflow.Workflow.Model.BaseWorkflowItem item)
+        internal pyprflow.DbEntity.BaseDbWorkFlowItem Map(pyprflow.Workflow.Model.BaseWorkflowItem item)
         {
-            pyprflow.Database.Entity.BaseDbWorkFlowItem result =
-                new pyprflow.Database.Entity.BaseDbWorkFlowItem();
+            pyprflow.DbEntity.BaseDbWorkFlowItem result =
+                new pyprflow.DbEntity.BaseDbWorkFlowItem();
             result.Active = item.Active;
             result.Deleted = item.Deleted;
             result.DerivedType = item.DerivedType;
@@ -35,7 +35,7 @@ namespace pyprflow.Workflow.Helpers
             return result;
         }
 
-        internal pyprflow.Workflow.Model.BaseWorkflowItem Map(pyprflow.Database.Entity.BaseDbWorkFlowItem item)
+        internal pyprflow.Workflow.Model.BaseWorkflowItem Map(pyprflow.DbEntity.BaseDbWorkFlowItem item)
         {
             pyprflow.Workflow.Model.BaseWorkflowItem result =
                 new pyprflow.Workflow.Model.BaseWorkflowItem();
@@ -47,10 +47,10 @@ namespace pyprflow.Workflow.Helpers
             return result;
         }
 
-        internal pyprflow.Database.Entity.Relationship Map(pyprflow.Workflow.Model.Relationship item)
+        internal pyprflow.DbEntity.Relationship Map(pyprflow.Workflow.Model.Relationship item)
         {
-            pyprflow.Database.Entity.Relationship result =
-                new Database.Entity.Relationship();
+            pyprflow.DbEntity.Relationship result =
+                new DbEntity.Relationship();
             result.Active = item.Active;
             result.Deleted = item.Deleted;
             result.AssignedTo = item.AssignedTo;
@@ -63,13 +63,13 @@ namespace pyprflow.Workflow.Helpers
             result.TransactionName = item.TransactionName;
             result.Comment = item.Comment;
             int iType = (int)item.Type;
-            result.Type = (pyprflow.Database.Entity.TransactionType)iType;
+            result.Type = (pyprflow.DbEntity.TransactionType)iType;
            
             result.WorkflowName = item.WorkflowName;
             return result;
 
         }
-        internal pyprflow.Workflow.Model.Relationship Map(pyprflow.Database.Entity.Relationship item)
+        internal pyprflow.Workflow.Model.Relationship Map(pyprflow.DbEntity.Relationship item)
         {
             pyprflow.Workflow.Model.Relationship result =
                 new pyprflow.Workflow.Model.Relationship();
@@ -124,27 +124,27 @@ namespace pyprflow.Workflow.Helpers
             return r;
         }
 
-        internal pyprflow.Database.Entity.Relationship Create(Trackable trackable)
+        internal pyprflow.DbEntity.Relationship Create(Trackable trackable)
         {
-            pyprflow.Database.Entity.Relationship r = new pyprflow.Database.Entity.Relationship(
-                  pyprflow.Database.Entity.TransactionType.add);
+            pyprflow.DbEntity.Relationship r = new pyprflow.DbEntity.Relationship(
+                  pyprflow.DbEntity.TransactionType.add);
             r.TrackableName = trackable.Name;
             return r;
 
         }
-        internal pyprflow.Database.Entity.Relationship Create(Model.Workflow workflow)
+        internal pyprflow.DbEntity.Relationship Create(Model.Workflow workflow)
         {
-            pyprflow.Database.Entity.Relationship r = new pyprflow.Database.Entity.Relationship(
-                pyprflow.Database.Entity.TransactionType.add);
+            pyprflow.DbEntity.Relationship r = new pyprflow.DbEntity.Relationship(
+                pyprflow.DbEntity.TransactionType.add);
             r.WorkflowName = workflow.Name;
             return r;
 
         }
 
-        internal List<pyprflow.Workflow.Model.Relationship> Map(List<pyprflow.Database.Entity.Relationship> items)
+        internal List<pyprflow.Workflow.Model.Relationship> Map(List<pyprflow.DbEntity.Relationship> items)
         {
             List<pyprflow.Workflow.Model.Relationship> result = new List<Relationship>();
-            foreach (pyprflow.Database.Entity.Relationship item in items)
+            foreach (pyprflow.DbEntity.Relationship item in items)
             {
                 result.Add(Map(item));
             }

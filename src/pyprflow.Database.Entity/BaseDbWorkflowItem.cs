@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace pyprflow.Database.Entity
+namespace pyprflow.DbEntity
 {
     public abstract class BaseDbItem
     {

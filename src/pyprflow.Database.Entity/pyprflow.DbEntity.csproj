@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
+    <RootNamespace>pyprflow.DbEntity</RootNamespace>
+    <AssemblyName>pyprflow.DbEntity</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

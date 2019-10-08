@@ -14,11 +14,10 @@
     <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.17" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.2.4" />
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\pyprflow.Database.Entity\pyprflow.Database.Entity.csproj" />
-  </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="1.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\pyprflow.Database.Entity\pyprflow.DbEntity.csproj" />
   </ItemGroup>
 </Project>
