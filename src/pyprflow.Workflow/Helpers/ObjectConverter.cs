@@ -63,7 +63,7 @@ namespace pyprflow.Workflow.Helpers
             result.TransactionName = item.TransactionName;
             result.Comment = item.Comment;
             int iType = (int)item.Type;
-            result.Type = (pyprflow.DbEntity.TransactionType)iType;
+            result.Type = (pyprflow.Workflow.Model.TransactionType)iType;
            
             result.WorkflowName = item.WorkflowName;
             return result;
@@ -127,7 +127,7 @@ namespace pyprflow.Workflow.Helpers
         internal pyprflow.DbEntity.Relationship Create(Trackable trackable)
         {
             pyprflow.DbEntity.Relationship r = new pyprflow.DbEntity.Relationship(
-                  pyprflow.DbEntity.TransactionType.add);
+                  pyprflow.Workflow.Model.TransactionType.add);
             r.TrackableName = trackable.Name;
             return r;
 
@@ -135,7 +135,7 @@ namespace pyprflow.Workflow.Helpers
         internal pyprflow.DbEntity.Relationship Create(Model.Workflow workflow)
         {
             pyprflow.DbEntity.Relationship r = new pyprflow.DbEntity.Relationship(
-                pyprflow.DbEntity.TransactionType.add);
+                pyprflow.Workflow.Model.TransactionType.add);
             r.WorkflowName = workflow.Name;
             return r;
 

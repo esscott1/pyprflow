@@ -40,7 +40,7 @@ namespace pyprflow.Workflow.Search
              { "etest", string.Empty }
         };
 
-        public pyprflow.DbEntity.TransactionType transactiontype { get; set; }
+        public pyprflow.Workflow.Model.TransactionType transactiontype { get; set; }
         public IsActive isActive { get; set; }
     }
    
@@ -72,7 +72,7 @@ namespace pyprflow.Workflow.Search
         }
 
         internal EntityType _entityType { get; private set; }
-        public static DbEntity.TransactionType type;// = default(Database.Entity.TransactionType);
+        public static pyprflow.Workflow.Model.TransactionType type;// = default(Database.Entity.TransactionType);
         internal static Dictionary<string, Expression<Func<DbEntity.Relationship, bool>>> _ClauseStrategy =
            new Dictionary<string, Expression<Func<DbEntity.Relationship, bool>>>()
            {
@@ -100,7 +100,7 @@ namespace pyprflow.Workflow.Search
             string sIsActive = searchRequestParameters.isActive.ToString();
             if(sIsActive == "true" || sIsActive=="false")
                 searchRequestParameters.Parameters.Add("isactive" ,sIsActive);
-            if (searchRequestParameters.transactiontype != DbEntity.TransactionType.none)
+            if (searchRequestParameters.transactiontype != pyprflow.Workflow.Model.TransactionType.none)
             {
                 searchRequestParameters.Parameters.Add("transactiontype", searchRequestParameters.transactiontype.ToString());
                 type = searchRequestParameters.transactiontype;

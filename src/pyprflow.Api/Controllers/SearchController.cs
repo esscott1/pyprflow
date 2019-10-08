@@ -73,7 +73,7 @@ namespace pyprflow.Api.Controllers
             
             SearchRequestParameters srp = new SearchRequestParameters();
             if (dic.TryGetValue("transactiontype", out StringValues sTransactiontype))
-                if (Enum.TryParse(sTransactiontype, out DbEntity.TransactionType tType))
+                if (Enum.TryParse(sTransactiontype, out pyprflow.Workflow.Model.TransactionType tType))
                     srp.transactiontype = tType;
 
             if (dic.TryGetValue("isactive", out StringValues sIsActive))
