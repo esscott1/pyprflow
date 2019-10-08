@@ -23,10 +23,10 @@ namespace pyprflow.Workflow.Helpers
             return result;
         }
 
-        internal pyprflow.Database.Entity.BaseWorkflowItem Map(pyprflow.Workflow.Model.BaseWorkflowItem item)
+        internal pyprflow.Database.Entity.BaseDbWorkFlowItem Map(pyprflow.Workflow.Model.BaseWorkflowItem item)
         {
-            pyprflow.Database.Entity.BaseWorkflowItem result =
-                new pyprflow.Database.Entity.BaseWorkflowItem();
+            pyprflow.Database.Entity.BaseDbWorkFlowItem result =
+                new pyprflow.Database.Entity.BaseDbWorkFlowItem();
             result.Active = item.Active;
             result.Deleted = item.Deleted;
             result.DerivedType = item.DerivedType;
@@ -35,7 +35,7 @@ namespace pyprflow.Workflow.Helpers
             return result;
         }
 
-        internal pyprflow.Workflow.Model.BaseWorkflowItem Map(pyprflow.Database.Entity.BaseWorkflowItem item)
+        internal pyprflow.Workflow.Model.BaseWorkflowItem Map(pyprflow.Database.Entity.BaseDbWorkFlowItem item)
         {
             pyprflow.Workflow.Model.BaseWorkflowItem result =
                 new pyprflow.Workflow.Model.BaseWorkflowItem();

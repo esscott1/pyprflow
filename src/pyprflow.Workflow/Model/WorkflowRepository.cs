@@ -37,7 +37,7 @@ namespace pyprflow.Workflow.Model
                     //Console.WriteLine("saving {0} with type {1}", item.Name, item.DerivedType);
                     Helpers.ObjectConverter converter = new Helpers.ObjectConverter();
                     BaseWorkflowItem saveThis = converter.GetBase<T>(item);
-                    pyprflow.Database.Entity.BaseWorkflowItem dbSaveThis =
+                    pyprflow.Database.Entity.BaseDbWorkFlowItem dbSaveThis =
                         new Helpers.ObjectConverter().Map(saveThis);
                         
                     db.WorkflowDb.Add(dbSaveThis);
@@ -72,7 +72,7 @@ namespace pyprflow.Workflow.Model
                     Helpers.ObjectConverter converter = new Helpers.ObjectConverter();
                     BaseWorkflowItem updateThis = converter.GetBase<T>(item);
 
-                    pyprflow.Database.Entity.BaseWorkflowItem dbUpdateThis =
+                    pyprflow.Database.Entity.BaseDbWorkFlowItem dbUpdateThis =
                         new Helpers.ObjectConverter().Map(updateThis);
                             
                             
@@ -190,7 +190,7 @@ namespace pyprflow.Workflow.Model
                         delete.Name = workflowItemId;
                         delete.DerivedType = typeof(T).ToString();
 
-                        pyprflow.Database.Entity.BaseWorkflowItem dbDelete =
+                        pyprflow.Database.Entity.BaseDbWorkFlowItem dbDelete =
                             new Helpers.ObjectConverter().Map(delete);
 
                         db.WorkflowDb.Remove(dbDelete);
@@ -322,7 +322,7 @@ namespace pyprflow.Workflow.Model
             }
         }
 
-        private pyprflow.Database.Entity.BaseWorkflowItem FindDBItem<T>(string workflowItemName, bool deleted) where T : BaseWorkflowItem
+        private pyprflow.Database.Entity.BaseDbWorkFlowItem FindDBItem<T>(string workflowItemName, bool deleted) where T : BaseWorkflowItem
         {
             using (var db = new ApiContext(_options))
             {
@@ -331,7 +331,7 @@ namespace pyprflow.Workflow.Model
                     Console.WriteLine("searching for item {0} with Id {1}", typeof(T).ToString(), workflowItemName);
 
                     //  BaseWorkflowItem result = db.WorkflowDb.Find(new object[] { workflowName, typeof(T).ToString() });
-                    pyprflow.Database.Entity.BaseWorkflowItem result
+                    pyprflow.Database.Entity.BaseDbWorkFlowItem result
                         = db.WorkflowDb.Find(new object[] { workflowItemName, typeof(T).ToString() });
 
                     if (result.Deleted != deleted)
@@ -353,7 +353,7 @@ namespace pyprflow.Workflow.Model
             }
         }
 
-        private pyprflow.Database.Entity.BaseWorkflowItem FindDBItem(string workflowItemName, Type returnType, bool deleted)  
+        private pyprflow.Database.Entity.BaseDbWorkFlowItem FindDBItem(string workflowItemName, Type returnType, bool deleted)  
         {
             using (var db = new ApiContext(_options))
             {
@@ -362,7 +362,7 @@ namespace pyprflow.Workflow.Model
                     Console.WriteLine("searching for item {0} with Id {1}", returnType, workflowItemName);
 
                     //  BaseWorkflowItem result = db.WorkflowDb.Find(new object[] { workflowName, typeof(T).ToString() });
-                    pyprflow.Database.Entity.BaseWorkflowItem result
+                    pyprflow.Database.Entity.BaseDbWorkFlowItem result
                         = db.WorkflowDb.Find(new object[] { workflowItemName, returnType.ToString() });
 
                     if (result.Deleted != deleted)

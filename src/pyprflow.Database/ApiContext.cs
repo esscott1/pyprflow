@@ -13,7 +13,7 @@ namespace pyprflow.Database
 {
     public class ApiContext : DbContext
     {
-        public DbSet<BaseWorkflowItem> WorkflowDb { get; set; }
+        public DbSet<BaseDbWorkFlowItem> WorkflowDb { get; set; }
         public DbSet<Relationship> Relationships { get; set; }
 
         public ApiContext(DbContextOptions<ApiContext> options) : base(options) { }
@@ -28,7 +28,7 @@ namespace pyprflow.Database
         {
 
         //    modelBuilder.ForNpgsqlUseSerialColumns();
-            modelBuilder.Entity<BaseWorkflowItem>()
+            modelBuilder.Entity<BaseDbWorkFlowItem>()
                 .HasKey(w => new { w.Name, w.DerivedType });
 
         

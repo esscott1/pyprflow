@@ -8,19 +8,19 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace pyprflow.Database.Entity
 {
-    public abstract class BaseItem
+    public abstract class BaseDbItem
     {
         public bool Active { get; set; } = true;
         public bool Deleted { get; set; } = false;
     }
-    public class BaseWorkflowItem : BaseItem
+    public class BaseDbWorkFlowItem : BaseDbItem
     {
-        public BaseWorkflowItem()
+        public BaseDbWorkFlowItem()
         {
 
         }
 
-        public BaseWorkflowItem(string serializedObject)
+        public BaseDbWorkFlowItem(string serializedObject)
         {
             SerializedObject = serializedObject;
         }

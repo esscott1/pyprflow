@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace pyprflow.Database.Entity
 {
-    public class Relationship : BaseItem
+    public class Relationship : BaseDbItem
     {
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
