@@ -1,0 +1,45 @@
+{
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:42705/",
+      "sslPort": 0
+    }
+  },
+  "profiles": {
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "launchUrl": "api/values",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "pfdatabasetype": "local",
+        "pfdbhost": "127.0.0.1",
+        "pfmsdbinstance": "DEV2014",
+        "pfdbname": "pyprflowdb",
+        "ConnectionString": "Server=10.0.0.25;Database=pyprflowDb;User Id=sa;Password=!!Nimda1;",
+        "pfdbport": "2250",
+        "pfdbid": "sa",
+        "pfdbpw": "!!nimda1"
+      }
+    },
+    "pyprflow": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "api/values",
+      "applicationUrl": "http://localhost:5000",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "pfdatabasetype": "local",
+        "pfdbhost": "127.0.0.1",
+        "pfmsdbinstance": "DEV2014",
+        "pfdbname": "pyprflowdb",
+        "ConnectionString": "Server=10.0.0.25;Database=pyprflowDb;User Id=sa;Password=!!Nimda1;",
+        "pfdbport": "2250",
+        "pfdbid": "sa",
+        "pfdbpw": "!!nimda1"
+      }
+    }
+  }
+}
