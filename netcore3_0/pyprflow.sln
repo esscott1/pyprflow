@@ -1,0 +1,78 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{FDD81516-B5F4-4BC4-A0A6-BC81F67982FE}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{52B062DF-D502-4B87-BCA9-4B284AAF574D}"
+	ProjectSection(SolutionItems) = preProject
+		src\Dockerfile = src\Dockerfile
+		DockerIt.md = DockerIt.md
+		src\pyprflow.Api\EFcommands.md = src\pyprflow.Api\EFcommands.md
+		HowToParticipate.md = HowToParticipate.md
+		Piperflow.md = Piperflow.md
+		ReadMe.md = ReadMe.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pyprflow.Api", "src\pyprflow.Api\pyprflow.Api.csproj", "{D3BFED65-EB99-4B26-AB3D-FD8903516759}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pyprflow.Database", "src\pyprflow.Database\pyprflow.Database.csproj", "{C3581EC1-B906-45D5-AA06-79F23C411E27}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pyprflow.DbEntity", "src\pyprflow.Database.Entity\pyprflow.DbEntity.csproj", "{D4531030-743B-4FB3-B2B6-835A63A89040}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pyprflow.Workflow", "src\pyprflow.Workflow\pyprflow.Workflow.csproj", "{458DF408-C134-4F99-B08A-0497485E1253}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pyprflow.MetaMatcher", "pyprflow.MetaMatcher\pyprflow.MetaMatcher.csproj", "{D1039F7D-E2C0-4074-A23A-23495FF29E17}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pyprflow.Cli", "src\pyprflow.Cli\pyprflow.Cli.csproj", "{3F8DCB99-E30A-42C5-9E28-9969C0E4CA93}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D3BFED65-EB99-4B26-AB3D-FD8903516759}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3BFED65-EB99-4B26-AB3D-FD8903516759}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3BFED65-EB99-4B26-AB3D-FD8903516759}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3BFED65-EB99-4B26-AB3D-FD8903516759}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3581EC1-B906-45D5-AA06-79F23C411E27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3581EC1-B906-45D5-AA06-79F23C411E27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3581EC1-B906-45D5-AA06-79F23C411E27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3581EC1-B906-45D5-AA06-79F23C411E27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4531030-743B-4FB3-B2B6-835A63A89040}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4531030-743B-4FB3-B2B6-835A63A89040}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4531030-743B-4FB3-B2B6-835A63A89040}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4531030-743B-4FB3-B2B6-835A63A89040}.Release|Any CPU.Build.0 = Release|Any CPU
+		{458DF408-C134-4F99-B08A-0497485E1253}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{458DF408-C134-4F99-B08A-0497485E1253}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{458DF408-C134-4F99-B08A-0497485E1253}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{458DF408-C134-4F99-B08A-0497485E1253}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1039F7D-E2C0-4074-A23A-23495FF29E17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1039F7D-E2C0-4074-A23A-23495FF29E17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1039F7D-E2C0-4074-A23A-23495FF29E17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1039F7D-E2C0-4074-A23A-23495FF29E17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F8DCB99-E30A-42C5-9E28-9969C0E4CA93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F8DCB99-E30A-42C5-9E28-9969C0E4CA93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F8DCB99-E30A-42C5-9E28-9969C0E4CA93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F8DCB99-E30A-42C5-9E28-9969C0E4CA93}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D3BFED65-EB99-4B26-AB3D-FD8903516759} = {FDD81516-B5F4-4BC4-A0A6-BC81F67982FE}
+		{C3581EC1-B906-45D5-AA06-79F23C411E27} = {FDD81516-B5F4-4BC4-A0A6-BC81F67982FE}
+		{D4531030-743B-4FB3-B2B6-835A63A89040} = {FDD81516-B5F4-4BC4-A0A6-BC81F67982FE}
+		{458DF408-C134-4F99-B08A-0497485E1253} = {FDD81516-B5F4-4BC4-A0A6-BC81F67982FE}
+		{D1039F7D-E2C0-4074-A23A-23495FF29E17} = {FDD81516-B5F4-4BC4-A0A6-BC81F67982FE}
+		{3F8DCB99-E30A-42C5-9E28-9969C0E4CA93} = {FDD81516-B5F4-4BC4-A0A6-BC81F67982FE}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {99D9E00E-D928-4972-9EA0-50051880BD78}
+	EndGlobalSection
+EndGlobal
