@@ -1,4 +1,4 @@
-vmFROM microsoft/aspnetcore-build:1.0-1.1
+vmFROM microsoft/dotnet:2.1-sdk
 ENV pfdatabasetype dockertest
 ENV pfdbhost 127.0.0.1
 ENV pfmsdbinstance DEV2014

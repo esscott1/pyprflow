@@ -21,7 +21,7 @@ namespace pyprflow.Database
           new Dictionary<string, Action<DbContextOptionsBuilder>>() {
              { "dockertest",  o => o.UseSqlServer(conn, m => m.MigrationsAssembly("pyprflow")) },
              { "mssql2017", o => o.UseSqlServer(conn, m => m.MigrationsAssembly("pyprflow")) },
-             { "local", o => o.UseSqlServer(conn, m => m.MigrationsAssembly("pyprflow.Workflow")) },
+             { "local", o => o.UseSqlServer(conn, m => m.MigrationsAssembly("pyprflow")) },
              { "mssql", o => o.UseSqlServer(conn, m => m.MigrationsAssembly("pyprflow")) },
              { "mysql", o => o.UseMySQL(conn, m => m.MigrationsAssembly("pyprflow")) },
              { "postgres", o => o.UseNpgsql(conn, m => m.MigrationsAssembly("pyprflow"))

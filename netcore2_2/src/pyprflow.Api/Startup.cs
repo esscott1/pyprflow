@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,23 +24,36 @@ namespace pyprflow.Api
     {
 
        
-        public Startup(IHostingEnvironment env)
+        //public Startup(IHostingEnvironment env)
+        //{
+        //    var builder = new ConfigurationBuilder()
+        //        .SetBasePath(env.ContentRootPath)
+        //        .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+        //        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+        //        .AddEnvironmentVariables();
+        //    Configuration = builder.Build();
+        //}
+        public Startup(IConfiguration configuration)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddEnvironmentVariables();
-            Configuration = builder.Build();
+            Configuration = configuration;
         }
-
-        public IConfigurationRoot Configuration { get; }
+        public IConfiguration  Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
-			services.AddSingleton<IWorkflowRepository, WorkflowRepository>();
+            //services.Configure<CookiePolicyOptions>(options =>
+            //{
+            //    // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+            //    options.CheckConsentNeeded = context => true;
+            //    options.MinimumSameSitePolicy = SameSiteMode.None;
+            //});
+
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+
+            services.AddSingleton<IWorkflowRepository, WorkflowRepository>();
             string dbtype = Environment.GetEnvironmentVariable("pfdatabasetype");
             Console.WriteLine("OS is: " + System.Runtime.InteropServices.RuntimeInformation.OSDescription);
             Console.WriteLine("pfdatabasetype ENV var is: " + dbtype);
@@ -55,7 +70,6 @@ namespace pyprflow.Api
            
             services.AddSwaggerGen(c =>
             {
-               
                 c.SwaggerDoc("v1", new Info { Title = "My Api", Version = "v1" });
             });
             
@@ -65,21 +79,26 @@ namespace pyprflow.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
+            //loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+            //loggerFactory.AddDebug();
             //app.ApplyUserKeyValidation(); 
-
-            app.UseMvc();
-            //app.UseMvcWithDefaultRoute();
-
+            app.UseStaticFiles();
+            
+            
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
-            
+
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
+            });
             // below is added to create the DB if it does not already exist.
-			using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
                 serviceScope.ServiceProvider.GetService<ApiContext>().Database.Migrate();
 
