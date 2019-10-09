@@ -53,21 +53,19 @@ namespace pyprflow.Api
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
 
-            services.AddSingleton<IWorkflowRepository, WorkflowRepository>();
+            services.AddScoped<IWorkflowRepository, WorkflowRepository>();
             string dbtype = Environment.GetEnvironmentVariable("pfdatabasetype");
-            Console.WriteLine("OS is: " + System.Runtime.InteropServices.RuntimeInformation.OSDescription);
-            Console.WriteLine("pfdatabasetype ENV var is: " + dbtype);
-            Console.WriteLine("is dbtype null? : "+ String.IsNullOrWhiteSpace(dbtype));
             if (string.IsNullOrWhiteSpace(dbtype))
                  dbtype = "local";
           //  dbtype = "postgres";
             pyprflow.Database.IDbProvider Iconn = new pyprflow.Database.DbProviderFactory().Create(dbtype);
-          
-            Console.WriteLine("connection string used is: "+ Iconn.ConnectionString);
-           
-            services.AddDbContext<ApiContext>(Iconn.dbContext);
+            services.AddDbContext<ApiContext>(Iconn.dbContext,ServiceLifetime.Scoped);
 
-           
+
+            Console.WriteLine("OS is: " + System.Runtime.InteropServices.RuntimeInformation.OSDescription);
+            Console.WriteLine("pfdatabasetype ENV var is: " + dbtype);
+            Console.WriteLine("is dbtype null? : " + String.IsNullOrWhiteSpace(dbtype));
+            Console.WriteLine("connection string used is: " + Iconn.ConnectionString);
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info { Title = "My Api", Version = "v1" });
@@ -90,17 +88,17 @@ namespace pyprflow.Api
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
-
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
+            app.UseMvc();
+            //app.UseMvc(routes =>
+            //{
+            //    routes.MapRoute(
+            //        name: "default",
+            //        template: "{controller=Home}/{action=Index}/{id?}");
+            //});
             // below is added to create the DB if it does not already exist.
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
-                serviceScope.ServiceProvider.GetService<ApiContext>().Database.Migrate();
+             //   serviceScope.ServiceProvider.GetService<ApiContext>().Database.Migrate();
 
             }
 		}

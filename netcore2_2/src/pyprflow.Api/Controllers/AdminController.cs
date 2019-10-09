@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +30,10 @@ namespace pyprflow.Api.Controllers
         [HttpGet("db")]
         public IActionResult environment()
         {
-            var environment = Environment.GetEnvironmentVariable("");
+            System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
+            string version = fvi.FileVersion;
+            var environment = String.Format("Running version {0} of Pyprflow", version);
 
             return Json(environment);
 

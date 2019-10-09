@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 //using Microsoft.AspNetCore.Builder;
 
 namespace pyprflow.Api
@@ -30,10 +31,13 @@ namespace pyprflow.Api
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args)
-        {
-            var builder = new WebHostBuilder()
+        =>
+            WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-                .UseKestrel()
+                .ConfigureKestrel((context, options) => {
+                    options.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(2);
+                    
+                })
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .ConfigureAppConfiguration((hostingContext, config) =>
                 {
@@ -60,9 +64,10 @@ namespace pyprflow.Api
                 })
                 .ConfigureLogging((hostingContext, logging) =>
                 {
-                    //logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
-                    //logging.AddConsole();
-                    //logging.AddDebug();
+                    logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
+                    logging.AddConsole();
+                        
+                    logging.AddDebug();
                 })
                 .UseIISIntegration()
                 .UseDefaultServiceProvider((context, options) =>
@@ -70,8 +75,8 @@ namespace pyprflow.Api
                     options.ValidateScopes = context.HostingEnvironment.IsDevelopment();
                 });
 
-            return builder;
-        }
+           // return builder;
+        
 
 
 

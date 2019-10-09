@@ -11,7 +11,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "api/values",
+      "launchUrl": "api/admin/db",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "pfdatabasetype": "local",
@@ -27,7 +27,7 @@
     "pyprflow": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "api/values",
+      "launchUrl": "api/admin/db",
       "applicationUrl": "http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
