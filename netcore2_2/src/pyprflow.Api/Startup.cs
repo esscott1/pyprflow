@@ -83,6 +83,15 @@ namespace pyprflow.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
             //loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             //loggerFactory.AddDebug();
             //app.ApplyUserKeyValidation();
@@ -100,6 +109,7 @@ namespace pyprflow.Api
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
+            app.UseHttpsRedirection();
             app.UseMvc();
             //app.UseMvc(routes =>
             //{
@@ -110,7 +120,7 @@ namespace pyprflow.Api
             // below is added to create the DB if it does not already exist.
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
-                serviceScope.ServiceProvider.GetService<ApiContext>().Database.Migrate();
+             //   serviceScope.ServiceProvider.GetService<ApiContext>().Database.Migrate();
 
             }
 		}

@@ -17,7 +17,8 @@ namespace pyprflow.Api.Controllers
         {
 
          //   var path = "./HTML/Instructions.html";
-            var path = "Instructions.html";
+            var path = "/app/wwwroot/index.html";
+            
             return new ContentResult()
             {
                 Content = System.IO.File.ReadAllText(path),

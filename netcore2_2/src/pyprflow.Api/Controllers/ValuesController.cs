@@ -21,7 +21,13 @@ namespace pyprflow.Api.Controllers
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            return new string[] { "value1", "value2" };
+            return new string[] { "value1", "value2", System.IO.Directory.GetCurrentDirectory() };
+        }
+
+        [HttpGet("dir")]
+        public IEnumerable<string> GetDir()
+        {
+            return System.IO.Directory.EnumerateDirectories(System.IO.Directory.GetCurrentDirectory());
         }
 
         // GET api/values/5
