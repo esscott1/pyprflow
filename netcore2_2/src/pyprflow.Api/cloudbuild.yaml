@@ -1,4 +1,4 @@
 ﻿steps:
 - name: 'gcr.io/cloud-builders/gcloud'
-  args: ['app', 'deploy', 'app.yaml']
+  args: ['app', 'deploy', 'netcore2_2/src/pyprflow.Api/app.yaml']
   timeout: 600s
