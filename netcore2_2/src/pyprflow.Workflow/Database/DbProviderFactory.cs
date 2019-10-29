@@ -39,7 +39,7 @@ namespace pyprflow.Database
        //       { "local", "Server=127.0.0.1; Database=pyprflowlocaldb;User Id = sa; Password=!!nimda1;" },
             { "sqlite" , "Filename=./Repository.db" },
             {"mysql", "Server=35.232.78.33;Database=pyprflowlocaldb;uid=root;pwd=!!nimda!!1" },
-            {"postgres", "Server=35.188.178.150;Database=pyprflowlocaldb;userId=postgres;Password=!!nimda!!1" }
+            {"postgres", "Server=35.247.75.125;Database=pyprflowlocaldb;userId=postgres;Password=!!nimda!!1" }
         };
         internal static string conn = string.Empty;
       

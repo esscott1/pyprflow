@@ -17,6 +17,8 @@ using pyprflow.Api.Middleware;
 using pyprflow.Database;
 using System.Linq.Expressions;
 using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
 
 namespace pyprflow.Api
 {
@@ -51,13 +53,17 @@ namespace pyprflow.Api
 
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            //services.AddMvc(options => options.OutputFormatters.Add(new HtmlOutputFormatter()))
+            //    .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
 
             services.AddScoped<IWorkflowRepository, WorkflowRepository>();
             string dbtype = Environment.GetEnvironmentVariable("pfdatabasetype");
+            string databasetype = Configuration["Db:Type"];
             if (string.IsNullOrWhiteSpace(dbtype))
                  dbtype = "local";
-          //  dbtype = "postgres";
+            //  dbtype = "postgres";
+            dbtype = databasetype;
             pyprflow.Database.IDbProvider Iconn = new pyprflow.Database.DbProviderFactory().Create(dbtype);
             services.AddDbContext<ApiContext>(Iconn.dbContext,ServiceLifetime.Scoped);
 
@@ -79,10 +85,16 @@ namespace pyprflow.Api
         {
             //loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             //loggerFactory.AddDebug();
-            //app.ApplyUserKeyValidation(); 
+            //app.ApplyUserKeyValidation();
+            app.UseDefaultFiles();
             app.UseStaticFiles();
-            
-            
+            //app.UseStaticFiles(new StaticFileOptions()
+            //{
+            //    FileProvider = new PhysicalFileProvider(
+            //Path.Combine(Directory.GetCurrentDirectory(), @"MyStaticFiles")),
+            //    RequestPath = new PathString("/HTML")
+            //});
+
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
@@ -98,7 +110,7 @@ namespace pyprflow.Api
             // below is added to create the DB if it does not already exist.
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
-             //   serviceScope.ServiceProvider.GetService<ApiContext>().Database.Migrate();
+                serviceScope.ServiceProvider.GetService<ApiContext>().Database.Migrate();
 
             }
 		}

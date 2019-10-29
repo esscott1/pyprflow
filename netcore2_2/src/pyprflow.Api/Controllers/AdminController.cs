@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using pyprflow.Workflow.Model;
@@ -26,7 +29,7 @@ namespace pyprflow.Api.Controllers
         //    var msver = Microsoft.Extensions.PlatformAbstractions.PlatformServices.Default.Application.ApplicationVersion;
         //    return Json(msver);
         //}
-
+      
         [HttpGet("db")]
         public IActionResult environment()
         {
@@ -34,8 +37,10 @@ namespace pyprflow.Api.Controllers
             FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
             string version = fvi.FileVersion;
             var environment = String.Format("Running version {0} of Pyprflow", version);
-
-            return Json(environment);
+           
+            
+           
+           return Json(environment);
 
         }
         // DELETE api/values/5

@@ -1,4 +1,4 @@
-vmFROM mcr.microsoft.com/dotnet/core/sdk:2.2
+FROM mcr.microsoft.com/dotnet/core/sdk:2.2
 ENV pfdatabasetype dockertest
 ENV pfdbhost 127.0.0.1
 ENV pfmsdbinstance DEV2014
