@@ -1,6 +1,6 @@
 ﻿steps:
 - name: 'gcr.io/cloud-builders/dotnet'
-  args: [ 'publish', './netcore2_2/rc/pyprflow.Api', '-c', 'Release', '-o','epublish' ]
+  args: [ 'publish', './netcore2_2/src/pyprflow.Api', '-c', 'Release', '-o','epublish' ]
 
 
 - name: 'gcr.io/cloud-builders/gcloud'
