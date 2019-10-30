@@ -8,4 +8,4 @@
   args: ['app', 'deploy', './netcore2_2/src/pyprflow.Api/epublish/app.yaml']
   waitFor: 
   - build
-  timeout: 600s
+timeout: 1200s
