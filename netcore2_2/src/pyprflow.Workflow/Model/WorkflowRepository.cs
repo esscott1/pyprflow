@@ -178,34 +178,34 @@ namespace pyprflow.Workflow.Model
 		public void HardDelete<T>(string workflowItemId) where T:BaseWorkflowItem
 		    {
             throw new NotImplementedException("needs to be tested");
-            Type providedtype = typeof(T);
-            if (providedtype.GetTypeInfo().BaseType == typeof(BaseWorkflowItem))
-            {
-                using (var db = new ApiContext(_options))
-                {
-                    try
-                    {
+            //Type providedtype = typeof(T);
+            //if (providedtype.GetTypeInfo().BaseType == typeof(BaseWorkflowItem))
+            //{
+            //    using (var db = new ApiContext(_options))
+            //    {
+            //        try
+            //        {
 
-                        var delete = new BaseWorkflowItem();
-                        delete.Name = workflowItemId;
-                        delete.DerivedType = typeof(T).ToString();
+            //            var delete = new BaseWorkflowItem();
+            //            delete.Name = workflowItemId;
+            //            delete.DerivedType = typeof(T).ToString();
 
-                        pyprflow.DbEntity.BaseDbWorkFlowItem dbDelete =
-                            new Helpers.ObjectConverter().Map(delete);
+            //            pyprflow.DbEntity.BaseDbWorkFlowItem dbDelete =
+            //                new Helpers.ObjectConverter().Map(delete);
 
-                        db.WorkflowDb.Remove(dbDelete);
+            //            db.WorkflowDb.Remove(dbDelete);
 
-                      //  db.WorkflowDb.Remove(delete);
-                        db.SaveChanges();
-                        //	Console.WriteLine("ItemId {0} deleted from database");
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("{0} error", ex.Message);
-                        Console.WriteLine("{0} inner message", ex.InnerException);
-                    }
-                }
-            }
+            //          //  db.WorkflowDb.Remove(delete);
+            //            db.SaveChanges();
+            //            //	Console.WriteLine("ItemId {0} deleted from database");
+            //        }
+            //        catch (Exception ex)
+            //        {
+            //            Console.WriteLine("{0} error", ex.Message);
+            //            Console.WriteLine("{0} inner message", ex.InnerException);
+            //        }
+            //    }
+            //}
 		    }
         #endregion
         public List<BaseWorkflowItem> Where<T>(System.Linq.Expressions.Expression<Func<pyprflow.DbEntity.Relationship, bool>> predicate, Type returnType) where T : BaseWorkflowItem

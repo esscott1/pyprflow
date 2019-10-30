@@ -1,8 +1,10 @@
 ﻿steps:
 - name: 'gcr.io/cloud-builders/dotnet'
+  id: build
   args: [ 'publish', './netcore2_2/src/pyprflow.Api', '-c', 'Release', '-o','epublish']
 
 
 - name: 'gcr.io/cloud-builders/gcloud'
   args: ['app', 'deploy', './netcore2_2/src/pyprflow.Api/epublish/app.yaml']
+  waitFor: build
   timeout: 600s
