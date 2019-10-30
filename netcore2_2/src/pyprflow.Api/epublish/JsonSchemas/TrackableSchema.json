@@ -1,0 +1,38 @@
+﻿{
+	"trackables": {
+		"description": "array of items within the given node",
+		"type": "array",
+		"items": {
+			"title": "trackable",
+			"description": "object being tracked within this step",
+			"type": "object",
+			"properties": {
+				"trackableId": {
+					"description": "unique identifier for this item",
+					"type": "string"
+				},
+				"trackingName:" {
+					"description": "human friendly name for this item",
+					"type": "string"
+				},
+				"key": {
+					"description": "unique identifier for this item",
+					"type": "string"
+				},
+				"Location": {
+					"type"="array",
+					"description": "List of locations that trackable is in.",
+					"items": {
+						"type": "object",
+						"description": "workflowId and NodeId that designates a location of item",
+						"parameters": {
+							"workflowId": "string",
+							"nodeId": "string"
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
