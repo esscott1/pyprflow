@@ -68,4 +68,8 @@
     <None Include="wwwroot\default.html" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\img\" />
+  </ItemGroup>
+
 </Project>
