@@ -1,25 +1,52 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Serilog;
+using Serilog.Extensions.Logging;
+using System;
+using System.IO;
+using System.Threading.Tasks;
+
+
 
 namespace pyprflow.Cli
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static async Task<int> Main(string[] args)
         {
-            Console.WriteLine("Welcome to pyprflow CLI where workflows can be create, managed, and executed from command line commands");
-            var cliResonse = Console.ReadLine();
+            var Configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile(AppDomain.CurrentDomain.BaseDirectory + "\\appsettings.json", optional: true, reloadOnChange: true)
+                .AddEnvironmentVariables()
+                .Build();
 
-            Console.WriteLine(Cli(cliResonse));
-            Console.ReadLine();
-;        }
+            Log.Logger = new LoggerConfiguration()
+                   .ReadFrom.Configuration(Configuration)
+                   .Enrich.FromLogContext()
+                   .CreateLogger();
 
-        static string Cli(string sInput)
-        {
-            string response = "error";
-            if(sInput.StartsWith("pflow"))
-                response =  "I did something";
+            var builder = new HostBuilder()
+                .ConfigureServices((hostContext, services) =>
+                {
+                    services.AddLogging(config =>
+                    {
+                        config.ClearProviders();
+                        config.AddProvider(new SerilogLoggerProvider(Log.Logger));
+                    });
+                    services.AddHttpClient();
+                });
 
-            return response;
+            try
+            {
+                return await builder.RunCommandLineApplicationAsync<iPyprflowCmd>(args);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return 1;
+            }
         }
     }
 }
