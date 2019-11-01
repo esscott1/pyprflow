@@ -23,11 +23,24 @@
             margin: auto;
                
         }
+        .imagecontainer > img:hover{
+            width: 700px;
+            height: 700px;
+
+        }
+
+        img{
+            transition:transform 0.25s ease;
+        }
+        img:hover{
+            -webkit-transform:scale(1.75);
+            transform:scale(1.75);
+        }
     </style>
     <!-- 3. Instantiate clipboard -->
-    <p>
+    <div class="imagecontainer"><p>
         <img src="img/expense-sample1.png" width="400" height="400" />
-    </p>
+    </p></div>
     <code>PS> </code><code id="foo1">the Actual code to copy...btw moved initial of clipboard js to bottom of body section</code>
     <button class="btn" data-clipboard-target="#foo1">
         <img src="https://clipboardjs.com/assets/images/clippy.svg" width="13" alt="Copy to clipboard">
