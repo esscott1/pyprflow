@@ -48,7 +48,7 @@ namespace pyprflow.Cli
         {
             get
             {
-                return $"{Environment.GetFolderPath(Environment.SpecialFolder.UserProfile, Environment.SpecialFolderOption.Create)}\\.istrada\\";
+                return $"{Environment.GetFolderPath(Environment.SpecialFolder.UserProfile, Environment.SpecialFolderOption.Create)}\\.ipyprflow\\";
             }
         }
 
@@ -73,7 +73,7 @@ namespace pyprflow.Cli
             }
         }
 
-        private iPyprflowClient IPyprflowClient
+        protected iPyprflowClient iPyprflowClient
         {
             get
             {

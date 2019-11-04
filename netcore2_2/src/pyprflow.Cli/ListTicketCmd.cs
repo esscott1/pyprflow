@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace pyprflow.Cli
 {
-    [Command(Name = "list-tickets", Description = "list istrada tickets")]
+    [Command(Name = "list-tickets", Description = "list ipyprflow tickets")]
     internal class ListTicketCmd : iPyprflowCmdBase
     {
         [Option(CommandOptionType.SingleValue, ShortName = "start", LongName = "start-date", Description = "start date", ValueName = "start date", ShowInHelpText = true)]
@@ -23,43 +23,52 @@ namespace pyprflow.Cli
             _httpClientFactory = clientFactory;
         }
 
-        //protected override async Task<int> OnExecute(CommandLineApplication app)
-        //{
-        //    try
-        //    {
-        //        if (!StartDate.HasValue)
-        //        {
-        //            StartDate = DateTime.Parse(Prompt.GetString("start date:", DateTime.Now.ToShortDateString()));
-        //        }
+        protected override async Task<int> OnExecute(CommandLineApplication app)
+        {
+            try
+            {
+                //if (!StartDate.HasValue)
+                //{
+                //    StartDate = DateTime.Parse(Prompt.GetString("start date:", DateTime.Now.ToShortDateString()));
+                //}
 
-        //        if (!EndDate.HasValue)
-        //        {
-        //            EndDate = DateTime.Parse(Prompt.GetString("end date:", DateTime.Now.ToShortDateString()));
-        //        }
-        //        var url = $"/api/tickets?filter[where][ticketDate][gt]={StartDate.Value.ToUniversalTime().ToString("o")}&filter[where][ticketDate][lt]={EndDate.Value.ToUniversalTime().ToString("o")}";
+                //if (!EndDate.HasValue)
+                //{
+                //    EndDate = DateTime.Parse(Prompt.GetString("end date:", DateTime.Now.ToShortDateString()));
+                //}
+                // var url = $"/api/tickets?filter[where][ticketDate][gt]={StartDate.Value.ToUniversalTime().ToString("o")}&filter[where][ticketDate][lt]={EndDate.Value.ToUniversalTime().ToString("o")}";
 
-        //        var tickets =  await iPyprflowClient.GetAsync(url);
-        //        if (string.IsNullOrEmpty(tickets)) return 0;
 
-        //        if (StartDate == EndDate)
-        //        {
-        //            FileNameSuffix = $"{StartDate.Value.ToString("yyyyMMdd")}";
-        //        }
-        //        else
-        //        {
-        //            FileNameSuffix = $"{StartDate.Value.ToString("yyyyMMdd")}-{EndDate.Value.ToString("yyyyMMdd")}";
-        //        }
+                var url = "https://pyprflow.io/api/values";
 
-        //        OutputJson(tickets, "tickets", "ticket");
+                var tickets = await iPyprflowClient.GetAsync(url);
+                Console.WriteLine("got the tickets");
+                //var tickets = String.Empty;
+                if (string.IsNullOrEmpty(tickets)) return 0;
 
-        //        return 0;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        OnException(ex);
-        //        return 1;
-        //    }
-        //}
-   
+                //if (StartDate == EndDate)
+                //{
+                //    FileNameSuffix = $"{StartDate.Value.ToString("yyyyMMdd")}";
+                //}
+                //else
+                //{
+                //    FileNameSuffix = $"{StartDate.Value.ToString("yyyyMMdd")}-{EndDate.Value.ToString("yyyyMMdd")}";
+                //}
+                //string sTestInfo = "some data from the url";
+
+                //OutputJson(sTestInfo, "tickets", "ticket");
+                OutputJson(tickets, "tickets", "ticket");
+
+                Console.ReadLine();
+                return 0;
+                
+            }
+            catch (Exception ex)
+            {
+                OnException(ex);
+                return 1;
+            }
+        }
+
     }
 }

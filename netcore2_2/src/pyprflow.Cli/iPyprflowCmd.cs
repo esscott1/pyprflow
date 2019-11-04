@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace pyprflow.Cli
 {
-    [Command(Name = "istrada", ThrowOnUnexpectedArgument = false, OptionsComparison = System.StringComparison.InvariantCultureIgnoreCase)]
+    [Command(Name = "pyprflow", ThrowOnUnexpectedArgument = false, OptionsComparison = System.StringComparison.InvariantCultureIgnoreCase)]
     [VersionOptionFromMember("--version", MemberName = nameof(GetVersion))]
     [Subcommand(
         typeof(LoginCmd),
