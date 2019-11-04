@@ -40,11 +40,11 @@ namespace pyprflow.Cli
 
             try
             {
-                //    return await builder.RunCommandLineApplicationAsync<iPyprflowCmd>(args);
+                   return await builder.RunCommandLineApplicationAsync<iPyprflowCmd>(args);
             //    var eArgs = new String[] { "login" };
-                var eArgs = new String[] { "list-tickets" };
-                return await builder.RunCommandLineApplicationAsync<iPyprflowCmd>(eArgs);
-                int i = 0;
+                //var eArgs = new String[] { "list-tickets" };
+                //return await builder.RunCommandLineApplicationAsync<iPyprflowCmd>(eArgs);
+                //int i = 0;
             }
             catch (Exception ex)
             {

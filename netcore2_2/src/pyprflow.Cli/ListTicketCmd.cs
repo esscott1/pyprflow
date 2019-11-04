@@ -59,7 +59,7 @@ namespace pyprflow.Cli
                 //OutputJson(sTestInfo, "tickets", "ticket");
                 OutputJson(tickets, "tickets", "ticket");
 
-                Console.ReadLine();
+             //   Console.ReadLine();
                 return 0;
                 
             }
