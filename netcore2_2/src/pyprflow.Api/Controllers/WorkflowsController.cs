@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.JsonPatch;
 using pyprflow.Workflow.Model;
+using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json.Linq;
 
 
 
@@ -15,11 +17,13 @@ namespace pyprflow.Api.Controllers
 	[Route("api/[controller]")]
 	public class WorkflowsController : Controller
 	{
-		public WorkflowsController(IWorkflowRepository workflow)
+		public WorkflowsController(IWorkflowRepository workflow, IHostingEnvironment hostingEnvironment)
 		{
 			Repository = workflow;
+            _hostingEnvironment = hostingEnvironment;
 		}
 		public IWorkflowRepository Repository { get; set; }
+        public IHostingEnvironment _hostingEnvironment { get; set; }
 
 		[HttpGet]
 		public IEnumerable<Workflow.Model.Workflow> GetAll()
@@ -39,6 +43,27 @@ namespace pyprflow.Api.Controllers
 			var wkf = new Workflow.Model.Workflow();
 			return Json(wkf.GetSample());
 		}
+
+        [HttpGet("expense-sample1")]
+        public IActionResult GetSample1()
+        {
+            string result;
+            var rootpath = _hostingEnvironment.ContentRootPath;
+            JObject o1 = new JObject();
+            try
+            {
+                o1 = JObject.Parse(System.IO.File.ReadAllText(rootpath + "/JsonSchemas/expense-sample1.json"));
+                
+            }
+            catch(Exception ex)
+            {
+                result = "error reading the json file "+ ex.InnerException;
+            }
+
+        
+            return Json(o1);
+           
+        }
 
 
 		//[HttpGet("{workflowId}/orchestrations")]

@@ -1,0 +1,69 @@
+    {
+        "nodes": {
+            "Submitted": {
+                "nodeName": "Submitted",
+                "nodeDescription": "Expense Reports that have been submitted",
+                "nodeId": null,
+                "isStart": true,
+                "isEnd": false
+            },
+            "Denied": {
+                "nodeName": "Denied",
+                "nodeDescription": "Expense reports that were denied and returned to submitter",
+                "nodeId": null,
+                "isStart": false,
+                "isEnd": false
+            },
+            "Approved": {
+                "nodeName": "Approved",
+                "nodeDescription": "Expense Reports that have been approved",
+                "nodeId": null,
+                "isStart": false,
+                "isEnd": false
+            },
+            "Paid": {
+                "nodeName": "Paid",
+                "nodeDescription": "Expense Reports that have been submitted for Payment",
+                "nodeId": null,
+                "isStart": false,
+                "isEnd": true
+            }
+        },
+        "orchestrations": {
+            "Orch1": {
+                "orchestrationName": "Orch1",
+                "moves": [
+                    {
+                        "from": null,
+                        "to": "Submitted"
+                    },
+                    {
+                        "from": "Submitted",
+                        "to": "Denied"
+                    },
+                    {
+                        "from": "Submitted",
+                        "to": "Approved"
+                    },
+                    {
+                        "from": "Denied",
+                        "to": "Submitted"
+                    },
+                    {
+                        "from": "Approved",
+                        "to": "Paid"
+                    }
+                ],
+                "name": null,
+                "active": true,
+                "deleted": false
+            }
+        },
+        "workflowGuid": "A31B0626-E5AD-430B-8440-5C7FBB5816E4",
+        "workflowName": "expense-sample1",
+        "orchestrationAffinity": false,
+        "name": "expense-sample1",
+        "active": true,
+        "deleted": false
+    }
+
