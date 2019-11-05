@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  
+  <!-- Give Product a unique ID per platform-->
+	<?if $(var.Platform)=x64 ?>
+  <?define ProductCode = "{49B9F7B3-2C8B-4D02-B58E-F9FBE1C0767C}" ?>
+  <?else?>
+  <?define ProductCode = "{3C070993-AF4A-4D1D-BCD9-471058263CDD}" ?>
+  <?endif?>
+  
+  <!--  Fixed upgrade Id-->
+  <?define UpgradeCode = "{35A71E94-4031-4CFA-B120-6252D3B8B3F3}" ?>
+
+  <?define BuildVersion = 1.2.3.4 ?>
+
+  <!--  Define main project -->
+  <Product Id="$(var.ProductCode)" 
+           Name="!(loc.ProductName_$(var.Platform))" 
+           Language="!(loc.Language)" 
+           Version="$(var.BuildVersion)" 
+           Manufacturer="!(loc.Company)" 
+           UpgradeCode="$(var.UpgradeCode)">
+    
+    
+    <!-- Provide package details -->
+		<Package InstallerVersion="200" 
+             Compressed="yes" 
+             InstallScope="perMachine" 
+             Platform ="$(var.Platform)"
+             Manufacturer ="!(loc.Company)"
+             Description ="!(loc.Description)"
+             Keywords="!(loc.Keywords)"
+             Comments="!(loc.Comments)"
+             Languages ="!(loc.Language)"
+             />
+
+    
+    <!--Down Grade Error Message-->
+		<MajorUpgrade DowngradeErrorMessage="!(loc.DowngradeErrorMessage)" />
+		
+    <!--  Include .cab file into .msi file-->
+    <MediaTemplate
+      EmbedCab="yes"
+      />
+
+
+    <!-- Define the components, shortcuts, fiels etc. for the installer -->
+		<Feature Id="ProductFeature" Title="pyprflow.Cli_setup" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+      
+		</Feature>
+
+    <!-- Define the icon.ico for this installer (shows up in the Add/Remove programs -->
+    <Icon Id="icon.ico" SourceFile="$(var.pyprflow.Cli.ProjectDir)\pyprflow.ico"/>
+    <Property Id="ARPPRODUCTICON">icon.ico</Property>
+   
+    
+    <!-- help/support websited (shows in the add/remove programs-->
+    <Property Id="ARPURLINFOABOUT">http://www.pyprflow.com</Property>
+    
+    <!-- set up the UI for installer... alternative for minimal ux UIRef id="WixUI_Minimal"-->
+    <UIRef Id="WixUI_InstallDir"/>
+    <WixVariable Id="WixUIDialogBmp" Value="$(var.ProjectDir)\Assets\desert.bmp"/>
+    <WixVariable Id="WixUIBannerBmp" Value="$(var.ProjectDir)\Assets\banner.bmp"/>
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+    <WixVariable Id="WixUILicenseRtf" Value="LicenseAgreement.rtf"/>
+	</Product>
+
+
+
+
+</Wix>

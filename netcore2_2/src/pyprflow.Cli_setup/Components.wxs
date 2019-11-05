@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+
+    <!-- Product Components -->
+    <ComponentGroup Id="ProductComponents" >
+      
+      <!-- Test file-->
+      <ComponentRef Id ="TestFile"/>
+      
+    </ComponentGroup>
+
+    
+    <!-- Installed files -->
+    <DirectoryRef Id="INSTALLFOLDER" FileSource="..\pyprflow.Cli\bin\Release\netcoreapp2.2\win-$(var.Platform)\publish">
+      <!-- component file to install.. need all 200plus files from the dotnet publish output... but there is a better way than listing them all out-->
+      <Component Id="TestFile" Guid="{9ADCDEFC-E532-446F-BB66-2F3DBC015C60}">
+        <File Id="FileTestFile" Name="api-ms-win-core-console-l1-1-0.dll" KeyPath="yes" />
+        
+<!-- Remove start menu items .. required to be somewhere-->
+        <RemoveFolder Id="RemoveStartMenu" Directory="InstallProgramMenuFolder" On="uninstall"/>
+      </Component>
+    </DirectoryRef>
+  
+  </Fragment>
+  
+  
+  
+</Wix>
