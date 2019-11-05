@@ -1,29 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <Fragment>
-
     <!-- Product Components -->
     <ComponentGroup Id="ProductComponents" >
-      
-      <!-- Test file-->
-      <ComponentRef Id ="TestFile"/>
-      
+      <!-- Shortcut file-->
+      <ComponentRef Id ="MainAppShortcut"/>
+      <ComponentRef Id="setEnvironment"/>
     </ComponentGroup>
 
     
     <!-- Installed files -->
-    <DirectoryRef Id="INSTALLFOLDER" FileSource="..\pyprflow.Cli\bin\Release\netcoreapp2.2\win-$(var.Platform)\publish">
-      <!-- component file to install.. need all 200plus files from the dotnet publish output... but there is a better way than listing them all out-->
-      <Component Id="TestFile" Guid="{9ADCDEFC-E532-446F-BB66-2F3DBC015C60}">
-        <File Id="FileTestFile" Name="api-ms-win-core-console-l1-1-0.dll" KeyPath="yes" />
-        
+    <DirectoryRef Id="INSTALLFOLDER" FileSource="..\pyprflow.Cli\bin\$(var.Configuration)\netcoreapp2.2\win-$(var.Platform)\publish">
+      
+      <!-- component file to install.. need all 200plus files from the dotnet publish output... but there is a better way than listing them all out  -->
+      <Component Id="MainAppShortcut" Guid="{9ADCDEFC-E532-446F-BB66-2F3DBC015C60}">
+       
+        <Shortcut Id="MainAppShortcut"
+                   Name="!(loc.ProductName_$(var.Platform))"
+                  Target="[INSTALLFOLDER]pyprflow.exe"
+                  Directory="InstallProgramMenuFolder"
+                  WorkingDirectory="INSTALLFOLDER"
+                  Icon="icon.ico"
+                 />
+        <!-- our unique key for this component/shortcut-->
+        <RegistryValue Id="RegShortcutKey" Root="HKCU" Key="SOFTWARE\!(loc.ProductNameFolder)" Name="Shortcut" Value="1" Type="integer" KeyPath="yes">
+          
+        </RegistryValue>
+       
 <!-- Remove start menu items .. required to be somewhere-->
-        <RemoveFolder Id="RemoveStartMenu" Directory="InstallProgramMenuFolder" On="uninstall"/>
+           <RemoveFolder Id="RemoveStartMenu" Directory="InstallProgramMenuFolder" On="uninstall"/>
+     
       </Component>
+
+      <Component Id="setEnvironment" Guid="{EE07DDB7-FCE5-4F1C-8BF9-4C5898EA86C5}">
+        <CreateFolder/>
+        <Environment Id="PATH" Name="PATH" Part="last" System="yes" Value="[INSTALLFOLDER]" Action="set" Permanent="no"/>
+       </Component>
+      
     </DirectoryRef>
   
   </Fragment>
-  
-  
   
 </Wix>

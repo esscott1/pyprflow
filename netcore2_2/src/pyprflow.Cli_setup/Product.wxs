@@ -11,7 +11,6 @@
   <!--  Fixed upgrade Id-->
   <?define UpgradeCode = "{35A71E94-4031-4CFA-B120-6252D3B8B3F3}" ?>
 
-  <?define BuildVersion = 1.2.3.4 ?>
 
   <!--  Define main project -->
   <Product Id="$(var.ProductCode)" 
@@ -47,6 +46,7 @@
     <!-- Define the components, shortcuts, fiels etc. for the installer -->
 		<Feature Id="ProductFeature" Title="pyprflow.Cli_setup" Level="1">
 			<ComponentGroupRef Id="ProductComponents" />
+      <ComponentGroupRef Id="PublishedComponents"/>
       
 		</Feature>
 

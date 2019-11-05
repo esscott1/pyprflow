@@ -6,6 +6,8 @@
     <RuntimeIdentifier>win7-x64</RuntimeIdentifier>
     <LangVersion>7.1</LangVersion>
     <AssemblyName>pyprflow</AssemblyName>
+    <AssemblyVersion>1.0.0.1</AssemblyVersion>
+    <FileVersion>1.0.1.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
