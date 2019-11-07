@@ -65,7 +65,7 @@ namespace pyprflow.Cli
     [Command("list", Description = "Lists workflows")]
     internal class List : iPyprflowCmdBase
     {
-        public List(ILogger<WorkflowCmd> logger, IConsole console, IHttpClientFactory clientFactory)  
+        public List(ILogger<WorkflowCmd> logger, IConsole console, IHttpClientFactory clientFactory)
         {
             _logger = logger;
             _console = console;
@@ -73,10 +73,14 @@ namespace pyprflow.Cli
         }
         [Option(Description = "Show all Workflow Names")]
         public bool All { get; }
+
+        [Option(CommandOptionType.NoValue, ShortName = "s", LongName = "sample", Description = "List Workflows from sample inventory", ValueName = "samples", ShowInHelpText = true)]
+        protected bool samples { get; set; } = false;
         protected override async Task<int> OnExecute(CommandLineApplication app)
         {
-          
-            var url = "workflows/list";
+            string url = "workflows/list";
+            if (samples)
+                url = "workflows/list/samples";
             var result = await iPyprflowClient.GetAsync(url);
 
             // _console.WriteLine("in the list subcommand.");
@@ -114,6 +118,8 @@ namespace pyprflow.Cli
     {
         [Option(CommandOptionType.SingleValue, ShortName ="describe", LongName ="describe", Description ="describe the workflow", ValueName ="describe", ShowInHelpText = true)]
         public string WorkflowName {get;set;}
+        [Option(CommandOptionType.NoValue, ShortName = "s", LongName = "sample", Description = "List Workflows from sample inventory", ValueName = "samples", ShowInHelpText = true)]
+        protected bool samples { get; set; } = false;
         public WorkflowCmd(ILogger<WorkflowCmd> logger, IConsole console, IHttpClientFactory clientFactory)
         {
             _logger = logger;
@@ -128,10 +134,18 @@ namespace pyprflow.Cli
                 {
                     WorkflowName = Prompt.GetString("Workflow name:", "expense-sample1");
                 }
+                if (String.IsNullOrEmpty(WorkflowName) || String.IsNullOrWhiteSpace(WorkflowName))
+                {
+                    OutputError("Workflow name is required.. run >'pyprflow workflow list' for a list of available workflows to describe.");
+                    return 1;
+                }
+                
                 var url = $"search?entitytype=workflows&workflowid={WorkflowName}";
+                if (samples)
+                    url = $"workflows/sample/{WorkflowName}";
                 var result = await iPyprflowClient.GetAsync(url);
 
-                _console.WriteLine("You must specify at a subcommand.");
+               // _console.WriteLine("You must specify at a subcommand.");
                 OutputJson(result, "workflow", "workflow");
                 return 0;
             }

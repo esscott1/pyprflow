@@ -22,24 +22,40 @@ namespace pyprflow.Api.Controllers
 		{
 			Repository = workflow;
             _hostingEnvironment = hostingEnvironment;
-		}
+            RootPath = _hostingEnvironment.ContentRootPath;
+        }
 		public IWorkflowRepository Repository { get; set; }
         public IHostingEnvironment _hostingEnvironment { get; set; }
-
+        private string RootPath { get; set; }
 		[HttpGet]
 		public IEnumerable<Workflow.Model.Workflow> GetAll()
 		{ return Repository.GetAll<Workflow.Model.Workflow>(); }
 
+        [HttpGet("list/samples")]
+        public IActionResult ListSamples()
+        {
+            var files = System.IO.Directory.GetFiles(RootPath + $"/JsonSchemas");
+            var sampleFiles = new List<string>();
+            foreach(string f in files)
+            {
+                if (System.IO.Path.GetFileName(f).Contains("sample"))
+                    sampleFiles.Add(System.IO.Path.GetFileNameWithoutExtension(f));
+            }
+
+            var n = new { names = sampleFiles };
+            JObject jo = JObject.Parse(JsonConvert.SerializeObject(n));
+            return Json(jo);
+
+        }
         [HttpGet("list")]
         public IActionResult List()
         {
-            
             var result = Repository.List<Workflow.Model.Workflow>();
             var n = new { names = result };
             JObject jo = JObject.Parse(JsonConvert.SerializeObject(n));
             return Json(jo);
-    
         }
+
 		[HttpGet("{id}", Name = "GetWorkflow")]
 		public IActionResult GetById([FromQuery] string id)
 		{
@@ -48,12 +64,21 @@ namespace pyprflow.Api.Controllers
 			return Json(workflow);
 		}
 
-		[HttpGet("example")]
-		public IActionResult GetSample()
-		{
-			var wkf = new Workflow.Model.Workflow();
-			return Json(wkf.GetSample());
-		}
+        [HttpGet("sample/{id}", Name = "sample")]
+        public IActionResult GetSample( string id)
+        {
+            string result;
+            JObject o1 = new JObject();
+            try
+            {
+                o1 = JObject.Parse(System.IO.File.ReadAllText(RootPath + $"/JsonSchemas/{id}.json"));
+            }
+            catch (Exception ex)
+            {
+                result = "error reading the json file " + ex.InnerException;
+            }
+            return Json(o1);
+        }
 
         [HttpGet("expense-sample1")]
         public IActionResult GetSample1()
