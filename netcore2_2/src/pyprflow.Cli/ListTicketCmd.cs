@@ -16,12 +16,12 @@ namespace pyprflow.Cli
 
         [Option(CommandOptionType.SingleValue, ShortName = "end", LongName = "end-date", Description = "end date", ValueName = "end date", ShowInHelpText = true)]
         public DateTime? EndDate { get; set; }
-        public ListTicketCmd(ILogger<ListTicketCmd> logger, IConsole console, IHttpClientFactory clientFactory, Microsoft.Extensions.Configuration.IConfiguration configuration)
+        public ListTicketCmd(ILogger<ListTicketCmd> logger, IConsole console, IHttpClientFactory clientFactory)
         {
             _logger = logger;
             _console = console;
             _httpClientFactory = clientFactory;
-            _configuration = configuration;
+
         }
 
         protected override async Task<int> OnExecute(CommandLineApplication app)
@@ -60,9 +60,9 @@ namespace pyprflow.Cli
                 //OutputJson(sTestInfo, "tickets", "ticket");
                 OutputJson(tickets, "tickets", "ticket");
 
-             //   Console.ReadLine();
+                //   Console.ReadLine();
                 return 0;
-                
+
             }
             catch (Exception ex)
             {

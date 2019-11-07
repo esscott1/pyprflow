@@ -26,6 +26,7 @@ namespace pyprflow.Cli
 
         public async Task<string> GetAsync(string url)
         {
+            url = _httpClient.BaseAddress.AbsoluteUri + url;
             Console.WriteLine("calling " +url);
             HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
 

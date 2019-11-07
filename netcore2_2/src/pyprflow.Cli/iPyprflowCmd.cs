@@ -10,7 +10,7 @@ namespace pyprflow.Cli
     [VersionOptionFromMember("--version", MemberName = nameof(GetVersion))]
     [Subcommand(
         typeof(LoginCmd),
-        typeof(ListTicketCmd),
+       // typeof(ListTicketCmd),
         typeof(WorkflowCmd))]
     class iPyprflowCmd: iPyprflowCmdBase
     {

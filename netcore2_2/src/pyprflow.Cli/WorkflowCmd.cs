@@ -10,17 +10,16 @@ using System.Threading.Tasks;
 
 namespace pyprflow.Cli
 {
-    [Command(Name = "workflow", Description = "list ipyprflow tickets")]
-    [Subcommand(
-       
-        typeof(AddCmd),
-        typeof(DeleteCmd),
-        typeof(List))]
+    [Command(Name = "workflow", Description = "list ipyprflow workflows")]
+    //[Subcommand(
+    //    typeof(AddCmd),
+    //    typeof(DeleteCmd),
+    //    typeof(List))]
     internal class WorkflowCmd: iPyprflowCmdBase
     {
         [Option(CommandOptionType.SingleValue, ShortName ="describe", LongName ="describe", Description ="describe the workflow", ValueName ="describe", ShowInHelpText = true)]
         public string WorkflowName {get;set;}
-        public WorkflowCmd(ILogger<ListTicketCmd> logger, IConsole console, IHttpClientFactory clientFactory)
+        public WorkflowCmd(ILogger<WorkflowCmd> logger, IConsole console, IHttpClientFactory clientFactory)
         {
             _logger = logger;
             _console = console;
@@ -33,7 +32,7 @@ namespace pyprflow.Cli
                 WorkflowName = Prompt.GetString("Workflow name:", "expense-sample1");
             }
             
-            var url = "search?entitytype=workflow?workflowid=SampleWorkflow1";
+            var url = "search?entitytype=workflows&workflowid=SampleWorkflow1";
 
             var result = await iPyprflowClient.GetAsync(url);
 
@@ -44,10 +43,17 @@ namespace pyprflow.Cli
 
 
         [Command("describe", Description = "Describes workflow")]
-        private class DescribeCmd {
-            private int OnExecute(IConsole console)
+        private class DescribeCmd : WorkflowCmd{
+            public DescribeCmd(ILogger<WorkflowCmd> logger, IConsole console, IHttpClientFactory clientFactory):
+                base(logger,  console,  clientFactory)
+                    { }
+
+            private async Task<int> OnExecute(IConsole console)
             {
-                console.Error.WriteLine("You must specify an action. See --help for more details.");
+                var url = "search?entitytype=workflow?workflowid=expe";
+              
+                var result = await base.iPyprflowClient.GetAsync(url);
+
                 return 1;
             }
         

@@ -79,14 +79,15 @@ namespace pyprflow.Cli
                 });
             try
             {
-                //     return await builder.RunCommandLineApplicationAsync<iPyprflowCmd>(args);
-                //    var eArgs = new String[] { "login" };
-                var eArgs = new String[] { "list-tickets" };
-                int i = await builder.RunCommandLineApplicationAsync<iPyprflowCmd>(eArgs);
-                Console.Read();
-                return i;
+                return await builder.RunCommandLineApplicationAsync<iPyprflowCmd>(args);
+                //    var eArgs = new String[] { "workflow" , "--describe"};
+               // var eArgs = new String[] { "workflow describe expense-sample1" };
+               // int i = await builder.RunCommandLineApplicationAsync<iPyprflowCmd>(eArgs);
+               // Console.Read();
                 
-                 
+               // return i;
+
+
             }
             catch (Exception ex)
             {
