@@ -92,6 +92,12 @@ namespace pyprflow.Workflow.Model
             }
         }
        
+        public IEnumerable<string> List<T>() where T: BaseWorkflowItem {
+
+            List<string> result = GetAll<T>().Select(w => w.Name).ToList();
+            return result;
+
+        }
         public IEnumerable<T> GetAll<T>() where T : BaseWorkflowItem
 		{
             Type providedtype = typeof(T);

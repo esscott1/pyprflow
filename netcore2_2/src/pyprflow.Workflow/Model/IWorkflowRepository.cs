@@ -12,7 +12,7 @@ namespace pyprflow.Workflow.Model
 	{
 
         IEnumerable<T> GetAll<T>() where T : BaseWorkflowItem;
-
+        IEnumerable<String> List<T>() where T : BaseWorkflowItem;
         void Add<T>(T item) where T : BaseWorkflowItem;
         T Find<T>(string name) where T : BaseWorkflowItem;
         void HardDelete<T>(string workflowItemId) where T : BaseWorkflowItem;

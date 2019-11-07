@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.JsonPatch;
 using pyprflow.Workflow.Model;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 
 
@@ -29,6 +30,13 @@ namespace pyprflow.Api.Controllers
 		public IEnumerable<Workflow.Model.Workflow> GetAll()
 		{ return Repository.GetAll<Workflow.Model.Workflow>(); }
 
+        [HttpGet("list")]
+        public IEnumerable<string> List()
+        {
+            var result = Repository.List<Workflow.Model.Workflow>();
+
+            return result;
+        }
 		[HttpGet("{id}", Name = "GetWorkflow")]
 		public IActionResult GetById([FromQuery] string id)
 		{
