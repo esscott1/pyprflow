@@ -47,8 +47,7 @@ namespace pyprflow.Cli
                    .Enrich.FromLogContext()
                    .CreateLogger();
 
-            //   var ebuilder = CreateHostBuilder(args);
-            //  var builder = CreateHostBuilder(args);
+         
             var builder = new HostBuilder()
                 .ConfigureAppConfiguration((hostingContext, config) =>
                 {
@@ -71,21 +70,19 @@ namespace pyprflow.Cli
                     {
                         c.BaseAddress = new Uri(hostContext.Configuration["Host:Location"]);
                     });
-
-
                     services.Add(new ServiceDescriptor(typeof(IConfiguration), Configuration));
-                    //   services.AddSingleton(Configuration);
 
                 });
             try
             {
-                return await builder.RunCommandLineApplicationAsync<iPyprflowCmd>(args);
-                //    var eArgs = new String[] { "workflow" , "--describe"};
-               // var eArgs = new String[] { "workflow describe expense-sample1" };
-               // int i = await builder.RunCommandLineApplicationAsync<iPyprflowCmd>(eArgs);
-               // Console.Read();
-                
-               // return i;
+                // return await builder.RunCommandLineApplicationAsync<iPyprflowCmd>(args);
+                //var eArgs = new String[] { "workflow", "list" };
+                // var eArgs = new String[] { "workflow describe expense-sample1" };
+             //   args = new string[] { "list-tickets" };
+                int i = await builder.RunCommandLineApplicationAsync<iPyprflowCmd>(args);
+                Console.Read();
+
+                 return i;
 
 
             }

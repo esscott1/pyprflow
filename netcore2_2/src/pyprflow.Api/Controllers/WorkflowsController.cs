@@ -31,11 +31,14 @@ namespace pyprflow.Api.Controllers
 		{ return Repository.GetAll<Workflow.Model.Workflow>(); }
 
         [HttpGet("list")]
-        public IEnumerable<string> List()
+        public IActionResult List()
         {
+            
             var result = Repository.List<Workflow.Model.Workflow>();
-
-            return result;
+            var n = new { name = result };
+            JObject jo = JObject.Parse(JsonConvert.SerializeObject(n));
+            return Json(jo);
+           // return result;
         }
 		[HttpGet("{id}", Name = "GetWorkflow")]
 		public IActionResult GetById([FromQuery] string id)

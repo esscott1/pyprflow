@@ -40,7 +40,7 @@ namespace pyprflow.Cli
                 // var url = $"/api/tickets?filter[where][ticketDate][gt]={StartDate.Value.ToUniversalTime().ToString("o")}&filter[where][ticketDate][lt]={EndDate.Value.ToUniversalTime().ToString("o")}";
 
 
-                var url = "https://pyprflow.io/api/values";
+                var url = "values";
 
                 var tickets = await iPyprflowClient.GetAsync(url);
                 Console.WriteLine("got the tickets");

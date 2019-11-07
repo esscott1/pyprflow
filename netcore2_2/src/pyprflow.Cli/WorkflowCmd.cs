@@ -10,11 +10,36 @@ using System.Threading.Tasks;
 
 namespace pyprflow.Cli
 {
+
+    [Command("list", Description = "Lists workflows")]
+    internal class List : iPyprflowCmdBase
+    {
+        public List(ILogger<WorkflowCmd> logger, IConsole console, IHttpClientFactory clientFactory)  
+        {
+            _logger = logger;
+            _console = console;
+            _httpClientFactory = clientFactory;
+        }
+        [Option(Description = "Show all Workflow Names")]
+        public bool All { get; }
+        protected override async Task<int> OnExecute(CommandLineApplication app)
+        {
+          
+            var url = "workflows/list";
+            var result = await iPyprflowClient.GetAsync(url);
+
+           // _console.WriteLine("in the list subcommand.");
+            OutputJson(result, "workflow", "workflow");
+            return 1;
+        }
+    }
+
+
     [Command(Name = "workflow", Description = "list ipyprflow workflows")]
-    //[Subcommand(
+    [Subcommand(
     //    typeof(AddCmd),
     //    typeof(DeleteCmd),
-    //    typeof(List))]
+        typeof(List))]
     internal class WorkflowCmd: iPyprflowCmdBase
     {
         [Option(CommandOptionType.SingleValue, ShortName ="describe", LongName ="describe", Description ="describe the workflow", ValueName ="describe", ShowInHelpText = true)]
@@ -31,9 +56,7 @@ namespace pyprflow.Cli
             {
                 WorkflowName = Prompt.GetString("Workflow name:", "expense-sample1");
             }
-            
             var url = "search?entitytype=workflows&workflowid=SampleWorkflow1";
-
             var result = await iPyprflowClient.GetAsync(url);
 
             _console.WriteLine("You must specify at a subcommand.");
@@ -77,13 +100,6 @@ namespace pyprflow.Cli
             }
         }
 
-        [Command("list", Description = "Lists workflows")]
-        private class List {
-            private int OnExecute(IConsole console)
-            {
-                console.Error.WriteLine("You must specify an action. See --help for more details.");
-                return 1;
-            }
-        }
+       
     }
 }
