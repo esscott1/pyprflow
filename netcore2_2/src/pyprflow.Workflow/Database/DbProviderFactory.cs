@@ -19,14 +19,12 @@ namespace pyprflow.Database
     {
         internal static Dictionary<string, Action<DbContextOptionsBuilder>> _DbProviderStrategy =
           new Dictionary<string, Action<DbContextOptionsBuilder>>() {
-             { "dockertest",  o => o.UseSqlServer(conn, m => m.MigrationsAssembly("pyprflow")) },
-             { "mssql2017", o => o.UseSqlServer(conn, m => m.MigrationsAssembly("pyprflow")) },
-             { "local", o => o.UseSqlServer(conn, m => m.MigrationsAssembly("pyprflow")) },
-             { "mssql", o => o.UseSqlServer(conn, m => m.MigrationsAssembly("pyprflow")) },
-             { "mysql", o => o.UseMySQL(conn, m => m.MigrationsAssembly("pyprflow")) },
-             { "postgres", o => o.UseNpgsql(conn, m => m.MigrationsAssembly("pyprflow"))
-                
-              },
+             { "dockertest",  o => o.UseSqlServer(conn, m => m.MigrationsAssembly("pyprflow.Api")) },
+             { "mssql2017", o => o.UseSqlServer(conn, m => m.MigrationsAssembly("pyprflow.Api")) },
+             { "local", o => o.UseSqlServer(conn, m => m.MigrationsAssembly("pyprflow.Api")) },
+             { "mssql", o => o.UseSqlServer(conn, m => m.MigrationsAssembly("pyprflow.Api")) },
+             { "googlesql", o => o.UseMySQL(conn, m => m.MigrationsAssembly("pyprflow.Api")) },
+             { "postgres", o => o.UseNpgsql(conn, m => m.MigrationsAssembly("pyprflow.Api"))},
              {"sqlite", o => o.UseSqlite(conn, m => { m.SuppressForeignKeyEnforcement(); m.MigrationsAssembly("pyprflow"); }) }
 
            };
@@ -39,7 +37,8 @@ namespace pyprflow.Database
        //       { "local", "Server=127.0.0.1; Database=pyprflowlocaldb;User Id = sa; Password=!!nimda1;" },
             { "sqlite" , "Filename=./Repository.db" },
             {"mysql", "Server=35.232.78.33;Database=pyprflowlocaldb;uid=root;pwd=!!nimda!!1" },
-            {"postgres", "Server=35.247.75.125;Database=pyprflowlocaldb;userId=postgres;Password=!!nimda!!1" }
+            {"postgres", "Server=34.94.219.219;Database=pyprflowlocaldb;userId=postgres;Password=!!nimda!!1" },
+            { "googlesql", "Server=127.0.0.1\\sqlexpress2017; Database=pyprflowlocaldb;User Id = sa; Password=!!nimda1;" },
         };
         internal static string conn = string.Empty;
       

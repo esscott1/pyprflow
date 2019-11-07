@@ -1,5 +1,6 @@
 ﻿using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Configuration;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -9,13 +10,15 @@ namespace pyprflow.Cli
     [VersionOptionFromMember("--version", MemberName = nameof(GetVersion))]
     [Subcommand(
         typeof(LoginCmd),
-        typeof(ListTicketCmd))]
+        typeof(ListTicketCmd),
+        typeof(WorkflowCmd))]
     class iPyprflowCmd: iPyprflowCmdBase
     {
-        public iPyprflowCmd(ILogger<iPyprflowCmd> logger, IConsole console)
+        public iPyprflowCmd(ILogger<iPyprflowCmd> logger, IConsole console, IConfiguration configuration)
         {
             _logger = logger;
             _console = console;
+            _configuration = configuration;
         }
 
         protected override Task<int> OnExecute(CommandLineApplication app)

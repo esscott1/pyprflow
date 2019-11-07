@@ -1,0 +1,18 @@
+{
+  "profiles": {
+    "pyprflow.Cli": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development",
+        "Hosting:Environment": "Development",
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "pyprflow.Cli-Production": {
+        "commandName": "Project",
+        "environmentVariables": {
+            "ASPNETCORE_ENVIRONMENT": "Production"
+        }
+    }
+  }
+}

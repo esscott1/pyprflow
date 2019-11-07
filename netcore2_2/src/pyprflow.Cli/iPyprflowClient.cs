@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -12,12 +13,15 @@ namespace pyprflow.Cli
         private readonly HttpClient _httpClient;
         private readonly UserProfile _userProfile;
         private readonly ILogger _logger;
+        private readonly String _host;
 
-        public iPyprflowClient(HttpClient httpClient, UserProfile userProfile, ILogger logger)
+        public iPyprflowClient(HttpClient httpClient, UserProfile userProfile, ILogger logger )
         {
             _httpClient = httpClient;
             _userProfile = userProfile;
             _logger = logger;
+            
+          //  _host = configuration["Host:Location"];
         }
 
         public async Task<string> GetAsync(string url)

@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Xml.Xsl;
+using Microsoft.Extensions.Configuration;
 
 namespace pyprflow.Cli
 {
@@ -24,6 +25,7 @@ namespace pyprflow.Cli
         protected ILogger _logger;
         protected IHttpClientFactory _httpClientFactory;
         protected IConsole _console;
+        protected IConfiguration _configuration;
 
         [Option(CommandOptionType.SingleValue, ShortName = "", LongName = "profile", Description = "local profile name", ValueName = "profile name", ShowInHelpText = true)]
         public string Profile { get; set; } = "default";
@@ -57,7 +59,7 @@ namespace pyprflow.Cli
         {
             get
             {
-                if (_userProfile == null)
+                    if (_userProfile == null)
                 {
                     var text = File.ReadAllText($"{ProfileFolder}{Profile}");
                     if (!string.IsNullOrEmpty(text))
@@ -79,7 +81,7 @@ namespace pyprflow.Cli
             {
                 if (_iPyprflowClient == null)
                 {
-                    _iPyprflowClient =  new iPyprflowClient(_httpClientFactory.CreateClient(), UserProfile, _logger);
+                    _iPyprflowClient =  new iPyprflowClient(_httpClientFactory.CreateClient("pyprflow"), UserProfile, _logger);
                 }
 
                 return _iPyprflowClient;

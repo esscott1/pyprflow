@@ -16,43 +16,53 @@
             font-family: courier, monospace;
             padding: 0 3px;
         }
+
         #picdiv {
             background-color: black;
             max-width: 400px;
             max-height: 400px;
             margin: auto;
-               
         }
-        .imagecontainer > img:hover{
+
+        .imagecontainer > img:hover {
             width: 700px;
             height: 700px;
-
         }
-        .sampleimg{
+
+        .sampleimg {
             display: block;
             margin-left: auto;
             margin-right: auto;
             width: 400px;
             height: 400px;
         }
-        img{
-            transition:transform 0.25s ease;
-          
+
+        img {
+            transition: transform 0.25s ease;
         }
-        img:hover{
-            -webkit-transform:scale(1.75);
-            transform:scale(1.75);
-        }
+
+            img:hover {
+                -webkit-transform: scale(1.75);
+                transform: scale(1.75);
+            }
     </style>
     <!-- 3. Instantiate clipboard -->
-    <div class="imagecontainer"><p>
-        <img src="img/expense-sample1.png" class="sampleimg" />
-    </p></div>
-    <code>PS> </code><code id="foo1">the Actual code to copy...btw moved initial of clipboard js to bottom of body section</code>
-    <button class="btn" data-clipboard-target="#foo1">
+    <div class="imagecontainer">
+        <p>
+            <img src="img/expense-sample1.png" class="sampleimg" />
+        </p>
+    </div>
+    <code> > </code><code id="wf-list">pyprflow workflow list samples</code>
+    <button class="btn" data-clipboard-target="#wf-list">
         <img src="https://clipboardjs.com/assets/images/clippy.svg" width="13" alt="Copy to clipboard">
     </button>
-    <p>Let's do some instrution writing hu?</p>
+    <p>Get a list of sample workflows</p>
+
+    <code> > </code><code id="wf-list">pyprflow workflow describe example-sample1</code>
+    <button class="btn" data-clipboard-target="#wf-list">
+        <img src="https://clipboardjs.com/assets/images/clippy.svg" width="13" alt="Copy to clipboard">
+    </button>
+    <p>Get the expense report sample workflow</p>
     <script>
         var clipboard = new ClipboardJS('.btn');
 
