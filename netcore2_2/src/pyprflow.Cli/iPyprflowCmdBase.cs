@@ -184,6 +184,7 @@ namespace pyprflow.Cli
         protected void OnException(Exception ex)
         {
             OutputError(ex.Message);
+            OutputError("please contact us via e-mail at help@pyprflow.io");
             _logger.LogError(ex.Message);
             _logger.LogDebug(ex, ex.Message);
         }
@@ -234,6 +235,7 @@ namespace pyprflow.Cli
             if (!string.IsNullOrEmpty(OutputFile))
             {
                 OutputToFile(data);
+                OutputToConsole($"Your data has been streamed to {OutputFile}");
             }
             else
             {

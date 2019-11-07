@@ -11,6 +11,56 @@ using System.Threading.Tasks;
 
 namespace pyprflow.Cli
 {
+    [Command("add", Description = "adds workflows")]
+    internal class Add : iPyprflowCmdBase
+    {
+        public Add(ILogger<WorkflowCmd> logger, IConsole console, IHttpClientFactory clientFactory)
+        {
+            _logger = logger;
+            _console = console;
+            _httpClientFactory = clientFactory;
+        }
+        [Option(CommandOptionType.SingleValue,
+            ShortName = "filelocation",
+            LongName = "filelocation",
+            Description = "Json file that represents the workflow",
+            ValueName = "filelocation", ShowInHelpText = true)]
+        public string FileLocation { set; get; }
+        protected override async Task<int> OnExecute(CommandLineApplication app)
+        {
+            if (String.IsNullOrWhiteSpace(FileLocation) || String.IsNullOrEmpty(FileLocation))
+                FileLocation = Prompt.GetString("File Location", "/input/simple-sample1.json");
+            var url = "workflows";
+            //var result = await iPyprflowClient.PostAsync(url,app.Arguments);
+
+            // _console.WriteLine("in the list subcommand.");
+            var jsonworkflow = System.IO.File.ReadAllText(FileLocation);
+            OutputToConsole("--- Workflow Names ---");
+            try
+            {
+                //JObject o = JObject.Parse(result);
+                //JArray a = (JArray)o["names"];
+
+                var result = await iPyprflowClient.PostAsync(url, jsonworkflow);
+                //IList<string> names = a.ToObject<IList<string>>();
+                //foreach (string name in names)
+                //{
+                //    OutputToConsole(name);
+
+                //}
+                OutputJson(result, "workflow", "workflow");
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                OnException(ex);
+                return 1;
+
+            }
+
+        }
+    }
+
 
     [Command("list", Description = "Lists workflows")]
     internal class List : iPyprflowCmdBase
@@ -31,22 +81,33 @@ namespace pyprflow.Cli
 
             // _console.WriteLine("in the list subcommand.");
             OutputToConsole("--- Workflow Names ---");
-            JObject o = JObject.Parse(result);
-            JArray a =(JArray)o["name"];
-            IList<string> names = a.ToObject<IList<string>>();
-            foreach (string name in names) {
-                OutputToConsole(name);
-               
-                    }
-            OutputJson(result, "workflow", "workflow");
-            return 1;
+            try
+            {
+                JObject o = JObject.Parse(result);
+                JArray a = (JArray)o["names"];
+                IList<string> names = a.ToObject<IList<string>>();
+                foreach (string name in names)
+                {
+                    OutputToConsole(name);
+
+                }
+                OutputJson(result, "workflow", "workflow");
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                OnException(ex);
+                return 1;
+
+            }
+           
         }
     }
 
 
     [Command(Name = "workflow", Description = "list ipyprflow workflows")]
     [Subcommand(
-    //    typeof(AddCmd),
+        typeof(Add),
     //    typeof(DeleteCmd),
         typeof(List))]
     internal class WorkflowCmd: iPyprflowCmdBase
@@ -61,52 +122,28 @@ namespace pyprflow.Cli
         }
         protected override async Task<int> OnExecute(CommandLineApplication app)
         {
-            if(String.IsNullOrEmpty(WorkflowName) || String.IsNullOrWhiteSpace(WorkflowName))
+            try
             {
-                WorkflowName = Prompt.GetString("Workflow name:", "expense-sample1");
-            }
-            var url = $"search?entitytype=workflows&workflowid={WorkflowName}";
-            var result = await iPyprflowClient.GetAsync(url);
+                if (String.IsNullOrEmpty(WorkflowName) || String.IsNullOrWhiteSpace(WorkflowName))
+                {
+                    WorkflowName = Prompt.GetString("Workflow name:", "expense-sample1");
+                }
+                var url = $"search?entitytype=workflows&workflowid={WorkflowName}";
+                var result = await iPyprflowClient.GetAsync(url);
 
-            _console.WriteLine("You must specify at a subcommand.");
-            OutputJson(result, "workflow", "workflow");
-            return 1;
+                _console.WriteLine("You must specify at a subcommand.");
+                OutputJson(result, "workflow", "workflow");
+                return 0;
+            }
+            catch(Exception ex)
+            {
+                OnException(ex);
+                return 1;
+            }
+            
         }
         
-        [Command("describe", Description = "Describes workflow")]
-        private class DescribeCmd : WorkflowCmd{
-            public DescribeCmd(ILogger<WorkflowCmd> logger, IConsole console, IHttpClientFactory clientFactory):
-                base(logger,  console,  clientFactory)
-                    { }
-
-            private async Task<int> OnExecute(IConsole console)
-            {
-                var url = "search?entitytype=workflow?workflowid=expe";
-              
-                var result = await base.iPyprflowClient.GetAsync(url);
-
-                return 1;
-            }
-        
-        }
-
-        [Command("add", Description = "Adds a workflow")]
-        private class AddCmd {
-            private int OnExecute(IConsole console)
-            {
-                console.Error.WriteLine("You must specify an action. See --help for more details.");
-                return 1;
-            }
-        }
-
-        [Command("delete", Description = "Deletes a workflow")]
-        private class DeleteCmd {
-            private int OnExecute(IConsole console)
-            {
-                console.Error.WriteLine("You must specify an action. See --help for more details.");
-                return 1;
-            }
-        }
+       
 
        
     }

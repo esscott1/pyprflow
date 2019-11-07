@@ -1,10 +1,12 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace pyprflow.Cli
 {
@@ -23,7 +25,22 @@ namespace pyprflow.Cli
             
           //  _host = configuration["Host:Location"];
         }
+        public async Task<string> PostAsync(string url, string body)
+        {
+            url = _httpClient.BaseAddress.AbsoluteUri + url;
+            _httpClient.DefaultRequestHeaders
+                .Accept
+                .Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+            Console.WriteLine("calling " + url);
+            HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Post, url);
+            requestMessage.Headers.Add("user-key", "test");
+            //requestMessage.Headers.Add("Content-Type", "application/json");
+            requestMessage.Content = new StringContent(
+                body, Encoding.UTF8, "application/json");
 
+            return await Request(requestMessage);
+
+        }
         public async Task<string> GetAsync(string url)
         {
             url = _httpClient.BaseAddress.AbsoluteUri + url;

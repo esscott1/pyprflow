@@ -1,0 +1,9 @@
+{"nodes": {"Submitted": {"nodeName": "Submitted","nodeDescription": "Expense Reports that have been submitted",
+"nodeId": null,"isStart": true,"isEnd": false},
+"Denied": {"nodeName": "Denied","nodeDescription": "Expense reports that were denied and returned to submitter",
+"nodeId": null,"isStart": false,"isEnd": true}},"orchestrations": {"Orch1": {"orchestrationName": "Orch1",
+"moves": [{"from": null,"to": "Submitted"},{"from": "Submitted","to": "Denied"}],
+"name": null,"active": true,"deleted": false}},
+"workflowGuid": "3498E872-277B-45C8-BC96-08BAE74BBEBD","workflowName": "simple-sample1","orchestrationAffinity": false,
+"name": "simple-sample1","active": true,"deleted": false}
+

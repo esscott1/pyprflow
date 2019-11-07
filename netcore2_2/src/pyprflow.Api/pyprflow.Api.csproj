@@ -74,7 +74,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="JsonSchemas\expense-sample1.json">
+    <Content Update="JsonSchemas\simple-sample1.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Update="wwwroot\css\stylesheet.css">

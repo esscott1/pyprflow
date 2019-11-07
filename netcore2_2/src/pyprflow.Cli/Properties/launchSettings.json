@@ -10,6 +10,7 @@
     },
     "pyprflow.Cli-Production": {
       "commandName": "Project",
+      "commandLineArgs": "workflow add --filelocation C:\\src\\pyprflow\\netcore2_2\\src\\pyprflow.Cli\\bin\\Debug\\netcoreapp2.2\\win7-x64\\input\\simple-sample1.json",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Production"
       }
