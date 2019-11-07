@@ -250,7 +250,8 @@ namespace pyprflow.Cli
         {
             _console.BackgroundColor = ConsoleColor.Black;
             _console.ForegroundColor = ConsoleColor.White;
-            _console.Out.Write(data);
+           // _console.Out.Write(data);
+            _console.Out.WriteLine(data);
             _console.ResetColor();
         }
 

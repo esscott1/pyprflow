@@ -80,7 +80,7 @@ namespace pyprflow.Cli
                 // var eArgs = new String[] { "workflow describe expense-sample1" };
              //   args = new string[] { "list-tickets" };
                 int i = await builder.RunCommandLineApplicationAsync<iPyprflowCmd>(args);
-                Console.Read();
+              //  Console.Read();
 
                  return i;
 

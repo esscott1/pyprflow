@@ -35,10 +35,10 @@ namespace pyprflow.Api.Controllers
         {
             
             var result = Repository.List<Workflow.Model.Workflow>();
-            var n = new { name = result };
+            var n = new { names = result };
             JObject jo = JObject.Parse(JsonConvert.SerializeObject(n));
             return Json(jo);
-           // return result;
+    
         }
 		[HttpGet("{id}", Name = "GetWorkflow")]
 		public IActionResult GetById([FromQuery] string id)

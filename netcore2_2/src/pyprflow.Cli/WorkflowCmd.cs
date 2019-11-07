@@ -1,9 +1,10 @@
 ﻿
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,7 +29,15 @@ namespace pyprflow.Cli
             var url = "workflows/list";
             var result = await iPyprflowClient.GetAsync(url);
 
-           // _console.WriteLine("in the list subcommand.");
+            // _console.WriteLine("in the list subcommand.");
+            OutputToConsole("--- Workflow Names ---");
+            JObject o = JObject.Parse(result);
+            JArray a =(JArray)o["name"];
+            IList<string> names = a.ToObject<IList<string>>();
+            foreach (string name in names) {
+                OutputToConsole(name);
+               
+                    }
             OutputJson(result, "workflow", "workflow");
             return 1;
         }
@@ -56,15 +65,14 @@ namespace pyprflow.Cli
             {
                 WorkflowName = Prompt.GetString("Workflow name:", "expense-sample1");
             }
-            var url = "search?entitytype=workflows&workflowid=SampleWorkflow1";
+            var url = $"search?entitytype=workflows&workflowid={WorkflowName}";
             var result = await iPyprflowClient.GetAsync(url);
 
             _console.WriteLine("You must specify at a subcommand.");
             OutputJson(result, "workflow", "workflow");
             return 1;
         }
-
-
+        
         [Command("describe", Description = "Describes workflow")]
         private class DescribeCmd : WorkflowCmd{
             public DescribeCmd(ILogger<WorkflowCmd> logger, IConsole console, IHttpClientFactory clientFactory):
