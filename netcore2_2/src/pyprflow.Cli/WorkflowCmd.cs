@@ -81,7 +81,7 @@ namespace pyprflow.Cli
             string url = "workflows/list";
             if (samples)
                 url = "workflows/list/samples";
-            var result = await iPyprflowClient.GetAsync(url);
+             var result = await iPyprflowClient.GetAsync(url);
 
             // _console.WriteLine("in the list subcommand.");
             OutputToConsole("--- Workflow Names ---");
@@ -95,7 +95,7 @@ namespace pyprflow.Cli
                     OutputToConsole(name);
 
                 }
-                OutputJson(result, "workflow", "workflow");
+                //OutputJson(result, "workflow", "workflow");
                 return 0;
             }
             catch (Exception ex)

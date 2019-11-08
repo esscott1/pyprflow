@@ -92,17 +92,10 @@ namespace pyprflow.Api
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            //loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            //loggerFactory.AddDebug();
-            //app.ApplyUserKeyValidation();
+          
             app.UseDefaultFiles();
             app.UseStaticFiles();
-            //app.UseStaticFiles(new StaticFileOptions()
-            //{
-            //    FileProvider = new PhysicalFileProvider(
-            //Path.Combine(Directory.GetCurrentDirectory(), @"MyStaticFiles")),
-            //    RequestPath = new PathString("/HTML")
-            //});
+            
 
             app.UseSwagger();
             app.UseSwaggerUI(c =>
@@ -110,7 +103,6 @@ namespace pyprflow.Api
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
             app.UseHttpsRedirection();
-            //  app.UseMvc();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
