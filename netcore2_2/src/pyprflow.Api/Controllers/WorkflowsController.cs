@@ -8,6 +8,7 @@ using pyprflow.Workflow.Model;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+using pyprflow.Api.Services;
 
 
 
@@ -18,15 +19,17 @@ namespace pyprflow.Api.Controllers
 	[Route("api/[controller]")]
 	public class WorkflowsController : Controller
 	{
-		public WorkflowsController(IWorkflowRepository workflow, IHostingEnvironment hostingEnvironment)
+		public WorkflowsController(IWorkflowRepository workflow, IHostingEnvironment hostingEnvironment, IUserService userService)
 		{
 			Repository = workflow;
             _hostingEnvironment = hostingEnvironment;
             RootPath = _hostingEnvironment.ContentRootPath;
+            _userService = userService;
         }
 		public IWorkflowRepository Repository { get; set; }
         public IHostingEnvironment _hostingEnvironment { get; set; }
         private string RootPath { get; set; }
+        private IUserService _userService;
 		[HttpGet]
 		public IEnumerable<Workflow.Model.Workflow> GetAll()
 		{ return Repository.GetAll<Workflow.Model.Workflow>(); }
@@ -50,6 +53,7 @@ namespace pyprflow.Api.Controllers
         [HttpGet("list")]
         public IActionResult List()
         {
+            var user = _userService.Authenticate("test", "test");
             var result = Repository.List<Workflow.Model.Workflow>();
             var n = new { names = result };
             JObject jo = JObject.Parse(JsonConvert.SerializeObject(n));

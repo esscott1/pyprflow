@@ -11,7 +11,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.SqlServer;
-using pyprflow.Workflow.Helpers;
 using pyprflow.Workflow.Model;
 using pyprflow.Api.Middleware;
 using pyprflow.Database;
@@ -19,13 +18,15 @@ using System.Linq.Expressions;
 using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.Extensions.FileProviders;
 using System.IO;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using pyprflow.Api.Services;
 
 namespace pyprflow.Api
 {
     public class Startup
     {
-
-       
         //public Startup(IHostingEnvironment env)
         //{
         //    var builder = new ConfigurationBuilder()
@@ -67,6 +68,33 @@ namespace pyprflow.Api
             pyprflow.Database.IDbProvider Iconn = new pyprflow.Database.DbProviderFactory().Create(dbtype);
             services.AddDbContext<ApiContext>(Iconn.dbContext,ServiceLifetime.Scoped);
 
+            // configure strongly typed settings objects
+            var appSettingsSection = Configuration.GetSection("AppSettings");
+            services.Configure<pyprflow.Api.Helpers.AppSettings>(appSettingsSection);
+
+            // configure jwt authentication
+            var appSettings = appSettingsSection.Get<pyprflow.Api.Helpers.AppSettings>();
+            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
+            // configure DI for application services
+            services.AddScoped<IUserService, UserService>();
+
 
             Console.WriteLine("OS is: " + System.Runtime.InteropServices.RuntimeInformation.OSDescription);
             Console.WriteLine("pfdatabasetype ENV var is: " + dbtype);
@@ -92,9 +120,12 @@ namespace pyprflow.Api
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-          
+
+            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            app.UseAuthentication();
             app.UseDefaultFiles();
             app.UseStaticFiles();
+
             
 
             app.UseSwagger();
