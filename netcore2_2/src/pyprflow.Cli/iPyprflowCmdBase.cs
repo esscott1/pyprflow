@@ -81,7 +81,6 @@ namespace pyprflow.Cli
             {
                 if (_iPyprflowClient == null)
                 {
-                 
                     _iPyprflowClient =  new iPyprflowClient(_httpClientFactory.CreateClient("pyprflow"), UserProfile, _logger);
                 }
 
