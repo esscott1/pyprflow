@@ -74,22 +74,15 @@ namespace pyprflow.Cli
                 return _userProfile;
             }
         }
-        protected string GetToken()
-        {
-
-            return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjEiLCJuYmYiOjE1NzM1ODAwMzAsImV4cCI6MTU3NDE4NDgzMCwiaWF0IjoxNTczNTgwMDMwfQ.e2V9GYDyFSG4yq5HbDh7dmYMxge_6gbPje38oUmFizw";
-        }
+       
         protected iPyprflowClient iPyprflowClient
         {
             get
             {
                 if (_iPyprflowClient == null)
                 {
-                    HttpClient client = _httpClientFactory.CreateClient("pyprflow");
-                    client.DefaultRequestHeaders.Authorization = 
-                        new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GetToken());
-                   // _iPyprflowClient =  new iPyprflowClient(_httpClientFactory.CreateClient("pyprflow"), UserProfile, _logger);
-                    _iPyprflowClient = new iPyprflowClient(client, UserProfile, _logger);
+                 
+                    _iPyprflowClient =  new iPyprflowClient(_httpClientFactory.CreateClient("pyprflow"), UserProfile, _logger);
                 }
 
                 return _iPyprflowClient;

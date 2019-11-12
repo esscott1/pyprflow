@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace pyprflow.Cli
 {
@@ -43,8 +44,17 @@ namespace pyprflow.Cli
         }
         public async Task<string> GetAsync(string url)
         {
-            url = _httpClient.BaseAddress.AbsoluteUri + url;
+            var jsontoken = await PostAsync("values", System.IO.File.ReadAllText("input/cred.json"));
+            JObject jo = JObject.Parse(jsontoken);
+            var token = (string)jo["token"];
 
+
+            url = _httpClient.BaseAddress.AbsoluteUri + url;
+            _httpClient.DefaultRequestHeaders.Authorization =
+            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer",
+         //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjEiLCJuYmYiOjE1NzM1ODAwMzAsImV4cCI6MTU3NDE4NDgzMCwiaWF0IjoxNTczNTgwMDMwfQ.e2V9GYDyFSG4yq5HbDh7dmYMxge_6gbPje38oUmFizw");
+         token);
+          //  await PostAsync("values", System.IO.File.ReadAllText("input/cred.json")));
             Console.WriteLine("calling " +url);
             HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
 

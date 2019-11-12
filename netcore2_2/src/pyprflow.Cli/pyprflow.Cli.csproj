@@ -34,6 +34,9 @@
     <None Update="appSettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="input\cred.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="input\simple-sample1.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -128,15 +128,15 @@ namespace pyprflow.Cli
             OutputToConsole("--- test Names ---");
             try
             {
-                JObject o = JObject.Parse(result);
-                JArray a = (JArray)o["names"];
-                IList<string> names = a.ToObject<IList<string>>();
-                foreach (string name in names)
-                {
-                    OutputToConsole(name);
+                //JObject o = JObject.Parse(result);
+                //JArray a = (JArray)o["names"];
+                //IList<string> names = a.ToObject<IList<string>>();
+                //foreach (string name in names)
+                //{
+                //    OutputToConsole(name);
 
-                }
-                //OutputJson(result, "workflow", "workflow");
+                //}
+                OutputJson(result, "workflow", "workflow");
                 return 0;
             }
             catch (Exception ex)
