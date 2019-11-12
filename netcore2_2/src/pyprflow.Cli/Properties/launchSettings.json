@@ -10,7 +10,7 @@
     },
     "pyprflow.Cli-Production": {
       "commandName": "Project",
-      "commandLineArgs": "workflow list -s",
+      "commandLineArgs": "workflow etest",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Production"
       }

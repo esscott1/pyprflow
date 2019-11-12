@@ -108,10 +108,51 @@ namespace pyprflow.Cli
         }
     }
 
+    [Command("etest", Description = "test secure api call")]
+    internal class Etest : iPyprflowCmdBase
+    {
+        public Etest(ILogger<WorkflowCmd> logger, IConsole console, IHttpClientFactory clientFactory)
+        {
+            _logger = logger;
+            _console = console;
+            _httpClientFactory = clientFactory;
+        }
+       
+        protected override async Task<int> OnExecute(CommandLineApplication app)
+        {
+            string url = "values";
+           
+            var result = await iPyprflowClient.GetAsync(url);
+
+            // _console.WriteLine("in the list subcommand.");
+            OutputToConsole("--- test Names ---");
+            try
+            {
+                JObject o = JObject.Parse(result);
+                JArray a = (JArray)o["names"];
+                IList<string> names = a.ToObject<IList<string>>();
+                foreach (string name in names)
+                {
+                    OutputToConsole(name);
+
+                }
+                //OutputJson(result, "workflow", "workflow");
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                OnException(ex);
+                return 1;
+
+            }
+
+        }
+    }
 
     [Command(Name = "workflow", Description = "list ipyprflow workflows")]
     [Subcommand(
         typeof(Add),
+        typeof(Etest),
     //    typeof(DeleteCmd),
         typeof(List))]
     internal class WorkflowCmd: iPyprflowCmdBase
