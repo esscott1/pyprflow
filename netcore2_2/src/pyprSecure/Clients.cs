@@ -13,13 +13,42 @@ namespace pyprSecure
         {
             return new List<Client>
             {
+                new Client
+                {
+                    ClientId = "apiclient",
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+                    ClientSecrets =
+                    {
+                        new Secret("secret".Sha256())
+                    },
+                    AllowedScopes = {"api"},
+                      Claims = new List<System.Security.Claims.Claim>
+                    {
+                        new System.Security.Claims.Claim("fedorg","unique_Value")
+                    },
+                       AlwaysSendClientClaims = true
+
+                },
                 new Client {
                     ClientId = "oauthClient",
                     ClientName = "Example Client Credentials Client Application",
-                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials, 
+                    
                     ClientSecrets = new List<Secret> {
                         new Secret("superSecretPassword".Sha256())},
-                    AllowedScopes = new List<string> {"customAPI.read"}
+                    AllowedScopes = new List<string> {
+                         IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.Email,
+                        "customAPI.read",
+                        "api" },
+                    Claims = new List<System.Security.Claims.Claim>
+                    {
+                        new System.Security.Claims.Claim("fedorg","unique_Value")
+                    },
+                    AlwaysSendClientClaims = true
+                    
+                    
                 },
                 new Client {
                     ClientId = "openIdConnectClient",

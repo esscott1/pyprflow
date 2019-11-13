@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using IdentityModel.Client;
 
 namespace pyprflow.Cli
 {
@@ -42,8 +43,47 @@ namespace pyprflow.Cli
             return await Request(requestMessage);
 
         }
+
+        public async Task<TokenResponse> RequestTokenAsync()
+        {
+            var client = new HttpClient();
+
+            var disco = await client.GetDiscoveryDocumentAsync("https://localhost:5001/");
+            if (disco.IsError) throw new Exception(disco.Error);
+
+            var response = await client.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
+            {
+                Address = disco.TokenEndpoint,
+                ClientCredentialStyle = ClientCredentialStyle.PostBody,
+
+                ClientId = "oauthClient",
+                ClientSecret = "superSecretPassword",
+                Scope = "customAPI.read"
+            });
+
+            if (response.IsError) throw new Exception(response.Error);
+            return response;
+
+        }
         public async Task<string> GetAsync(string url)
         {
+            var response = await RequestTokenAsync();
+            var eClient = new HttpClient
+            {
+                BaseAddress = new Uri("https://localhost:5001/")
+            };
+            try
+            {
+                eClient.SetBearerToken(response.AccessToken);
+                var endResponse = await eClient.GetStringAsync("api/values");
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.InnerException);
+            }
+            
+
+
             var jsontoken = await PostAsync("values", System.IO.File.ReadAllText("input/cred.json"));
             JObject jo = JObject.Parse(jsontoken);
             var token = (string)jo["token"];

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.779
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29418.71
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{FDD81516-B5F4-4BC4-A0A6-BC81F67982FE}"
 	ProjectSection(SolutionItems) = preProject
@@ -32,9 +32,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pyprflow.Cli", "src\pyprflo
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "pyprflow.Cli_setup", "src\pyprflow.Cli_setup\pyprflow.Cli_setup.wixproj", "{86306EFA-7B77-4DCA-A89E-30DA2D15F931}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pyprSecure", "src\pyprSecure\pyprSecure.csproj", "{FD790364-E732-434F-B8A0-F855EAAE2F59}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pyprSecure", "src\pyprSecure\pyprSecure.csproj", "{FD790364-E732-434F-B8A0-F855EAAE2F59}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pyprSecureTestWebClient", "src\pyprSecureTestWebClient\pyprSecureTestWebClient.csproj", "{6D35028B-81CD-4B57-A5D4-FD55179263BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pyprSecureTestWebClient", "src\pyprSecureTestWebClient\pyprSecureTestWebClient.csproj", "{6D35028B-81CD-4B57-A5D4-FD55179263BA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pyprSecureConsoleTest", "src\pyprSecureConsoleTest\pyprSecureConsoleTest.csproj", "{4B3113ED-7379-4CCA-B494-B14063FB4A52}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pyprSecureAPITest", "src\pyprSecureAPITest\pyprSecureAPITest.csproj", "{A2C39E45-1AB7-4513-B43F-9EE50A64F067}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -141,6 +145,30 @@ Global
 		{6D35028B-81CD-4B57-A5D4-FD55179263BA}.Release|x64.Build.0 = Release|Any CPU
 		{6D35028B-81CD-4B57-A5D4-FD55179263BA}.Release|x86.ActiveCfg = Release|Any CPU
 		{6D35028B-81CD-4B57-A5D4-FD55179263BA}.Release|x86.Build.0 = Release|Any CPU
+		{4B3113ED-7379-4CCA-B494-B14063FB4A52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B3113ED-7379-4CCA-B494-B14063FB4A52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B3113ED-7379-4CCA-B494-B14063FB4A52}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4B3113ED-7379-4CCA-B494-B14063FB4A52}.Debug|x64.Build.0 = Debug|Any CPU
+		{4B3113ED-7379-4CCA-B494-B14063FB4A52}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4B3113ED-7379-4CCA-B494-B14063FB4A52}.Debug|x86.Build.0 = Debug|Any CPU
+		{4B3113ED-7379-4CCA-B494-B14063FB4A52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B3113ED-7379-4CCA-B494-B14063FB4A52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B3113ED-7379-4CCA-B494-B14063FB4A52}.Release|x64.ActiveCfg = Release|Any CPU
+		{4B3113ED-7379-4CCA-B494-B14063FB4A52}.Release|x64.Build.0 = Release|Any CPU
+		{4B3113ED-7379-4CCA-B494-B14063FB4A52}.Release|x86.ActiveCfg = Release|Any CPU
+		{4B3113ED-7379-4CCA-B494-B14063FB4A52}.Release|x86.Build.0 = Release|Any CPU
+		{A2C39E45-1AB7-4513-B43F-9EE50A64F067}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2C39E45-1AB7-4513-B43F-9EE50A64F067}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2C39E45-1AB7-4513-B43F-9EE50A64F067}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A2C39E45-1AB7-4513-B43F-9EE50A64F067}.Debug|x64.Build.0 = Debug|Any CPU
+		{A2C39E45-1AB7-4513-B43F-9EE50A64F067}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A2C39E45-1AB7-4513-B43F-9EE50A64F067}.Debug|x86.Build.0 = Debug|Any CPU
+		{A2C39E45-1AB7-4513-B43F-9EE50A64F067}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2C39E45-1AB7-4513-B43F-9EE50A64F067}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2C39E45-1AB7-4513-B43F-9EE50A64F067}.Release|x64.ActiveCfg = Release|Any CPU
+		{A2C39E45-1AB7-4513-B43F-9EE50A64F067}.Release|x64.Build.0 = Release|Any CPU
+		{A2C39E45-1AB7-4513-B43F-9EE50A64F067}.Release|x86.ActiveCfg = Release|Any CPU
+		{A2C39E45-1AB7-4513-B43F-9EE50A64F067}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -155,6 +183,7 @@ Global
 		{86306EFA-7B77-4DCA-A89E-30DA2D15F931} = {FDD81516-B5F4-4BC4-A0A6-BC81F67982FE}
 		{FD790364-E732-434F-B8A0-F855EAAE2F59} = {FDD81516-B5F4-4BC4-A0A6-BC81F67982FE}
 		{6D35028B-81CD-4B57-A5D4-FD55179263BA} = {FDD81516-B5F4-4BC4-A0A6-BC81F67982FE}
+		{4B3113ED-7379-4CCA-B494-B14063FB4A52} = {FDD81516-B5F4-4BC4-A0A6-BC81F67982FE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {99D9E00E-D928-4972-9EA0-50051880BD78}

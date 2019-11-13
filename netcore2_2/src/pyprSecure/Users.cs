@@ -19,7 +19,8 @@ namespace pyprSecure
                 Password = "password",
                 Claims = new List<Claim> {
                     new Claim(JwtClaimTypes.Email, "scott@scottbrady91.com"),
-                    new Claim(JwtClaimTypes.Role, "admin")
+                    new Claim(JwtClaimTypes.Role, "admin"),
+                    new Claim("fedorg","someuniquevalue")
                 }
             }
         };

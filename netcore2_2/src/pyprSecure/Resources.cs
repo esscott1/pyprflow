@@ -37,7 +37,19 @@ namespace pyprSecure
                         new Scope("customAPI.read"),
                         new Scope("customAPI.write")
                     }
+                },
+                new ApiResource
+                {
+                    Name = "api",
+                    DisplayName = "test api app",
+                    UserClaims = new List<string> {"role", "fedorg"},
+                    Scopes = new List<Scope>
+                    {
+                        new Scope("api")
+                    }
+
                 }
+               
             };
 
         }

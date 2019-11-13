@@ -89,6 +89,7 @@ namespace pyprflow.Api
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
+            
             .AddJwtBearer(x =>
             {
                 x.RequireHttpsMetadata = false;

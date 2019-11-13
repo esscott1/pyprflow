@@ -22,6 +22,7 @@ namespace pyprSecure
                 .AddInMemoryApiResources(Resources.GetApiResources())
                 .AddTestUsers(Users.Get())
                 .AddDeveloperSigningCredential();
+            
 
             services.AddMvc();
             
