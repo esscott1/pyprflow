@@ -22,6 +22,8 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using pyprflow.Api.Services;
+using IdentityServer4.Models;
+using IdentityServer4.Test;
 
 namespace pyprflow.Api
 {
@@ -52,6 +54,13 @@ namespace pyprflow.Api
             //    options.MinimumSameSitePolicy = SameSiteMode.None;
             //});
 
+            var builder = services.AddIdentityServer()
+                .AddInMemoryClients(Models.Clients.Get())
+                .AddInMemoryIdentityResources(Models.Resources.GetIdentityResources())
+                .AddInMemoryApiResources(Models.Resources.GetApiResources())
+                .AddTestUsers(Models.Users.Get())
+                .AddDeveloperSigningCredential(true, "devSignedCred");
+            
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             //services.AddMvc(options => options.OutputFormatters.Add(new HtmlOutputFormatter()))
@@ -122,7 +131,9 @@ namespace pyprflow.Api
             }
 
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            app.UseIdentityServer();
             app.UseAuthentication();
+            
             app.UseDefaultFiles();
             app.UseStaticFiles();
 

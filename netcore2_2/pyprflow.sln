@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29418.71
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.779
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{FDD81516-B5F4-4BC4-A0A6-BC81F67982FE}"
 	ProjectSection(SolutionItems) = preProject
@@ -31,6 +31,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pyprflow.Cli", "src\pyprflow.Cli\pyprflow.Cli.csproj", "{940CF748-5AB0-4E13-B139-9721C1AF80BA}"
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "pyprflow.Cli_setup", "src\pyprflow.Cli_setup\pyprflow.Cli_setup.wixproj", "{86306EFA-7B77-4DCA-A89E-30DA2D15F931}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pyprSecure", "src\pyprSecure\pyprSecure.csproj", "{FD790364-E732-434F-B8A0-F855EAAE2F59}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -113,6 +115,18 @@ Global
 		{86306EFA-7B77-4DCA-A89E-30DA2D15F931}.Release|x64.ActiveCfg = Release|x86
 		{86306EFA-7B77-4DCA-A89E-30DA2D15F931}.Release|x86.ActiveCfg = Release|x86
 		{86306EFA-7B77-4DCA-A89E-30DA2D15F931}.Release|x86.Build.0 = Release|x86
+		{FD790364-E732-434F-B8A0-F855EAAE2F59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD790364-E732-434F-B8A0-F855EAAE2F59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD790364-E732-434F-B8A0-F855EAAE2F59}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FD790364-E732-434F-B8A0-F855EAAE2F59}.Debug|x64.Build.0 = Debug|Any CPU
+		{FD790364-E732-434F-B8A0-F855EAAE2F59}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FD790364-E732-434F-B8A0-F855EAAE2F59}.Debug|x86.Build.0 = Debug|Any CPU
+		{FD790364-E732-434F-B8A0-F855EAAE2F59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD790364-E732-434F-B8A0-F855EAAE2F59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD790364-E732-434F-B8A0-F855EAAE2F59}.Release|x64.ActiveCfg = Release|Any CPU
+		{FD790364-E732-434F-B8A0-F855EAAE2F59}.Release|x64.Build.0 = Release|Any CPU
+		{FD790364-E732-434F-B8A0-F855EAAE2F59}.Release|x86.ActiveCfg = Release|Any CPU
+		{FD790364-E732-434F-B8A0-F855EAAE2F59}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -125,6 +139,7 @@ Global
 		{D1039F7D-E2C0-4074-A23A-23495FF29E17} = {FDD81516-B5F4-4BC4-A0A6-BC81F67982FE}
 		{940CF748-5AB0-4E13-B139-9721C1AF80BA} = {FDD81516-B5F4-4BC4-A0A6-BC81F67982FE}
 		{86306EFA-7B77-4DCA-A89E-30DA2D15F931} = {FDD81516-B5F4-4BC4-A0A6-BC81F67982FE}
+		{FD790364-E732-434F-B8A0-F855EAAE2F59} = {FDD81516-B5F4-4BC4-A0A6-BC81F67982FE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {99D9E00E-D928-4972-9EA0-50051880BD78}
