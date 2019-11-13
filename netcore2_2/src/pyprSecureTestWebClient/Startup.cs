@@ -39,7 +39,7 @@ namespace pyprSecureTestWebClient
             .AddCookie("cookie")
             .AddOpenIdConnect("oidc", options =>
             {
-                options.Authority = "https://localhost:44350/";
+                options.Authority = "https://localhost:5001/";
                 options.ClientId = "openIdConnectClient";
                 options.SignInScheme = "cookie";
             });

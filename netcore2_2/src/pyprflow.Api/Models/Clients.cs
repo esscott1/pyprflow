@@ -1,4 +1,5 @@
-﻿using IdentityServer4.Models;
+﻿using IdentityServer4;
+using IdentityServer4.Models;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,22 @@ namespace pyprflow.Api.Models
                 ClientSecrets = new List<Secret> {
                     new Secret("superSecretPassword".Sha256())},
                 AllowedScopes = new List<string> {"customAPI.read"}
-            }
+            },
+                new Client {
+                    ClientId = "openIdConnectClient",
+                    ClientName = "Example Implicit Client Application",
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowedScopes = new List<string>
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.Email,
+                        "role",
+                        "customAPI.write"
+                    },
+                    RedirectUris = new List<string> {"https://localhost:44330/signin-oidc"},
+                    PostLogoutRedirectUris = new List<string> { "https://localhost:44330" }
+                }
             };
         }
     }
