@@ -22,6 +22,9 @@ namespace pyprSecure
                 .AddInMemoryApiResources(Resources.GetApiResources())
                 .AddTestUsers(Users.Get())
                 .AddDeveloperSigningCredential();
+
+            services.AddMvc();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -33,10 +36,12 @@ namespace pyprSecure
                 app.UseDeveloperExceptionPage();
             }
 
-            app.Run(async (context) =>
-            {
-                await context.Response.WriteAsync("Hello World!");
-            });
+            //app.Run(async (context) =>
+            //{
+            //    await context.Response.WriteAsync("Hello World!");
+            //});
+            app.UseStaticFiles();
+            app.UseMvcWithDefaultRoute();
         }
     }
 }
