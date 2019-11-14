@@ -13,6 +13,28 @@ namespace pyprSecure
         {
             return new List<Client>
             {
+                  new Client {
+                    ClientId = "pyprflowcli",
+                    ClientName = "Pyprflow CLI",
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+
+                    ClientSecrets = new List<Secret> {
+                        new Secret("superSecretPassword".Sha256())},
+                    AllowedScopes = new List<string> {
+                         IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.Email,
+                      
+                        "api" },
+                    Claims = new List<System.Security.Claims.Claim>
+                    {
+                        new System.Security.Claims.Claim("fedorg","unique_Value")
+                    },
+                    AlwaysSendClientClaims = true
+
+
+                },
+
                 new Client
                 {
                     ClientId = "apiclient",

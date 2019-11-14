@@ -32,7 +32,7 @@ namespace pyprSecureConsoleTest
                 ClientCredentialStyle = ClientCredentialStyle.PostBody,
                 GrantType = "password",
                 UserName = "scott",
-                Password = "password",
+                Password = "Password123!",
                 ClientId = "oauthClient",
                 ClientSecret = "superSecretPassword",
                 Scope = "api"

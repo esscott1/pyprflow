@@ -12,11 +12,12 @@ namespace pyprSecure
     {
         public static List<TestUser> Get()
         {
+
             return new List<TestUser> {
             new TestUser {
                 SubjectId = "5BE86359-073C-434B-AD2D-A3932222DABE",
                 Username = "scott",
-                Password = "password",
+                Password = "password", // pw was saved to DB as Password123! see startup.cs
                 Claims = new List<Claim> {
                     new Claim(JwtClaimTypes.Email, "scott@scottbrady91.com"),
                     new Claim(JwtClaimTypes.Role, "admin"),
