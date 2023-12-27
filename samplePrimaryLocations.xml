@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<MainRoot>
+  <xs:schema id="samplePrimaryLocations_ds" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xs:element name="samplePrimaryLocations_ds" msdata:IsDataSet="true" msdata:UseCurrentLocale="true">
+      <xs:complexType>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element name="samplePrimaryLocations">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="EntityID" type="xs:string" />
+                <xs:element name="AddressLine" type="xs:string" minOccurs="0" />
+                <xs:element name="Locality" type="xs:string" minOccurs="0" />
+                <xs:element name="AdminDistrict" type="xs:string" minOccurs="0" />
+                <xs:element name="PostalCode" type="xs:string" minOccurs="0" />
+                <xs:element name="Latitude" type="xs:double" minOccurs="0" />
+                <xs:element name="Longitude" type="xs:double" minOccurs="0" />
+                <xs:element name="CountryRegion" type="xs:string" minOccurs="0" />
+                <xs:element name="Confidence" type="xs:string" minOccurs="0" />
+                <xs:element name="eName" type="xs:string" minOccurs="0" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:choice>
+      </xs:complexType>
+      <xs:unique name="Constraint1" msdata:PrimaryKey="true">
+        <xs:selector xpath=".//samplePrimaryLocations" />
+        <xs:field xpath="EntityID" />
+      </xs:unique>
+    </xs:element>
+  </xs:schema>
+<samplePrimaryLocations>
+  <EntityID>3</EntityID>
+  <AddressLine>566 Mountain Village Blvd</AddressLine>
+  <Locality>Mountain Village</Locality>
+  <AdminDistrict>CO</AdminDistrict>
+  <PostalCode>81435</PostalCode>
+  <Latitude>35.874695</Latitude>
+  <Longitude>-92.268526</Longitude>
+  <CountryRegion>United States</CountryRegion>
+</samplePrimaryLocations>
+<samplePrimaryLocations>
+  <EntityID>2</EntityID>
+  <AddressLine>22097 US Highway 6</AddressLine>
+  <Locality>Keystone</Locality>
+  <AdminDistrict>CO</AdminDistrict>
+  <PostalCode>80435</PostalCode>
+  <Latitude>39.610486</Latitude>
+  <Longitude>-105.967713</Longitude>
+  <CountryRegion>United States</CountryRegion>
+</samplePrimaryLocations>
+<samplePrimaryLocations>
+  <EntityID>5</EntityID>
+  <AddressLine>273 Warren Ave</AddressLine>
+  <Locality>Silverthorne</Locality>
+  <AdminDistrict>CO</AdminDistrict>
+  <PostalCode>80497</PostalCode>
+  <Latitude>39.633480</Latitude>
+  <Longitude>-106.077911</Longitude>
+  <CountryRegion>United States</CountryRegion>
+</samplePrimaryLocations>
+<samplePrimaryLocations>
+  <EntityID>6</EntityID>
+  <AddressLine>1100 KELLER RD</AddressLine>
+  <Locality>SOUTH LAKE TAHOE</Locality>
+  <AdminDistrict>CA</AdminDistrict>
+  <PostalCode>96150</PostalCode>
+  <Latitude>38.946563</Latitude>
+  <Longitude>-119.948995</Longitude>
+  <CountryRegion>United States</CountryRegion>
+</samplePrimaryLocations>
+<samplePrimaryLocations>
+  <EntityID>4</EntityID>
+  <AddressLine>9086 W Bowles Ave</AddressLine>
+  <Locality>Littleton</Locality>
+  <AdminDistrict>CO</AdminDistrict>
+  <PostalCode>80123</PostalCode>
+  <Latitude>39.617626</Latitude>
+  <Longitude>-105.072128</Longitude>
+  <CountryRegion>United States</CountryRegion>
+</samplePrimaryLocations>
+<samplePrimaryLocations>
+  <EntityID>7</EntityID>
+  <AddressLine>556 MOUNTAIN ROAD</AddressLine>
+  <Locality>LUDLOW</Locality>
+  <AdminDistrict>VT</AdminDistrict>
+  <PostalCode>05149</PostalCode>
+  <Latitude>43.405281</Latitude>
+  <Longitude>-72.721488</Longitude>
+  <CountryRegion>United States</CountryRegion>
+</samplePrimaryLocations>
+<samplePrimaryLocations>
+  <EntityID>8</EntityID>
+  <AddressLine>137 BENCHMARK RD</AddressLine>
+  <Locality>AVON</Locality>
+  <AdminDistrict>CO</AdminDistrict>
+  <PostalCode>81620</PostalCode>
+  <Latitude>37.304020</Latitude>
+  <Longitude>-79.242724</Longitude>
+  <CountryRegion>United States</CountryRegion>
+</samplePrimaryLocations>
+<samplePrimaryLocations>
+  <EntityID>10</EntityID>
+  <AddressLine>6600 PELLER AVE S</AddressLine>
+  <Locality>HASTINGS</Locality>
+  <AdminDistrict>MN</AdminDistrict>
+  <PostalCode>55033</PostalCode>
+  <Latitude>44.850551</Latitude>
+  <Longitude>-92.787563</Longitude>
+  <CountryRegion>United States</CountryRegion>
+</samplePrimaryLocations>
+<samplePrimaryLocations>
+  <EntityID>9</EntityID>
+  <AddressLine>620 GOTHIC RD</AddressLine>
+  <Locality>CRESTED BUTTE</Locality>
+  <AdminDistrict>CO</AdminDistrict>
+  <PostalCode>81224</PostalCode>
+  <Latitude>38.900475</Latitude>
+  <Longitude>-106.966880</Longitude>
+  <CountryRegion>United States</CountryRegion>
+</samplePrimaryLocations>
+<samplePrimaryLocations>
+  <EntityID>12</EntityID>
+  <AddressLine>142 ARROWHEAD CIR</AddressLine>
+  <Locality>Vail</Locality>
+  <AdminDistrict>CO</AdminDistrict>
+  <PostalCode>81657</PostalCode>
+  <Latitude>39.633138</Latitude>
+  <Longitude>-106.562524</Longitude>
+  <CountryRegion>United States</CountryRegion>
+</samplePrimaryLocations>
+<samplePrimaryLocations>
+  <EntityID>11</EntityID>
+  <AddressLine>21699 U S HIGHWAY 6</AddressLine>
+  <Locality>KEYSTONE</Locality>
+  <AdminDistrict>CO</AdminDistrict>
+  <PostalCode>80435</PostalCode>
+  <Latitude>39.606827</Latitude>
+  <Longitude>-106.020638</Longitude>
+  <CountryRegion>United States</CountryRegion>
+</samplePrimaryLocations>
+<samplePrimaryLocations>
+  <EntityID>14</EntityID>
+  <AddressLine>100 S PARK AVE</AddressLine>
+  <Locality>BRECKENRIDGE</Locality>
+  <AdminDistrict>CO</AdminDistrict>
+  <PostalCode>80424</PostalCode>
+  <Latitude>39.481650</Latitude>
+  <Longitude>-106.047924</Longitude>
+  <CountryRegion>United States</CountryRegion>
+</samplePrimaryLocations>
+<samplePrimaryLocations>
+  <EntityID>15</EntityID>
+  <AddressLine>10000 BIG SPRINGS DR</AddressLine>
+  <Locality>Truckee</Locality>
+  <AdminDistrict>CA</AdminDistrict>
+  <PostalCode>96161</PostalCode>
+  <Latitude>39.282086</Latitude>
+  <Longitude>-120.123706</Longitude>
+  <CountryRegion>United States</CountryRegion>
+</samplePrimaryLocations>
+<samplePrimaryLocations>
+  <EntityID>17</EntityID>
+  <AddressLine>102 RIDGE RD</AddressLine>
+  <Locality>VAIL</Locality>
+  <AdminDistrict>CO</AdminDistrict>
+  <PostalCode>81657</PostalCode>
+  <Latitude>39.639568</Latitude>
+  <Longitude>-106.375687</Longitude>
+  <CountryRegion>United States</CountryRegion>
+</samplePrimaryLocations>
+<samplePrimaryLocations>
+  <EntityID>16</EntityID>
+  <AddressLine>1005 KEYSTONE RD</AddressLine>
+  <Locality>KEYSTONE</Locality>
+  <AdminDistrict>CO</AdminDistrict>
+  <PostalCode>80435</PostalCode>
+  <Latitude>39.606827</Latitude>
+  <Longitude>-106.020638</Longitude>
+  <CountryRegion>United States</CountryRegion>
+</samplePrimaryLocations>
+<samplePrimaryLocations>
+  <EntityID>13</EntityID>
+  <AddressLine>100 Northstar Dr</AddressLine>
+  <Locality>Truckee</Locality>
+  <AdminDistrict>CA</AdminDistrict>
+  <PostalCode>96161</PostalCode>
+  <Latitude>39.287393</Latitude>
+  <Longitude>-120.104271</Longitude>
+  <CountryRegion>United States</CountryRegion>
+</samplePrimaryLocations>
+<samplePrimaryLocations>
+  <EntityID>18</EntityID>
+  <AddressLine>1031 S FRONTAGE RD W</AddressLine>
+  <Locality>VAIL</Locality>
+  <AdminDistrict>CO</AdminDistrict>
+  <PostalCode>81657</PostalCode>
+  <Latitude>39.641540</Latitude>
+  <Longitude>-106.397527</Longitude>
+  <CountryRegion>United States</CountryRegion>
+</samplePrimaryLocations>
+<samplePrimaryLocations>
+  <EntityID>19</EntityID>
+  <AddressLine>1051 BELLYACHE RIDGE RD</AddressLine>
+  <Locality>WOLCOTT</Locality>
+  <AdminDistrict>CO</AdminDistrict>
+  <PostalCode>81655</PostalCode>
+  <Latitude>39.692501</Latitude>
+  <Longitude>-106.694672</Longitude>
+  <CountryRegion>United States</CountryRegion>
+</samplePrimaryLocations>
+<samplePrimaryLocations>
+  <EntityID>1</EntityID>
+  <AddressLine>174 Keystone Rd</AddressLine>
+  <Locality>Keystone</Locality>
+  <AdminDistrict>CO</AdminDistrict>
+  <PostalCode>80435</PostalCode>
+  <Latitude>39.606827</Latitude>
+  <Longitude>-106.020638</Longitude>
+  <CountryRegion>United States</CountryRegion>
+</samplePrimaryLocations>
+<samplePrimaryLocations>
+  <EntityID>20</EntityID>
+  <AddressLine>1099 RED SKY RD</AddressLine>
+  <Locality>EDWARDS</Locality>
+  <AdminDistrict>CO</AdminDistrict>
+  <PostalCode>81632</PostalCode>
+  <Latitude>39.685917</Latitude>
+  <Longitude>-106.683540</Longitude>
+  <CountryRegion>United States</CountryRegion>
+</samplePrimaryLocations>
+<samplePrimaryLocations>
+  <EntityID>21</EntityID>
+  <AddressLine>46 AVONDALE LN</AddressLine>
+  <Locality>AVON</Locality>
+  <AdminDistrict>CO</AdminDistrict>
+  <PostalCode>81620</PostalCode>
+  <Latitude>39.630619</Latitude>
+  <Longitude>-106.520966</Longitude>
+  <CountryRegion>United States</CountryRegion>
+</samplePrimaryLocations>
+</MainRoot>
